@@ -13,3 +13,5 @@ Eksempel til implementering a DFXComponentsLibrary i LibreCAD:
 	4. Gå til 'Paths'	
 	5. Indsæt stien til DFXComponentsLibrary fra GitHub-repo klonen i 'part libraries' feltet. 
 	6. Genstart libreCAD
+
+ For at tilføje flere komponenter skal mappen med de nye komponenter i filformatet .dfx indsættet i DFXComponentsLibrary-mappen.
