@@ -1,9 +1,10 @@
 # RoboInternship
 The github repo for RoboStacker/MPN internship
 
-CompanyDocumentation indeholder dokumentation for firmaets opbygning
+CompanyDocumentation indeholder dokumentation for firmaets opbygning og kode. 
 
 Brugen af el-dokumenter:
+
 Åben CaddyDFX filerne i et program der understøtter .dfx filtyper, såsom LibreCAD (Open Source)
 
 DFXComponentsLibrary består af komponenter i .dfx formatet. 
