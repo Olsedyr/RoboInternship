@@ -1,0 +1,78 @@
+STATEMACHINEVERSION 3
+Name=Plads5
+Input=Foto "ConveyorIn Foto5"
+Input=Skubberout "ConveyorIn kasseSkubber+"
+Input=Skubberin "ConveyorIn kasseSkubber-"
+Output=Skubout "ConveyorIn kasseSkubberUd"
+Output=Skubin "ConveyorIn kasseSkubberInd"
+Link=parent Parent
+Link=KassePakkerBottom
+;Link=CInFoto5
+Timeout=PushDelay 2500000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Skubout 0 
+  SET Skubin 0
+  TEST parent = ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST 
+END
+
+State=ST_READY
+  TEST KassePakkerBottom = ST_EMPTY
+    SET Skubout 1
+    TIMEOUT PushDelay ST_SEND_FW
+    SETSTATE ST_SEND_FW
+  ELSE
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST Foto = 1
+    SETSTATE ST_READY
+  ELSE
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_SEND_FW
+  TEST PushDelay = 1
+  OR Skubberout = 1
+    SET Skubout 0
+    SET Skubin 1
+    SETSTATE ST_SEND_BACK
+  ENDTEST
+END
+
+State=ST_SEND_BACK
+  TEST Skubberin = 1
+    SET Skubout 0
+    SET Skubin 0
+    SETSTATE ST_EMPTY
+  ENDTEST
+END
+
+State=ST_RESET
+    TEST Foto = 1
+      SETSTATE ST_READY
+    ELSE
+      TEST Skubberin = 0
+        SET Skubout 0
+        SET Skubin 1
+        SETSTATE ST_SEND_BACK
+      ELSE
+        SETSTATE ST_EMPTY
+      ENDTEST
+    ENDTEST
+END

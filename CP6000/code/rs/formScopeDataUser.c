@@ -37,7 +37,7 @@ static float fdtable[MAXTABLESIZE];
 static float ftdata[MAXTABLESIZE];
 static int *pdtable;
 static float *pfdtable;
-tmpnScopeData scopeitem[10];
+//tmpnScopeData scopeitem[10];
 
 #ifdef USEFFT
 static double *in;

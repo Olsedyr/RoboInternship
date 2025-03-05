@@ -1,0 +1,56 @@
+STATEMACHINEVERSION 3
+Include=pallebane6.statemachine
+Name=Pallebane6
+Input=palletInPlace "Pallebane6 FotoRev"
+Input=fotoAlign "Pallebane6 FotoAlign"
+Input=fotoAlign2 "Pallebane6 FotoAlign"
+Input=emptyPallet "Pallebane6 FotoTest"
+Output=MotorFwd "Pallebane6 MotorFwd"
+Output=MotorRev "Pallebane6 MotorRev"
+Output=ChainFwd "Pallebane6 Chain"
+Output=ChainRev "Pallebane6 Chain"
+Output=Cyl "Pallebane6 Cyl"
+linkValue=shuttlePos curPos Shuttle 
+linkValue=command Shuttle
+Link=next Shuttle
+Link=prev Pallebane5 
+Link=prev2 Pallebane5
+;Link=prev2 Pallemagasin
+Link=parent Parent
+;Link=pallet Pallet
+Timeout=TimeoutDelay 5000000
+Timeout=TimeoutForPalletRev 1000000
+Timeout=TimeoutForPalletSideAlign 3000000
+Timeout=TimeoutForPalletLift 2000000
+Timeout=maxRecieve 5000000
+Timeout=TimeoutRev 150000
+Timeout=EmptyDelay 6000000
+Const=usePrev 1
+Const=usePrev2 0
+Const=ON 0
+Const=posPB6 3
+Const=comSend 4
+Value=errorCode 0
+
+State=ST_READY
+  TEST next = ST_EMPTY
+  AND shuttlePos = posPB6
+  AND command = comSend
+    TIMEOUT maxDelayStop ST_SEND
+    SETSTATE ST_SEND
+  ELSE
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET ChainFwd 0
+    SET ChainRev 0
+    SET Cyl 0
+    SET MotorRev 0
+  ENDTEST
+  TEST simulate = 1
+    SETSTATE ST_PALLET_EMPTY
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+

@@ -4,10 +4,10 @@ DIST_NAME=BOXSYSTEM.$(VERSION).tar
 # -------------------------------------------------
 # Append local cc flags here for only this Makefile
 # -------------------------------------------------
-INCLUDES = -I./
+INCLUDES = -I./ -I/usr/src/linux-headers-2.6.31-23/include
 #CCFLAGS = -O2 -fomit-frame-pointer -fPIC -DLINUX
-CCFLAGS = -c -fPIC -DLINUX -Wall -O0 -pg -save-temps -g3
-LDFLAGS = -s -N
+CCFLAGS = -c -fPIC -DLINUX -Wall -O0 -pg -save-temps -g3 -m32
+LDFLAGS = -s -N -m32
 CC=gcc
 CPP=g++
 BINDIR=/sbin
@@ -309,7 +309,8 @@ clean:
 		$(OBJDIR)libbx.$(LIBEXT) \
         *.s \
         *.o \
-        *.i
+        *.i \
+		*.ii
 	$(CLEAN)
  
 distclean:	clean

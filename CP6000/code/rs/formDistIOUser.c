@@ -45,7 +45,7 @@ BX_BOOL update(HBOX hBox)
         case STBDDI3725:
         case STBDDO3705:
           {
-            char s[256*3];
+            char s[1024];
             sprintf(s,"Adv. %s %s %s",
                     tworkcell->dios.dio[i].iotab[j].module_name,
                     tworkcell->dios.dio[i].iotab[j].typeStr,
@@ -71,7 +71,7 @@ BX_BOOL update(HBOX hBox)
                 );
         BxList_AddString(BxGetDlgItem(hBox, FORMDISTIO_LISTBOX), s);
       */
-        char s[256];
+        char s[512];
         sprintf(s, "LoadCell %s", tworkcell->loadcells.loadcell[i].ipaddr);
         BxList_AddString(BxGetDlgItem(hBox, FORMDISTIO_LISTBOX), s);
     }
@@ -83,7 +83,7 @@ BX_BOOL update(HBOX hBox)
     {
       for(j=0;j<tworkcell->comsks.comsk[i].numOfModules;j++)
       {
-        char s[256*2];
+        char s[1024];
         sprintf(s, "ComSK %s %s", 
 								tworkcell->comsks.comsk[i].iotab[j].module_name,
                 tworkcell->comsks.comsk[i].ipaddr);
@@ -97,7 +97,7 @@ BX_BOOL update(HBOX hBox)
     {
       for(j=0;j<tworkcell->macs.mac[i].numOfMotors;j++)
       {
-        char s[256*2];
+        char s[1024];
         sprintf(s, "Mac %s %s", 
 								tworkcell->macs.mac[i].iotab[j].module_name,
                 tworkcell->macs.mac[i].ipaddr);
@@ -111,7 +111,7 @@ BX_BOOL update(HBOX hBox)
     {
       for(j=0;j<tworkcell->icpcons.icpcon[i].numOfModules;j++)
       {
-        char s[256*2];
+        char s[1024];
         sprintf(s, "ICPcon %s %s", 
 								tworkcell->icpcons.icpcon[i].iotab[j].module_name,
                 tworkcell->icpcons.icpcon[i].ipaddr);

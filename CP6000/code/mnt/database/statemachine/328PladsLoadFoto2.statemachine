@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=PladsLoadFoto2
+Input=input "ConveyorIn Foto2"
+Timeout=TimeOn 100000
+Timeout=TimeOff 100000
+Value=test 0
+Const=active 1

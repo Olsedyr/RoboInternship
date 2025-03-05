@@ -1031,18 +1031,18 @@ typedef struct tmpnBoptParamItem
 
 typedef struct tmpnBoptCoeffItem
 {
-	char pathName[256];
+	char pathName[1024];
 	int mode;
 	int pathtype;
 	int viatype;
   struct 
   {
-    char fromFrame[256];
-    char toFrame[256]; 
-    char fromItem[256]; 
-    char toItem[256]; 
-    char fromPattern[256]; 
-    char toPattern[256]; 
+    char fromFrame[512];
+    char toFrame[512]; 
+    char fromItem[512]; 
+    char toItem[512]; 
+    char fromPattern[512]; 
+    char toPattern[512]; 
   } def;   //default (used in mpnguide)
 	tmpnBoptViaVector viapos[2];
 	tmpnBoptViaVector viavel[2];
@@ -1054,8 +1054,8 @@ typedef struct tmpnBoptCoeffItem
 
 typedef struct tmpnBoptCoeff
 {
-  char name[128];
-	char filename[256];
+  char name[256];
+	char filename[512];
 	int maxidx;
 	tmpnBoptCoeffItem item[MAXBOPTCOEFFITEMS];
 } tmpnBoptCoeff;
@@ -1068,7 +1068,7 @@ typedef struct tmpnItem
 {
   char type[256];//"BAG","BOX","EUROPALLET","HALFPALLET","BIGBOX" etc
   char name[256];
-  char filename[256];
+  char filename[512];
   tmpnVectorXYZ dim; //fysisk
   tmpnFloat sy; //stablet y
   tmpnFloat gy; //grip y
@@ -1111,7 +1111,7 @@ typedef struct tmpnCPPatternItem
 typedef struct tmpnCPPattern
 {
   char name[256]; //unique key to pattern
-  char filename[256];
+  char filename[512];
   int user;
   int selectedItem;
   int selectedPPP;
@@ -1413,6 +1413,10 @@ typedef struct tmpnStateMachineValue
 	tmpnRemoteValue *remote; //used if remotevalue <=> linkvalue==NULL
 } tmpnStateMachineValue;
 
+extern tmpnStateMachineValue *ppmin;
+extern tmpnStateMachineValue *casecount;
+
+
 typedef struct tmpnStateMachineLink
 {
   int stmidx; 
@@ -1542,7 +1546,7 @@ typedef struct tmpnRSSystem
     int ctrltype;
     char port[256];
   } touch;
-  char scriptname[256];
+  char scriptname[512];
   int  simulateMC;
   int  mc_task_debug;
   int  path_debug;
@@ -2157,40 +2161,38 @@ typedef struct tmpnScopeData
   tmpnStateMachineValue *sampling;
 } tmpnScopeData;
 
+extern tmpnScopeData scopeitem[10];
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-  int staticforce(tmpnRobot *robot);
-  int tmpnComputeIK(tmpnRobot *trobot, tmpnFloat wx, tmpnFloat wy, tmpnFloat wz, tmpnFloat wv, tmpnFloat ww, tmpnFloat wu, int tcpidx);
-  int tmpnJointToActuator(tmpnRobot *robot,int tcpidx);
-  int tmpnComputeFK(tmpnRobot *trobot, tmpnFloat a, tmpnFloat b, tmpnFloat c, tmpnFloat d, tmpnFloat e, tmpnFloat f, int tcpidx);
-  int tmpnComputeFKlogic(tmpnRobot *trobot, tmpnFloat a, tmpnFloat b, tmpnFloat c, tmpnFloat d, tmpnFloat e, tmpnFloat f, int tcpidx);
-  void solve(tmpnRobot *robot, int maxidx, tmpnPosition *position, tmpnFloat maxTime, tmpnFloat *maxSpeed, int order);
-  void generatePath(tmpnRobot *tmpnrobot, tmpnPathDef *pathdef, tmpnPath *path);
-  void copyPath(tmpnPath *dest, tmpnPath *source);
-  void hackPositionHint(tmpnPath *path, tmpnPathDef *pathdef);
-  void copyKeypoint(tmpnPath *path, tmpnPathDef *pathdef);
-  //http://hyperphysics.phy-astr.gsu.edu/hbase/hframe.html
+
+// Function declarations
+int staticforce(tmpnRobot *robot);
+int tmpnComputeIK(tmpnRobot *trobot, tmpnFloat wx, tmpnFloat wy, tmpnFloat wz, tmpnFloat wv, tmpnFloat ww, tmpnFloat wu, int tcpidx);
+int tmpnJointToActuator(tmpnRobot *robot, int tcpidx);
+int tmpnComputeFK(tmpnRobot *trobot, tmpnFloat a, tmpnFloat b, tmpnFloat c, tmpnFloat d, tmpnFloat e, tmpnFloat f, int tcpidx);
+int tmpnComputeFKlogic(tmpnRobot *trobot, tmpnFloat a, tmpnFloat b, tmpnFloat c, tmpnFloat d, tmpnFloat e, tmpnFloat f, int tcpidx);
+void solve(tmpnRobot *robot, int maxidx, tmpnPosition *position, tmpnFloat maxTime, tmpnFloat *maxSpeed, int order);
+void generatePath(tmpnRobot *tmpnrobot, tmpnPathDef *pathdef, tmpnPath *path);
+void copyPath(tmpnPath *dest, tmpnPath *source);
+void hackPositionHint(tmpnPath *path, tmpnPathDef *pathdef);
+void copyKeypoint(tmpnPath *path, tmpnPathDef *pathdef);
+
+// Global variable declarations (use extern)
+extern tmpnRobot *initrobot;
+extern volatile tmpnRobot *trobot;
+extern volatile tmpnWorkcell *tworkcell;
+extern tmpnPlant *tplant;
+extern int newtau;
+extern tmpnBoptCoeffItem coeff;
+extern tmpnStateName stateName[];
+
 #ifdef __cplusplus
 }
 #endif
-//data definitions (could be implemented in mysql)
-#ifdef __cplusplus
-extern "C" tmpnRobot *initrobot;
-extern "C" volatile tmpnRobot *trobot;
-extern "C" volatile tmpnWorkcell *tworkcell;
-extern "C" tmpnPlant *tplant;
-extern "C" int newtau;
-extern "C" tmpnBoptCoeffItem coeff;
-#else
-tmpnRobot *initrobot;
-volatile tmpnRobot *trobot;
-volatile tmpnWorkcell *tworkcell;
-tmpnPlant *tplant;
-int newtau;
-extern tmpnBoptCoeffItem coeff;
-extern tmpnStateName stateName[];
-#endif
+
+
+
 #endif //TMPNROBOT_H

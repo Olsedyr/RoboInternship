@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=ConveyorInFotoKassePakker
+Input=input "ConveyorIn FotoKassePakker"
+Timeout=TimeOn 1000000
+Timeout=TimeOff 1000000
+Value=test 0

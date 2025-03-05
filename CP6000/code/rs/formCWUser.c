@@ -16,7 +16,7 @@
 #include <time.h>
 #include <sys/timeb.h>
 
-extern char programStateMachineName[256];
+extern char programStateMachineName[512];
 extern int supervisorLogin(HBOX hBox);
 extern BX_BOOL formDemo_cmdDemoClose_Click(HBOX hBox);
 extern int demo;
@@ -29,9 +29,9 @@ static BXMENUSTRUCT pBxMainMenu;
 static time_t starttid;
 static time_t sluttid;
 
-static char weightstr[256]="";
-static char ws[256];
-static char es[256];
+static char weightstr[2048]="";
+static char ws[512];
+static char es[512];
 
 tmpnStateMachineValue *avgWeight[3];
 tmpnStateMachineValue *calcWeight[3];
@@ -52,7 +52,7 @@ int cw60 = FALSE;
 
 BX_BOOL formCWUserInit(HBOX hBox,BX_LPARAM lParam)
 {
-  char s[256];
+  char s[512];
 	tmpnLanguage *langptr=(tmpnLanguage*)&tworkcell->languages.language[tworkcell->languages.currentLanguage];	
 	BxAssignStringValue(BxGetDlgItem(hBox, FORMCW_GROUPBOX1_2_2));
 	BxSetStringValue(BxGetDlgItem(hBox, FORMCW_GROUPBOX1_2_2), getLanguageLineFromIdx(langptr, 16, "Information"));
@@ -147,7 +147,7 @@ BX_BOOL formCWUserUpdate(HBOX hBox)
   char tidstr[256];
   int stmErrorCode;
   int stmMessageCode;
-  char s[256];
+  char s[512];
 	char* programstr;
 	int menuEn,runEn,stopEn;
 	tmpnLanguage *langptr=(tmpnLanguage*)&tworkcell->languages.language[tworkcell->languages.currentLanguage];	
@@ -288,7 +288,7 @@ BX_BOOL formCWUserUpdate(HBOX hBox)
 
 static void signalContinueS(void)
 {
-  char s[256];
+  char s[512];
   if(cw60)
     sprintf(s,"ContinueKnap");
   else
@@ -298,7 +298,7 @@ static void signalContinueS(void)
 
 BX_BOOL formCW_cmdRun_Click(HBOX hBox)
 {
-  char s[256];
+  char s[512];
   if(cw60)
     sprintf(s,"WorkCell");
   else
@@ -325,7 +325,7 @@ BX_BOOL formCW_cmdRun_Click(HBOX hBox)
 
 BX_BOOL formCW_cmdStop_Click(HBOX hBox)
 {
-  char s[256];
+  char s[512];
   if(cw60)
     sprintf(s,"WorkCell");
   else
@@ -431,7 +431,7 @@ BX_BOOL formCW_cmdSample_Click(HBOX hBox)
 
 BX_BOOL formCW_cmdZero_Click(HBOX hBox)
 {
-  char s[256];
+  char s[512];
   if(cw60)
     sprintf(s,"checkWeigher");
   else
@@ -442,7 +442,7 @@ BX_BOOL formCW_cmdZero_Click(HBOX hBox)
 
 BX_BOOL formCW_cmdSetScale_Click(HBOX hBox)
 {
-  char s[256];
+  char s[512];
   if(cw60)
     sprintf(s,"checkWeigher");
   else
@@ -453,7 +453,7 @@ BX_BOOL formCW_cmdSetScale_Click(HBOX hBox)
 
 BX_BOOL formCW_cmdStatic_Click(HBOX hBox)
 {
-  char s[256];
+  char s[512];
   if(cw60)
     sprintf(s,"checkWeigher");
   else
@@ -466,7 +466,7 @@ BX_BOOL formCW_cmdStatic_Click(HBOX hBox)
 
 BX_BOOL formCW_S1_Click(HBOX hBox)
 {
-  char s[256];
+  char s[512];
   strcpy(cwSlave[0],"S1");
   strcpy(cwSlave[1],"S2");
   strcpy(cwSlave[2],"S3");
@@ -500,7 +500,7 @@ BX_BOOL formCW_S1_Click(HBOX hBox)
 
 BX_BOOL formCW_S2_Click(HBOX hBox)
 {
-  char s[256];
+  char s[512];
   strcpy(cwSlave[0],"S2");
   strcpy(cwSlave[1],"S1");
   strcpy(cwSlave[2],"S3");
@@ -534,7 +534,7 @@ BX_BOOL formCW_S2_Click(HBOX hBox)
 
 BX_BOOL formCW_S3_Click(HBOX hBox)
 {
-  char s[256];
+  char s[512];
   strcpy(cwSlave[0],"S3");
   strcpy(cwSlave[1],"S1");
   strcpy(cwSlave[2],"S2");

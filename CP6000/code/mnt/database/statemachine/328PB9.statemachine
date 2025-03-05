@@ -1,0 +1,40 @@
+STATEMACHINEVERSION 3
+Include=pallebane.statemachine
+Name=Pallebane9
+Input=palletInPlace "Pallebane9 Foto"
+Output=Motor "Pallebane9 Motor"
+linkValue=shuttlePos curPos Shuttle 
+linkValue=command Shuttle
+Link=next Pallebane9
+Link=prev Shuttle
+Link=parent Parent
+Timeout=TimeoutDelay 10000000
+Timeout=StartupTimeout 5000000
+Timeout=StopDelay 0
+Timeout=PickupDelay 3000000
+Timeout=ReadyDelay 0
+Const=autoDetectPallet 1
+Const=ON 1
+Const=posPB9 0
+Const=comPB9receive 1
+
+State=ST_EMPTY
+  TEST palletInPlace = ON 
+  AND autoDetectPallet = 1
+    TIMEOUT ReadyDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST prev = ST_SEND
+    AND shuttlePos = posPB9
+    AND command = comPB9receive
+      TIMEOUT maxDelayStop ST_RECEIVE
+      SETSTATE ST_RECEIVE
+    ELSE 
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END

@@ -59,7 +59,7 @@ BX_BOOL formCPPattern_cmdCreate_Click(HBOX hBox)
 {
 	char newname[128];
   tmpnLanguage *langptr=(tmpnLanguage*)&tworkcell->languages.language[tworkcell->languages.currentLanguage];
-  char str[256];
+  char str[512];
 	newname[0]='\0';
 
   if(BxVirtualKeyboard( hBox, "", 32)==IDOK)

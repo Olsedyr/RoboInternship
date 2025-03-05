@@ -1,2 +1,2 @@
-/home/luz/Desktop/CP6000/database
-708system.ini
+/home/luz/Desktop/350/database
+350system.ini

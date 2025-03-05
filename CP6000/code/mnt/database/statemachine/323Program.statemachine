@@ -1,0 +1,103 @@
+STATEMACHINEVERSION 3
+Name=Program323
+;signal to WorkCell that a new program has been selected
+Value=newprogram 1
+Value=usersection 0
+Const=programidx 4
+Link=workcell WorkCell
+Value=casekind 0
+Value=wALayer 0
+Value=wBLayer 0
+Value=wAItemsPerLayer 0
+Value=wBItemsPerLayer 0
+Value=wBItems 0
+Value=pap 0
+Value=case 0
+Value=timeInPalletB 1000000
+Value=timeInConveyorA 1000000
+Value=robotspeedpct 90.0000
+Value=autorobotspeed 0
+;*******************************************
+;* ITEM's                    
+;*******************************************
+Item=item 10KgNet
+Item=item10KgNet 10KgNet
+;*******************************************
+;* PATTERN's                 
+;*******************************************
+Pattern=patternB 10Kg_40
+Pattern=p10KgNet_40 10Kg_40
+
+; Put programstates in top
+
+; also edit 'subPrograms' for example VendePattern and PushPattern for particular program
+
+State=PROGRAM_323C18
+	SET newprogram 1
+	SET casekind 3
+	SET wAItemsPerLayer 2
+	SET wBItemsPerLayer 2
+	SET pap 0
+	SET usersection 1 ; user editable below
+	SET wALayer 11
+	SET wBLayer 9
+	SET timeInPalletB 1500000
+	SET timeInConveyorA 500000
+	SETSTATE ST_RUNNING_323C18
+END
+
+State=PROGRAM_10Kg_40
+  SET usersection 0
+  SET newprogram 1
+  SETITEM item item10KgNet
+  SETPATTERN patternB p10KgNet_40
+  SET wBItemsPerLayer 7
+  SET wBItems 40
+  SET case 0
+  SET usersection 1 ; user editable below
+  SET timeInPalletB 2500000
+	SET robotspeedpct 90.0000
+	SET autorobotspeed 0
+  SETSTATE ST_RUNNING_10Kg_40
+END
+
+; RUNNING STATES
+
+State=ST_RUNNING_323C18
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 0
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_10Kg_40
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 1
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_323C18
+  ENDTEST
+  TEST programidx = 1
+    SETSTATE PROGRAM_10Kg_40
+  ENDTEST
+END

@@ -157,6 +157,9 @@ State=ST_CHOOSETRACK
 	ELSETEST Master = ST_BEGINFORWARD
 		CALC vsoll = cruise_speed_perc * curpspeed
 		CALC asoll = acceleration_perc * curpacc
+		TEST numpush = 0
+		 	SET infwdpos 1
+		ENDTEST
 		TEST infwdpos = 1
 			SET setpoint posBackOffset
 			SET infwdpos 0

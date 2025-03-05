@@ -1,0 +1,177 @@
+BOPTCOEFFVERSION 1
+320
+
+mode 21 pathtype 23 :
+pathName home_conveyorB
+def.fromFrame home
+def.toFrame conveyorB
+def.toItem CanLayer1
+viatype END
+via2pos.x c=50.0000
+via2pos.y c=200.0000
+via2vel.x c=-60.0000
+via2vel.y c=-140.0000
+macro2 type=FASTDOWNLINE length=60.0000 time=0.40
+mv a=1.7000 b=1.6448 c=2.0138 d=2.3271 e=2.3271
+ma a=2.3000 b=1.7000 c=1.7000 d=6.0000 e=2.0000
+params tcpidx=0 blendtype=0 samplerate=15.0000 timefactor=1.0000
+
+mode 21 pathtype 24 :
+pathName conveyorB_palletB
+def.fromFrame conveyorB
+def.toFrame palletB0
+def.fromItem CanLayer1
+def.toItem CanLayer1
+viatype BOTH
+via1pos.x c=80.00 gg=40.0
+via1pos.y c=900.0000
+via1pos.z c=-30.0000
+via1vel.x c=250.00
+via1vel.y c=150.0000
+via1vel.z c=-60.0000
+via2pos.x c=85.0000
+via2pos.y c=130.0000
+via2pos.z c=70.0000
+via2vel.x c=-70.0000
+via2vel.y c=-70.0000
+via2vel.z c=-110.0000
+macro1 type=FASTUPLINE positionhint=1 length=150.0000 time=1.500
+macro2 type=FASTDOWNLINE length=60.0000 time=0.70
+mv a=1.7000 b=1.6448 c=2.0138 d=2.3271 e=2.3271
+ma a=0.4000 b=0.4000 c=0.6000 d=1.0000 e=0.5000
+params tcpidx=0 blendtype=0 maxheight=3600.0000 minheight=1200.0000 samplerate=10.0000 timefactor=1.0000 maxlength=4200.0000 lockv=90.00
+
+mode 21 pathtype 25 :
+pathName palletB_home
+def.fromFrame palletB0
+def.toFrame home
+def.fromItem CanLayer1
+viatype BOTH
+via1pos.x c=240.0000
+via1pos.y c=120.0000
+via1pos.z c=400.0000
+via1pos.v c=-2.0000
+via1vel.x c=50.0000
+via1vel.y c=-20.0000
+via1vel.z c=270.0000
+via1pos.w c=30.00
+via1vel.w c=15.00
+via2pos.x c=60.00
+via2pos.y c=350.00
+via2pos.z c=-180.00
+via2pos.v c=-2.0000
+via2vel.x c=-35.0000
+via2vel.y c=-20.0000
+via2vel.z c=170.0000
+macro1 type=FASTUPLINE length=130.0000 time=0.5
+mv a=1.7000 b=1.6448 c=2.0138 d=2.3271 e=2.3271
+ma a=2.5000 b=1.7000 c=5.0000 d=6.0000 e=2.0000
+params tcpidx=0 blendtype=0 maxheight=3600.0000 minheight=1200.0000 samplerate=15.0000 timefactor=1.0000 maxlength=4200.0000
+
+mode 21 pathtype 44 :
+pathName palletB_conveyorB
+def.fromFrame palletB0
+def.toFrame conveyorB
+def.fromItem CanLayer1
+def.toItem CanLayer1
+viatype BOTH
+via1pos.x c=240.0000
+via1pos.y c=120.0000
+via1pos.z c=400.0000
+via1pos.v c=-8.0000
+via1vel.x c=50.0000
+via1vel.y c=-20.0000
+via1vel.z c=270.0000
+via1pos.w c=35.00
+via1vel.w c=15.00
+via2pos.x c=180.00
+via2pos.y c=900.0000
+via2pos.z c=-10.0000
+via2pos.v c=-8.0000
+via2vel.x c=-150.0000
+via2vel.y c=-240.0000
+via2vel.z c=10.0000
+macro1 type=FASTUPLINE length=130.0000 time=0.6
+macro2 type=FASTDOWNLINE length=60.0000 time=0.50
+mv a=1.7000 b=1.6448 c=2.0138 d=2.3271 e=2.3271
+ma a=2.0000 b=1.3000 c=2.0000 d=6.0000 e=2.0000
+params tcpidx=0 blendtype=0 maxheight=3600.0000 minheight=1200.0000 samplerate=10.0000 timefactor=1.0000 maxlength=4200.0000
+
+mode 21 pathtype 16 :
+pathName home_home
+def.fromFrame homeHigh
+def.toFrame home
+viatype START
+via1pos.y c=600.0000 bb=-500.00 fff=-400.0
+via1pos.x l=600.00
+via1pos.z l=1800.0000 lll=1300.00
+via1vel.y c=0.0000 fff=100.0
+via1vel.z l=1200.0000 lll=-1300.00
+via1pos.w r=70.00
+via1vel.w r=40.00
+mv a=1.7000 b=1.6448 c=2.0138 d=2.3271 e=2.3271
+ma a=2.0000 b=1.2000 c=1.0000 d=2.0000 e=2.0000
+params tcpidx=0 blendtype=0 samplerate=15.0000 timefactor=1.2000 maxheight=3300.0000 minheight=1200.0000
+
+mode 21 pathtype 43 :
+pathName conveyorB_home
+def.fromFrame conveyorB
+def.toFrame home
+def.fromItem CanLayer1
+viatype START
+via1pos.x c=30.0000
+via1pos.y c=260.0000
+via1vel.x c=30.0000
+via1vel.y c=140.0000
+macro1 type=FASTUPLINE length=60.0000 time=0.40
+mv a=1.7000 b=1.6448 c=2.0138 d=2.3271 e=2.3271
+ma a=2.5000 b=1.7000 c=1.7000 d=3.0000 e=2.0000
+params tcpidx=0 blendtype=0 samplerate=15.0000 timefactor=1.0000
+
+mode 22 pathtype 24 :
+pathName conveyorB_inter
+def.fromFrame conveyorB
+def.toFrame inter
+def.fromItem CanLayer1
+def.toItem NULL
+viatype START
+via1pos.x c=30.00
+via1pos.y c=850.0000
+via1pos.z c=-30.0000
+via1vel.x c=90.00
+via1vel.y c=130.0000
+via1vel.z c=-60.0000
+via2pos.x c=85.0000
+via2pos.y c=130.0000
+via2pos.z c=70.0000
+via2vel.x c=-70.0000
+via2vel.y c=-70.0000
+via2vel.z c=-110.0000
+macro1 type=FASTUPLINE positionhint=1 length=150.0000 time=1.500
+mv a=1.7000 b=1.6448 c=2.0138 d=2.3271 e=2.3271
+ma a=0.4000 b=0.4000 c=0.6000 d=1.0000 e=0.5000
+params tcpidx=0 blendtype=0 maxheight=3600.0000 minheight=1200.0000 samplerate=10.0000 timefactor=1.0000 maxlength=4200.0000 lockv=90.00
+
+mode 23 pathtype 24 :
+pathName inter_palletB
+def.fromFrame inter
+def.toFrame palletB0
+def.fromItem NULL
+def.toItem CanLayer1
+viatype END
+via1pos.x c=80.00
+via1pos.y c=90.0000
+via1pos.z c=-30.0000
+via1vel.x c=50.00
+via1vel.y c=10.0000
+via1vel.z c=-60.0000
+via2pos.x c=85.0000
+via2pos.y c=130.0000
+via2pos.z c=70.0000
+via2vel.x c=-70.0000
+via2vel.y c=-70.0000
+via2vel.z c=-110.0000
+macro2 type=FASTDOWNLINE length=60.0000 time=0.70
+mv a=1.7000 b=1.6448 c=2.0138 d=2.3271 e=2.3271
+ma a=0.4000 b=0.4000 c=0.6000 d=1.0000 e=0.5000
+params tcpidx=0 blendtype=0 maxheight=3600.0000 minheight=1200.0000 samplerate=10.0000 timefactor=1.0000 maxlength=4200.0000 lockv=90.00

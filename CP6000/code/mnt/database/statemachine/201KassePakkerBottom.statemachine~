@@ -1,0 +1,253 @@
+STATEMACHINEVERSION 3
+Name=KassePakkerBottom
+Delaystop=5000000
+Input=Kasseklar "KassePakker kasseKlar"
+Input=Bredin "KassePakker bredKasseklemmer-"
+Input=Smalin "KassePakker smalKasseklemmer-"
+Input=Langnede "KassePakker langKasseLift-"
+Input=Kortnede "KassePakker kortKasseLift-"
+Input=Kortoppe "KassePakker kortKasseLift+"
+Output=Motor "KassePakker Motor"
+Output=Bredklem "KassePakker bredKasseKlem"
+Output=Smalklem "KassePakker smalKasseKlem"
+Output=Langop "KassePakker langKasseLiftOp"
+Output=Kortop "KassePakker kortKasseLiftOp"
+Link=KassePakkerTop
+;Link=ConveyorOut
+;Link=Plads5
+Timeout=TimeWaitNext 4200000
+Timeout=DelayUpHigh 450000
+Timeout=DelayUpLow 300000
+Timeout=DelayShakeDown 180000
+Timeout=DelayShakeDownTwo 280000
+Timeout=DelayShakeUp 180000
+Value=errorCode 0
+Value=Shake 1
+Value=ShakeOK 1
+Value=ShakeCount 0
+Value=ShakeMax 2
+Value=One 1
+Value=Zero 0
+Value=FullBox 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Motor 0
+  SET Bredklem 0
+  SET Smalklem 0
+  SET Langop 0
+  SET Kortop 0
+  TEST KassePakkerTop = ST_STARTDUMP
+    SETSTATE ST_STARTDUMP
+  ENDTEST
+  TEST KassePakkerTop = ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST 
+END
+
+State=ST_STARTDUMP
+  SET FullBox 0
+  SET Motor 0
+  SET Bredklem 0
+  SET Smalklem 0
+  SET Langop 0
+  SET Kortop 0
+  SETSTATE ST_DUMPDONE
+END
+
+State=ST_DUMPDONE
+  TEST Kortnede = 1
+  AND Langnede = 1
+  AND Bredin = 1
+  AND Smalin = 1
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_READY
+  TEST KassePakkerTop = ST_IDLE
+    SET FullBox 0
+    SETSTATE ST_IDLE
+  ELSE
+    TEST KassePakkerTop = ST_FOO
+      SET Shake 1
+      SET Langop 0
+      SET Kortop 0
+      TIMEOUT DelayShakeDownTwo ST_STARTSHAKE
+      SETSTATE ST_STARTSHAKE
+    ELSE
+      TEST Shake >= ShakeOK
+      AND KassePakkerTop = ST_NEXTLAYER
+        SET Shake 0
+        SET Langop 0
+        SET Kortop 0
+        TIMEOUT DelayShakeDown ST_STARTSHAKE
+        SETSTATE ST_STARTSHAKE
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_STARTSHAKE
+  TEST DelayShakeDown = 1
+  AND DelayShakeDownTwo = 1
+    SET Langop 1
+    TIMEOUT DelayShakeUp ST_SHAKE
+    SETSTATE ST_SHAKE
+  ENDTEST
+END
+
+State=ST_SHAKE
+  TEST DelayShakeUp = 1
+    CALC ShakeCount = One + ShakeCount
+    TEST ShakeCount < ShakeMax
+      SET Langop 0
+      TIMEOUT DelayShakeDown ST_STARTSHAKE
+      SETSTATE ST_STARTSHAKE
+    ELSE
+      SET ShakeCount 0
+      TEST Shake >= ShakeOK
+        SET Langop 0
+        SET Kortop 0
+        SET Bredklem 0
+        SET Smalklem 0	
+        SETSTATE ST_GODOWN
+      ELSE
+        SETSTATE ST_READY
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMPTY
+;  TEST Plads5 = ST_SEND_FW
+    SETSTATE ST_RECEIVE 
+;  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SET FullBox 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+;  TEST Plads5 = ST_EMPTY
+    TEST Kasseklar = 1 
+      SET Bredklem 1
+      SET Smalklem 1
+      SETSTATE ST_CLOSE
+;    ELSE
+;      SET errorCode 1006
+;      SET FullBox 0
+;      SETSTATE ST_IDLE
+    ENDTEST
+;  ENDTEST
+END
+
+State=ST_CLOSE
+  SET Langop 1
+  SET Kortop 1
+  SETSTATE ST_LIFTHIGH
+END
+
+State=ST_LIFTHIGH
+  TIMEOUT DelayUpHigh ST_READY
+  SETSTATE ST_TIMER
+END
+
+State=ST_GODOWN
+  TEST Kortnede = 1
+  AND Langnede = 1
+    SET Bredklem 0
+    SET Smalklem 0
+    SET Langop 0
+    SET Kortop 0
+    SETSTATE ST_OPEN
+  ENDTEST
+END
+
+State=ST_OPEN
+  TEST Bredin = 1
+  AND Smalin = 1
+;    TEST ConveyorOut = ST_EMPTY
+;    OR ConveyorOut = ST_WAIT2
+;    OR ConveyorOut = ST_WAIT3
+      SET Motor 1
+      SET Bredklem 0
+      SET Smalklem 0
+      TIMEOUT TimeWaitNext ST_RUN
+      SETSTATE ST_RUN
+;    ENDTEST
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SET FullBox 1
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RUN
+  TEST Kasseklar = 0
+;  AND ConveyorOut = ST_RECEIVED
+    SET Motor 0
+    SET Kortop 1
+    TIMEOUT DelayUpLow ST_LIFTLOW
+    SETSTATE ST_TIMER
+  ELSE
+    TEST TimeWaitNext = 1
+      SET errorCode 1003
+      SET FullBox 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_LIFTLOW
+  TEST KassePakkerTop = ST_IDLE
+    SET FullBox 0
+    SETSTATE ST_IDLE
+  ELSE
+    SETSTATE ST_EMPTY
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST Kasseklar = 1
+  AND FullBox = Zero
+    SET Langop 0
+    SET Kortop 0
+    SET Bredklem 1
+    SET Smalklem 1
+    SETSTATE ST_CLOSE
+  ELSE
+    TEST FullBox = One
+      SET FullBox 0	
+      SET Bredklem 0
+      SET Smalklem 0
+      SETSTATE ST_OPEN
+    ELSE
+      SET Motor 1
+      SET Langop 0
+      SET Kortop 0
+      SET Bredklem 0
+      SET Smalklem 0
+      TIMEOUT TimeWaitNext ST_STARTUP
+      SETSTATE ST_STARTUP
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_STARTUP
+  TEST TimeWaitNext = 1
+    SET Motor 0
+    SET Langop 0
+    SET Kortop 1
+    SET Bredklem 0
+    SET Smalklem 0	
+    TIMEOUT DelayUpLow ST_LIFTLOW
+    SETSTATE ST_TIMER
+  ENDTEST
+END

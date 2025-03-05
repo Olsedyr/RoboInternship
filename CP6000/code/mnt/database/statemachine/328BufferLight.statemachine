@@ -1,0 +1,208 @@
+STATEMACHINEVERSION 3
+Name=BufferLight
+Output=D9 "D9 Lamp"
+Output=C11 "C11 Lamp"
+Output=C15 "C15 Lamp"
+Output=C18 "C18 Lamp"
+Timeout=blinkRate 500000
+Link=workcell WorkCell
+Link=emergency Emergency
+Link=errorcode ErrorCode
+Link=PB1 Pallebane1
+Link=PB4 Pallebane4
+Link=PB5 Pallebane5
+Link=PB6 Pallebane6
+Link=PBuf1 PalleBuffer1
+Link=PBuf2 PalleBuffer2
+Link=PBuf3 PalleBuffer3
+Link=PBuf4 PalleBuffer4
+Link=PM Pallemagasin
+linkValue=casekind Program328
+linkValue=FotoPM test PallemagasinPhoto
+Value=ON 1
+Value=OFF 0
+Value=BLINK 0
+Value=message 0
+;Value=testPB4
+;order 0 no order, 1 C11, 2 C14/15, 3 C18, 4 D9, 5 pallets
+Value=order 0 
+Const=enable 1
+
+State=ST_HALT
+END
+ 
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST enable = 1
+    SET order 0
+    SETSTATE ST_WAIT_NEW_ORDER
+  ENDTEST
+END
+
+State=ST_RESET
+  SET message 0
+  SETSTATE ST_IDLE
+END
+
+State=ST_WAIT_NEW_ORDER
+  TEST enable = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+  TEST casekind = 1
+  AND PBuf2 = ST_EMPTY
+      SET order 1
+      SETSTATE ST_ORDER
+  ELSETEST casekind = 2
+  AND PBuf3 = ST_EMPTY
+      SET order 2
+      SETSTATE ST_ORDER
+  ELSETEST casekind = 3
+  AND PBuf4 = ST_EMPTY
+      SET order 3
+      SETSTATE ST_ORDER
+  ELSETEST casekind = 4
+  AND PBuf1 = ST_EMPTY
+      SET order 4
+      SETSTATE ST_ORDER
+  ELSETEST PM = ST_LOADPOS
+  AND FotoPM = 0
+    SET order 5
+    SETSTATE ST_ORDER
+  ELSETEST PBuf1 = ST_EMPTY
+    SET order 4
+    SETSTATE ST_ORDER
+  ELSETEST PBuf2 = ST_EMPTY
+    SET order 1
+    SETSTATE ST_ORDER
+  ELSETEST PBuf3 = ST_EMPTY
+    SET order 2
+    SETSTATE ST_ORDER
+  ELSETEST PBuf4 = ST_EMPTY
+    SET order 3
+    SETSTATE ST_ORDER
+  ENDTEST
+  SET D9 0
+  SET C11 0
+  SET C15 0
+  SET C18 0
+END
+
+State=ST_ORDER
+  TEST blinkRate = 1
+    TEST BLINK = ON
+      SET BLINK OFF
+    ELSE
+      SET BLINK ON
+    ENDTEST
+    TIMEOUT blinkRate ST_ORDER
+    SETSTATE ST_ORDER
+  ENDTEST
+  TEST order = 0 THEN
+    SET D9 0
+    SET C11 0
+    SET C15 0
+    SET C18 0
+    SET message 0
+    SETSTATE ST_WAIT_NEW_ORDER
+  ELSETEST order = 1
+    SET D9 0
+    SET C11 BLINK
+    SET C15 0
+    SET C18 0
+    SET message 0
+    TEST PBuf2 = ST_READY
+      SETSTATE ST_WAIT_NEW_ORDER
+    ENDTEST
+  ELSETEST order = 2
+    SET D9 0
+    SET C11 0
+    SET C15 BLINK
+    SET C18 0
+    SET message 0
+    TEST PBuf3 = ST_READY
+      SETSTATE ST_WAIT_NEW_ORDER
+    ENDTEST
+  ELSETEST order = 3
+    SET D9 0
+    SET C11 0
+    SET C15 0
+    SET C18 BLINK
+    SET message 0
+    TEST PBuf4 = ST_READY
+      SETSTATE ST_WAIT_NEW_ORDER
+    ENDTEST
+  ELSETEST order = 4
+    SET D9 BLINK
+    SET C11 0
+    SET C15 0
+    SET C18 0
+    SET message 0
+    TEST PBuf1 = ST_READY
+      SETSTATE ST_WAIT_NEW_ORDER
+    ENDTEST
+  ELSETEST order = 5
+    SET D9 BLINK
+    SET C11 BLINK
+    SET C15 BLINK
+    SET C18 BLINK
+    SET message 0
+    TEST FotoPM = 1
+      SETSTATE ST_WAIT_NEW_ORDER
+    ENDTEST
+  ENDTEST
+  TEST PB1 = ST_READY
+    SET D9 0
+    SET C11 0
+    SET C15 0
+    SET C18 0
+    SET message 0
+;    TEST PB4 = ST_EMPTY
+;      SET testPB4 1
+;    ELSE
+;      SET testPB4 0
+;    ENDTEST
+    SETSTATE ST_ORDERED
+  ENDTEST
+END
+
+State=ST_ORDERED
+  ;wait until ordered pallet gets on its place
+;  TEST testPB4 = 1
+;    TEST PB4 = ST_READY_ROBOT
+;      SET testPB4 0
+;      SET order 0
+;      SETSTATE ST_WAIT_NEW_ORDER
+;    ENDTEST
+;  ELSE
+    TEST order = 1
+      TEST PBuf2 = ST_READY
+        SET order 0
+        SETSTATE ST_WAIT_NEW_ORDER
+      ENDTEST
+    ELSETEST order = 2
+      TEST PBuf3 = ST_READY
+        SET order 0
+        SETSTATE ST_WAIT_NEW_ORDER
+      ENDTEST
+    ELSETEST order = 3
+      TEST PBuf4 = ST_READY
+        SET order 0
+        SETSTATE ST_WAIT_NEW_ORDER
+      ENDTEST
+    ELSETEST order = 4
+      TEST PBuf1 = ST_READY
+        SET order 0
+        SETSTATE ST_WAIT_NEW_ORDER
+      ENDTEST
+    ELSETEST order = 5
+      TEST PM = ST_READY
+        SET order 0
+        SETSTATE ST_WAIT_NEW_ORDER
+      ENDTEST
+    ELSETEST order = 0
+      SETSTATE ST_WAIT_NEW_ORDER
+    ENDTEST
+;  ENDTEST
+END

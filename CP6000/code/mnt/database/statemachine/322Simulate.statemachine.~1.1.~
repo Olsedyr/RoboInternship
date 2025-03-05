@@ -1,0 +1,51 @@
+STATEMACHINEVERSION 3
+Name=Simulate
+Link=ProgramB2
+Link=ConveyorOutA
+Link=ConveyorOut2A
+Link=ConveyorOutB
+Link=ConveyorOut2B
+Link=ConveyorOut3B
+Link=BendConveyor
+linkValue=simConvA simulate ConveyorOutA
+linkValue=simConv2A simulate ConveyorOut2A
+linkValue=simConvB simulate ConveyorOutB
+linkValue=simConv2B simulate ConveyorOut2B
+linkValue=simConv3B simulate ConveyorOut3B
+linkValue=simBend simulate BendConveyor
+linkValue=nextConv ProgramB2
+linkValue=countB ProgramB2
+linkValue=curCountB ConveyorOut2B
+linkValue=singlesend ConveyorOut2B
+linkValue=firstRun WorkCell
+Value=simSoco 0
+Value=temp 0
+Value=simulatePallets 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST simSoco = 0
+  AND temp != simSoco
+    SET temp simSoco
+    SET simConvA 0
+    SET simConv2A 0
+    SET simConvB 0
+    SET simConv2B 0
+    SET simConv3B 0
+    SET simBend 0
+  ELSETEST simSoco = 1
+  AND temp != simSoco
+    SET temp simSoco
+    SET simConvA 1
+    SET simConv2A 1
+    SET simConvB 1
+    SET simConv2B 1
+    SET simConv3B 1
+    SET simBend 1
+  ENDTEST
+END

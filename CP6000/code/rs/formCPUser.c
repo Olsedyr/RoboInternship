@@ -37,7 +37,7 @@ static char prodpermin[256]="";
 static FONT strFont;
 static int useprogramstm=-1;
 
-tmpnStateMachineValue *ppmin;
+//tmpnStateMachineValue *ppmin;
 
 static int wstm = -1;
 static int statew_idle = -1;
@@ -106,7 +106,7 @@ BX_BOOL formCPUserInit(HBOX hBox,BX_LPARAM lParam)
 	continueknapstm = getMachineIdx("ContinueKnap");
 	continueknap = getMachineValuePtr(continueknapstm,"knap");
 	cpcounterstm = getMachineIdx("CPCounter");
-  doFakeProducts = getMachineValuePtr(wstm,"doFakeProducts");
+  	doFakeProducts = getMachineValuePtr(wstm,"doFakeProducts");
 	return TRUE;
 }
 
@@ -485,10 +485,16 @@ BX_BOOL formCP_cmdMenu_Click(HBOX hBox)
 		}
 		ToolBx = BxMenu_Add(hBx ,getLanguageLineFromIdx(langptr, 19, "Tools"), SUB, NULL, TRUE, NULL);//icon4);
 		{
-      BxMenu_Add(ToolBx ,getLanguageLineFromIdx(langptr, 31, "Jog Manual"), MENU, formTools_cmdJogLift_Click, TRUE, NULL);
-      if(tworkcell->dios.maxidx>0 || tworkcell->loadcells.maxidx>0 || tworkcell->comsks.maxidx>0 || tworkcell->macs.maxidx>0)
-      {
-        BxMenu_Add(ToolBx ,getLanguageLineFromIdx(langptr, 24, "Dist. I/O"), MENU, formTools_cmdDistIO_Click, TRUE, NULL);
+			if(testState(wstm,statew_halt)
+				||testState(wstm,statew_idle)
+				||testState(wstm,statew_paused)
+				||testState(wstm,statew_error))
+			BxMenu_Add(ToolBx ,getLanguageLineFromIdx(langptr, 31, "Jog Manual"), MENU, formTools_cmdJogLift_Click, TRUE, NULL);
+			else
+			BxMenu_Add(ToolBx ,getLanguageLineFromIdx(langptr, 31, "Jog Manual"), MENU, formTools_cmdJogLift_Click, FALSE, NULL);
+			if(tworkcell->dios.maxidx>0 || tworkcell->loadcells.maxidx>0 || tworkcell->comsks.maxidx>0 || tworkcell->macs.maxidx>0)
+			{
+				BxMenu_Add(ToolBx ,getLanguageLineFromIdx(langptr, 24, "Dist. I/O"), MENU, formTools_cmdDistIO_Click, TRUE, NULL);
 			}
 			BxMenu_Add(ToolBx ,getLanguageLineFromIdx(langptr, 25, "STM control"), MENU, formCP_cmdSTMCtrl_Click, TRUE, NULL);
 		}

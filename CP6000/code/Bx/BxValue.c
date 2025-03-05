@@ -34,7 +34,7 @@ BX_BOOL BxAssignIntValue(HBOX hBox)
 BX_BOOL BxDeleteValue(HBOX hBox)
 {
   PBOXSTRUCT b = (PBOXSTRUCT)hBox;
-  BXINTVALUESTRUCT *iv;
+  BXINTVALUESTRUCT *iv = NULL;
 
   if(hBox==NULL)
     return FALSE;

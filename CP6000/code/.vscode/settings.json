@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "sdl_thread.h": "c",
+        "bxdrivers.h": "c"
+    }
+}

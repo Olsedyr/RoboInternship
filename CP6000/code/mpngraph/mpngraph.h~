@@ -1,0 +1,197 @@
+/***********************************************************
+ *based on tmpnrobot.h
+ *typedef to define new name for the type:
+ *        typedef int Apples;
+ *        typedef int Oranges;
+ *        Apples coxes; //same as int coxes
+ *        Oranges jaffa; 
+ *
+ *Type definition for a structure:
+ *#include<stdio.h>
+ *
+ *typedef struct person
+ *{
+ *  char *name;
+ *  int age;
+ *} PERSON;
+ *
+ *int main()
+ *{
+ *  PERSON p;
+ *  p.name = "John Smith";
+ *  p.age = 25;
+ *  printf("%s",p.name);
+ *  printf("%d",p.age);
+ *  return 0;
+ *}
+ *
+ *Arrays of structures?
+ ***********************************************************/
+
+//************************************************
+//PATTERN
+//************************************************
+typedef struct tmpnItem
+{
+  char type[256];//"BAG","BOX","EUROPALLET","HALFPALLET","BIGBOX" etc
+  char name[256];
+  char filename[256];
+  tmpnVectorXYZ dim; //fysisk
+  tmpnFloat sy; //stablet y
+  tmpnFloat gy; //grip y
+  tmpnFloat my; //move y
+  tmpnFloat gx; //grip x
+  tmpnFloat weight;//for dynamic model
+  int user;
+} tmpnItem;
+
+typedef struct tmpnPatternItem
+{
+  int layer;
+  tmpnFrame wcp;
+} tmpnPatternItem;
+
+typedef struct tmpnPattern
+{
+  char name[256]; //unique key to pattern
+  char filename[256]; 
+  int maxidx;
+  float width;
+  float length;
+  tmpnPatternItem item[MAXPATTERNITEMS];
+} tmpnPattern;   //size=14200 med 50 items
+
+//************************************************
+//CPPATTERN
+//************************************************
+
+typedef struct tmpnCPPatternItem
+{
+  int layer;
+  int maxpush;
+  int gettime;
+  int *ppps;//maxpush indicates number of ppps
+} tmpnCPPatternItem;
+
+typedef struct tmpnCPPattern
+{
+  char name[256]; //unique key to pattern
+  char filename[256];
+  int user;
+  int selectedItem;
+  int selectedPPP;
+  int maxidx;
+  tmpnCPPatternItem *items;
+} tmpnCPPattern;
+
+typedef struct tmpnStateName
+{
+  int  idx;
+  char name[256];
+} tmpnStateName;
+
+typedef struct STMCOMMANDSTRUCT
+{
+  int type;
+  void *data;
+  int level;
+} STMCOMMANDSTRUCT;
+
+typedef struct tmpnStateMachineState
+{
+  char name[256];
+  int statenum;
+  int maxprgidx;
+  STMCOMMANDSTRUCT *prg;
+} tmpnStateMachineState;
+
+typedef struct tmpnStateMachineTimeout
+{
+  char name[256];
+  int timeout;
+} tmpnStateMachineTimeout;
+
+typedef struct tmpnStateMachineTable
+{
+  int maxsize;
+  int filter; //0=NO FILTER 1=AVG
+  int newtablesize;
+  int curtablesize;
+  int sum;
+  int sumcnt;
+  int maxidx;
+  int min;
+  int max;
+  int *item;
+  int topsearchwidth; ///< how far back the search of the toppoint should go
+  int topidx; ///< index of found toppoint
+  float fsum;
+  float fmin;
+  float fmax;
+  float *fitem;
+  float topval; ///< value of found toppoint
+} tmpnStateMachineTable;
+
+typedef struct tmpnStateMachineValue
+{
+  char name[256];
+  int type; //VALUE CONSTANT TABLE LINKVALUE
+  int subtype; //0=int 1=float
+  int data;
+  float fdata;
+  char linkname[256];
+  char link[256];
+  //could be declared as union
+  tmpnStateMachineTable *table; //used if type=TABLE
+  //tmpnPathHandle *path; //used if type=PATH
+  //tmpnFrame *frame; //used if type=FRAME
+  tmpnItem *item; //used if type=ITEM
+  tmpnPattern *pattern; //used if type=PATTERN
+  tmpnCPPattern *cppattern; //used if type=CPPATTERN
+  struct tmpnStateMachineValue *linkvalue;
+	tmpnRemoteValue *remote; //used if remotevalue <=> linkvalue==NULL
+} tmpnStateMachineValue;
+
+typedef struct tmpnStateMachineLink
+{
+  int stmidx; 
+  char localname[256];
+  char name[256];
+} tmpnStateMachineLink;
+
+typedef struct tmpnStateMachine
+{
+  int version;
+  int type;
+  char filename[256];
+  char name[256];
+  //TODO liste over hvilke STM's der har mcSignal's er i brug
+  //
+  int mcSignal; //hvis TRUE sendes denne STM's istate til MC
+                //og MC kan sætte state via setState()
+  int delaystop;
+  struct timeval stoptimer;
+
+  volatile int istate;
+  int next_istate;
+  int new_istate;
+  volatile int stop;
+  pthread_cond_t change;
+  pthread_mutex_t change_mtx;
+  struct timeval timer;
+	int timerstate;
+	tmpnStateMachineValue *debugvalue;
+  int numstate;
+  tmpnStateMachineState *state;
+	int numvalue;
+  tmpnStateMachineValue *value;
+  int numtimeout;
+  tmpnStateMachineTimeout *timeout;
+  int numinput;
+  tmpnStateMachineIO *input;
+  int numoutput;
+  tmpnStateMachineIO *output;
+  int numlink;
+  tmpnStateMachineLink *link;
+} tmpnStateMachine;
+

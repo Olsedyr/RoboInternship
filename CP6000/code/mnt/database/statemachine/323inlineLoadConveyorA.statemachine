@@ -1,0 +1,9 @@
+; INLINE 310inlineLoadConveyorA.statemachine
+SETFRAME fromFrame toFrame1
+;*******************************************
+SETFRAME toFrame2 conveyorB
+CALC toFrame2.y = toFrame2.y + item.gy
+CALC toFrame2.x = toFrame2.x - item.gx
+LOAD conveyorA_conveyorB fromFrame toFrame2
+;*******************************************
+LOAD conveyorA_home fromFrame home

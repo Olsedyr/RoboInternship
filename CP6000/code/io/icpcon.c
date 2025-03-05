@@ -145,7 +145,7 @@ int sendIcpcon(int type, int address,unsigned int *data,int sfd) {
 	int i;
 	char s[16];
 	char sendpacket[32];
-	char recpacket[32];
+	char recpacket[256];
 	int spacketlen;
 	struct timeval tv;
   fd_set readfds;

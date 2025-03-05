@@ -1,0 +1,127 @@
+STATEMACHINEVERSION 3
+Include=pallebane.statemachine
+Name=Pallebane5
+Input=palletInPlace "Pallebane5 Foto"
+Output=Motor "Pallebane5 Motor"
+Output=Chain "Pallebane5 Chain"
+Link=next Pallebane6
+Link=prev Pallebane4
+Link=prev2 Shuttle
+Link=parent Parent 
+linkValue=shuttlePos curPos Shuttle
+linkValue=command Shuttle
+Timeout=TimeoutDelay 10000000
+Timeout=StartupTimeout 5000000
+Timeout=StopDelay 200000
+Timeout=PickupDelay 0
+Timeout=ReadyDelay 200000
+Const=autoDetectPallet 1
+Const=ON 0
+Const=posPB5 6
+Const=comPB5receive 5
+
+State=ST_IDLE
+  SET Motor 0
+  SET Chain 0 
+  TEST parent = ST_RESET
+  OR parent = ST_RUN
+  OR simulate = 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST palletInPlace = ON 
+  AND autoDetectPallet = 1
+    TIMEOUT ReadyDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST prev = ST_SEND
+      SET Motor 0
+      SET Chain 1
+      TIMEOUT maxDelayStop ST_RECEIVE
+      SETSTATE ST_RECEIVE
+    ELSETEST prev2 = ST_SEND
+    AND shuttlePos = posPB5
+    AND command = comPB5receive
+      SET Motor 1
+      SET Chain 0
+      TIMEOUT maxDelayStop ST_RECEIVE
+      SETSTATE ST_RECEIVE
+    ELSE 
+      SET Motor 0
+      SET Chain 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_RECEIVE
+  TEST palletInPlace = ON
+    TIMEOUT StopDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST maxDelayStop = 1
+      SETSTATE ST_RESET
+    ELSE
+      TEST prev = ST_SEND
+        SET Chain 1
+      ELSETEST prev2 = ST_SEND
+      AND shuttlePos = posPB5
+      AND command = comPB5receive
+        SET Motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_STOP
+  TEST palletInPlace = ON
+    TIMEOUT StopDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST StartupTimeout = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Chain 1
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_READY
+  TEST palletInPlace != ON 
+  AND autoDetectPallet = 1
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST next = ST_EMPTY_SHIFT
+      TIMEOUT TimeoutDelay ST_RESET
+      SETSTATE ST_SEND
+    ELSE 
+      SET Motor 0
+      SET Chain 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST next = ST_PALLET_REV
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST TimeoutDelay = 1
+      SETSTATE ST_RESET
+    ELSE
+      TEST next = ST_RECEIVE
+        SET Chain 1
+        SET Motor 0 
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST next = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

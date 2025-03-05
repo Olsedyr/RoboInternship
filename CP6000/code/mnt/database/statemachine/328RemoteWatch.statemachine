@@ -1,0 +1,38 @@
+STATEMACHINEVERSION 3
+Name=RemoteWatch
+Link=parent Parent
+Link=Remote1 KasseLift 
+Link=Remote2 KasseLoader
+Value=errorCode 0
+Value=message 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_WATCH
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SET message 0
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST Remote1 = UNKNOWN
+	OR Remote2 = UNKNOWN
+		SET message 2050
+	ELSE
+		SET message 0
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

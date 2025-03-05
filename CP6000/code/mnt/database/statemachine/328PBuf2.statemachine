@@ -1,0 +1,29 @@
+STATEMACHINEVERSION 3
+Include=pallebuffer.statemachine
+Name=PalleBuffer2
+Input=palletInPlace "Pallebuffer2 Foto"
+Output=MotorFwd "PalleBuffer2 MotorFwd"
+Output=MotorRev "PalleBuffer2 MotorRev"
+linkValue=shuttlePos curPos Shuttle
+linkValue=shuttlePickDir pickDir Shuttle
+linkValue=shuttlePlaceDir placeDir Shuttle 
+linkValue=command Shuttle
+linkValue=shuttleCasekind casekind Shuttle
+Link=next Shuttle
+Link=prev Shuttle
+Link=parent Parent
+;casekind 0 no case, 1 C11, 2 C14/15, 3 C18, 4 D9
+Value=casekind 0 
+Timeout=TimeoutDelay 10000000
+Timeout=StartupTimeout 5000000
+Timeout=StopDelay 0
+Timeout=PickupDelay 0
+Timeout=ReadyDelay 6000000
+Const=autoDetectPallet 1
+Const=ON 1
+Const=posPBuf 3
+Const=bufSide 1
+Const=comSend 14
+Const=comReceive 13
+Const=defaultCase 1
+

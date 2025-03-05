@@ -24,7 +24,7 @@ int isRunning(char *WorkCell);
 void setupCW(void);
 int thnRoundZero(int val);
 void doCW(void);
-int getline(char *instring, char *outstring, int lim);
+int getStrFromLine(char *instring, char *outstring, int lim);
 int openSocket(char *remoteHost, int port);
 void resetRequest(tmpnRemoteHost* remotehost);
 void closeSocket(tmpnRemoteHost* remotehost);

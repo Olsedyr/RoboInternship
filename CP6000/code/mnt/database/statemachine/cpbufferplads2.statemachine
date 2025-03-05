@@ -250,12 +250,12 @@ State=ST_GOCLOSE
 END
 
 State=ST_NEXT
-	TEST kortskubleftinde = 1
+;	TEST kortskubleftinde = 1
 ;  AND kortskubrightinde = 1
   	TEST startingup = 0
 			SETSTATE ST_WAITPUSH
 		ELSE
 			SETSTATE ST_STARTUP
 		ENDTEST
-	ENDTEST
+;	ENDTEST
 END

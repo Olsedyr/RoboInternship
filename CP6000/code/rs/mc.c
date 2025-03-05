@@ -13,6 +13,7 @@
 #include "stm.h"
 #include "modbus_tcp.h"
 #include "genscript.h"
+#include "timer.h"
 
 volatile int trio_sdf;
 volatile int *roboError=NULL;
@@ -46,7 +47,7 @@ extern volatile int bxUpAndRunning;
 
 volatile static bufferstruct buffer0 = { NULL };
 
-clock_t gstart;
+//clock_t gstart;
 
 pthread_mutex_t mc_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t mc_cond = PTHREAD_COND_INITIALIZER;

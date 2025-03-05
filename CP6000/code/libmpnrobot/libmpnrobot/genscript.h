@@ -53,11 +53,20 @@ typedef struct macroparamstruct
 			      ,const char* fromFrame0, tmpnFloat x1, tmpnFloat y1, tmpnFloat z1, tmpnFloat v1, tmpnFloat w1, tmpnFloat u1
 			      ,const char* fromFrame1, tmpnRobot *robot, int nos, int *level, const char *toFrame, const char *tcpname, int endpoint);
   COMMANDSTRUCT *spiralMacro(tmpnRobot *robot, tmpnPathDef *ptrpath, int* curidx, tmpnFloat A, tmpnFloat offsx, tmpnFloat offsz, tmpnFloat L, tmpnFloat f, tmpnFloat T, tmpnVector* pos, int nos, int TCPidx);
-  inline tmpnFloat spiralspeed(tmpnFloat L, tmpnFloat T);
+  inline tmpnFloat spiralspeed(tmpnFloat L, tmpnFloat T) 
+  {
+  return -((3 * L) / (2 * T));
+  } 
   COMMANDSTRUCT *uplineMacro(tmpnRobot *robot, tmpnPathDef *ptrpath, int* curidx, tmpnFloat L, tmpnFloat T, tmpnVector* pos, int nos, int TCPidx);
-  inline tmpnFloat uplinespeed(tmpnFloat L, tmpnFloat T);
+  inline tmpnFloat uplinespeed(tmpnFloat L, tmpnFloat T) 
+  {
+  return ((3 * L) / (2 * T));
+  }
   COMMANDSTRUCT *downlineMacro(tmpnRobot *robot, tmpnPathDef *ptrpath, int* curidx, tmpnFloat L, tmpnFloat T, tmpnVector* pos, int nos, int TCPidx);
-  inline tmpnFloat downlinespeed(tmpnFloat L, tmpnFloat T);
+  inline tmpnFloat downlinespeed(tmpnFloat L, tmpnFloat T) 
+  {
+  return (-(3 * L) / (2 * T));
+  }
   void blendquintic(tmpnPathDef *ptrpath, int* curidx, tmpnJointsUnion* p1, tmpnJointsUnion* v1, tmpnJointsUnion* a1, tmpnJointsUnion* p2, tmpnJointsUnion* v2, tmpnJointsUnion* a2, tmpnFloat ttime, int nos, int TCPidx, tmpnRobot *robot, int positionhint, int last);
   tmpnFloat blendquinticmaxvel(tmpnJointsUnion* p1, tmpnJointsUnion* v1, tmpnJointsUnion* a1, tmpnJointsUnion* p2, tmpnJointsUnion* v2, tmpnJointsUnion* a2, tmpnFloat ttime, tmpnJointsUnion *mv);
   tmpnFloat blendquinticmaxacc(tmpnJointsUnion* p1, tmpnJointsUnion* v1, tmpnJointsUnion* a1, tmpnJointsUnion* p2, tmpnJointsUnion* v2, tmpnJointsUnion* a2,tmpnFloat ttime,tmpnJointsUnion *ma);

@@ -1,0 +1,123 @@
+Changed name of custom getline function since standart implementation was made in 2010
+stm.h changed name to my_getline
+
+stmclient.c int my_getline
+
+stmserver.c int my_getline
+
+
+Changed code for these variables since compiler is now better at finding multiple declerations of global variables
+
+****** Bx.h*******
+// uncommented
+extern BxFont* DefaultButtonFont;
+
+//*****************changed to extern**************
+extern BxFont* DefaultSmallFont;
+
+//*********************added in header************
+extern BxFont* DefaultFont;
+
+
+******* Bx.c *********
+removed extern from def
+
+********fftfont.c********
+removed definition of the variables
+
+
+
+***** in tmpnRobot.c/tmpnRobot.h*************
+changed ifdef cpluplus section to this for fix
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// Function declarations
+int staticforce(tmpnRobot *robot);
+int tmpnComputeIK(tmpnRobot *trobot, tmpnFloat wx, tmpnFloat wy, tmpnFloat wz, tmpnFloat wv, tmpnFloat ww, tmpnFloat wu, int tcpidx);
+int tmpnJointToActuator(tmpnRobot *robot, int tcpidx);
+int tmpnComputeFK(tmpnRobot *trobot, tmpnFloat a, tmpnFloat b, tmpnFloat c, tmpnFloat d, tmpnFloat e, tmpnFloat f, int tcpidx);
+int tmpnComputeFKlogic(tmpnRobot *trobot, tmpnFloat a, tmpnFloat b, tmpnFloat c, tmpnFloat d, tmpnFloat e, tmpnFloat f, int tcpidx);
+void solve(tmpnRobot *robot, int maxidx, tmpnPosition *position, tmpnFloat maxTime, tmpnFloat *maxSpeed, int order);
+void generatePath(tmpnRobot *tmpnrobot, tmpnPathDef *pathdef, tmpnPath *path);
+void copyPath(tmpnPath *dest, tmpnPath *source);
+void hackPositionHint(tmpnPath *path, tmpnPathDef *pathdef);
+void copyKeypoint(tmpnPath *path, tmpnPathDef *pathdef);
+
+// Global variable declarations (use extern)
+extern tmpnRobot *initrobot;
+extern volatile tmpnRobot *trobot;
+extern volatile tmpnWorkcell *tworkcell;
+extern tmpnPlant *tplant;
+extern int newtau;
+extern tmpnBoptCoeffItem coeff;
+extern tmpnStateName stateName[];
+
+#ifdef __cplusplus
+}
+#endif
+
+*********************************************
+
+
+
+******** scopeitem***********
+scopeItem in formuserdata but from tmpnrobot.h typedef struct tmpnscopedata
+
+added in tmpnrobot.h at typedef struct tmpnscopedata
+
+// Declare the array as extern
+extern tmpnScopeData scopeitem[10];
+
+
+added in tmpnrobot.c in top
+
+
+// Define the array
+tmpnScopeData scopeitem[10]; // This is the definition
+
+in formScopeDatauser.c and formSTMCtrlUser.c
+//*********removed***********
+//tmpnScopeData scopeitem[10];
+
+***************************************************
+
+
+
+************************************
+
+ppmin in formCMUser.c and formCPUser.c but from tmpnrobot.h typedef struct tmpnstatemachinevalue
+
+in tmpnrobot.c
+//define variable
+tmpnStateMachineValue *ppmin;
+tmpnStateMachineValue *casecount;
+
+in tmpnrobot.h
+
+// added for global def
+extern tmpnStateMachineValue *ppmin;
+extern tmpnStateMachineValue *casecount;
+
+in formCMUser.c and formCPUser.c
+
+removed def of ppmin and casecount since now global pointers
+
+
+
+
+*************************************************
+
+gstart added timer.h with extern definition of clock_t = gstart, used loader.c as definition file and removed definition in mc.c but included timer.h instead
+
+
+*************************************
+
+
+
+
+CODE CHANGES FOR FIXING COMPILATION WARNINGS
+
+all array sizes increased

@@ -1,0 +1,97 @@
+STATEMACHINEVERSION 3
+Name=SmallPap
+Output=SmallPapMotor "SmallPap Motor"
+Input=BigPapInduktiv "BigPap Induktiv"
+Output=BigPapMotor "BigPap Motor"
+Link=PladsLoad PladsLoad 
+Link=KasseLoader2 
+Link=KasseSkubberFoto2 
+Link=parent Parent 
+Timeout=stopDelaySmall 5500000
+Timeout=stopDelayBig 350000
+Timeout=timeoutBigPap 3000000
+Value=simulate 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET SmallPapMotor 0
+  SET BigPapMotor 0
+;  TEST parent = ST_RESET
+;  OR simulate = 1
+    SETSTATE ST_RESET
+;  ENDTEST
+END
+
+State=ST_TEST
+  TEST KasseLoader2 = ST_READY
+  OR KasseLoader2 = ST_EMPTY
+  OR KasseLoader2 = ST_HOLD 
+  OR simulate = 1 
+    TEST KasseSkubberFoto2 != ST_ON
+      SET SmallPapMotor 0
+      SET BigPapMotor 1
+      TIMEOUT timeoutBigPap ST_GETPAP
+      SETSTATE ST_GETPAP
+    ENDTEST
+  ELSE
+    SET SmallPapMotor 0
+    SET BigPapMotor 0
+  ENDTEST
+;  TEST parent = ST_IDLE
+;  AND simulate = 0
+;    SETSTATE ST_IDLE
+;  ENDTEST
+END
+
+State=ST_GETPAP
+  TEST BigPapInduktiv = 1
+    TIMEOUT stopDelayBig ST_BIGPAP_STOP
+    SETSTATE ST_BIGPAP_STOP
+  ELSETEST timeoutBigPap = 1
+		; induktiv føler fejl
+  ELSE
+    SET SmallPapMotor 0
+    SET BigPapMotor 1
+  ENDTEST
+;  TEST parent = ST_IDLE
+;  AND simulate = 0
+;    SETSTATE ST_IDLE
+;  ENDTEST
+END
+
+State=ST_BIGPAP_STOP
+  TEST stopDelayBig = 1 
+    SET BigPapMotor 0
+    SET SmallPapMotor 1
+    TIMEOUT stopDelaySmall ST_STARTUP
+    SETSTATE ST_STARTUP
+  ENDTEST
+;  TEST parent = ST_IDLE
+;  AND simulate = 0
+;    SETSTATE ST_IDLE
+;  ENDTEST
+END
+
+State=ST_STARTUP
+  TEST KasseSkubberFoto2 = ST_ON
+    SET SmallPapMotor 0
+    SET BigPapMotor 0
+    SETSTATE ST_TEST 
+  ELSETEST stopDelaySmall = 1
+    SETSTATE ST_TEST
+  ELSE
+    SET SmallPapMotor 1
+    SET BigPapMotor 0
+  ENDTEST 
+END
+
+State=ST_RESET
+  TIMEOUT stopDelaySmall ST_STARTUP
+  SETSTATE ST_STARTUP
+END
+

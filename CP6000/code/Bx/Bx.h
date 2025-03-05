@@ -33,8 +33,9 @@
 #include "BxDC.h"
 #include "BxUser.h"
 
-//extern BxFont* DefaultButtonFont;
-BxFont* DefaultSmallFont;
+extern BxFont* DefaultButtonFont;
+extern BxFont* DefaultSmallFont;
+extern BxFont* DefaultFont;
 extern BX_INT BX_LANGUAGE;
 
 ///////////////////////////////////////////////////////////////////

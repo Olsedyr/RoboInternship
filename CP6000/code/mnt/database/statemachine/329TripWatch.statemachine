@@ -1,0 +1,49 @@
+STATEMACHINEVERSION 3
+Name=TripWatch
+Input=pallebane6 "Pallebane6 Tripped"
+Input=pallebane6chain "Pallebane6 Chain Tripped"
+Input=conveyorout "ConveyorOut Tripped"
+Input=conveyorout2 "ConveyorOut2 Tripped"
+linkValue=manometer test Manometer
+linkValue=emerg emergency Emergency
+Link=parent Parent
+Value=errorCode 0
+Timeout=waitForPressure 10000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  TIMEOUT waitForPressure ST_WATCH
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST conveyorout = 1
+	OR conveyorout2 = 1
+		SET errorCode 1114
+	ENDTEST
+	TEST pallebane6 = 1
+	OR pallebane6chain = 1
+		SET errorCode 1116
+	ENDTEST
+	;TEST manometer = 0
+	TEST emerg = 0
+	;AND waitForPressure = 1
+;		SET errorCode 1117
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

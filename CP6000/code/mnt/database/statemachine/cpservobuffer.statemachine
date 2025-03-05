@@ -48,6 +48,12 @@ State=ST_IDLE
 	  AND status != 64
 	  AND status != 80
 	  AND status != 0
+	  AND status != 524304
+	  AND status != 524320
+	  AND status != 524336
+	  AND status != 524352
+	  AND status != 524368
+	  AND status != 524288
       SET set_status 0
     ENDTEST
 		SET errorCode 0
@@ -186,6 +192,12 @@ State=ST_RUN
 	AND status != 64
 	AND status != 80
 	AND status != 0
+	AND status != 524304
+	AND status != 524320
+	AND status != 524336
+	AND status != 524352
+	AND status != 524368
+	AND status != 524288
     SET Mode 0
     SET homed 0
     TIMEOUT TimeCmdDelay ST_IDLE

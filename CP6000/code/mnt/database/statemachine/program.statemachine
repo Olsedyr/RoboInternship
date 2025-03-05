@@ -1,182 +1,182 @@
-VERSION 2
-Name=Program
-Value=0,restart 0
-Value=0,delaystop 0
-Value=0,ticksMoveBag 250 40000.00
-Value=0,ticksBagMoved 251 -350000.00
-Value=0,ticksToolOpen 252 -60000.00
-Value=0,ticksToolOpen 253 60000.00
-Value=0,ticksToolOpen 254 750000.00
-Value=0,ticksToolOpen 255 850000.00
-Value=0,wBags 80
-Value=0,cBagsTotal 0
-Value=0,cBags 0
-Value=0,cPallet 0
-Value=0,cLayer 0
-Value=0,programIdx 0
-linkValue=0,WorkCellFirstRun firstRun WorkCell
-Link=0,pallet Pallebane6
-Link=0,parent Parent
-
-
-State=0,ST_IDLE
-  TEST parent = ST_RESET
-    SETSTATE ST_RESET
-  ENDTEST
-END
-
-State=0,ST_RESET
-  TEST WorkCellFirstRun = 1
-    SETSTATE ST_START
-  ELSE
-    SETSTATE ST_RESTART
-  ENDTEST
-END
-
-;*******************************************
-;* START FROM SCRATCH
-;*******************************************
-State=0,ST_START
-  SET restart = 0
-  SET wBags = 80
-  SET cBagsTotal = 0
-  SET cBags = 0
-  SET cPallet = 0
-  SET cLayer = 0
-  LOAD PATH toHome id=5000,type=12,time=1000 
-    POINT home 0,0,0,90,0,0,10 case
-    POINT home 0,0,0,90,0,0,10 case
-    POINT home 0,0,0,90,0,0,10 case
-    POINT home 0,0,0,90,0,0,10 case
-  END
-  LOAD PATH toConveyor id=5100,type=12,time=1000
-    POINT conveyorA 320,-100,0,100,0,0,10 case
-    POINT conveyorA 320,-100,0,100,0,0,10 case
-    POINT conveyorA 320,-100,0,100,0,0,10 case
-    POINT conveyorA 320,-100,0,100,0,0,10 case
-  END
-  EXEC toHome ST_MOVING_HOME
-  SETSTATE ST_MOVING (or ST_MOVING_HOME)
-END
-
-;*******************************************
-;* RESTART FROM SOMEWHERE
-;*******************************************
-State=0,ST_RESTART
-  TEST restart = 0
-    SETSTATE ST_START
-  ENDTEST
-END
-
-;*******************************************
-;* WAIT UNTIL ROBOT HAS STOPPED
-;*******************************************
-State=0,ST_MOVING_HOME
-  TEST 
-  SETSTATE ST_WAIT_PS_TOP
-END
-
-;*******************************************
-;* SIGNAL PS - WAIT UNTIL TOP
-;*******************************************
-State=0,ST_WAIT_PS_TOP
-  TEST PS ST_TOP
-    SETSTATE ST_RESET_PK
-  ENDTEST
-END
-
-;*******************************************
-;* SIGNAL PB6 - WAIT PALLET READY
-;*******************************************
-State=0,ST_RESET_PK
-  TEST palletB ST_READY_ROBOT  
-    SETSTATE ST_waitUntilBottom
-  ENDTEST
-END
-
-;*******************************************
-;* SIGNAL PS - WAIT UNTIL BOTTOM
-;*******************************************
-State=0,ST_waitUntilBottom
-  TEST PK ST_BOTTOM
-    LOAD PPSCRIPT Nyhuus10Kg cBags
-    SETSTATE 
-  ENDTEST
-END
-
-;*******************************************
-;* WAIT UNTIL ROBOT HAS STOPPED
-;*******************************************
-State=0,ST_MOVE_TO_CONVEYOR
-  TEST Robot = ST_IDLE  
-    SETSTATE ST_MOVE_PS_TOP
-  ENDTEST
-END
-
-;*******************************************
-;* WAIT UNTIL ROBOT HAS STOPPED
-;*******************************************
-State=0,ST_MOVE_TO_COONVEYOR
-  TEST Robot = ST_IDLE  
-    SETSTATE ST_MOVE_PS_TOP
-  ENDTEST
-END
-
-;*******************************************
-;* SIGNAL CV1 - WAIT UNTIL BAG IS READY
-;*******************************************
-State=0,ST_waitBagReady
-  TEST CV1 ST_BAG_READY
-    SETSTATE CV1 ST_MOVE_BAG 
-  ENDTEST
-END
-
-;*******************************************
-;* SIGNAL CV1 - WAIT UNTIL BAG IS LOADED
-;*******************************************
-State=0,ST_MOVE_BAG
-  TEST CV1 ST_BAG_MOVED
-;EXEC er som TIMEOUT
-    EXEC PPSCRIPT Nyhuus cBags - signal run path ST_PLACE_BAG
-    SETSTATE ST_MOVING (or ST_PLACE_BAG)
-  ENDTEST
-END
-
-;*******************************************
-;* WAIT UNTIL ROBOT HAS STOPPED
-;*******************************************
-State=0,ST_PLACE_BAG
-  TEST Robot axis_t > 500000
-    cBags = cBags + 1
-    LOAD PPSCRIPT Nyhuus10Kg cBags
-  ENDTEST
-END
-
-State=0,ST_AfterEachPath
-  CALC cItemsInLayer = cBags % cItemsPrLayer
-  TEST cItemsInLayer >= cItemsPrLayer
-    CALC cLayer = cLayer + 1
-    TEST cLayer > 1
-      SETSTATE ST_MOVE_FOTO_FRI
-    ELSE
-      SETSTATE ST_PSFotoFri
-    ENDTEST
-  ELSE
-    
-  ENDTEST
-END
-
-State=0,ST_MOVE_FOTO_FRI
-  TEST PS ST_FOTO_FRI
-    SETSTATE ST_PSFotoFri
-  ENDTEST
-END
-
-State=0,ST_PSFotoFri
-  TEST cBags < wBags
-    SETSTATE ST_
-  ENDTEST
-  EXEC toHome
-END
-
-
+VERSION 2
+Name=Program
+Value=0,restart 0
+Value=0,delaystop 0
+Value=0,ticksMoveBag 250 40000.00
+Value=0,ticksBagMoved 251 -350000.00
+Value=0,ticksToolOpen 252 -60000.00
+Value=0,ticksToolOpen 253 60000.00
+Value=0,ticksToolOpen 254 750000.00
+Value=0,ticksToolOpen 255 850000.00
+Value=0,wBags 80
+Value=0,cBagsTotal 0
+Value=0,cBags 0
+Value=0,cPallet 0
+Value=0,cLayer 0
+Value=0,programIdx 0
+linkValue=0,WorkCellFirstRun firstRun WorkCell
+Link=0,pallet Pallebane6
+Link=0,parent Parent
+
+
+State=0,ST_IDLE
+  TEST parent = ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=0,ST_RESET
+  TEST WorkCellFirstRun = 1
+    SETSTATE ST_START
+  ELSE
+    SETSTATE ST_RESTART
+  ENDTEST
+END
+
+;*******************************************
+;* START FROM SCRATCH
+;*******************************************
+State=0,ST_START
+  SET restart = 0
+  SET wBags = 80
+  SET cBagsTotal = 0
+  SET cBags = 0
+  SET cPallet = 0
+  SET cLayer = 0
+  LOAD PATH toHome id=5000,type=12,time=1000 
+    POINT home 0,0,0,90,0,0,10 case
+    POINT home 0,0,0,90,0,0,10 case
+    POINT home 0,0,0,90,0,0,10 case
+    POINT home 0,0,0,90,0,0,10 case
+  END
+  LOAD PATH toConveyor id=5100,type=12,time=1000
+    POINT conveyorA 320,-100,0,100,0,0,10 case
+    POINT conveyorA 320,-100,0,100,0,0,10 case
+    POINT conveyorA 320,-100,0,100,0,0,10 case
+    POINT conveyorA 320,-100,0,100,0,0,10 case
+  END
+  EXEC toHome ST_MOVING_HOME
+  SETSTATE ST_MOVING (or ST_MOVING_HOME)
+END
+
+;*******************************************
+;* RESTART FROM SOMEWHERE
+;*******************************************
+State=0,ST_RESTART
+  TEST restart = 0
+    SETSTATE ST_START
+  ENDTEST
+END
+
+;*******************************************
+;* WAIT UNTIL ROBOT HAS STOPPED
+;*******************************************
+State=0,ST_MOVING_HOME
+  TEST 
+  SETSTATE ST_WAIT_PS_TOP
+END
+
+;*******************************************
+;* SIGNAL PS - WAIT UNTIL TOP
+;*******************************************
+State=0,ST_WAIT_PS_TOP
+  TEST PS ST_TOP
+    SETSTATE ST_RESET_PK
+  ENDTEST
+END
+
+;*******************************************
+;* SIGNAL PB6 - WAIT PALLET READY
+;*******************************************
+State=0,ST_RESET_PK
+  TEST palletB ST_READY_ROBOT  
+    SETSTATE ST_waitUntilBottom
+  ENDTEST
+END
+
+;*******************************************
+;* SIGNAL PS - WAIT UNTIL BOTTOM
+;*******************************************
+State=0,ST_waitUntilBottom
+  TEST PK ST_BOTTOM
+    LOAD PPSCRIPT Nyhuus10Kg cBags
+    SETSTATE 
+  ENDTEST
+END
+
+;*******************************************
+;* WAIT UNTIL ROBOT HAS STOPPED
+;*******************************************
+State=0,ST_MOVE_TO_CONVEYOR
+  TEST Robot = ST_IDLE  
+    SETSTATE ST_MOVE_PS_TOP
+  ENDTEST
+END
+
+;*******************************************
+;* WAIT UNTIL ROBOT HAS STOPPED
+;*******************************************
+State=0,ST_MOVE_TO_COONVEYOR
+  TEST Robot = ST_IDLE  
+    SETSTATE ST_MOVE_PS_TOP
+  ENDTEST
+END
+
+;*******************************************
+;* SIGNAL CV1 - WAIT UNTIL BAG IS READY
+;*******************************************
+State=0,ST_waitBagReady
+  TEST CV1 ST_BAG_READY
+    SETSTATE CV1 ST_MOVE_BAG 
+  ENDTEST
+END
+
+;*******************************************
+;* SIGNAL CV1 - WAIT UNTIL BAG IS LOADED
+;*******************************************
+State=0,ST_MOVE_BAG
+  TEST CV1 ST_BAG_MOVED
+;EXEC er som TIMEOUT
+    EXEC PPSCRIPT Nyhuus cBags - signal run path ST_PLACE_BAG
+    SETSTATE ST_MOVING (or ST_PLACE_BAG)
+  ENDTEST
+END
+
+;*******************************************
+;* WAIT UNTIL ROBOT HAS STOPPED
+;*******************************************
+State=0,ST_PLACE_BAG
+  TEST Robot axis_t > 500000
+    cBags = cBags + 1
+    LOAD PPSCRIPT Nyhuus10Kg cBags
+  ENDTEST
+END
+
+State=0,ST_AfterEachPath
+  CALC cItemsInLayer = cBags % cItemsPrLayer
+  TEST cItemsInLayer >= cItemsPrLayer
+    CALC cLayer = cLayer + 1
+    TEST cLayer > 1
+      SETSTATE ST_MOVE_FOTO_FRI
+    ELSE
+      SETSTATE ST_PSFotoFri
+    ENDTEST
+  ELSE
+    
+  ENDTEST
+END
+
+State=0,ST_MOVE_FOTO_FRI
+  TEST PS ST_FOTO_FRI
+    SETSTATE ST_PSFotoFri
+  ENDTEST
+END
+
+State=0,ST_PSFotoFri
+  TEST cBags < wBags
+    SETSTATE ST_
+  ENDTEST
+  EXEC toHome
+END
+
+

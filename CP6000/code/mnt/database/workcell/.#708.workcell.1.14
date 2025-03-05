@@ -1,0 +1,64 @@
+VERSION 2
+708
+;*********************************
+;*       COMMON                  *
+;*********************************
+ITEM D9.item
+ITEM C14.item
+ITEM C18.item
+ITEM Netto.item
+ITEM IFCO18.item
+ITEM FervaA.item
+ITEM FervaTest.item
+CPPATTERN test.cppattern
+CPPATTERN Ferva.cppattern
+CPPATTERN Harndrup.cppattern
+CPPATTERN User1.cppattern
+CPPATTERN User2.cppattern
+CPPATTERN DobbeltD9.cppattern
+STATETEKST danish.statetekst
+STATETEKST english.statetekst
+STATETEKST spanish.statetekst
+LANGUAGE danish.language
+LANGUAGE english.language
+LANGUAGE spanish.language
+;*********************************
+;*            CP6000 V4          *
+;*********************************
+DIO 708.io
+COMSK 708.comsk
+MAC 708Skub.mac
+MAC 708Buffer.mac
+MAC 708Lift.mac
+STM 708WorkCell.statemachine
+STM 708Parent.statemachine
+STM 708Program.statemachine
+STM 708ErrorCode.statemachine
+STM 708ContinueKnap.statemachine
+STM 708TrafficLight.statemachine
+STM 708Emergency.statemachine
+STM 708IOError.statemachine
+STM 708TripWatch.statemachine
+STM 708KasseLiftFoto.statemachine
+STM 708KasseInLinerFoto.statemachine
+STM 708Product1Foto1.statemachine
+STM 708Product1Foto2.statemachine
+STM 708Product2Foto1.statemachine
+STM 708Product2Foto2.statemachine
+STM 708CPCounter.statemachine
+STM 708ProductCount.statemachine
+STM 708PushPattern.statemachine
+STM 708ProductConveyors.statemachine
+STM 708KasseInLiner.statemachine
+STM 708ServoSkub.statemachine
+STM 708LangBufferSkub.statemachine
+STM 708ServoBuffer.statemachine
+STM 708BufferPlads.statemachine
+STM 708ServoLift.statemachine
+STM 708KasseLift.statemachine
+STM 708KasseLiftNext.statemachine
+STM 708KasseLoaderFoto.statemachine
+STM 708KasseLoader.statemachine
+STM 708AccumulatingConveyorQueFullFoto.statemachine
+STM 708AccumulatingConveyor.statemachine
+

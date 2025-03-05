@@ -1,0 +1,45 @@
+How to create a bootable flash disk for roboStacker
+
+1. Lav en flash disk
+   su -
+   /sbin/fdisk /dev/sda (eller hvad disken hedder)
+	 
+	 Opret 2 partitioner - en vfat (type b) på ca 16-20M (bootpart) og en linux (default) på resten dog min. 20-30M:
+
+     1. slet eksisterende med "d"
+     2. opret første med "n" - primary "p"  - partition nr "1" og "+16M"
+     3. set bootflag med "a"
+     4. set type med "t" parameter "b"
+     5. opret anden med "n" - primary "p" - partition nr "2" og "246"(default) - "978"(default)
+     6. write to disk med "w"
+     7. unmount and remove disk
+     7. insert disk.
+
+2. opret filsystemer på flashen
+   /sbin/mkfs -t vfat /dev/sda1
+	 /sbin/mkfs -t ext3 /dev/sda2
+
+3. Gør flash disken bootbar
+   ms-sys --mbrsyslinux /dev/sda
+	 syslinux /dev/sda1
+
+4. kopier filer til bootparten
+   mount /dev/sda1 /mnt/cf
+	 cp syslinux.cfg /mnt/cf
+	 cp bzImage /mnt/cf
+	 cp ramfs.igz /mnt/cf
+   umount /mnt/cf
+	 	 
+5. Kopier program filer og data til prgparten
+   mount /dev/sda2 /mnt/cf
+	 kopier prg + database
+	 umount /mnt/cf
+
+	 Thats it.
+	 
+6. Kopier indhold af en flashdisk til en anden: (optional)
+   1. Gem indhold af flashdisk1 til en fil med "dd if=/dev/sda of=flashfil"
+   2. unmount flashdisk (umount /dev/sda1; umount /dev/sda2) og fjern fra læser.
+   3. isæt flashdisk2 og udfør "dd if=flashfil of=/dev/sda"
+   4. unmount flashdisk (umount /dev/sda1) og fjern disken
+   5. indsæt evt. disken igen for at teste om data er blevet lagt korrekt over.

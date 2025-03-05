@@ -1,0 +1,361 @@
+#include <stdio.h>    //standard input/output
+#include <stdlib.h>  //for exit function, realloc
+#include <string.h>  //operations on strings: strcpy, etc
+#include "tmpnrobot.h" //definitions of structures 
+
+static int ln=0;
+static char databasePath[256]="pathname";
+
+int main()
+{
+  tmpnStateMachine statemachine; 
+  char filename[32]="308ConveyorOut.statemachine";
+  printf("%s\n",filename);
+  statemachine.numvalue=1;
+  statemachine.numtimeout=1;
+  statemachine.numinput=1;
+  statemachine.numoutput=1;
+  statemachine.numlink=1;
+  statemachine.numstate=1;
+  // tmpnStateMachineLoad(&filename,&statemachine, 0);
+  tmpnStateLoad(&filename,&statemachine, 0);
+  return 0;
+}
+
+int findDot(char *s)
+{
+  int i=0;
+  while(s[i]!=0)
+  {
+    if(s[i]=='.') return i;
+    i++;
+  }
+  return -1;
+}
+
+
+
+int splitArg(char *s, char *s1, char *s2)
+{
+  int i,j,x;
+  strcpy(s1,s); 
+  s2[0]=0;
+  x=findDot(s);
+  if(x>=0)
+  {
+    s1[x]=0;
+    i=x+1;
+    j=0;
+    while(s[i]!=0)
+    {
+      s2[j++]=s[i++];
+    }
+    s2[j]=0;
+  }
+  return x;
+}
+
+int getValueIdx(tmpnStateMachine *stm, char *s)
+{
+  int i;
+  for(i=0;i<stm->numvalue;i++)
+  {
+    if(strcmp(stm->value[i].name, s)==0)
+      return i;
+  }
+
+  return -1;
+}
+
+int getTimeoutIdx(tmpnStateMachine *stm, char *s)
+{
+  int i;
+
+  for(i=0;i<stm->numtimeout;i++)
+  {
+    if(strcmp(stm->timeout[i].name, s)==0)
+      return i;
+  }
+  return -1;
+}
+
+void getComment(char *buffer, char *n)
+{
+  int i,j0=0,j1=0;
+
+  for(i=0;i<strlen(buffer);i++)
+  {
+    if(j0==0&&buffer[i]=='"')
+    {
+      j0=i;
+      i++;
+    }
+    if(j1==0&&buffer[i]=='"') j1=i;
+  }
+  strncpy(n,&buffer[j0+1],j1-j0-1);
+  n[j1-j0-1]=0;
+}
+    
+
+int tmpnStateMachineLoad(const char *filename, tmpnStateMachine *statemachine, int level)
+{
+  FILE *fp;
+  int version;
+  int idx,timeout, v, delaystop;
+  char name[256], s[256], key[256], n[256],l[256],a1[256],a2[256],a3[256];//,includename[256]
+  char buffer[256];
+  tmpnStateMachineTable* tab;
+  int i,x;
+  
+  fp = fopen(filename,"r");
+  if(fp==NULL){
+    printf("ERROR: Load Statemachine: cannot open file: '%s'\n", filename);
+    exit(99);
+  }
+  ln = 0;
+  fscanf(fp,"STATEMACHINEVERSION %d\n",&version);
+  printf("Open statemachine %s VERSION %d\n", filename,version);
+  ln++;
+	if(version!=2&&version!=STATEMACHINEVERSION)
+  {
+    fclose(fp);
+    printf(" FAILED version mismatch\n");
+    exit(99);
+  }
+  statemachine->version=version;
+  if(level==0)
+    strcpy(statemachine->filename,filename);
+  printf("filename: %s\n",statemachine->filename);
+
+    //loop for reading initialization values 
+  while(fgets(buffer, sizeof(buffer), fp)!=NULL)
+  {
+    ln++;
+    // printf("Line no: %d\n",ln);
+    if(strncmp(buffer, ";", 1)==0)
+    {
+      //do nothing if comment
+    }
+    else if(strncmp(buffer,"Name=",5)==0)
+    {
+      //read stm name
+      sscanf(buffer,"Name=%s",statemachine->name);
+    }
+    else if(strncmp(buffer,"Include=",8)==0)
+    {
+      //read include name without reading the whole file
+      //int oldln=ln;
+      printf("include->");
+      sscanf(buffer,"Include=%s",name);
+      printf("%s/statemachine/%s\n",databasePath,name);
+      //sprintf(includename,"%s/statemachine/%s",databasePath,name);
+      //tmpnStateMachineLoad(includename, statemachine,level+1);
+      //ln = oldln;
+    }
+    else if(strncmp(buffer,"Value=",6)==0)
+    {
+      if(version==2)
+        sscanf(buffer,"Value=%d,%s %s\n",&idx,s,n);
+      else
+        sscanf(buffer,"Value=%s %s\n",s,n);
+      
+      //idx=getValueIdx(statemachine,s);
+      //check if the value declaration is dubbled?
+      idx=statemachine->numvalue++;//podstaw i zwieksz
+      strcpy(statemachine->value[idx].name,s);
+      printf("value: %s\n",statemachine->value[idx].name);
+      //   statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+	//realloc not working. why?
+     
+      statemachine->value[idx].type=VALUE;
+      if (!strcmp(s,"DEBUG")) 
+      {
+       printf("DEBUG %s\n",statemachine->name); 
+       statemachine->debugvalue = &statemachine->value[idx];
+       }
+      x = splitArg(n,a2,a3);//split value arguments?
+      if(x>=0)
+      {
+        statemachine->value[idx].subtype=1; //what type is data - 1 float
+        statemachine->value[idx].data=atof(n); //string to float
+        statemachine->value[idx].fdata=atof(n);
+      }
+      else
+      {
+        statemachine->value[idx].data=atoi(n); //string to integer
+        statemachine->value[idx].fdata=atoi(n);
+        statemachine->value[idx].subtype=0;//what type is data - 0 int
+      }
+     }
+     else if(strncmp(buffer,"Const=",6)==0)
+    {
+      if(version==2)
+        sscanf(buffer,"Const=%d,%s %s\n",&idx,s,n);
+      else
+        sscanf(buffer,"Const=%s %s\n",s,n);
+      idx=getValueIdx(statemachine,s);
+      idx=statemachine->numvalue++;
+      strcpy(statemachine->value[idx].name,s);
+      printf("const: %s\n", statemachine->value[idx].name);
+      statemachine->value[idx].type=CONSTANT;
+      if (!strcmp(s,"DEBUG"))
+	  statemachine->debugvalue = &statemachine->value[idx];
+      x = splitArg(n,a2,a3);
+      if(x>=0)
+      {
+        statemachine->value[idx].subtype=1;
+        statemachine->value[idx].data=atof(n);
+        statemachine->value[idx].fdata=atof(n);
+      }
+      else
+      {
+        statemachine->value[idx].data=atoi(n);
+        statemachine->value[idx].fdata=atoi(n);
+        statemachine->value[idx].subtype=0;
+      }
+    }
+    else if(strncmp(buffer,"linkValue=",10)==0)
+    {
+      v = sscanf(buffer,"linkValue=%s %s %s\n",s,n,l);
+      idx=statemachine->numvalue++;
+      if(v==2)
+      {
+        strcpy(statemachine->value[idx].name,s);
+        strcpy(statemachine->value[idx].linkname,s);
+        strcpy(statemachine->value[idx].link,n);
+      }
+      else if(v==3)
+      {
+        strcpy(statemachine->value[idx].name,s);
+        strcpy(statemachine->value[idx].linkname,n);
+        strcpy(statemachine->value[idx].link,l);
+      }
+      else 
+        error(ln, "wrong number of arguments");
+      printf("linkvalue: %s\n", statemachine->value[idx].name);
+      statemachine->value[idx].type=LINKVALUE;
+      statemachine->value[idx].data=0;
+      statemachine->value[idx].linkvalue=NULL;
+      statemachine->value[idx].remote=NULL;
+    } 
+    else if(strncmp(buffer,"Timeout=",8)==0)
+    {
+      if(version==2)
+        sscanf(buffer,"Timeout=%d,%s %d\n",&idx,s,&timeout);
+      else
+        sscanf(buffer,"Timeout=%s %d\n",s,&timeout);
+      idx=statemachine->numtimeout++;
+      strcpy(statemachine->timeout[idx].name,s);
+      statemachine->timeout[idx].timeout=timeout;
+      printf("timeout: %s\n", statemachine->timeout[idx].name);
+    }
+    else if(strncmp(buffer,"Input=",6)==0)
+    {
+      if(version==2)
+        v = sscanf(buffer,"Input=%d,%s",&idx,name);
+      else
+        v = sscanf(buffer,"Input=%s",name) + 1;   
+      idx=statemachine->numinput++;
+      strcpy(statemachine->input[idx].name,name);
+      if(v!=2) error(ln, "wrong number of arguments");
+			statemachine->input[idx].iotype=INPUT;
+			//getComment(buffer,key);
+      printf("input: %s\n", statemachine->input[idx].name);
+    }
+    else if(strncmp(buffer,"Output=",7)==0)
+    {
+      if(version==2)
+        v = sscanf(buffer,"Output=%d,%s",&idx,name);
+      else
+        v = sscanf(buffer,"Output=%s",name) + 1;
+      idx=statemachine->numoutput++;
+      strcpy(statemachine->output[idx].name,name);
+      if(v!=2) error(ln, "wrong number of arguments");
+			statemachine->output[idx].iotype=OUTPUT;
+      printf("output: %s\n", statemachine->output[idx].name);
+    }
+    /*else if(strncmp(buffer,"Link=",5)==0)
+    {
+      //key[0]=0;
+      if(version==2)
+        v = sscanf(buffer,"Link=%d,%s\n",&idx,s);
+      else
+        v = sscanf(buffer,"Link=%s \n",s) + 1;
+       printf("s= %s\n", s);
+      idx=statemachine->numlink++;
+      if(v==2)
+      {
+        strcpy(statemachine->link[idx].localname,"nazwa");
+        //strcpy(statemachine->link[idx].name,s);
+      }
+      else
+      {
+        strcpy(statemachine->link[idx].localname,s);
+        //strcpy(statemachine->link[idx].name,key);
+      }
+      printf("link: %s\n", statemachine->link[idx].name);
+      }*/
+  }
+  fclose(fp);
+  return TRUE;
+}
+
+int tmpnStateLoad(const char *filename, tmpnStateMachine *statemachine, int level)
+{
+  FILE *fp;
+  char name[256], s[256],includename[256];
+  char buffer[256];
+  int version=0,idx;
+  ln=0;
+  fp = fopen(filename,"r");
+  fscanf(fp,"STATEMACHINEVERSION %d\n",&version);
+  ln++;
+  while(fgets(buffer, sizeof(buffer), fp)!=NULL)
+  {
+    ln++;
+    if(strncmp(buffer, ";", 1)==0)
+    {
+      //comment
+    }
+    /*else if(strncmp(buffer,"Include=",8)==0)
+    {
+			int oldln=ln;
+			sscanf(buffer,"Include=%s",name);
+      sprintf(includename,"%s/statemachine/%s",databasePath,name);
+      tmpnStateLoad(includename, statemachine,level+1);
+			ln=oldln;
+			}*/
+    else if(strncmp(buffer,"State=",6)==0)
+    {
+      if(version==2)
+        sscanf(buffer,"State=%d,%s\n",&idx,s);
+      else
+        sscanf(buffer,"State=%s\n",s);
+			
+      //idx = getMachinePtrStateIdx(statemachine,s);
+      //if(idx==-1)
+      //{
+        idx=statemachine->numstate++;
+				statemachine->state=(tmpnStateMachineState *)realloc(statemachine->state,statemachine->numstate*sizeof(tmpnStateMachineState));
+        statemachine->state[idx].maxprgidx=0;
+	statemachine->state[idx].prg=NULL;
+        statemachine->state[idx].statenum = idx;
+        strcpy(statemachine->state[idx].name,s);
+	printf("state name: %s\n", statemachine->state[idx].name);
+	/*}
+      else
+      {
+        free(statemachine->state[idx].prg);
+        statemachine->state[idx].maxprgidx=0;
+				statemachine->state[idx].prg=NULL;
+      }
+			if (!strcmp(s,"ST_TIMER")) statemachine->timerstate=idx;
+			getFunctionBody(fp, idx, statemachine);*/
+    }
+	}
+  fclose(fp);
+  return TRUE;
+}
+
+
+

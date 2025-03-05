@@ -101,7 +101,7 @@ void *stmServer(void *t)
   return 0;
 }
 
-int getline(char *instring, char *outstring, int lim)
+int getStrFromLine(char *instring, char *outstring, int lim)
 {
   int i;
   for (i=0;i<lim;i++)
@@ -198,7 +198,7 @@ void *do_chld(void *arg)
       /* Parse messages */
       while(ibytes<rbytes)
       {
-				linelen = getline(&indata[ibytes], line, 255);
+				linelen = getStrFromLine(&indata[ibytes], line, 255);
 				ibytes+=(linelen+1);
 				if (!strncmp("STATE",line,5)) 
 				{

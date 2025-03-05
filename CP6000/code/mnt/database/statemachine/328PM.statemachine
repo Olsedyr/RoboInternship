@@ -1,0 +1,39 @@
+STATEMACHINEVERSION 3
+Include=pallemagasin4.statemachine
+Name=Pallemagasin
+linkValue=Photo test PallemagasinPhoto
+Input=PhotoFull "Pallemagasin FotoFull" 
+Input=ReadBottomLeft "Pallemagasin ReadBottomLeft"
+Input=ReadBottomRight "Pallemagasin ReadBottomRight"
+Input=ReadRelease "Pallemagasin ReadRelease"
+Input=ReadGrip "Pallemagasin ReadGrip"
+Input=ReadMidLeft "Pallemagasin ReadMidLeft"
+Input=ReadMidRight "Pallemagasin ReadMidRight"
+Input=ReadTopLeft "Pallemagasin ReadTopLeft"
+Input=ReadTopRight "Pallemagasin ReadTopRight"
+Output=MotorFwd "Pallemagasin MotorFwd"
+Output=MotorRev "Pallemagasin MotorRev"
+;Output=GripCyl "Pallemagasin GripCyl"
+Output=ReleaseCyl "Pallemagasin ReleaseCyl"
+Output=CylUpLeft "Pallemagasin CylUpLeft"
+Output=CylUpRight "Pallemagasin CylUpRight"
+Output=CylDownLeft "Pallemagasin CylDownLeft"
+Output=CylDownRight "Pallemagasin CylDownRight"
+Timeout=TimeLoadTime 10000000
+Timeout=TimeOutDelay 20000000
+Const=simulate 0
+Const=posPM 12
+Link=next Shuttle
+Link=parent Parent
+linkValue=shuttlePos curPos Shuttle
+linkValue=shuttlePickDir pickDir Shuttle
+linkValue=shuttlePlaceDir placeDir Shuttle 
+linkValue=command Shuttle 
+Value=read1ok 0
+Value=read2ok 0
+Value=errorCode 0
+
+; command
+; = 0 -> nothing
+; = 19 -> PM must receive
+; = 20 -> PM must send

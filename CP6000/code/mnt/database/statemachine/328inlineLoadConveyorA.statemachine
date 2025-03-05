@@ -1,0 +1,13 @@
+; INLINE 328inlineLoadConveyorA.statemachine
+SETFRAME fromFrame toFrame1
+;*******************************************
+TEST casekind = 4
+  SETFRAME toFrame2 conveyorBP
+ELSE
+  SETFRAME toFrame2 conveyorB
+ENDTEST
+CALC toFrame2.y = toFrame2.y + itemOut.gy
+CALC toFrame2.x = toFrame2.x - itemOut.gx
+LOAD conveyorA_conveyorB fromFrame toFrame2
+;*******************************************
+LOAD conveyorA_home fromFrame home

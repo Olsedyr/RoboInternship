@@ -89,7 +89,7 @@ State=ST_WAIT
     TEST Conveyors = ST_RUN
     OR Conveyors = ST_GOSTOP
       ; start timer
-      ; hvis bånd stopper før timer udløber -> for tæt
+      ; hvis bÃ¥nd stopper fÃ¸r timer udlÃ¸ber -> for tÃ¦t
 		  SET TimeGet gettime
       TIMEOUT TimeGet ST_WAIT2
 		  SETSTATE ST_WAIT2
@@ -114,9 +114,9 @@ State=ST_WAIT2
 	  		SETSTATE ST_BEGINFORWARD
 		  ENDTEST
 		ENDTEST
-  ELSETEST Conveyors = ST_STOP
-    SET errorCode 1011
-    SETSTATE ST_IDLE
+;  ELSETEST Conveyors = ST_STOP
+;    SET errorCode 1011
+;    SETSTATE ST_IDLE
   ENDTEST
 	TEST parent = ST_IDLE
 		SETSTATE ST_IDLE
@@ -161,7 +161,8 @@ END
 
 State=ST_FORWARD
 	TEST curpm > klapindpm
-	AND curpm < klapudpm
+;	TEST curpm > klapindpm
+;	AND curpm < klapudpm
 		SET klap 0
 	ELSE
 		SET klap 1
@@ -215,10 +216,12 @@ State=ST_BEGINBACK
 END
 
 State=ST_GOBACK
-	SET klap 0
 	TEST startingup = 0
 	AND curpm > klapudpm
+	AND curpm < 1000
 		SET klap 1
+	ELSE
+		SET klap 0
 	ENDTEST
   TEST CamGen = ST_STOP
   	TEST startingup = 1

@@ -1,0 +1,8 @@
+; INLINE 328inlineResetStackA.statemachine
+;CALC cAItem = wAItem - 1
+SET cAItem wAItem
+CALC cAStackleft = wAItem / 2
+CALC cAStackleft = cAStackleft - 1
+CALC cAStackright = wAItem / 2
+CALC cAStackright = cAStackright - 1
+SET nextpala 1

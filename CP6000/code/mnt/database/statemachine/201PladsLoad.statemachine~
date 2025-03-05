@@ -1,0 +1,78 @@
+STATEMACHINEVERSION 3
+Name=PladsLoad
+Input=Foto1 "ConveyorIn Foto1"
+Input=Foto2 "ConveyorIn Foto2"
+Link=Plads3
+Timeout=FotDelay 100000
+Timeout=MaxSendTime 10000000
+Value=errorCode 0
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+END
+
+State=ST_TIMER
+END
+
+State=1,ST_READY
+  TEST Foto1 = 0
+  AND Foto2 = 0
+    TIMEOUT FotDelay ST_GOEMPTY
+    SETSTATE ST_GOEMPTY
+  ELSE
+    TEST Plads3 = ST_EMPTY
+      TIMEOUT MaxSendTime ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ENDTEST
+END
+
+State=2,ST_GOEMPTY
+  TEST FotDelay = 1
+    TEST Foto1 = 0
+    AND Foto2 = 0
+     SETSTATE ST_EMPTY
+    ELSE
+     SETSTATE ST_READY
+    ENDTEST
+  ENDTEST
+END
+
+State=2,ST_EMPTY
+  TEST Foto1 = 1
+  OR Foto2 = 1
+    SETSTATE ST_READY
+  ENDTEST
+END
+
+State=3,ST_SEND
+  TEST Plads3 = ST_READY
+    TEST Foto1 = 0
+    AND Foto2 = 0
+      TIMEOUT FotDelay ST_GOEMPTY
+      SETSTATE ST_GOEMPTY
+    ELSE
+      SETSTATE ST_READY
+    ENDTEST
+  ELSE
+    TEST Plads3 != ST_EMPTY
+      SETSTATE ST_READY
+    ENDTEST
+  ENDTEST
+  TEST MaxSendTime = 1
+    SET errorCode 1008
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=4,ST_RESET
+    TEST Foto1 = 0
+    AND Foto2 = 0
+      TIMEOUT FotDelay ST_GOEMPTY
+      SETSTATE ST_GOEMPTY
+    ELSE
+      SETSTATE ST_READY
+    ENDTEST
+END

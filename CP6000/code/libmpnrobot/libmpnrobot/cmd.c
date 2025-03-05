@@ -808,7 +808,7 @@ int SaveCommandScript(COMMANDSTRUCT *root, const char *filename)
 {
   FILE *fp;
   COMMANDSTRUCT *cmd;
-  char str[256];
+  char str[512];
   int prevlevel=0,l;
 
   if(root==NULL) return FALSE;
@@ -841,7 +841,7 @@ int tmpnPatternLoad(const char *filename, tmpnPattern *pattern)
 {
   FILE *fp;
   int version;
-  char buffer[256];
+  char buffer[512];
   fp = fopen(filename,"r");
   if(fp==NULL) return FALSE;
   fscanf(fp,"PATTERNVERSION %d\n",&version);
@@ -909,7 +909,7 @@ int tmpnCPPatternLoad(const char *filename, tmpnCPPatterns *cppatterns)
 {  
   FILE *fp;
   int version;
-  char buffer[256];
+  char buffer[512];
   tmpnCPPattern *cppattern;
   fp = fopen(filename,"r");
   if(fp==NULL)
@@ -966,7 +966,7 @@ int tmpnCPPatternLoad(const char *filename, tmpnCPPatterns *cppatterns)
           }
           else
           {
-            char str[256];
+            char str[512];
             int j;
             sscanf(buffer,"%s",str);
             printf("Error loading CP Pattern '%s' Got '%s', expected ppp.\n",cppattern->name,str);
@@ -1005,7 +1005,7 @@ int tmpnCPPatternLoad(const char *filename, tmpnCPPatterns *cppatterns)
     }
     else
     {
-      char str[256];
+      char str[512];
       int j;
       sscanf(buffer,"%s",str);
       printf("Error loading CP Pattern '%s' Got '%s', expected layer\n",cppattern->name,str);
@@ -2115,8 +2115,8 @@ void printArgValue(tmpnStateMachineValue * val)
   }
   else if(val->type==PATHHANDLE)
   {
-    printf("PRINT PATHHANDLE: %s state=%d mode=%d type=%d\n",val->name,val->path->state,val->path->key.mode,val->path->key.type);
-    printf("PRINT ----''----: from=%s(%d,%d) x=%3.2f y=%3.2f z=%3.2f v=%3.2f w=%3.2f\n"
+    printf("# PATHHANDLE: %s state=%d mode=%d type=%d\n",val->name,val->path->state,val->path->key.mode,val->path->key.type);
+    printf("# ----''----: from=%-14s(%d,%d) x=%07.2f y=%07.2f z=%07.2f v=%6.2f w=%6.2f\n"
           ,val->path->key.from.frame.name
           ,val->path->key.from.cItem
           ,val->path->key.from.cLayer
@@ -2125,7 +2125,7 @@ void printArgValue(tmpnStateMachineValue * val)
           ,val->path->key.from.frame.z
           ,val->path->key.from.frame.v
           ,val->path->key.from.frame.w);
-    printf("PRINT ----''----: to=%s(%d,%d) x=%3.2f y=%3.2f z=%3.2f v=%3.2f w=%3.2f"
+    printf("# ----''----: to=  %-14s(%d,%d) x=%07.2f y=%07.2f z=%07.2f v=%6.2f w=%6.2f"
           ,val->path->key.to.frame.name
           ,val->path->key.to.cItem
           ,val->path->key.to.cLayer
@@ -2255,8 +2255,8 @@ int getStateStringIdx(char *s)
 int getCmpType(tmpnStateMachine *stm, char *s, int ln)
 {
   int i,x;
-  char s1[256]; 
-  char s2[256];
+  char s1[512]; 
+  char s2[512];
   
   x = splitArg(s,s1,s2); 
  
@@ -2592,7 +2592,7 @@ void setArgValueFloat(tmpnStateMachineValue *val, char *valstring2, float value)
     }
     else
     {
-      char logstr[256];
+      char logstr[1024];
       sprintf(logstr,"CP Pattern '%s' does not exist.", val->name);
       printf("%s\n",logstr);
       logMsg(logstr);
@@ -2800,7 +2800,7 @@ void setArgValueInt(tmpnStateMachineValue *val, char *valstring2, int value)
     }
     else
     {
-      char logstr[256];
+      char logstr[1024];
       sprintf(logstr,"CP Pattern '%s' does not exist.", val->name);
       printf("%s\n",logstr);
       logMsg(logstr);
@@ -3029,7 +3029,7 @@ float getArgValueFloat(tmpnStateMachineValue *val, char *val2, int *argSubType)
   case CPPATTERN:
     if(val->cppattern == NULL)
     {
-      char logstr[256];
+      char logstr[1024];
       sprintf(logstr,"CP Pattern '%s' does not exist.", val->name);
       printf("%s\n",logstr);
       logMsg(logstr);
@@ -3045,7 +3045,7 @@ float getArgValueFloat(tmpnStateMachineValue *val, char *val2, int *argSubType)
         ret = val->cppattern->items[val->cppattern->selectedItem].maxpush;
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.maxpush: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3059,7 +3059,7 @@ float getArgValueFloat(tmpnStateMachineValue *val, char *val2, int *argSubType)
         ret = val->cppattern->items[val->cppattern->selectedItem].gettime;
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.gettime: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3075,7 +3075,7 @@ float getArgValueFloat(tmpnStateMachineValue *val, char *val2, int *argSubType)
           ret = val->cppattern->items[val->cppattern->selectedItem].ppps[val->cppattern->selectedPPP];
         else
         {
-          char logstr[256];
+          char logstr[1024];
           sprintf(logstr,"Unable to read %s.ppp: CPPattern '%s' pppidx (%d) out of bound [0;%d]",
                   val->name, val->cppattern->name, val->cppattern->selectedPPP,
                   val->cppattern->items[val->cppattern->selectedItem].maxpush  - 1);
@@ -3086,7 +3086,7 @@ float getArgValueFloat(tmpnStateMachineValue *val, char *val2, int *argSubType)
       }
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.maxpush: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3102,7 +3102,7 @@ float getArgValueFloat(tmpnStateMachineValue *val, char *val2, int *argSubType)
           ret = val->cppattern->items[val->cppattern->selectedItem].paccs[val->cppattern->selectedPPP];
         else
         {
-          char logstr[256];
+          char logstr[1024];
           sprintf(logstr,"Unable to read %s.pacc: CPPattern '%s' pppidx (%d) out of bound [0;%d]",
                   val->name, val->cppattern->name, val->cppattern->selectedPPP,
                   val->cppattern->items[val->cppattern->selectedItem].maxpush  - 1);
@@ -3113,7 +3113,7 @@ float getArgValueFloat(tmpnStateMachineValue *val, char *val2, int *argSubType)
       }
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.maxpush: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3129,7 +3129,7 @@ float getArgValueFloat(tmpnStateMachineValue *val, char *val2, int *argSubType)
           ret = val->cppattern->items[val->cppattern->selectedItem].pspeeds[val->cppattern->selectedPPP];
         else
         {
-          char logstr[256];
+          char logstr[1024];
           sprintf(logstr,"Unable to read %s.pspeed: CPPattern '%s' pppidx (%d) out of bound [0;%d]",
                   val->name, val->cppattern->name, val->cppattern->selectedPPP,
                   val->cppattern->items[val->cppattern->selectedItem].maxpush  - 1);
@@ -3140,7 +3140,7 @@ float getArgValueFloat(tmpnStateMachineValue *val, char *val2, int *argSubType)
       }
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.maxpush: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3520,7 +3520,7 @@ int getArgValueInt(tmpnStateMachineValue *val, char *val2, int *argSubType)
   case CPPATTERN:
 		if(val->cppattern == NULL)
     {
-      char logstr[256];
+      char logstr[1024];
       sprintf(logstr,"CP Pattern '%s' does not exist.", val->name);
       printf("%s\n",logstr);
       logMsg(logstr);
@@ -3536,7 +3536,7 @@ int getArgValueInt(tmpnStateMachineValue *val, char *val2, int *argSubType)
         ret = val->cppattern->items[val->cppattern->selectedItem].maxpush;
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.maxpush: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3550,7 +3550,7 @@ int getArgValueInt(tmpnStateMachineValue *val, char *val2, int *argSubType)
         ret = val->cppattern->items[val->cppattern->selectedItem].gettime;
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.gettime: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3566,7 +3566,7 @@ int getArgValueInt(tmpnStateMachineValue *val, char *val2, int *argSubType)
           ret = val->cppattern->items[val->cppattern->selectedItem].ppps[val->cppattern->selectedPPP];
         else
         {
-          char logstr[256];
+          char logstr[1024];
           sprintf(logstr,"Unable to read %s.ppp: CPPattern '%s' pppidx (%d) out of bound [0;%d]",
                   val->name, val->cppattern->name, val->cppattern->selectedPPP,
                   val->cppattern->items[val->cppattern->selectedItem].maxpush  - 1);
@@ -3577,7 +3577,7 @@ int getArgValueInt(tmpnStateMachineValue *val, char *val2, int *argSubType)
       }
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.maxpush: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3593,7 +3593,7 @@ int getArgValueInt(tmpnStateMachineValue *val, char *val2, int *argSubType)
           ret = val->cppattern->items[val->cppattern->selectedItem].paccs[val->cppattern->selectedPPP];
         else
         {
-          char logstr[256];
+          char logstr[1024];
           sprintf(logstr,"Unable to read %s.pacc: CPPattern '%s' pppidx (%d) out of bound [0;%d]",
                   val->name, val->cppattern->name, val->cppattern->selectedPPP,
                   val->cppattern->items[val->cppattern->selectedItem].maxpush  - 1);
@@ -3604,7 +3604,7 @@ int getArgValueInt(tmpnStateMachineValue *val, char *val2, int *argSubType)
       }
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.maxpush: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3620,7 +3620,7 @@ int getArgValueInt(tmpnStateMachineValue *val, char *val2, int *argSubType)
           ret = val->cppattern->items[val->cppattern->selectedItem].pspeeds[val->cppattern->selectedPPP];
         else
         {
-          char logstr[256];
+          char logstr[1024];
           sprintf(logstr,"Unable to read %s.pspeed: CPPattern '%s' pppidx (%d) out of bound [0;%d]",
                   val->name, val->cppattern->name, val->cppattern->selectedPPP,
                   val->cppattern->items[val->cppattern->selectedItem].maxpush  - 1);
@@ -3631,7 +3631,7 @@ int getArgValueInt(tmpnStateMachineValue *val, char *val2, int *argSubType)
       }
       else
       {
-        char logstr[256];
+        char logstr[1024];
         sprintf(logstr,"Unable to read %s.maxpush: CPPattern '%s' layeridx (%d) out of bound [0;%d]",
                 val->name, val->cppattern->name, val->cppattern->selectedItem, val->cppattern->maxidx - 1);
         printf("%s\n",logstr);
@@ -3764,8 +3764,8 @@ int getFunctionBody(FILE *fp, int state, tmpnStateMachine * stm)
 {
   int val, index=0;
   //int idx;
-  char s[256];
-  char func[256], arg1[256], arg2[128], arg3[128], arg4[128];
+  char s[512];
+  char func[512], arg1[512], arg2[128], arg3[128], arg4[128];
   int level = 0;
 	int inlinelevel = 0;
 	FILE *fpold[10];
@@ -3784,7 +3784,7 @@ int getFunctionBody(FILE *fp, int state, tmpnStateMachine * stm)
     strcpy(arg2, "");
     strcpy(arg3, "");
 		ln++;
-    fret=fgets(s, 256, fp);
+    fret=fgets(s, 512, fp);
 		if (fret==NULL)
 		{
 			inlinelevel--;
@@ -3796,7 +3796,7 @@ int getFunctionBody(FILE *fp, int state, tmpnStateMachine * stm)
 			continue;
 		}
     if(strlen(s)>=255)
-      error(ln, "length exceed max = 256");
+      error(ln, "length exceed max = 512");
 
     sscanf(s," %s", func);
 
@@ -4353,7 +4353,7 @@ int getFunctionBody(FILE *fp, int state, tmpnStateMachine * stm)
 		{
 			FILE *fpinline;
 			char name[128];
-			char inlinename[128];
+			char inlinename[512];
 			sscanf(s," INLINE %s ",name);
 			sprintf(inlinename,"%s/statemachine/%s",databasePath,name);
 			printf("'->Inlining at level %i: %s\n",inlinelevel,inlinename);
@@ -4696,8 +4696,8 @@ int tmpnStateMachineLoad(const char *filename, tmpnStateMachine *statemachine, i
   FILE *fp;
   int version;
   int idx,timeout, v, delaystop;
-  char name[256], s[256], key[256], n[256],l[256],includename[256],a1[256],a2[256],a3[256];
-  char buffer[256];
+  char name[512], s[512], key[512], n[512],l[512],includename[1024],a1[512],a2[512],a3[512];
+  char buffer[512];
   tmpnStateMachineTable* tab;
   int i,x;
 	
@@ -5098,7 +5098,7 @@ int tmpnStateMachineLoad(const char *filename, tmpnStateMachine *statemachine, i
     }
     else if(strncmp(buffer,"Item=",5)==0)
     {
-      char itemName[256];
+      char itemName[512];
       v = sscanf(buffer,"Item=%s %s\n",name,itemName);
       idx=getValueIdx(statemachine,name);
       if(idx==-1)
@@ -5114,7 +5114,7 @@ int tmpnStateMachineLoad(const char *filename, tmpnStateMachine *statemachine, i
     }
     else if(strncmp(buffer,"Pattern=",8)==0)
     {
-      char patternName[256];
+      char patternName[512];
       v = sscanf(buffer,"Pattern=%s %s\n",name,patternName);
       idx=getValueIdx(statemachine,name);
       if(idx==-1)
@@ -5130,7 +5130,7 @@ int tmpnStateMachineLoad(const char *filename, tmpnStateMachine *statemachine, i
     }
     else if(strncmp(buffer,"CPPattern=",10)==0)
     {
-      char cppatternName[256];
+      char cppatternName[512];
       v = sscanf(buffer,"CPPattern=%s %s\n",name,cppatternName);
       idx=getValueIdx(statemachine,name);
       if(idx==-1)
@@ -5152,8 +5152,8 @@ int tmpnStateMachineLoad(const char *filename, tmpnStateMachine *statemachine, i
 int tmpnStateLoad(const char *filename, tmpnStateMachine *statemachine, int level)
 {
   FILE *fp;
-	char name[256], s[256],includename[256];
-  char buffer[256];
+	char name[512], s[512],includename[1024];
+  char buffer[512];
 	int version=0,idx;
 	ln=0;
 	fp = fopen(filename,"r");
@@ -5218,7 +5218,9 @@ void setStateTekst(char *tekst, int kode, int line)
     {
       if(j==line)
       {
-        sprintf(tekst,stptr->item[i].tekst);
+        //sprintf(tekst,stptr->item[i].tekst);
+        strcpy(tekst, stptr->item[i].tekst);
+
         return;
       }
       if(j>0) return;
@@ -5231,7 +5233,7 @@ int tmpnStateTekstsLoad(const char *filename, tmpnStateTekstList *statetekstlist
 {
   FILE *fp;
   int version,l;
-  char buffer[256];
+  char buffer[512];
 	tmpnStateTeksts *sts;
   fp = fopen(filename,"r");
   if(fp==NULL) return FALSE;
@@ -5258,7 +5260,7 @@ int tmpnLanguageLoad(const char *filename, tmpnLanguages *languages)
 	int i,j;
   FILE *fp;
   int version;
-  char buffer[256];
+  char buffer[512];
 	int line;
 	tmpnLanguage *lang;
   fp = fopen(filename,"r");
@@ -5314,9 +5316,9 @@ int tmpnPPScriptLoad(const char *filename, tmpnPPScript *ppscript)
   //  extern FILE *ppin;
   FILE *fp;
   int version;
-  char buffer[256];
-  char fromstr[256];
-  char tostr[256];
+  char buffer[512];
+  char fromstr[512];
+  char tostr[512];
   char *bracket;
   int retval;
  
@@ -5450,8 +5452,8 @@ int tmpnBoptCoeffLoad(const char *filename, tmpnBoptCoeff *boptcoeff)
   FILE *fp;
   int version;
   char buffer[1024];
-	char string[256];
-  char str[16][256];
+	char string[512];
+  char str[16][512];
 	char *pstr;
 	float val[16];
   int retval; 
@@ -6741,7 +6743,7 @@ int tmpnScopeLoad(const char *filename, tmpnPath *path)
   int  lastidx;
   int  axisidx;
   float dat;
-  char buffer[256];
+  char buffer[512];
   fp = fopen(filename,"r");
   if(fp==NULL) return FALSE;
   lastidx=0;
@@ -7004,8 +7006,8 @@ int AddProgram(int PrgStmIdx, char *newName, int copyfromidx)
 {
 	FILE *fp;
 	int idx,i,j,h,newidx;
-  char line[256];
-  char temp[256];
+  char line[1024];
+  char temp[512];
 	char *lines[MAXSTATEMACHINELINES]; //max accepted no. of lines i stmprgs
 	int curstateidx;
 	int copystartidx=0,copyendidx=0,insertidx=-1;
@@ -7130,9 +7132,9 @@ int SaveProgramVal(int PrgStmIdx,STMCOMMANDSTRUCT *stmcmd,char *prgname)
 {
   int i,j,num,idx;
   FILE *fp;
-  char line[256];
-	char cname[256];
-  char temp[256];
+  char line[2048];
+	char cname[1024];
+  char temp[1024];
   int retval; 
 	int correctstate=0;
   char *lines[MAXSTATEMACHINELINES]; //max accepted no. of lines i stmprgs
@@ -7178,7 +7180,7 @@ int SaveProgramVal(int PrgStmIdx,STMCOMMANDSTRUCT *stmcmd,char *prgname)
             {
               int j;
               int slen=strlen(line);
-              char ws[256];
+              char ws[512];
               ws[0]='\0';
               for (j=0;j<slen;j++)
               {
@@ -7210,7 +7212,7 @@ int SaveProgramVal(int PrgStmIdx,STMCOMMANDSTRUCT *stmcmd,char *prgname)
             {
               int j;
               int slen=strlen(line);
-              char ws[256];
+              char ws[512];
               ws[0]='\0';
               for (j=0;j<slen;j++)
               {
@@ -7239,7 +7241,7 @@ int SaveProgramVal(int PrgStmIdx,STMCOMMANDSTRUCT *stmcmd,char *prgname)
             {
               int j;
               int slen=strlen(line);
-              char ws[256];
+              char ws[512];
               ws[0]='\0';
               for (j=0;j<slen;j++)
               {
@@ -7296,8 +7298,8 @@ int SaveConstVal(const char *stmname, const char *cname, tmpnStateMachineValue* 
 {
   int f,i,j,num,idx;
   FILE *fp;
-  char line[256];
-  char name[256];
+  char line[1024];
+  char name[512];
   int retval;  
 	float fnum;
   char *lines[MAXSTATEMACHINELINES]; //max accepted no. of lines i stmprgs
@@ -7397,7 +7399,7 @@ int SaveConstVal(const char *stmname, const char *cname, tmpnStateMachineValue* 
   }
   if(!retval)
   {
-    lines[i] = (char*)malloc(256);
+    lines[i] = (char*)malloc(512);
   	if (val->subtype==0)
     { 
       sprintf(lines[i],"Const=%s %d\n",cname,val->data);
@@ -7436,8 +7438,8 @@ int SaveTimeVal(const char *stmname, const char *timename,int val)
 {
   int f,i,j,num,idx;
   FILE *fp;
-  char line[256];
-  char name[256];
+  char line[1024];
+  char name[512];
   int retval;  
   char *lines[MAXSTATEMACHINELINES]; //max accepted no. of lines i stmprgs
   retval = FALSE;
@@ -7502,7 +7504,7 @@ int SaveTimeVal(const char *stmname, const char *timename,int val)
   }
   if(!retval)
   {
-    lines[i] = (char*)malloc(256);
+    lines[i] = (char*)malloc(512);
   	sprintf(lines[i],"Timeout=%s %d\n",timename,val);
     printf("Couldn't find Timeout %s added to end of file\n",timename);
     retval=TRUE;
@@ -7531,9 +7533,9 @@ int SaveItemVal(const char *stmname, const char *name, const char *itemName)
 {
   int i,j,idx;
   FILE *fp;
-  char line[256];
-  char cname[256];
-  char citemName[256];
+  char line[512];
+  char cname[512];
+  char citemName[512];
   int retval;  
   char *lines[MAXSTATEMACHINELINES]; //max accepted no. of lines i stmprgs
   retval = FALSE;
@@ -7575,7 +7577,7 @@ int SaveItemVal(const char *stmname, const char *name, const char *itemName)
   fclose(fp);
   if(!retval)
   {
-    lines[i] = (char*)malloc(256);
+    lines[i] = (char*)malloc(512);
   	sprintf(lines[i],"Item=%s %s\n",name,itemName);
     printf("Couldn't find Item %s added to end of file\n",name);
     retval=TRUE;
@@ -7604,9 +7606,9 @@ int SaveCPPatternVal(const char *stmname, const char *name, const char *cppName)
 {
   int i,j,idx;
   FILE *fp;
-  char line[256];
-  char cname[256];
-  char ccppName[256];
+  char line[512];
+  char cname[512];
+  char ccppName[512];
   int retval;  
   char *lines[MAXSTATEMACHINELINES]; //max accepted no. of lines i stmprgs
   retval = FALSE;
@@ -7648,7 +7650,7 @@ int SaveCPPatternVal(const char *stmname, const char *name, const char *cppName)
   fclose(fp);
   if(!retval)
   {
-    lines[i] = (char*)malloc(256);
+    lines[i] = (char*)malloc(512);
   	sprintf(lines[i],"CPPattern=%s %s\n",name,cppName);
     printf("Couldn't find CP Pattern %s added to end of file\n",name);
     retval=TRUE;
@@ -7678,8 +7680,8 @@ int SaveFrameVal(const char *stmname, tmpnFrame *newfr)
 	tmpnFrame oldfr;
   int i,j,idx;
   FILE *fp;
-  char line[256];
-  char name[256];
+  char line[4096];
+  char name[512];
   int retval;  
   char *lines[MAXSTATEMACHINELINES]; //max accepted no. of lines i stmprgs
   retval = FALSE;
@@ -7746,9 +7748,9 @@ int SaveMacInitVal(tmpnMac* mac, int modidx, int initidx)
 {
   int i,j;
   FILE *fp;
-	char cmpline[256];
+	char cmpline[512];
 	int cmplen;
-  char line[256];
+  char line[2048];
   int retval;
   char *lines[1000]; //max accepted no. of initlines i Mac-file
   retval = FALSE;
@@ -7866,7 +7868,7 @@ int tmpnRobotSave(const char *fn, tmpnRobot *robot)
 {
   int f,i;
   FILE *fp;
-  char filename[256];
+  char filename[512];
 
   sprintf(filename,"%s/robot/%s.robot",databasePath,fn);
   
@@ -8538,7 +8540,7 @@ void copyAxisToTableSpace(tmpnRobot *robot)
 int tmpnRobotLoad(const char *filename, tmpnRobot *robot)
 {
   FILE *fp;
-  char buffer[256];
+  char buffer[512];
   int version;
   fp = fopen(filename,"r");
   if(fp==NULL) return FALSE;
@@ -8801,8 +8803,8 @@ void getConnectData(char *buffer, stbstruct *stb)
 int tmpnDIOLoad(const char *filename, tmpnDIO *dio)
 {
   FILE *fp;
-  char buffer[256];
-  char sType[256];
+  char buffer[512];
+  char sType[512];
   int io_version, i;
   stbstruct *stb=NULL;
   unsigned short *tmpiptr;
@@ -8950,7 +8952,7 @@ int tmpnDIOLoad(const char *filename, tmpnDIO *dio)
 int tmpnICPconLoad(const char *filename, tmpnICPcon *icpcon)
 {
   FILE *fp;
-  char buffer[256];
+  char buffer[512];
 	int icp_version, i;
   icpconstruct *icp=NULL;
 	icpcon->simulate = 0;
@@ -9360,7 +9362,7 @@ int tmpnUdpAgentLoad(const char *filename, tmpnUdpAgents *udpagents,int type)
 int tmpnComSKLoad(const char *filename, tmpnComSK *comsk)
 {
   FILE *fp;
-  char buffer[256];
+  char buffer[512];
 	char type[64];
   int comsk_version, i;
   comskstruct *freq=NULL;
@@ -9695,7 +9697,7 @@ int tmpnComSKLoad(const char *filename, tmpnComSK *comsk)
 int tmpnMacLoad(const char *filename, tmpnMac *mac)
 {
   FILE *fp;
-  char buffer[256];
+  char buffer[512];
 	char tempbuf[64];
   int mac_version, i;
   macstruct *motor=NULL;
@@ -10251,7 +10253,7 @@ int tmpnMacLoad(const char *filename, tmpnMac *mac)
 int tmpnLoadCellLoad(const char *filename, tmpnLoadCell *loadcell)
 {
   FILE *fp;
-  char buffer[256];
+  char buffer[512];
   int loadcell_version;
   loadcellConnect *lcc=NULL;
 	
@@ -10367,13 +10369,13 @@ int tmpnLoadCellLoad(const char *filename, tmpnLoadCell *loadcell)
 int tmpnWorkcellLoad(const char *fn, tmpnWorkcell *workcell)
 {
   FILE *fp;
-  char buffer[256];
-  char s[256];
-  char filename[256];
+  char buffer[512];
+  char s[512];
+  char filename[1024];
   int i,version;
 	struct udpsave
 	{
-		char filename[256];
+		char filename[512];
 		int type;
 	};
 	struct udpsave us[MAXUDPAGENTS];
@@ -10548,7 +10550,7 @@ int tmpnWorkcellLoad(const char *fn, tmpnWorkcell *workcell)
         tmpnLanguageLoad(filename, &workcell->languages);
       }
       else{
-        char str[256];
+        char str[512];
         sscanf(buffer, "%s\n", str);
         printf("ERROR: Load WorkCell: Cannot recognize line: '%s' Number of statemachines given might be wrong.\n",str);
         exit(99);
@@ -10894,7 +10896,7 @@ int tmpnWorkcellLoad(const char *fn, tmpnWorkcell *workcell)
       }
       else
 			{
-        char str[256];
+        char str[512];
         sscanf(buffer, "%255s\n", str);
         printf("ERROR: Load WorkCell: Cannot recognize line: '%s'\n",str);
         exit(99);
@@ -10941,8 +10943,8 @@ void tmpnSetDatabase(const char *database)
 int tmpnPlantLoad(const char *fn, tmpnPlant *plant)
 {
   FILE *fp;
-  char s[256];
-  char filename[256];
+  char s[512];
+  char filename[1024];
   int w,version;
   
   sprintf(filename,"%s/plant/%s.plant",databasePath,fn);
@@ -11123,10 +11125,10 @@ COMMANDSTRUCT *addCommandString(COMMANDSTRUCT *ptrcmd, const char *t, int* level
 {
   COMMANDSTRUCT *cmd=NULL;
   tmpnRobot *robot=(tmpnRobot*)trobot;
-//char sdummy[256];
-  char t1[256];
-  char t2[256];
-  char t3[256];
+//char sdummy[512];
+  char t1[512];
+  char t2[512];
+  char t3[512];
   int i,forceItem,loadgroup;
   POINTSTRUCT *point;
   if(strncmp(t,"ROOT",4)==0)
@@ -11873,10 +11875,10 @@ int jointToTask(const char *filename)
   FILE *fp;
   FILE *fpout;
   int version;
-  char t[256];
-  char fn[256];
-  char fname[256];
-  char fnout[256];
+  char t[512];
+  char fn[512];
+  char fname[512];
+  char fnout[1024];
   tmpnJoints joint;
   tmpnJoints actuator;
   int dt;
@@ -11918,8 +11920,8 @@ int jointToTask(const char *filename)
   }
   fprintf(fpout,"VERSION %d\n", SCRIPTVERSION);
 
-  memset(t, 0, 256);
-  fgets(t,256,fp);
+  memset(t, 0, 512);
+  fgets(t,512,fp);
 
   while(!feof(fp))
   {
@@ -11966,7 +11968,7 @@ int jointToTask(const char *filename)
     );
     }           
     else fprintf(fpout,"%s",t);
-    fgets(t,256,fp);
+    fgets(t,512,fp);
   }
   fclose(fp);
   fclose(fpout);
@@ -11999,9 +12001,9 @@ COMMANDSTRUCT *LoadCommandScript(const char *filename, int flag)
   FILE *fp;
   COMMANDSTRUCT *cmd,*root;
   int i,version;
-  char t[256];
-  char tt[256];
-  char fn[256];
+  char t[512];
+  char tt[512];
+  char fn[512];
   
   int level = 0;
 
@@ -12030,8 +12032,8 @@ COMMANDSTRUCT *LoadCommandScript(const char *filename, int flag)
     return NULL;
   }
 
-  memset(t, 0, 256);
-  fgets(t,256,fp);
+  memset(t, 0, 512);
+  fgets(t,512,fp);
 
   //read first line in script
   root = addCommandString(NULL,"ROOT",&level);
@@ -12050,8 +12052,8 @@ COMMANDSTRUCT *LoadCommandScript(const char *filename, int flag)
       }
     }                 
     cmd = addCommandString(cmd,tt,&level);
-    memset(t, 0, 256);
-    fgets(t,256,fp);
+    memset(t, 0, 512);
+    fgets(t,512,fp);
   }
   fclose(fp);
   updatecmdPoints(root);
@@ -12771,7 +12773,7 @@ static void updateRSSystem(char *s, tmpnRSSystem *ini)
 static int mntdatabase(void)
 {
   FILE *fp;
-  char buffer[256];
+  char buffer[512];
 	fp = fopen("/mnt/mntdatabase.txt","r");
   if(fp==NULL)
 		fp = fopen("mntdatabase.txt","r");
@@ -12833,8 +12835,8 @@ static int mntdatabase(void)
 int LoadRSSystemData(tmpnRSSystem *ini)
 {
   FILE *fp;
-  char buffer[256];
-  char filename[256];
+  char buffer[512];
+  char filename[1024];
   int cmd_version;
   if(!mntdatabase()) return FALSE;
   sprintf(filename,"%s/system/%s",rs_systempath,rs_systemini);
@@ -12868,7 +12870,7 @@ int LoadRSSystemData(tmpnRSSystem *ini)
 int SaveRSSystemData(tmpnRSSystem *ini)
 {
   FILE *fp;
-  char filename[256];
+  char filename[1024];
   if(!mntdatabase()) return FALSE;
   sprintf(filename,"%s/system/%s",rs_systempath,rs_systemini);
   if((fp = fopen(filename, "w"))==NULL)
@@ -12918,7 +12920,7 @@ int SaveRSSystemData(tmpnRSSystem *ini)
 int saveScopeSample(char *file, char *s)
 {
   FILE *fp;
-  char filename[256];
+  char filename[512];
   sprintf(filename,"%s/scope/%s.txt",rs_systempath, file);
   fp = fopen(filename, "a");
   if(fp!=NULL)
@@ -12941,7 +12943,7 @@ int libRunCounter(COMMANDSTRUCT *cmd, COMMANDSTRUCT **pcmd)
   COUNTERSTRUCT *cnt;
   char *cVal;
   char *tVal;
-  char cntval[256];
+  char cntval[512];
   
 //  ploop=*pcmd;
 //loop100:    

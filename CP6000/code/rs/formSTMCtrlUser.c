@@ -14,8 +14,9 @@
 
 extern char *fixpointsFrameName;
 extern tmpnCPPattern *editcppattern;
+extern char *itemName;
 
-tmpnScopeData scopeitem[10];
+//tmpnScopeData scopeitem[10];
 
 static int stateMachineNum = 0;
 
@@ -133,7 +134,7 @@ BX_BOOL formSTMCtrl_BuildValueString(struct tmpnStateMachineValue *value, char* 
 //if string format is changed remember to change format in formSTMCtrl_cmdEdit_Click
 BX_BOOL formSTMCtrlUserUpdate(HBOX hBox)
 {
-  char s[128];
+  char s[1024];
   int sn=0, i;
   tmpnStateMachine *stm;
   tmpnStateMachine *link;
@@ -214,7 +215,7 @@ BX_BOOL formSTMCtrlUserUpdate(HBOX hBox)
     if(formSTMCtrl_BuildValueString(&stm->value[i], s))
       BxList_SetString(BxGetDlgItem(hBox, FORMSTMCTRL_LISTBOX), sn++, s);
     else{
-      char str[256];
+      char str[512];
       sprintf(str,"Error: %s is unknown",stm->value[i].name);
       BxList_SetString(BxGetDlgItem(hBox, FORMSTMCTRL_LISTBOX), sn++, str);
     }
@@ -407,20 +408,20 @@ BX_BOOL formSTMCtrl_cmdEdit_Click(HBOX hBox)
 			}
 		}
 	} 
-  /*  else if (!strncmp(str,"Item",4))
+   else if (!strncmp(str,"Item",4))
   {
 		HBOX hBx;
     tmpnItem *item;
     sscanf(str,"Item %s",(char*)tname);
+    tmpnLanguage *langptr=(tmpnLanguage*)&tworkcell->languages.language[tworkcell->languages.currentLanguage];
     for(i=0;i<stm->numvalue;i++) //there are for types of variables - item is of type value
     {
       if (!strncmp(stm->value[i].name,(char*)tname,256)&&stm->value[i].type==ITEM)
       {
-				printf("name of the item: %s\n",(char*)tname);
         item=stm->value[i].item;
-        printf("item size: %f\n",item->sy);
 				if (item!=NULL)
 				{
+          itemName=(char*)tname;
           hBx = BxCreateDialog(((BOXSTRUCT *)hBox)->hInstance, &formItemEdit[0], formItemEditProc);
 					BxSetFloatValue(BxGetDlgItem(hBx, FORMITEMEDIT_CMDDX), item->dim.x);
 				  BxSetFloatValue(BxGetDlgItem(hBx, FORMITEMEDIT_CMDDY), item->dim.y);
@@ -440,12 +441,12 @@ BX_BOOL formSTMCtrl_cmdEdit_Click(HBOX hBox)
             item->my = BxGetFloatValue(BxGetDlgItem(hBx, FORMITEMEDIT_CMDMY));
             item->gx = BxGetFloatValue(BxGetDlgItem(hBx, FORMITEMEDIT_CMDGX));
             item->weight = BxGetFloatValue(BxGetDlgItem(hBx, FORMITEMEDIT_CMDWEIGHT));
-						//SaveItemVal(stm->name,item, item);//saving in stm only
+						//SaveItemVal(stm->name,item, item);//saving to file but what about program STM?
           }
 				}
 			}
 		}
-  }*/
+    }
   else if (!strncmp(str,"CPPattern",9))
   {
 		HBOX hBx;

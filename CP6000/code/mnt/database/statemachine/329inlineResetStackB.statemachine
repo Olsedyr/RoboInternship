@@ -1,0 +1,11 @@
+; INLINE 329inlineResetStackB.statemachine
+SET cBItem sBItem
+CALC cBStackleft = sBItem / 2
+CALC cBStackright = sBItem / 2
+TEST currentpal = 1
+  SET nextpala 1
+  SET currentpal 0
+ELSETEST currentpal = 2
+  SET nextpalb 1
+  SET currentpal 0
+ENDTEST

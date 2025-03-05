@@ -1,0 +1,236 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut
+Delaystop=5000000
+Input=Foto1 "ConveyorOut Foto7"
+Input=Foto2 "ConveyorOut Foto6"
+Input=Foto3 "ConveyorOut Foto17"
+Output=Motor "ConveyorOut Motor"
+Link=KassePakkerBottom
+;Link=Robot
+Link=COutFotoOne
+Link=COutFotoTwo
+Timeout=StartMotorDelay 2500000
+Timeout=TimeOutDelay 4000000
+Timeout=WaitNextDelay 5000000
+Value=errorCode 0
+Value=Tostate 0
+Value=get1state 1
+Value=get2state 2
+Value=get3state 3
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_ERROR
+  SET errorCode 1007
+  TEST KassePakkerBottom = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_READY_ROBOT
+  SET Motor 0
+  TEST KassePakkerBottom = ST_IDLE
+    SETSTATE ST_IDLE
+  ELSE
+    TEST Foto1 = 0
+    AND Foto2 = 0
+      SETSTATE ST_WAIT_ROBOT_GONE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_IDLE
+  SET Motor 0
+END
+
+State=ST_EMPTY
+  TEST KassePakkerBottom = ST_RUN
+    SET Motor 1
+    SET Tostate 1
+    TIMEOUT WaitNextDelay ST_NEXT	
+    SETSTATE ST_NEXT 
+  ELSE
+    TEST KassePakkerBottom = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GET1
+  TEST COutFotoOne = ST_HIGH
+    SET Motor 0
+    SETSTATE ST_WAIT2
+  ENDTEST
+END
+
+State=ST_WAIT2
+  TEST KassePakkerBottom = ST_RUN
+    SET Motor 1
+    SET Tostate 2	
+    TIMEOUT WaitNextDelay ST_NEXT	
+    SETSTATE ST_NEXT
+  ELSE
+    TEST KassePakkerBottom = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_NEXT
+  TEST Foto3 = 1
+    SETSTATE ST_RECEIVED
+  ELSE
+    TEST WaitNextDelay = 1
+      SETSTATE ST_BACKSTEP
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_BACKSTEP
+  SET Motor 0
+  TEST Tostate = get1state
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST Tostate = get2state
+      SETSTATE ST_WAIT2
+    ELSE
+      TEST Tostate = get3state
+        SETSTATE ST_WAIT3 
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RECEIVED
+  TEST Tostate = get1state
+    SETSTATE ST_GET1
+  ELSE
+    TEST Tostate = get2state
+      SETSTATE ST_GET2
+    ELSE
+      TEST Tostate = get3state 
+        SETSTATE ST_GET3
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GET2
+  TEST COutFotoTwo = ST_HIGH
+    SET Motor 0
+    SETSTATE ST_WAIT3
+  ENDTEST
+ END
+
+State=ST_WAIT3
+  TEST KassePakkerBottom = ST_RUN
+    SET Motor 1	
+    SET Tostate 3
+    TIMEOUT WaitNextDelay ST_NEXT	
+    SETSTATE ST_NEXT
+  ELSE
+    TEST KassePakkerBottom = ST_IDLE
+      SETSTATE ST_IDLE
+    ELSE
+      TEST Foto1 = 0
+      AND Foto2 = 0
+        SETSTATE ST_WAIT_ROBOT_GONE
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_WAIT_ROBOT_GONE
+  ;TEST Robot = ST_THIRTYPCT_CONVBPLACE
+  ;OR Robot = ST_FOURTYPCT_CONVBPLACE
+    TEST Foto1 = 0
+    AND Foto2 = 0
+      SETSTATE ST_RESTART
+    ELSE
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+  TEST KassePakkerBottom = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_GET3
+  TEST Foto3 = 1
+    SET Motor 0
+    SETSTATE ST_READY_ROBOT
+  ENDTEST
+END
+
+State=ST_RESET
+  SET Tostate 0
+  TEST Foto1 = 1
+  AND Foto2 = 1
+    SET Motor 0
+    TEST Foto3 = 1
+      SETSTATE ST_READY_ROBOT
+    ELSE
+      SETSTATE ST_WAIT3
+    ENDTEST
+  ELSE
+    SET Motor 1
+    TIMEOUT TimeOutDelay ST_STARTUP
+    SETSTATE ST_STARTUP
+  ENDTEST
+END
+
+State=ST_STARTUP
+  TEST Foto1 = 1
+  AND Foto2 = 1
+    SET Motor 0
+    TEST Foto3 = 1
+      SETSTATE ST_READY_ROBOT
+    ELSE
+      SETSTATE ST_WAIT3
+    ENDTEST
+  ELSE
+    TEST TimeOutDelay = 1
+      SET Motor 0
+      TEST Foto1 = 1
+        TEST Foto2 = 1
+	  TEST Foto3 = 1
+            SETSTATE ST_READY_ROBOT
+          ELSE
+            SETSTATE ST_WAIT3
+          ENDTEST
+        ELSE
+          SETSTATE ST_WAIT2
+        ENDTEST 
+      ELSE
+        TEST Foto2 = 0
+          TEST Foto3 = 0
+            SETSTATE ST_EMPTY
+          ELSE
+            SETSTATE ST_ERROR
+          ENDTEST
+        ELSE
+          SETSTATE ST_ERROR
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESTART
+  TEST Foto1 = 0
+  AND Foto2 = 0
+    TEST Foto3 = 0
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+      SETSTATE ST_GET1 
+    ENDTEST  
+  ELSE
+    SETSTATE ST_ERROR
+  ENDTEST
+END
+

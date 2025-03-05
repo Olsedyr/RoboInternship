@@ -17,7 +17,7 @@
 //********************************************************************
 COMMANDSTRUCT *expandSubPathKatrineIn(tmpnRobot *robot, COMMANDSTRUCT *ptrcmd, int *level, int forceItem, const char *ppscriptname, int loadgroup) 
 {
-  char s[256];
+  char s[512];
   tmpnPPScriptItem *moveItem;
   tmpnPPScript *ppscriptA;
   tmpnFrame *toFrame,*fromFrame,*homeFrame;
@@ -163,7 +163,7 @@ COMMANDSTRUCT *expandSubPathKatrineIn(tmpnRobot *robot, COMMANDSTRUCT *ptrcmd, i
 //********************************************************************
 COMMANDSTRUCT *expandSubPathKatrineOut(tmpnRobot *robot, COMMANDSTRUCT *ptrcmd, int *level, int forceItem, const char *ppscriptname, int loadgroup) 
 {
-  char s[256];
+  char s[512];
   tmpnPPScriptItem *moveItem;
   tmpnPPScript *ppscriptB;
   tmpnFrame *toFrame,*fromFrame,*homeFrame;

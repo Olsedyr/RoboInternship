@@ -1,0 +1,59 @@
+How to create a bootable flash disk for roboStacker
+
+1. Lav en flash disk
+   su - (logger ind som root)
+   /sbin/fdisk /dev/sdX (erstat X med disk bogstav, kan findes med dmesg efter flash er isat. dmesg udskriver de sidste hændelser på pc'en (i dette tilfælde nyindsat flashkort))
+	 
+   Opret 2 partitioner - en vfat (type b) på ca 16-20M (bootpart) og en linux (default) på resten dog min. 20-30M:
+
+     1. slet eksisterende med "d"
+     2. opret første med "n" - primary "p"  - partition nr "1" - First cylinder "1" og Last cylinder "+16M"
+     3. set bootflag med "a" - partition nr. "1"
+     4. set type med "t" - parameter "b"
+     5. opret anden med "n" - primary "p" - partition nr "2" og "246"(default) - "978"(default)
+     6. write to disk med "w"
+     7. Unmount (erstart X med korrekt disk bogstav:
+          umount /dev/sdX1
+          umount /dev/sdX2
+
+2. opret filsystemer på flashen (husk at bruge korrekt disk (som i punkt 1, kan sdb eller sdc)
+     /sbin/mkfs -t vfat /dev/sdX1
+     /sbin/mkfs -t ext3 /dev/sdX2
+
+3. Gør flash disken bootbar
+     ms-sys --mbrsyslinux /dev/sdX
+     syslinux /dev/sdX1
+
+4. Kopier filer til bootparten
+     opret midlertidigt bibliotek til at mounte flashpartition: mkdir /mnt/cf (eksisterer muligvis allerede)
+     mount /dev/sdX1 /mnt/cf (erstat X)
+     cp /home/USER/sandbox/flash/bootpart/syslinux.cfg /mnt/cf (erstat USER med brugernavn)
+     cp /home/USER/sandbox/flash/bootpart/bzImage /mnt/cf
+     cp /home/USER/sandbox/flash/bootpart/ramfs.igz /mnt/cf
+     umount /mnt/cf
+	 	 
+5. Kopier program filer og data til prgparten
+     mount /dev/sdX2 /mnt/cf (erstat X)
+     kopier prg + database
+       cp -r /home/USER/sandbox/extras/ /mnt/cf/
+       cp -r /home/USER/sandbox/extras/connect2mpn.sh /mnt/cf/
+       cp -r /home/USER/sandbox/extras/startup /mnt/cf/
+       cp -r /home/USER/sandbox/rs/robostacker /mnt/cf/
+       cp -r /home/USER/sandbox/rs/data/ /mnt/cf/
+       cp -r /home/USER/sandbox/mnt/mntdatabase.txt /mnt/cf/
+       cp -r /home/USER/sandbox/mnt/database/ /mnt/cf/
+     rediger /mnt/cf/mntdatabase.txt så der står (erstat WID med workcell id nummer, eks.: 318):
+       /mnt/database/
+       WIDsystem.ini
+     rediger /mnt/cf/database/system/WIDsystem.ini
+       sæt touch.initialized=0 for at kalibrere touch skærmen første gang der startes op
+     umount /mnt/cf
+
+   Thats it.
+	 
+6. Kopier indhold af en flashdisk til en anden: (optional)
+   1. Gem indhold af flashdisk1 til en fil med "dd if=/dev/sdX of=flashfil"
+   2. unmount flashdisk (umount /dev/sdX1; umount /dev/sdX2) og fjern fra læser.
+   3. isæt flashdisk2 og udfør "dd if=flashfil of=/dev/sdX"
+   4. unmount flashdisk (umount /dev/sdX1; umount /dev/sdX2) og fjern disken
+   5. indsæt evt. disken igen for at teste om data er blevet lagt korrekt over.

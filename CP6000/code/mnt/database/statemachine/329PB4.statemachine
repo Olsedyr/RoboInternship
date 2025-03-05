@@ -1,0 +1,144 @@
+STATEMACHINEVERSION 3
+Include=pallebane4.statemachine
+Name=Pallebane4
+Input=palletInPlace "Pallebane4 FotoRev"
+Input=fotoTest "Pallebane4 FotoTest"
+Output=MotorFwd "Pallebane4 MotorFwd" 
+Output=MotorRev "Pallebane4 MotorRev"
+Output=Chain "Pallebane4 Chain"
+Output=Cyl "Pallebane4 Cyl"
+Link=next Pallebane5
+Link=prev Shuttle
+Link=parent Parent
+linkValue=shuttlePos curPos Shuttle
+linkValue=shuttleCmd command Shuttle
+linkValue=nextpala Frames
+linkValue=shuttleCasekind casekind Shuttle
+linkValue=programCasekind casekind Program328
+Value=casekind 0 
+Value=newpala 0
+Timeout=TimeoutDelay 5000000
+Timeout=TimeoutForPalletRev 1000000
+Timeout=TimeoutForPalletSideAlign 5000000
+Timeout=TimeoutForPalletLift 2000000
+Timeout=StopDelay 250000
+Const=posPB4 9
+Const=comPB4receive 	7
+Const=comPB4send 	8
+Const=ON 0
+
+State=ST_EMPTY
+  TEST shuttleCmd = comPB4receive 
+  AND prev = ST_SEND
+  AND shuttlePos = posPB4
+    SET MotorFwd 1
+    SET MotorRev 0
+    SET Chain 0
+    SET Cyl 0
+    TIMEOUT maxDelayStop ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSE 
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET Chain 0
+   SET Cyl 0
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_SEND
+  TEST next = ST_READY
+    SETSTATE ST_EMPTY
+    SET casekind 0
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET Chain 0
+    SET Cyl 0
+  ELSE 
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET Chain 1
+   SET Cyl 1
+ ENDTEST
+ TEST parent = ST_IDLE
+ AND maxDelayStop = 1 
+   SETSTATE ST_IDLE
+ ENDTEST  
+END
+
+
+State=ST_RECEIVE
+ TEST palletInPlace = ON
+    SET casekind shuttleCasekind
+    SET newpala 1
+    TIMEOUT TimeoutForPalletRev ST_PALLET_REV_TIMEOUT
+    SETSTATE ST_TIMER
+ ENDTEST
+ TEST parent = ST_IDLE
+ AND maxDelayStop = 1
+   SETSTATE ST_IDLE
+ ENDTEST  
+ END
+
+State=ST_PALLET_REV_TIMEOUT
+  SET MotorRev 0
+  SET MotorFwd 0
+  SET Chain 0
+  SET Cyl 0
+  TEST palletInPlace = ON
+  AND fotoTest = 0
+    TEST casekind != programCasekind
+      SETSTATE ST_READY_OUT
+    ELSE
+      SET nextpala 0
+      SETSTATE ST_READY_ROBOT
+    ENDTEST
+  ELSETEST palletInPlace = ON
+  AND fotoTest = 1
+    SETSTATE ST_READY_ROBOT
+  ELSE 
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_READY_OUT
+  TEST shuttleCmd = comPB4send 
+  AND shuttlePos = posPB4
+    TEST prev = ST_RECEIVE
+    OR prev = ST_EMPTY
+      TIMEOUT maxDelayStop ST_SEND_OUT
+      SETSTATE ST_SEND_OUT
+    ENDTEST
+  ELSE
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET Chain 0
+    SET Cyl 0
+    SET MotorRev 0
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_SEND_OUT
+  TEST prev = ST_READY
+    SETSTATE ST_EMPTY
+    SET casekind 0
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET Chain 0
+    SET Cyl 0
+  ELSE 
+    SET MotorFwd 0
+    SET MotorRev 1
+    SET Chain 0
+    SET Cyl 0
+ ENDTEST
+ TEST parent = ST_IDLE
+ AND maxDelayStop = 1 
+   SETSTATE ST_IDLE
+ ENDTEST 
+END

@@ -1,0 +1,37 @@
+; INLINE 328inlineLoadPalletB.statemachine
+SETFRAME fromFrame toFrame2
+;******************************************
+TEST pap = 0
+  CALC temp = cAItem - 1
+  CALC temp = temp % 2
+  TEST temp = 0
+    TEST casekind = 4
+      SETFRAME toFrame1 palletA1P
+    ELSE
+      SETFRAME toFrame1 palletA1
+    ENDTEST		
+    CALC ftemp = itemIn.sy * cAStackleft
+    SET leftrightA 0
+  ELSE
+    TEST casekind = 4
+      SETFRAME toFrame1 palletA0P
+    ELSE
+      SETFRAME toFrame1 palletA0
+    ENDTEST
+    CALC ftemp = itemIn.sy * cAStackright
+    SET leftrightA 1
+  ENDTEST
+  CALC toFrame1.y = toFrame1.y + ftemp
+  CALC toFrame1.y = toFrame1.y + itemIn.gy
+;C11 box offset på grund af stop
+  TEST casekind = 1
+    CALC toFrame1.x = toFrame1.x + 5
+  ENDTEST
+  LOAD palletB_palletA fromFrame toFrame1
+  SET palletB_home.mode normalmode
+  LOAD palletB_home fromFrame home
+ELSE
+  SET palletB_home.mode papmode
+  LOAD palletB_home fromFrame homeP
+ENDTEST
+;*******************************************

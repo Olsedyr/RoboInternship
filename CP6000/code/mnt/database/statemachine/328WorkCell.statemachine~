@@ -1,0 +1,143 @@
+STATEMACHINEVERSION 3
+Name=WorkCell
+Link=Emergency
+Link=ContinueKnap
+Link=ErrorCode
+; Statemachines with output, that should be tested for ST_IDLE
+; find them with 'grep -l "Output=" 304*.statemachine'
+;Link=ConveyorIn
+;Link=ConveyorOut
+;Link=AccumulatingConveyor
+;Link=Pallebane1
+;Link=Pallebane4
+;Link=Pallebane5
+;Link=Pallebane6
+;Link=Pallebane9
+;Link=PalleBuffer1
+;Link=PalleBuffer2
+;Link=PalleBuffer3
+;Link=PalleBuffer4
+;Link=Shuttle
+;Link=Pallemagasin
+Link=Tool
+;Link=KassePakkerBottom
+;Link=Plads5
+
+linkValue=button1Pressed RemoteControl
+linkValue=newprogram Program328
+Value=errorCode 0
+Value=firstRun 0
+Timeout=timeBeforeRunning 3000000
+Timeout=timeBeforePausing 2000000
+linkValue=delaystop Robot 
+linkValue=moving Robot
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  TEST ContinueKnap = ST_HIGH
+    TIMEOUT timeBeforeRunning ST_STARTING
+    SETSTATE ST_STARTING
+  ENDTEST
+END
+
+State=ST_STARTING
+  SET firstRun 1
+	TEST timeBeforeRunning = 1
+		SETSTATE ST_RUNNING
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_RESTARTING
+  SET firstRun 0
+	TEST timeBeforeRunning = 1
+		SETSTATE ST_RUNNING
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_RUNNING
+  TEST ContinueKnap = ST_HIGH
+  OR button1Pressed = 1
+    TIMEOUT timeBeforePausing ST_PAUSING
+    SETSTATE ST_PAUSING
+  ENDTEST
+	TEST ErrorCode = ST_ERROR
+		TIMEOUT timeBeforePausing ST_PAUSING
+    SETSTATE ST_PAUSING
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_STOPPING
+  SETSTATE ST_IDLE
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_PAUSING
+; dont test for trafficlight :-)
+	TEST timeBeforePausing = 1
+	AND ConveyorIn = ST_IDLE
+	AND ConveyorOut = ST_IDLE
+	AND Pallebane1 = ST_IDLE
+	AND Pallebane4 = ST_IDLE
+	AND Pallebane5 = ST_IDLE
+	AND Pallebane6 = ST_IDLE
+	AND Pallebane9 = ST_IDLE
+	AND PalleBuffer1 = ST_IDLE
+	AND PalleBuffer2 = ST_IDLE
+	AND PalleBuffer3 = ST_IDLE
+	AND PalleBuffer4 = ST_IDLE
+	;AND Shuttle = ST_IDLE
+	AND Pallemagasin = ST_IDLE
+	AND Tool = ST_IDLE
+	AND KassePakkerBottom = ST_IDLE
+	AND Plads5 = ST_IDLE
+	AND delaystop = 0
+	AND moving = 0
+	  SETSTATE ST_PAUSED
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_PAUSED
+	TEST newprogram = 1
+		SETSTATE ST_IDLE
+	ELSETEST ContinueKnap = ST_HIGH
+		TIMEOUT timeBeforeRunning ST_RESTARTING
+		SETSTATE ST_RESTARTING
+	ENDTEST
+END
+
+State=ST_ERROR
+  TEST ContinueKnap = ST_HIGH
+	  TEST Emergency = ST_POWERON
+  		SET errorCode 0
+      TIMEOUT timeBeforeRunning ST_STARTING
+      SETSTATE ST_STARTING
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+END
+
+State=ST_TIMER
+END

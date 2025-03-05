@@ -4,8 +4,8 @@
 #include "cmd.h"
 #include "formKeyboard.h"
 
-static BX_CHAR m_string[256];
-static BX_CHAR m_lstring[256];
+static BX_CHAR m_string[2048];
+static BX_CHAR m_lstring[2048];
 static BX_BOOL m_shift;
 static BX_INT  m_len;
 static BX_BOOL m_loginMode = FALSE;

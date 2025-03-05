@@ -1,0 +1,13 @@
+digraph G {
+node [fontsize=10];
+ST_HALT -> ST_IDLE;
+ST_RESET -> ST_IDLE;
+ST_IDLE -> ST_OFF;
+ST_IDLE -> ST_ON;
+ST_OFF -> ST_ON;
+ST_OFF -> ST_LOW;
+ST_ON -> ST_OFF;
+ST_ON -> ST_HIGH;
+ST_LOW -> ST_OFF;
+ST_HIGH -> ST_ON;
+}

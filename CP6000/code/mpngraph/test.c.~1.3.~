@@ -1,0 +1,2220 @@
+#include <stdio.h>
+#include "tmpnrobot.h"
+
+static char databasePath[256];
+static int ln=0;
+
+static tmpnConnect dummyConnectOn = {IBITDATA,0,0,0,0xFFFF,{0},"dummyOn","dummyOn","dummyOn"};
+static tmpnConnect dummyConnectOff = {IBITDATA,0,0,0,0xFFFF,{0},"dummyOff","dummyOff","dummyOff"};
+static tmpnConnect dummyConnectOut = {OBITDATA,0,0,0,0xFFFF,{0},"dummyOut","dummyOut","dummyOut"};
+static unsigned short dummyidataon=1;
+static unsigned short dummyidataoff=0;
+static unsigned short dummyodataout=0;
+
+int main()
+{
+  tmpnStateMachine statemachine; 
+  char filename[32]="308ConveyorOut.statemachine";
+  printf("%s\n",filename);
+  tmpnStateMachineLoad(filename,statemachine, 0);
+  tmpnStateLoad(filename,statemachine, 0);
+  return 0;
+}
+
+static int connectStatemachineAndIO(tmpnStateMachineIO *io, char *name, char *key)
+{
+  int i,j,d;
+
+  strcpy(io->name,name);
+
+  if(strcmp(key,"dummyOn")==0)
+  {
+    io->connect=&dummyConnectOn;
+    io->connect->udata=&dummyidataon;
+    return TRUE;
+  }
+  if(strcmp(key,"dummyOff")==0)
+  {
+    io->connect=&dummyConnectOff;
+    io->connect->udata=&dummyidataoff;
+    return TRUE;
+  }
+  if(strcmp(key,"dummyOut")==0)
+  {
+    io->connect=&dummyConnectOut;
+    io->connect->udata=&dummyodataout;
+    return TRUE;
+  }
+
+  for(d=0;d<tworkcell->dios.maxidx;d++)
+  {
+    for(i=0;i<tworkcell->dios.dio[d].numOfModules;i++)
+    {
+      for(j=0;j<tworkcell->dios.dio[d].iotab[i].maxidx;j++)
+      {
+        if(strcmp(tworkcell->dios.dio[d].iotab[i].connect[j].key,key)==0)
+        {
+          io->connect=&tworkcell->dios.dio[d].iotab[i].connect[j];
+          if(io->iotype==INPUT)
+            io->connect->udata=&tworkcell->dios.dio[d].iotab[i].idata[io->connect->wordidx];
+          else
+            io->connect->udata=&tworkcell->dios.dio[d].iotab[i].odata[io->connect->wordidx];
+          return TRUE;
+        }
+      }
+    }
+  }
+	if(io->iotype==INPUT)
+		io->iotype=INCOMSK;
+	else if (io->iotype==OUTPUT)
+		io->iotype=OUTCOMSK;
+	for(d=0;d<tworkcell->comsks.maxidx;d++)
+  {
+    for(i=0;i<tworkcell->comsks.comsk[d].numOfModules;i++)
+    {
+			if(io->iotype==INCOMSK)
+			{
+				for(j=0;j<tworkcell->comsks.comsk[d].iotab[i].numOfInWords;j++)
+				{
+					if(strcmp(tworkcell->comsks.comsk[d].iotab[i].idata[j].key,key)==0)
+					{
+						io->comskconnect=&tworkcell->comsks.comsk[d].iotab[i].idata[j];
+						return TRUE;
+					}
+				}
+			}
+			else if (io->iotype==OUTCOMSK)
+			{
+				
+				for(j=0;j<tworkcell->comsks.comsk[d].iotab[i].numOfOutWords;j++)
+				{
+					if(strcmp(tworkcell->comsks.comsk[d].iotab[i].odata[j].key,key)==0)
+					{
+						io->comskconnect=&tworkcell->comsks.comsk[d].iotab[i].odata[j];
+						return TRUE;
+					}
+				}
+      }
+    }
+  }
+	if(io->iotype==INCOMSK)
+		io->iotype=INLC;
+	for(d=0;d<tworkcell->loadcells.maxidx;d++)
+  {
+    for(i=0;i<tworkcell->loadcells.loadcell[d].numOfModules;i++)
+    {
+			if(io->iotype==INLC)
+			{
+				if(strcmp((char *)tworkcell->loadcells.loadcell[d].iotab[i].key,key)==0)
+				{
+
+					io->loadcellconnect=(loadcellConnect *)&tworkcell->loadcells.loadcell[d].iotab[i];
+					return TRUE;
+				}
+			}
+		}
+	}
+	if(io->iotype==INLC)
+		io->iotype=INMAC;
+	else if (io->iotype==OUTCOMSK)
+		io->iotype=OUTMAC;
+	for(d=0;d<tworkcell->macs.maxidx;d++)
+  {
+    for(i=0;i<tworkcell->macs.mac[d].numOfMotors;i++)
+    {
+			if(io->iotype==INMAC)
+			{
+				for(j=0;j<tworkcell->macs.mac[d].iotab[i].numOfInWords;j++)
+				{
+					if(strcmp(tworkcell->macs.mac[d].iotab[i].idata[j].key,key)==0)
+					{
+						io->macconnect=&tworkcell->macs.mac[d].iotab[i].idata[j];
+						return TRUE;
+					}
+				}
+			}
+			else if (io->iotype==OUTMAC)
+			{				
+				for(j=0;j<tworkcell->macs.mac[d].iotab[i].numOfOutWords;j++)
+				{
+					if(strcmp(tworkcell->macs.mac[d].iotab[i].odata[j].key,key)==0)
+					{
+						io->macconnect=&tworkcell->macs.mac[d].iotab[i].odata[j];
+						return TRUE;
+					}
+				}
+      }
+    }
+  }
+	if(io->iotype==INMAC)
+		io->iotype=INICPCON;
+	else if (io->iotype==OUTMAC)
+		io->iotype=OUTICPCON;
+	for(d=0;d<tworkcell->icpcons.maxidx;d++)
+  {
+    for(i=0;i<tworkcell->icpcons.icpcon[d].numOfModules;i++)
+    {
+			if (io->iotype==INICPCON)
+			{ 
+				for(j=0;j<tworkcell->icpcons.icpcon[d].iotab[i].numOfInBits;j++)
+				{
+					if(!strcmp((char *)tworkcell->icpcons.icpcon[d].iotab[i].inconnect[j].key,key))
+					{				
+						io->icpconnect=(tmpnICPConnect *)&tworkcell->icpcons.icpcon[d].iotab[i].inconnect[j];
+						return TRUE;
+					}
+				}
+			}
+			else if (io->iotype==OUTICPCON)
+			{
+				for(j=0;j<tworkcell->icpcons.icpcon[d].iotab[i].numOfOutBits;j++)
+				{
+					if(!strcmp((char *)tworkcell->icpcons.icpcon[d].iotab[i].outconnect[j].key,key))
+					{				
+						io->icpconnect=(tmpnICPConnect *)&tworkcell->icpcons.icpcon[d].iotab[i].outconnect[j];
+						return TRUE;
+					}
+				}
+			}
+		}
+	}
+  printf("%s not found\n",key);
+  exit(1);
+}
+
+static COMMANDSTRUCT *__localAddCommand(int type)
+{
+  COMMANDSTRUCT *cmd=NULL;
+  ROOTSTRUCT *root=NULL;
+  ELSESTRUCT *elses=NULL;
+  SPLINEHINTSTRUCT *splinehint=NULL;
+  MOVEAXISSTRUCT *moveaxis=NULL;
+  CANCELAXISSTRUCT *cancelaxis=NULL;
+  STATEHINTSTRUCT *statehint=NULL;
+  POSITIONHINTSTRUCT *positionhint=NULL;
+  SADSSTRUCT *dps=NULL;
+  MOVEABSSTRUCT *mas=NULL;
+  PATHSTRUCT *path=NULL;
+  WSPSTRUCT *wsp=NULL;
+  OUTPUTSTRUCT *out=NULL;
+  INPUTSTRUCT *in=NULL;
+  POINTSTRUCT *point=NULL;
+  NAMESTRUCT *sub=NULL;
+  MACROSTRUCT *macro=NULL;
+  CALLSTRUCT *call=NULL;
+  RESETPRELOADSTRUCT *resetpreload=NULL;
+  LABELSTRUCT *label=NULL;
+  JUMPLAYERSTRUCT *jumplayer=NULL;
+  EVENTSTRUCT *event=NULL;
+  SLEEPSTRUCT *sleep=NULL;
+  COUNTERSTRUCT *counter=NULL;
+  TUNINGSTRUCT *tuning=NULL;
+  SETSPEEDSTRUCT *setspeed=NULL;
+  SCOPESTRUCT *scope=NULL;
+  GOTOSTRUCT *go=NULL;
+  PPSCRIPTSTRUCT *ppscript=NULL;
+  TESTSTRUCT *test=NULL;
+	SETSTRUCT *set=NULL;
+  SETSTATESTRUCT *setstate=NULL;
+  TIMEOUTSTRUCT *timeout=NULL;
+  SUBTSTRUCT *subt=NULL;
+  ADDSTRUCT *add=NULL;
+  MULSTRUCT *mul=NULL;
+  CALCSTRUCT *calg=NULL;
+  DIVSTRUCT *div=NULL;
+  ERRORSTRUCT *error=NULL;
+  LOADSTRUCT *load=NULL;
+  EXECSTRUCT *exec=NULL;
+  SETFRAMESTRUCT *setframe=NULL;
+	SETITEMSTRUCT *setitem=NULL;
+	ROBOTSPEEDSTRUCT *robotspeed=NULL;
+
+  cmd = (COMMANDSTRUCT*)malloc(sizeof(COMMANDSTRUCT));
+  if(cmd==NULL)
+    return NULL;
+
+  cmd->type = type;
+  cmd->next = NULL;
+  cmd->prev = NULL;
+  cmd->flag = 0;
+  cmd->listitem = NULL;
+  cmd->include = 0;
+
+  switch(type)
+  {
+    case ROOT:
+      root = (ROOTSTRUCT*)malloc(sizeof(ROOTSTRUCT));
+      if(root==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)root;
+      break;
+    case ELSE:
+      elses = (ELSESTRUCT*)malloc(sizeof(ELSESTRUCT));
+      if(elses==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)elses;
+      break;
+    case SADS:
+      dps = (SADSSTRUCT*)malloc(sizeof(SADSSTRUCT));
+      if(dps==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)dps;
+      break;
+    case SPLINEHINT:
+      splinehint = (SPLINEHINTSTRUCT*)malloc(sizeof(SPLINEHINTSTRUCT));
+      if(splinehint==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)splinehint;
+      break;
+    case MOVEAXIS:
+      moveaxis = (MOVEAXISSTRUCT*)malloc(sizeof(MOVEAXISSTRUCT));
+      if(moveaxis==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)moveaxis;
+      break;
+    case CANCELAXIS:
+      cancelaxis = (CANCELAXISSTRUCT*)malloc(sizeof(CANCELAXISSTRUCT));
+      if(cancelaxis==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)cancelaxis;
+      break;
+    case STATEHINT:
+      statehint = (STATEHINTSTRUCT*)malloc(sizeof(STATEHINTSTRUCT));
+      if(statehint==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)statehint;
+      break;
+    case POSITIONHINT:
+      positionhint = (POSITIONHINTSTRUCT*)malloc(sizeof(POSITIONHINTSTRUCT));
+      if(positionhint==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)positionhint;
+      break;
+    case MOVEABS:
+      mas = (MOVEABSSTRUCT*)malloc(sizeof(MOVEABSSTRUCT));
+      if(mas==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)mas;
+      break;
+    case PATH:
+      path = (PATHSTRUCT*)malloc(sizeof(PATHSTRUCT));
+      if(path==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      path->tpathdef.maxidx=0;
+      path->tpathdef.maxhidx=0;
+      path->tpathdef.maxpidx=0;
+      path->tpathdef.id = 0;
+      path->tpathdef.idx = -1;
+      path->firstpoint=cmd;
+      cmd->data = (void*)path;
+      break;
+    case MACRO:
+      macro = (MACROSTRUCT*)malloc(sizeof(MACROSTRUCT));
+      if(macro==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      memset(macro, 0, sizeof(MACROSTRUCT));
+      cmd->data = (void*)macro;
+      break;
+    case RESETPRELOAD:
+      resetpreload = (RESETPRELOADSTRUCT*)malloc(sizeof(RESETPRELOADSTRUCT));
+      if(resetpreload==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      memset(resetpreload, 0, sizeof(RESETPRELOADSTRUCT));
+      cmd->data = (void*)resetpreload;
+      break;
+    case CALL:
+      call = (CALLSTRUCT*)malloc(sizeof(CALLSTRUCT));
+      if(call==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      memset(call, 0, sizeof(CALLSTRUCT));
+      cmd->data = (void*)call;
+      break;
+    case LABEL:
+      label = (LABELSTRUCT*)malloc(sizeof(LABELSTRUCT));
+      if(label==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      memset(label, 0, sizeof(LABELSTRUCT));
+      cmd->data = (void*)label;
+      break;
+    case JUMPLAYER:
+      jumplayer = (JUMPLAYERSTRUCT*)malloc(sizeof(JUMPLAYERSTRUCT));
+      if(jumplayer==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      memset(jumplayer, 0, sizeof(JUMPLAYERSTRUCT));
+      cmd->data = (void*)jumplayer;
+      break;
+    case SCOPE:
+      scope = (SCOPESTRUCT*)malloc(sizeof(SCOPESTRUCT));
+      if(scope==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      memset(scope, 0, sizeof(SCOPESTRUCT));
+      cmd->data = (void*)scope;
+      break;
+    case GOTO:
+      go = (GOTOSTRUCT*)malloc(sizeof(GOTOSTRUCT));
+      if(go==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      memset(go, 0, sizeof(GOTOSTRUCT));
+      cmd->data = (void*)go;
+      break;
+    case PPSCRIPT:
+      ppscript = (PPSCRIPTSTRUCT*)malloc(sizeof(PPSCRIPTSTRUCT));
+      if(ppscript==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      memset(ppscript, 0, sizeof(PPSCRIPTSTRUCT));
+      cmd->data = (void*)ppscript;
+      break;
+    case WSP:
+      wsp = (WSPSTRUCT*)malloc(sizeof(WSPSTRUCT));
+      if(wsp==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)wsp;
+      break;
+    case OUT:
+      out = (OUTPUTSTRUCT*)malloc(sizeof(OUTPUTSTRUCT));
+      if(out==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)out;
+      break;
+    case IN:
+      in = (INPUTSTRUCT*)malloc(sizeof(INPUTSTRUCT));
+      if(in==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)in;
+      break;
+    case STARTSUB:
+      sub = (NAMESTRUCT*)malloc(sizeof(NAMESTRUCT));
+      if(sub==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)sub;
+      break;
+    case ENDSUB:
+      sub = (NAMESTRUCT*)malloc(sizeof(NAMESTRUCT));
+      if(sub==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)sub;
+      break;
+    case POINT:
+    case RPOINT:
+    case EPOINT:
+    case HPOINT:
+    case HRPOINT:
+      point = (POINTSTRUCT*)malloc(sizeof(POINTSTRUCT));
+      if(point==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      memset(point, 0, sizeof(POINTSTRUCT));
+      cmd->data = (void*)point;
+      break;
+    case TESTEVENT:
+      event = (EVENTSTRUCT*)malloc(sizeof(EVENTSTRUCT));
+      if(event==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)event;
+      break;
+    case SLEEP:
+      sleep = (SLEEPSTRUCT*)malloc(sizeof(SLEEPSTRUCT));
+      if(sleep==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)sleep;
+      break;
+    case WAITEVENT:
+      event = (EVENTSTRUCT*)malloc(sizeof(EVENTSTRUCT));
+      if(event==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)event;
+      break;
+    case COUNTER:
+      counter = (COUNTERSTRUCT*)malloc(sizeof(COUNTERSTRUCT));
+      if(counter==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)counter;
+      break;
+    case TUNING:
+      tuning = (TUNINGSTRUCT*)malloc(sizeof(TUNINGSTRUCT));
+      if(tuning==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)tuning;
+      break;
+    case SETSPEED:
+      setspeed = (SETSPEEDSTRUCT*)malloc(sizeof(SETSPEEDSTRUCT));
+      if(setspeed==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)setspeed;
+      break;
+    case SIGNALEVENT:
+      event = (EVENTSTRUCT*)malloc(sizeof(EVENTSTRUCT));
+      if(event==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)event;
+      break;
+    case STOP:
+      sub = (NAMESTRUCT*)malloc(sizeof(NAMESTRUCT));
+      if(sub==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)sub;
+      break;
+    case ERROR:
+      error = (ERRORSTRUCT*)malloc(sizeof(ERRORSTRUCT));
+      if(error==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)error;
+      break;
+    case SETFRAME:
+      setframe = (SETFRAMESTRUCT*)malloc(sizeof(SETFRAMESTRUCT));
+      if(setframe==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)setframe;
+      break;
+	  case SETITEM:
+      setitem = (SETITEMSTRUCT*)malloc(sizeof(SETITEMSTRUCT));
+      if(setitem==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)setitem;
+      break;
+	  case ROBOTSPEED:
+      robotspeed = (ROBOTSPEEDSTRUCT*)malloc(sizeof(ROBOTSPEEDSTRUCT));
+      if(robotspeed==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)robotspeed;
+      break;
+    case EXEC:
+      exec = (EXECSTRUCT*)malloc(sizeof(LOADSTRUCT));
+      if(exec==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)exec;
+      break;
+    case LOAD:
+      load = (LOADSTRUCT*)malloc(sizeof(LOADSTRUCT));
+      if(load==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)load;
+      break;
+    case TEST:
+	  case ELSETEST:
+    case OR:
+    case AND:
+      test = (TESTSTRUCT*)malloc(sizeof(TESTSTRUCT));
+      if(test==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)test;
+      break;
+    case SET:
+      set = (SETSTRUCT*)malloc(sizeof(SETSTRUCT));
+      if(set==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)set;
+      break;
+    case SETSTATE:
+      setstate = (SETSTATESTRUCT*)malloc(sizeof(SETSTATESTRUCT));
+      if(setstate==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)setstate;
+      break;
+    case TIMEOUT:
+      timeout = (TIMEOUTSTRUCT*)malloc(sizeof(TIMEOUTSTRUCT));
+      if(timeout==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)timeout;
+      break;
+    case SUBT:
+      subt = (SUBTSTRUCT*)malloc(sizeof(SUBTSTRUCT));
+      if(subt==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)subt;
+      break;
+   case CALC:
+      calg = (CALCSTRUCT*)malloc(sizeof(CALCSTRUCT));
+      if(calg==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)calg;
+      break;
+   case MUL:
+      mul = (MULSTRUCT*)malloc(sizeof(MULSTRUCT));
+      if(mul==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)mul;
+      break;
+   case DIV:
+      div = (DIVSTRUCT*)malloc(sizeof(DIVSTRUCT));
+      if(div==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)div;
+      break;
+   case ADD:
+      add = (ADDSTRUCT*)malloc(sizeof(ADDSTRUCT));
+      if(add==NULL)
+      {
+        free (cmd);
+        return NULL;
+      }
+      cmd->data = (void*)add;
+      break;
+ }
+  return cmd;
+}
+
+void getComment(char *buffer, char *n)
+{
+  int i,j0=0,j1=0;
+
+  for(i=0;i<strlen(buffer);i++)
+  {
+    if(j0==0&&buffer[i]=='"')
+    {
+      j0=i;
+      i++;
+    }
+    if(j1==0&&buffer[i]=='"') j1=i;
+  }
+  strncpy(n,&buffer[j0+1],j1-j0-1);
+  n[j1-j0-1]=0;
+}
+
+int tmpnStateMachineLoad(const char *filename, tmpnStateMachine *statemachine, int level)
+{
+  FILE *fp;
+  int version;
+  int idx,timeout, v, delaystop;
+  char name[256], s[256], key[256], n[256],l[256],includename[256],a1[256],a2[256],a3[256];
+  char buffer[256];
+  tmpnStateMachineTable* tab;
+  int i,x;
+	
+  fp = fopen(filename,"r");
+  if(fp==NULL){
+    printf("ERROR: Load Statemachine: cannot open file: '%s'\n", filename);
+    exit(99);
+  }
+  ln = 0;
+  fscanf(fp,"STATEMACHINEVERSION %d\n",&version);
+  printf("Open statemachine %s VERSION %d\n", filename,version);
+  ln++;
+	if(version!=2&&version!=STATEMACHINEVERSION)
+  {
+    fclose(fp);
+    printf(" FAILED version mismatch\n");
+    exit(99);
+  }
+	statemachine->version=version;
+  if(level==0)
+    strcpy(statemachine->filename,filename);
+  while(fgets(buffer, sizeof(buffer), fp)!=NULL)
+  {
+    ln++;
+    printf("%d\n",ln);
+    if(strncmp(buffer, ";", 1)==0)
+    {
+    }
+    else if(strncmp(buffer,"Name=",5)==0)
+    {
+      sscanf(buffer,"Name=%s",statemachine->name);
+    }
+    else if(strncmp(buffer,"Include=",8)==0)
+    {
+			int oldln=ln;
+      printf("'->");
+      sscanf(buffer,"Include=%s",name);
+      sprintf(includename,"%s/statemachine/%s",databasePath,name);
+      tmpnStateMachineLoad(includename, statemachine,level+1);
+			ln = oldln;
+    }
+		else if(strncmp(buffer,"Value=",6)==0)
+    {
+      if(version==2)
+        sscanf(buffer,"Value=%d,%s %s\n",&idx,s,n);
+      else
+        sscanf(buffer,"Value=%s %s\n",s,n);
+      idx=getValueIdx(statemachine,s);
+      if(idx==-1)
+      {
+        idx=statemachine->numvalue++;
+				statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+			}
+      strcpy(statemachine->value[idx].name,s);
+      statemachine->value[idx].type=VALUE;
+			if (!strcmp(s,"DEBUG")) 
+      {
+       printf("DEBUG %s\n",statemachine->name); 
+       statemachine->debugvalue = &statemachine->value[idx];
+      }
+      x = splitArg(n,a2,a3);
+      if(x>=0)
+      {
+        statemachine->value[idx].subtype=1;
+        statemachine->value[idx].data=atof(n);
+        statemachine->value[idx].fdata=atof(n);
+      }
+      else
+      {
+        statemachine->value[idx].data=atoi(n);
+        statemachine->value[idx].fdata=atoi(n);
+        statemachine->value[idx].subtype=0;
+      }
+    }
+    else if(strncmp(buffer,"Table=",6)==0)
+    {
+			int new;
+			new=0;
+      v = sscanf(buffer,"Table=%s %s %s\n",s,n,a1);
+      idx=getValueIdx(statemachine,s);
+      if(idx==-1)
+      {
+				new=1;
+        idx=statemachine->numvalue++;
+				statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+			}
+      strcpy(statemachine->value[idx].name,s);
+      statemachine->value[idx].type=TABLE;
+      statemachine->value[idx].subtype=0;
+      x = splitArg(n,a2,a3);
+      if(x>=0)
+        statemachine->value[idx].subtype=1;
+      else
+        statemachine->value[idx].subtype=0;
+      statemachine->value[idx].data=0;
+      statemachine->value[idx].fdata=0;
+			if (new)
+			{
+				tab = (tmpnStateMachineTable*)malloc(sizeof(tmpnStateMachineTable));
+				statemachine->value[idx].table = tab;
+			}
+			else
+			{
+				tab = statemachine->value[idx].table;				
+			}
+      tab->maxsize=atoi(a2)*2;
+			if (new)
+			{
+				tab->item = (int*)malloc(sizeof(int)*tab->maxsize);
+				tab->fitem = (float*)malloc(sizeof(float)*tab->maxsize);
+			}
+			else
+			{
+				tab->item = (int*)realloc(tab->item,sizeof(int)*tab->maxsize);
+				tab->fitem = (float*)realloc(tab->fitem,sizeof(float)*tab->maxsize);
+			}
+      tab->topsearchwidth = -1;
+      tab->topidx = -1;
+      tab->topval = 0.0;
+      tab->sum=0;
+      tab->fsum=0.0;
+      tab->sumcnt=0;
+      tab->maxidx=0;
+      tab->min=0;
+      tab->max=0;
+      tab->fmin=999999999.0;
+      tab->fmax=-999999999.0;
+      tab->newtablesize=atoi(a2);
+      tab->curtablesize=tab->newtablesize;
+      tab->item[0]=0;
+      tab->fitem[0]=0.0;
+      for(i=0;i<tab->maxsize;i++)
+      {
+        tab->item[i]=0;
+        tab->fitem[i]=0.0;
+      }
+      if((v==3&&!strcmp(a1,"AVG")))
+        tab->filter=1;
+      else
+        tab->filter=0;
+    }
+    else if(strncmp(buffer,"Const=",6)==0)
+    {
+      if(version==2)
+        sscanf(buffer,"Const=%d,%s %s\n",&idx,s,n);
+      else
+        sscanf(buffer,"Const=%s %s\n",s,n);
+      idx=getValueIdx(statemachine,s);
+      if(idx==-1)
+      {
+        idx=statemachine->numvalue++;
+				statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+      }
+      strcpy(statemachine->value[idx].name,s);
+      statemachine->value[idx].type=CONSTANT;
+			if (!strcmp(s,"DEBUG")) statemachine->debugvalue = &statemachine->value[idx];
+      x = splitArg(n,a2,a3);
+      if(x>=0)
+      {
+        statemachine->value[idx].subtype=1;
+        statemachine->value[idx].data=atof(n);
+        statemachine->value[idx].fdata=atof(n);
+      }
+      else
+      {
+        statemachine->value[idx].data=atoi(n);
+        statemachine->value[idx].fdata=atoi(n);
+        statemachine->value[idx].subtype=0;
+      }
+    }
+    else if(strncmp(buffer,"linkValue=",10)==0)
+    {
+      v = sscanf(buffer,"linkValue=%s %s %s\n",s,n,l);
+      idx=getValueIdx(statemachine,s);
+      if(idx==-1)
+      {
+        idx=statemachine->numvalue++;
+				statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+      }
+      if(v==2)
+      {
+        strcpy(statemachine->value[idx].name,s);
+        strcpy(statemachine->value[idx].linkname,s);
+        strcpy(statemachine->value[idx].link,n);
+      }
+      else if(v==3)
+      {
+        strcpy(statemachine->value[idx].name,s);
+        strcpy(statemachine->value[idx].linkname,n);
+        strcpy(statemachine->value[idx].link,l);
+      }
+      else 
+        error(ln, "wrong number of arguments");
+      
+      statemachine->value[idx].type=LINKVALUE;
+      statemachine->value[idx].data=0;
+      statemachine->value[idx].linkvalue=NULL;
+			statemachine->value[idx].remote=NULL;
+    }
+    else if(strncmp(buffer,"Timeout=",8)==0)
+    {
+      if(version==2)
+        sscanf(buffer,"Timeout=%d,%s %d\n",&idx,s,&timeout);
+      else
+        sscanf(buffer,"Timeout=%s %d\n",s,&timeout);
+      idx=getTimeoutIdx(statemachine,s);
+      if(idx==-1)
+      {
+        idx=statemachine->numtimeout++;
+				statemachine->timeout=(tmpnStateMachineTimeout *)realloc(statemachine->timeout,statemachine->numtimeout*sizeof(tmpnStateMachineTimeout));
+      }
+      strcpy(statemachine->timeout[idx].name,s);
+      statemachine->timeout[idx].timeout=timeout;
+    }
+    else if(strncmp(buffer,"Input=",6)==0)
+    {
+      if(version==2)
+        v = sscanf(buffer,"Input=%d,%s",&idx,name);
+      else
+        v = sscanf(buffer,"Input=%s",name) + 1;
+        
+      idx=getInputIdx(statemachine,name);
+      if(idx==-1)
+      {
+        idx=statemachine->numinput++;
+				statemachine->input=(tmpnStateMachineIO *)realloc(statemachine->input,statemachine->numinput*sizeof(tmpnStateMachineIO));
+      }
+      if(v!=2) error(ln, "wrong number of arguments");
+			statemachine->input[idx].iotype=INPUT;
+      getComment(buffer,key);
+      connectStatemachineAndIO(&statemachine->input[idx],name,key);
+    }
+    else if(strncmp(buffer,"Output=",7)==0)
+    {
+      if(version==2)
+        v = sscanf(buffer,"Output=%d,%s",&idx,name);
+      else
+        v = sscanf(buffer,"Output=%s",name) + 1;
+       
+      idx=getOutputIdx(statemachine,name);
+      if(idx==-1)
+      {
+        idx=statemachine->numoutput++;
+				statemachine->output=(tmpnStateMachineIO *)realloc(statemachine->output,statemachine->numoutput*sizeof(tmpnStateMachineIO));
+      }
+      if(v!=2) error(ln, "wrong number of arguments");
+			statemachine->output[idx].iotype=OUTPUT;
+      getComment(buffer,key);
+      connectStatemachineAndIO(&statemachine->output[idx],name,key);
+    }
+    else if(strncmp(buffer,"Link=",5)==0)
+    {
+      key[0]=0;
+      if(version==2)
+        v = sscanf(buffer,"Link=%d,%s %s\n",&idx,s,key);
+      else
+        v = sscanf(buffer,"Link=%s %s\n",s,key) + 1;
+      idx=getLinkIdx(statemachine,s);
+      if(idx==-1)
+      {
+        idx=statemachine->numlink++;
+				statemachine->link=(tmpnStateMachineLink *)realloc(statemachine->link,statemachine->numlink*sizeof(tmpnStateMachineLink));
+      }
+      if(v==2)
+      {
+        strcpy(statemachine->link[idx].localname,s);
+        strcpy(statemachine->link[idx].name,s);
+      }
+      else
+      {
+        strcpy(statemachine->link[idx].localname,s);
+        strcpy(statemachine->link[idx].name,key);
+      }
+    }
+    else if(strncmp(buffer,"Delaystop=",10)==0) {
+      sscanf(buffer,"Delaystop=%d\n",&delaystop);
+      statemachine->delaystop=delaystop;
+      printf(" delaystop!");
+    }
+    else if(strncmp(buffer,"Path=",5)==0)
+    {
+			int new;
+      int mode;
+      int type;
+      tmpnPathHandle* path;
+      
+      v = sscanf(buffer,"Path=%s %s %s\n",s,a1,a2);
+      if(v==3)
+        v = sscanf(buffer,"Path=%s %d %d\n",s,&mode,&type);
+			new=0;
+      idx=getValueIdx(statemachine,s);
+      if(idx==-1)
+      {
+        idx=statemachine->numvalue++;
+				statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+				new=1;
+      }
+      strcpy(statemachine->value[idx].name,s);
+      statemachine->value[idx].type=PATHHANDLE;
+      statemachine->value[idx].subtype=0;
+      statemachine->value[idx].data=0;
+      statemachine->value[idx].fdata=0;
+			if (new)
+			{
+				path = (tmpnPathHandle*)malloc(sizeof(tmpnPathHandle));
+				statemachine->value[idx].path = path;
+			}
+			else
+			{
+				path = statemachine->value[idx].path;
+			}
+      path->state=ST_IDLE;
+      if(v==3)
+      {
+        strcpy(path->script,"");
+        path->firstpoint=NULL;
+        path->key.mode=mode;
+        path->key.type=type;
+      }
+      else
+      {
+        strcpy(path->script,a1);
+        path->firstpoint=NULL;
+        path->key.mode=0;
+        path->key.type=0;
+      }
+      //init from
+      strcpy(path->key.from.frame.name,"");
+      path->key.from.frame.x=0.0;
+      path->key.from.frame.y=0.0;
+      path->key.from.frame.z=0.0;
+      path->key.from.frame.v=0.0;
+      path->key.from.frame.w=0.0;
+      path->key.from.frame.u=0.0;
+      path->key.from.cItem=0;
+      path->key.from.cLayer=0;
+      strcpy(path->key.from.itemName,"");
+      strcpy(path->key.from.patternName,"");
+      path->key.from.item=NULL;
+      path->key.from.pattern=NULL;
+      //init to
+      strcpy(path->key.to.frame.name,"");
+      path->key.to.frame.x=0.0;
+      path->key.to.frame.y=0.0;
+      path->key.to.frame.z=0.0;
+      path->key.to.frame.v=0.0;
+      path->key.to.frame.w=0.0;
+      path->key.to.frame.u=0.0;
+      path->key.to.cItem=0;
+      path->key.to.cLayer=0;
+      strcpy(path->key.to.itemName,"");
+      strcpy(path->key.to.patternName,"");
+      path->key.to.item=NULL;
+      path->key.to.pattern=NULL;
+    }
+    else if(strncmp(buffer,"Frame=",6)==0)
+    {
+			int new;
+      tmpnFrame frame;
+      tmpnFrame *pframe;
+      float x,y,z,vv,w,u;     
+      v = sscanf(buffer,"Frame=%s x=%f y=%f z=%f v=%f w=%f u=%f\n",frame.name,&x,&y,&z,&vv,&w,&u);
+      frame.x = x; 
+      frame.y = y; 
+      frame.z = z; 
+      frame.v = vv; 
+      frame.w = w; 
+      frame.u = u; 
+      //= sscanf(buffer,"Frame=%s x=%f y=%f z=%f v=%f w=%f u=%f\n",frame.name,&frame.x,&frame.y,&frame.z,&frame.v,&frame.w,&frame.u);
+			if (v != 7) error(ln, "Wrong syntax in Frame");
+			new=0;
+      idx=getValueIdx(statemachine,frame.name);
+      if(idx==-1)
+      {
+        idx=statemachine->numvalue++;
+				statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+				new=1;
+      }
+      strcpy(statemachine->value[idx].name,frame.name);
+      statemachine->value[idx].type=FRAME;
+      statemachine->value[idx].subtype=1;
+      statemachine->value[idx].data=0;
+			if (new)
+			{
+				pframe = (tmpnFrame*)malloc(sizeof(tmpnFrame));
+				statemachine->value[idx].frame = pframe;
+			}
+			else
+			{
+				pframe = statemachine->value[idx].frame;
+			}
+      strcpy(pframe->name,frame.name);
+      pframe->x=frame.x;
+      pframe->y=frame.y;
+      pframe->z=frame.z;
+      pframe->v=frame.v;
+      pframe->w=frame.w;
+      pframe->u=frame.u;
+    }
+    else if(strncmp(buffer,"Item=",5)==0)
+    {
+      char itemName[256];
+      v = sscanf(buffer,"Item=%s %s\n",name,itemName);
+      idx=getValueIdx(statemachine,name);
+      if(idx==-1)
+      {
+        idx=statemachine->numvalue++;
+				statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+      }
+      strcpy(statemachine->value[idx].name,name);
+      strcpy(statemachine->value[idx].link,itemName);
+      statemachine->value[idx].type=ITEM;
+      statemachine->value[idx].subtype=1;
+      statemachine->value[idx].data=0;
+    }
+    else if(strncmp(buffer,"Pattern=",8)==0)
+    {
+      char patternName[256];
+      v = sscanf(buffer,"Pattern=%s %s\n",name,patternName);
+      idx=getValueIdx(statemachine,name);
+      if(idx==-1)
+      {
+        idx=statemachine->numvalue++;
+				statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+      }
+      strcpy(statemachine->value[idx].name,name);
+      strcpy(statemachine->value[idx].link,patternName);
+      statemachine->value[idx].type=PATTERN;
+      statemachine->value[idx].subtype=0;
+      statemachine->value[idx].data=0;
+    }
+    else if(strncmp(buffer,"CPPattern=",10)==0)
+    {
+      char cppatternName[256];
+      v = sscanf(buffer,"CPPattern=%s %s\n",name,cppatternName);
+      idx=getValueIdx(statemachine,name);
+      if(idx==-1)
+      {
+        idx=statemachine->numvalue++;
+				statemachine->value=(tmpnStateMachineValue *)realloc(statemachine->value,statemachine->numvalue*sizeof(tmpnStateMachineValue));
+      }
+      strcpy(statemachine->value[idx].name,name);
+      strcpy(statemachine->value[idx].link,cppatternName);
+      statemachine->value[idx].type=CPPATTERN;
+      statemachine->value[idx].subtype=0;
+      statemachine->value[idx].data=0;
+    }
+  }
+  fclose(fp);
+	return TRUE;
+} 
+
+int tmpnStateLoad(const char *filename, tmpnStateMachine *statemachine, int level)
+{
+  FILE *fp;
+	char name[256], s[256],includename[256];
+  char buffer[256];
+	int version=0,idx;
+	ln=0;
+	fp = fopen(filename,"r");
+  fscanf(fp,"STATEMACHINEVERSION %d\n",&version);
+  ln++;
+  while(fgets(buffer, sizeof(buffer), fp)!=NULL)
+  {
+    ln++;
+    if(strncmp(buffer, ";", 1)==0)
+    {
+    }
+    else if(strncmp(buffer,"Include=",8)==0)
+    {
+			int oldln=ln;
+			sscanf(buffer,"Include=%s",name);
+      sprintf(includename,"%s/statemachine/%s",databasePath,name);
+      tmpnStateLoad(includename, statemachine,level+1);
+			ln=oldln;
+    }
+    else if(strncmp(buffer,"State=",6)==0)
+    {
+      if(version==2)
+        sscanf(buffer,"State=%d,%s\n",&idx,s);
+      else
+        sscanf(buffer,"State=%s\n",s);
+			
+      idx = getMachinePtrStateIdx(statemachine,s);
+      if(idx==-1)
+      {
+        idx=statemachine->numstate++;
+				statemachine->state=(tmpnStateMachineState *)realloc(statemachine->state,statemachine->numstate*sizeof(tmpnStateMachineState));
+        statemachine->state[idx].maxprgidx=0;
+				statemachine->state[idx].prg=NULL;
+        statemachine->state[idx].statenum = idx;
+        strcpy(statemachine->state[idx].name,s);
+      }
+      else
+      {
+        free(statemachine->state[idx].prg);
+        statemachine->state[idx].maxprgidx=0;
+				statemachine->state[idx].prg=NULL;
+      }
+			if (!strcmp(s,"ST_TIMER")) statemachine->timerstate=idx;
+      getFunctionBody(fp, idx, statemachine);
+    }
+	}
+  fclose(fp);
+	return TRUE;
+}
+
+int getMachinePtrStateIdx(tmpnStateMachine *statemachine, const char *statename)
+{
+  int i;
+  for(i=0;i<statemachine->numstate;i++)
+  {
+    if(strcmp(statemachine->state[i].name,statename)==0) return i;
+  }
+  return -1;
+}
+
+int getCmpType(tmpnStateMachine *stm, char *s, int ln)
+{
+  int i,x;
+  char s1[256]; 
+  char s2[256];
+  
+  x = splitArg(s,s1,s2); 
+ 
+  for(i=0;i<stm->numinput;i++)
+	{ 
+		if (stm->input[i].iotype==INPUT)
+		{
+			if(strcmp(stm->input[i].name, s1)==0)
+				return stm->input[i].connect->connectType;
+		}
+		else if (stm->input[i].iotype==INLC)
+		{
+			if(strcmp(stm->input[i].name, s1)==0)
+				return INLC;
+		}
+		else if (stm->input[i].iotype==INCOMSK)
+		{
+			if(strcmp(stm->input[i].name, s1)==0)
+				return INCOMSK;
+		}
+		else if (stm->input[i].iotype==INMAC)
+		{
+			if(strcmp(stm->input[i].name, s1)==0)
+				return INMAC;
+		}
+		else if (stm->input[i].iotype==INICPCON)
+		{
+			if(strcmp(stm->input[i].name, s1)==0)
+				return INICPCON;
+		}
+  }
+  for(i=0;i<stm->numvalue;i++)
+  {
+    if(strcmp(stm->value[i].name, s1)==0) 
+    {
+      return VALUE;
+    }
+  }
+  for(i=0;i<stm->numoutput;i++)
+  {
+		if (stm->output[i].iotype==OUTPUT)
+		{
+			if(strcmp(stm->output[i].name, s1)==0) 
+				return stm->output[i].connect->connectType;
+		}
+		else if (stm->output[i].iotype==OUTCOMSK)
+		{
+			if(strcmp(stm->output[i].name, s1)==0) 
+				return OUTCOMSK;
+		}
+		else if (stm->output[i].iotype==OUTMAC)
+		{
+			if(strcmp(stm->output[i].name, s1)==0) 
+				return OUTMAC;
+		}
+		else if (stm->output[i].iotype==OUTICPCON)
+		{
+			if(strcmp(stm->output[i].name, s1)==0) 
+				return OUTICPCON;
+		}
+	}
+  for(i=0;i<stm->numlink;i++)
+  {
+    if(strcmp(stm->link[i].localname, s1)==0) return LINK;
+  }
+  for(i=0;i<stm->numtimeout;i++)
+  {
+    if(strcmp(stm->timeout[i].name, s1)==0) return TIMEOUT;
+  }
+  if(x>=0)
+  {
+    if(atof(s)==0.0&&s[0]!='0')
+    {
+      char str1[255];
+      sprintf(str1,"type not found (%s)",s);
+      error(ln,str1);
+    }
+  }
+  else
+  {
+    if(atoi(s)==0&&s[0]!='0')
+    {
+      if(getStateStringIdx(s)==0)
+      {
+        char str1[255];
+        sprintf(str1,"type not found (%s)",s);
+        error(ln,str1);
+      }
+    }
+  }  
+  return NUMBER;
+}
+
+int findDot(char *s)
+{
+  int i=0;
+  while(s[i]!=0)
+  {
+    if(s[i]=='.') return i;
+    i++;
+  }
+  return -1;
+}
+
+void SetLevelJmp(tmpnStateMachineState * stm, int idx)
+{
+  int i;
+  int level = stm->prg[idx].level;
+  int firstnontestidx=-1;
+  int elseidx = -1;
+	int oridx=-1;
+	int elsetestidx=-1;
+  for(i=idx;i>=0;i--)
+  {
+    if(level == stm->prg[i].level)
+    {
+      switch(stm->prg[i].type)
+      {
+			case ELSE :
+				((ELSESTRUCT*)stm->prg[i].data)->doneIdx = idx + 1;
+				elseidx = i;
+				break;
+			case ELSETEST :
+			case TEST :
+			case OR :
+			case AND :
+				((TESTSTRUCT*)stm->prg[i].data)->doneIdx = idx + 1;
+				if (firstnontestidx==-1) firstnontestidx=i+1;
+				if (stm->prg[i + 1].type == OR)
+				{
+					((TESTSTRUCT*)stm->prg[i].data)->trueIdx = firstnontestidx;
+					((TESTSTRUCT*)stm->prg[i].data)->falseIdx = i + 1;
+				}
+				else
+				{
+					((TESTSTRUCT*)stm->prg[i].data)->trueIdx = i + 1;
+					if (oridx > -1)
+					{
+						((TESTSTRUCT*)stm->prg[i].data)->falseIdx = oridx;
+					}
+					else if (elsetestidx > -1)
+					{
+						((TESTSTRUCT*)stm->prg[i].data)->falseIdx = elsetestidx;
+					}
+					else if(elseidx > -1)
+						((TESTSTRUCT*)stm->prg[i].data)->falseIdx = elseidx + 1;
+					else
+						((TESTSTRUCT*)stm->prg[i].data)->falseIdx = idx + 1;
+				}
+			  if (stm->prg[i].type == OR) oridx = i;
+				else if (stm->prg[i].type == ELSETEST) {
+					elsetestidx = i;
+					firstnontestidx=-1;
+					oridx=-1;
+				}
+				else if (stm->prg[i].type == TEST) return;
+        break;
+      }
+    }
+  }
+}
+
+int getStateStringIdx(char *s)
+{
+  if(strcmp(s,"ST_IDLE")==0) return 1;
+  if(strcmp(s,"ST_LOADED")==0) return 2;
+  if(strcmp(s,"ST_FINISHED")==0) return 3;
+  if(strcmp(s,"ST_ERROR")==0) return 4;
+  if(strcmp(s,"ST_INACTIVE")==0) return 5;
+  if(strcmp(s,"ST_LOAD")==0) return 6;
+  if(strcmp(s,"ST_EXEC")==0) return 7;
+  if(strcmp(s,"ST_BOPTING")==0) return 8;
+  if(strcmp(s,"ST_LOADING")==0) return 9;
+  if(strcmp(s,"ST_EXECUTING")==0) return 10;
+  return 0;
+}
+
+int getValueIdx(tmpnStateMachine *stm, char *s)
+{
+  int i;
+
+  for(i=0;i<stm->numvalue;i++)
+  {
+    if(strcmp(stm->value[i].name, s)==0)
+      return i;
+  }
+
+  return -1;
+}
+
+int getLinkIdx(tmpnStateMachine *stm, char *s)
+{
+  int i;
+
+  for(i=0;i<stm->numlink;i++)
+  {
+    if(strcmp(stm->link[i].localname, s)==0)
+      return i;
+  }
+  return -1;
+}
+
+int getInputIdx(tmpnStateMachine *stm, char *s)
+{
+  int i;
+
+  for(i=0;i<stm->numinput;i++)
+  {
+    if(strcmp(stm->input[i].name, s)==0)
+      return i;
+  }
+
+  return -1;
+}
+
+int getTimeoutIdx(tmpnStateMachine *stm, char *s)
+{
+  int i;
+
+  for(i=0;i<stm->numtimeout;i++)
+  {
+    if(strcmp(stm->timeout[i].name, s)==0)
+      return i;
+  }
+  return -1;
+}
+
+
+int getOutputIdx(tmpnStateMachine *stm, char *s)
+{
+  int i;
+
+  for(i=0;i<stm->numoutput;i++)
+  {
+    if(strcmp(stm->output[i].name, s)==0)
+      return i;
+  }
+
+  return -1;
+}
+
+int getValidationType(char *s)
+{
+  if(strcmp(s, "=")==0) return EQUAL;
+  if(strcmp(s, "!=")==0) return NOT_EQUAL;
+  if(strcmp(s, "<")==0) return LESS;
+  if(strcmp(s, "<=")==0) return LESS_EQUAL;
+  if(strcmp(s, ">")==0) return MORE;
+  if(strcmp(s, ">=")==0) return MORE_EQUAL;
+  return -1;
+
+}
+
+void getArgBody(tmpnStateMachine * stm, ARGSTRUCT *data, char arg[]) 
+{
+  int x;
+  x=splitArg(arg,data->valstring,data->valstring2);
+  data->subtype=0;
+  if(data->type==NUMBER)
+	{
+    if(x>0)
+    {
+      data->idx = -1;
+      data->subtype=1;
+		  data->fnumber = atof(arg);
+    }
+    else
+    {
+      data->idx = -1;
+      data->subtype=0;
+      data->number=getStateStringIdx(arg);
+		  if(data->number==0)
+        data->number = atoi(arg);
+    }
+	}
+	else if(data->type==VALUE)
+	{
+		if((data->idx=getValueIdx(stm,data->valstring))==-1) error(ln, "Value Does not exist");
+    data->subtype=stm->value[data->idx].subtype;
+	}
+	else if(data->type==IBITDATA||data->type==IWORDDATA||data->type==ISHORTDATA||data->type==INCOMSK)
+	{
+		if((data->idx = getInputIdx(stm,arg))==-1) error(ln, "Input Does not exist");
+	}
+	else if (data->type==INLC)
+	{
+		if((data->idx = getInputIdx(stm,arg))==-1) error(ln, "Input Does not exist");
+		data->subtype=1;
+	}
+	else if (data->type==INMAC)
+	{
+		if((data->idx = getInputIdx(stm,arg))==-1) error(ln, "Input Does not exist");
+		if (stm->input[data->idx].macconnect->type==MAC_LONGINT||stm->input[data->idx].macconnect->type==MAC_SHORTINT||stm->input[data->idx].macconnect->type==MAC_SHORTUINT)
+			data->subtype=0;
+		else
+			data->subtype=1;
+	}
+	else if (data->type==INICPCON)
+	{
+		if((data->idx = getInputIdx(stm,arg))==-1) error(ln, "Input Does not exist");
+		data->subtype=0;
+	}
+	else if(data->type==OBITDATA||data->type==OWORDDATA||data->type==OSHORTDATA)
+	{
+		if((data->idx = getOutputIdx(stm,arg))==-1) error(ln, "Output Does not exist");
+	}
+	else if (data->type==OUTCOMSK)
+	{
+		if((data->idx = getOutputIdx(stm,arg))==-1) error(ln, "Output Does not exist");
+		data->subtype=1;
+	}
+	else if (data->type==OUTMAC)
+	{
+		if((data->idx = getOutputIdx(stm,arg))==-1) error(ln, "Output Does not exist");
+		if (stm->output[data->idx].macconnect->type==MAC_LONGINT||stm->output[data->idx].macconnect->type==MAC_SHORTINT||stm->output[data->idx].macconnect->type==MAC_SHORTUINT)
+			data->subtype=0;
+		else
+			data->subtype=1;
+	}
+	else if (data->type==OUTICPCON)
+	{
+		if((data->idx = getOutputIdx(stm,arg))==-1) error(ln, "Output Does not exist");
+		data->subtype=0;
+	}
+	else if (data->type == LINK)
+	{
+		//TODO is this not already done by splitArg
+    strcpy(data->valstring,arg);
+		data->number = atoi(arg);
+	}
+	else if (data->type == TIMEOUT)
+	{
+		data->idx = getTimeoutIdx(stm,arg);
+	}                        
+	else
+		error(ln,"testtype does not exist");
+}
+
+int splitArg(char *s, char *s1, char *s2)
+{
+  int i,j,x;
+
+  strcpy(s1,s); 
+  s2[0]=0;
+  x=findDot(s);
+  if(x>=0)
+  {
+    s1[x]=0;
+    i=x+1;
+    j=0;
+    while(s[i]!=0)
+    {
+      s2[j++]=s[i++];
+    }
+    s2[j]=0;
+  }
+  return x;
+}
+
+int getFunctionBody(FILE *fp, int state, tmpnStateMachine * stm)
+{
+  int val, index=0;
+  //int idx;
+  char s[256];
+  char func[256], arg1[256], arg2[128], arg3[128], arg4[128];
+  int level = 0;
+	int inlinelevel = 0;
+	FILE *fpold[10];
+	int lnold[10];
+	char* fret;
+  PRINTSTRUCT* print;
+  SETSTRUCT* set;
+  TESTSTRUCT* test;
+  CALCSTRUCT* calc;
+	ROBOTSPEEDSTRUCT *robotspeed;
+  index = stm->state[state].maxprgidx;
+  while(inlinelevel>=0)
+  {
+    strcpy(func, "");
+    strcpy(arg1, "");
+    strcpy(arg2, "");
+    strcpy(arg3, "");
+		ln++;
+    fret=fgets(s, 256, fp);
+		if (fret==NULL)
+		{
+			inlinelevel--;
+			if (inlinelevel>=0)
+			{
+				fp=fpold[inlinelevel];
+				ln=lnold[inlinelevel];
+			}
+			continue;
+		}
+    if(strlen(s)>=255)
+      error(ln, "length exceed max = 256");
+
+    sscanf(s," %s", func);
+
+    if(strncmp(func, ";", 1)==0)
+    {
+      //comment
+    }
+    else if(strncmp(func, "TEST", 4)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s %s", func, arg1, arg2, arg3);
+      if(val != 4) error(ln, "wrong number of arguments.\n");
+      stm->state[state].prg[index].type = TEST;
+      stm->state[state].prg[index].data = malloc(sizeof(TESTSTRUCT));
+      level++;
+      stm->state[state].prg[index].level = level;
+      
+      test = (TESTSTRUCT*)stm->state[state].prg[index].data;
+      test->test.type = getCmpType(stm, arg1,ln);
+      test->validation = getValidationType(arg2);
+			if (test->validation == -1) error(ln, "unknown test.\n");
+			if(test->test.type==LINK) test->cmp.type = LINK;
+			else test->cmp.type = getCmpType(stm, arg3,ln);
+      getArgBody(stm,&test->test,arg1); 
+      getArgBody(stm,&test->cmp,arg3);
+      if(test->test.type==LINK)
+      {
+				if((test->test.idx=getLinkIdx(stm,arg1))==-1) error(ln, "Link Does not exist");
+      }
+      index++;
+    }
+    else if(strncmp(func, "OR", 2)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s %s", func, arg1, arg2, arg3);
+      if(val != 4) error(ln, "wrong number of arguments.\n");
+      stm->state[state].prg[index].type = OR;
+      stm->state[state].prg[index].data = malloc(sizeof(TESTSTRUCT));
+      stm->state[state].prg[index].level = level;
+      
+      test = (TESTSTRUCT*)stm->state[state].prg[index].data;
+      test->test.type = getCmpType(stm, arg1,ln);
+      test->validation = getValidationType(arg2);
+			if (test->validation == -1) error(ln, "unknown test.\n");
+			if(test->test.type==LINK) test->cmp.type = LINK;
+			else test->cmp.type = getCmpType(stm, arg3,ln);
+      getArgBody(stm,&test->test,arg1); 
+      getArgBody(stm,&test->cmp,arg3); 
+      if(test->test.type==LINK)
+      {
+   		  if((test->test.idx=getLinkIdx(stm,arg1))==-1) error(ln, "Link Does not exist");
+      }
+      index++;
+    }
+    else if(strncmp(func, "AND", 3)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s %s", func, arg1, arg2, arg3);
+      if(val != 4) error(ln, "wrong number of arguments.\n");
+      stm->state[state].prg[index].type = AND;
+      stm->state[state].prg[index].data = malloc(sizeof(TESTSTRUCT));
+      stm->state[state].prg[index].level = level;
+      
+      test = (TESTSTRUCT*)stm->state[state].prg[index].data;
+      test->test.type = getCmpType(stm, arg1,ln);
+      test->validation = getValidationType(arg2);
+			if (test->validation == -1) error(ln, "unknown test.\n");
+			if(test->test.type==LINK) test->cmp.type = LINK;
+			else test->cmp.type = getCmpType(stm, arg3,ln);
+      getArgBody(stm,&test->test,arg1); 
+      getArgBody(stm,&test->cmp,arg3); 
+      if(test->test.type==LINK)
+      {
+   		  if((test->test.idx=getLinkIdx(stm,arg1))==-1) error(ln, "Link Does not exist");
+      }
+      index++;
+    }
+		else if(strncmp(func, "ELSETEST", 8)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s %s", func, arg1, arg2, arg3);
+      if(val != 4) error(ln, "wrong number of arguments.\n");
+      stm->state[state].prg[index].type = ELSETEST;
+      stm->state[state].prg[index].data = malloc(sizeof(TESTSTRUCT));
+      stm->state[state].prg[index].level = level;
+      
+      test = (TESTSTRUCT*)stm->state[state].prg[index].data;
+      test->test.type = getCmpType(stm, arg1,ln);
+      test->validation = getValidationType(arg2);
+			if (test->validation == -1) error(ln, "unknown test.\n");
+			if(test->test.type==LINK) test->cmp.type = LINK;
+			else test->cmp.type = getCmpType(stm, arg3,ln);
+      getArgBody(stm,&test->test,arg1);
+      getArgBody(stm,&test->cmp,arg3);
+      if(test->test.type==LINK)
+      {
+				if((test->test.idx=getLinkIdx(stm,arg1))==-1) error(ln, "Link Does not exist");
+      }
+      index++;
+    }
+    else if(strncmp(func, "EXEC", 4)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s", func, arg1);
+      if(val != 2)
+        error(ln, "EXEC wrong number of arguments.\n");
+      stm->state[state].prg[index].type = EXEC;
+      stm->state[state].prg[index].data = malloc(sizeof(EXECSTRUCT));
+      stm->state[state].prg[index].level = level;
+      strcpy(((EXECSTRUCT*)stm->state[state].prg[index].data)->dest, arg1);
+      index++;
+    }
+    else if(strncmp(func, "LOAD", 4)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s %s", func, arg1, arg2, arg3);
+      if(val != 4)
+        error(ln, "LOAD wrong number of arguments.\n");
+      stm->state[state].prg[index].type = LOAD;
+      stm->state[state].prg[index].data = malloc(sizeof(LOADSTRUCT));
+      stm->state[state].prg[index].level = level;
+      strcpy(((LOADSTRUCT*)stm->state[state].prg[index].data)->dest, arg1);
+      strcpy(((LOADSTRUCT*)stm->state[state].prg[index].data)->src1, arg2);
+      strcpy(((LOADSTRUCT*)stm->state[state].prg[index].data)->src2, arg3);
+      index++;
+    }
+    else if(strncmp(func, "SETFRAME", 8)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s", func, arg1, arg2);
+      if(val != 3)
+        error(ln, "SETFRAME wrong number of arguments.\n");
+      stm->state[state].prg[index].type = SETFRAME;
+      stm->state[state].prg[index].data = malloc(sizeof(SETFRAMESTRUCT));
+      stm->state[state].prg[index].level = level;
+      strcpy(((SETFRAMESTRUCT*)stm->state[state].prg[index].data)->dest, arg1);
+      strcpy(((SETFRAMESTRUCT*)stm->state[state].prg[index].data)->src, arg2);
+      index++;
+    }
+		else if(strncmp(func, "SETITEM", 7)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s", func, arg1, arg2);
+      if(val != 3)
+        error(ln, "SETITEM wrong number of arguments.\n");
+      stm->state[state].prg[index].type = SETITEM;
+      stm->state[state].prg[index].data = malloc(sizeof(SETITEMSTRUCT));
+      stm->state[state].prg[index].level = level;
+      strcpy(((SETITEMSTRUCT*)stm->state[state].prg[index].data)->dest, arg1);
+      strcpy(((SETITEMSTRUCT*)stm->state[state].prg[index].data)->src, arg2);
+      index++;
+    }
+		else if(strncmp(func, "ROBOTSPEED", 10)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s", func, arg1);
+      if(val != 2)
+        error(ln, "ROBOTSPEED wrong number of arguments.\n");
+      stm->state[state].prg[index].type = ROBOTSPEED;
+      stm->state[state].prg[index].data = malloc(sizeof(ROBOTSPEEDSTRUCT));
+      stm->state[state].prg[index].level = level;
+			robotspeed = (ROBOTSPEEDSTRUCT*)stm->state[state].prg[index].data;
+			
+      robotspeed->src.type = getCmpType(stm, arg1,ln);
+      getArgBody(stm,&robotspeed->src,arg1);
+   
+			if(robotspeed->src.type!=NUMBER
+				 &&robotspeed->src.type!=IBITDATA
+				 &&robotspeed->src.type!=IWORDDATA
+				 &&robotspeed->src.type!=ISHORTDATA
+				 &&robotspeed->src.type!=OBITDATA
+				 &&robotspeed->src.type!=OWORDDATA
+				 &&robotspeed->src.type!=OSHORTDATA
+				 &&robotspeed->src.type!=INCOMSK
+				 &&robotspeed->src.type!=INMAC
+				 &&robotspeed->src.type!=INLC
+				 &&robotspeed->src.type!=INICPCON
+				 &&robotspeed->src.type!=OUTCOMSK
+				 &&robotspeed->src.type!=OUTMAC
+				 &&robotspeed->src.type!=OUTICPCON
+				 &&robotspeed->src.type!=TIMEOUT
+				 &&robotspeed->src.type!=VALUE)
+				error(ln, "srctype not found");
+			
+			index++;
+    }
+		else if(strncmp(func, "SETPATTERN", 10)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s", func, arg1, arg2);
+      if(val != 3)
+        error(ln, "SETPATTERN wrong number of arguments.\n");
+      stm->state[state].prg[index].type = SETPATTERN;
+      stm->state[state].prg[index].data = malloc(sizeof(SETPATTERNSTRUCT));
+      stm->state[state].prg[index].level = level;
+      strcpy(((SETPATTERNSTRUCT*)stm->state[state].prg[index].data)->dest, arg1);
+      strcpy(((SETPATTERNSTRUCT*)stm->state[state].prg[index].data)->src, arg2);
+      index++;
+    }
+		else if(strncmp(func, "SETCPPATTERN", 12)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s", func, arg1, arg2);
+      if(val != 3)
+        error(ln, "SETCPPATTERN wrong number of arguments.\n");
+      stm->state[state].prg[index].type = SETCPPATTERN;
+      stm->state[state].prg[index].data = malloc(sizeof(SETCPPATTERNSTRUCT));
+      stm->state[state].prg[index].level = level;
+      strcpy(((SETCPPATTERNSTRUCT*)stm->state[state].prg[index].data)->dest, arg1);
+      strcpy(((SETCPPATTERNSTRUCT*)stm->state[state].prg[index].data)->src, arg2);
+      index++;
+    }
+    else if(strncmp(func, "SETSTATE", 8)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s", func, arg1);
+      if(val != 2)
+        error(ln, "SETSTATE wrong number of arguments.\n");
+      stm->state[state].prg[index].type = SETSTATE;
+      stm->state[state].prg[index].data = malloc(sizeof(SETSTATESTRUCT));
+      stm->state[state].prg[index].level = level;
+      strcpy(((SETSTATESTRUCT*)stm->state[state].prg[index].data)->name, arg1);
+      index++;
+    }
+    else if(strncmp(func, "PRINT", 5)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s", func, arg1, arg2);
+      if(val < 2 || val > 3)
+        error(ln, "PRINT wrong number of arguments.\n");
+      stm->state[state].prg[index].type = PRINT;
+      stm->state[state].prg[index].data = malloc(sizeof(PRINTSTRUCT));
+      stm->state[state].prg[index].level = level;
+
+      print = (PRINTSTRUCT*)stm->state[state].prg[index].data;
+
+      print->arg.type = getCmpType(stm, arg1,ln);
+      getArgBody(stm,&print->arg,arg1);
+      if(val==2) print->newline=TRUE; 
+      else print->newline=FALSE; 
+      index++;
+    }
+    else if(strncmp(func, "SET", 3)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s", func, arg1, arg2);
+      if(val != 3)
+        error(ln, "SET wrong number of arguments.\n");
+			
+      stm->state[state].prg[index].type = SET;
+      stm->state[state].prg[index].data = malloc(sizeof(SETSTRUCT));
+      stm->state[state].prg[index].level = level;
+
+      set = (SETSTRUCT*)stm->state[state].prg[index].data;
+
+      set->dest.type = getCmpType(stm, arg1,ln);
+      set->src.type = getCmpType(stm, arg2,ln);
+
+      getArgBody(stm,&set->dest,arg1); 
+        
+ 
+      if(set->dest.type!=OBITDATA
+				 &&set->dest.type!=OWORDDATA
+				 &&set->dest.type!=OSHORTDATA
+				 &&set->dest.type!=OUTCOMSK
+				 &&set->dest.type!=OUTMAC
+				 &&set->dest.type!=OUTICPCON
+				 &&set->dest.type!=TIMEOUT
+				 &&set->dest.type!=VALUE)
+				error(ln, "desttype not found");
+
+      getArgBody(stm,&set->src,arg2); 
+      
+      if(set->src.type!=NUMBER
+				 &&set->src.type!=IBITDATA
+				 &&set->src.type!=IWORDDATA
+				 &&set->src.type!=ISHORTDATA
+				 &&set->src.type!=OBITDATA
+				 &&set->src.type!=OWORDDATA
+				 &&set->src.type!=OSHORTDATA
+				 &&set->src.type!=INCOMSK
+				 &&set->src.type!=INMAC
+				 &&set->src.type!=INLC
+				 &&set->src.type!=INICPCON
+				 &&set->src.type!=OUTCOMSK
+				 &&set->src.type!=OUTMAC
+				 &&set->src.type!=OUTICPCON
+				 &&set->src.type!=TIMEOUT
+				 &&set->src.type!=VALUE)
+				error(ln, "srctype not found");
+      
+      index++;
+    }
+    else if(strncmp(func, "TIMEOUT", 7)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+//      val = sscanf(s,"%d %s %s %s", &idx, func, arg1, arg2);
+//      if(val != 4)
+      val = sscanf(s,"%s %s %s", func, arg1, arg2);
+      if(val<2||val>3)
+        error(ln, "TIMEOUT wrong number of arguments.\n");
+//      if(idx != index)
+//        error(ln, "index error.\n");
+
+      stm->state[state].prg[index].type = TIMEOUT;
+      stm->state[state].prg[index].data = malloc(sizeof(TIMEOUTSTRUCT));
+      stm->state[state].prg[index].level = level;
+
+      ((TIMEOUTSTRUCT*)stm->state[state].prg[index].data)->idx = getTimeoutIdx(stm, arg1);
+	      if(((TIMEOUTSTRUCT*)stm->state[state].prg[index].data)->idx==-1)
+          error(ln, "Timeout Does not exist");
+
+
+      if(val==3)
+      {
+        strcpy(((TIMEOUTSTRUCT*)stm->state[state].prg[index].data)->statename,arg2);
+//        ((TIMEOUTSTRUCT*)stm->state[state].prg[index].data)->number = getMachineStateIdx(stm->name,arg2);
+//	      if(((TIMEOUTSTRUCT*)stm->state[state].prg[index].data)->number==-1) error(ln, "TIMEOUT State does not exist");
+      }
+      else
+      {
+        strcpy(((TIMEOUTSTRUCT*)stm->state[state].prg[index].data)->statename,"");
+        ((TIMEOUTSTRUCT*)stm->state[state].prg[index].data)->number = -1;
+      }
+
+      index++;
+
+    }
+    else if(strncmp(func, "CALC", 4)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s = %s %s %s", func, arg1, arg2, arg3, arg4);
+      if(val != 5)
+        error(ln, "DIV wrong number of arguments.\n");
+      stm->state[state].prg[index].type = CALC;
+      stm->state[state].prg[index].data = malloc(sizeof(CALCSTRUCT));
+      calc = (CALCSTRUCT*)stm->state[state].prg[index].data;
+      calc->dest.type = getCmpType(stm, arg1,ln);
+      calc->src1.type = getCmpType(stm, arg2,ln);
+      calc->src2.type = getCmpType(stm, arg4,ln);
+      if(!strcmp(arg3,"+"))
+        calc->optype = ADD;
+      else if(!strcmp(arg3,"-"))
+        calc->optype = SUBT;
+      else if(!strcmp(arg3,"/"))
+        calc->optype = DIV;
+      else if(!strcmp(arg3,"*"))
+        calc->optype = MUL;
+      else if(!strcmp(arg3,"%"))
+        calc->optype = MODULO;
+      else   
+       error(ln, "unknown optype\n");
+		
+      if(calc->dest.type!=OBITDATA
+				 &&calc->dest.type!=OWORDDATA
+				 &&calc->dest.type!=OSHORTDATA
+				 &&calc->dest.type!=OUTCOMSK
+				 &&calc->dest.type!=OUTMAC
+				 &&calc->dest.type!=OUTICPCON
+				 &&calc->dest.type!=VALUE)
+      	error(ln, "CALC desttype not found");
+      
+      if(calc->src1.type!=NUMBER
+				 &&calc->src1.type!=VALUE
+				 &&calc->src1.type!=IBITDATA
+				 &&calc->src1.type!=IWORDDATA
+				 &&calc->src1.type!=ISHORTDATA
+				 &&calc->src1.type!=OBITDATA
+				 &&calc->src1.type!=OWORDDATA
+				 &&calc->src1.type!=OSHORTDATA
+				 &&calc->src1.type!=INCOMSK
+				 &&calc->src1.type!=INMAC
+				 &&calc->src1.type!=INLC
+				 &&calc->src1.type!=INICPCON
+				 &&calc->src1.type!=OUTCOMSK
+				 &&calc->src1.type!=OUTMAC
+				 &&calc->src1.type!=OUTICPCON
+				 &&calc->src1.type!=TIMEOUT)
+				error(ln, "CALC src1 type not found");
+
+      if(calc->src2.type!=NUMBER
+				 &&calc->src2.type!=VALUE
+				 &&calc->src2.type!=IBITDATA
+				 &&calc->src2.type!=IWORDDATA
+				 &&calc->src2.type!=ISHORTDATA
+				 &&calc->src2.type!=OBITDATA
+				 &&calc->src2.type!=OWORDDATA
+				 &&calc->src2.type!=OSHORTDATA
+				 &&calc->src2.type!=INCOMSK
+				 &&calc->src2.type!=INMAC
+				 &&calc->src2.type!=INLC
+				 &&calc->src2.type!=INICPCON
+				 &&calc->src2.type!=OUTCOMSK
+				 &&calc->src2.type!=OUTMAC
+				 &&calc->src2.type!=OUTICPCON
+				 &&calc->src2.type!=TIMEOUT)
+				error(ln, "CALC src2 type not found");
+
+      getArgBody(stm,&calc->dest,arg1); 
+      getArgBody(stm,&calc->src1,arg2); 
+      getArgBody(stm,&calc->src2,arg4); 
+      
+
+
+      stm->state[state].prg[index].level = level;
+      index++;
+    }
+    else if(strncmp(func, "DIV", 3)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s %s", func, arg3, arg1, arg2);
+      if(val != 4)
+        error(ln, "DIV wrong number of arguments.\n");
+    //  if(idx != index)
+    //    error(ln, "index error.\n");
+
+      stm->state[state].prg[index].type = DIV;
+      stm->state[state].prg[index].data = malloc(sizeof(DIVSTRUCT));
+      ((DIVSTRUCT*)stm->state[state].prg[index].data)->arg1idx = getValueIdx(stm, arg1);
+      if(((DIVSTRUCT*)stm->state[state].prg[index].data)->arg1idx==-1)
+          error(ln, "Value Does not exist");
+      ((DIVSTRUCT*)stm->state[state].prg[index].data)->arg2idx = getValueIdx(stm, arg2);
+      if(((DIVSTRUCT*)stm->state[state].prg[index].data)->arg2idx==-1) 
+      {
+      //= atoi(arg2);
+          error(ln, "Value Does not exist");  
+      }
+      ((DIVSTRUCT*)stm->state[state].prg[index].data)->idx = getValueIdx(stm, arg3);
+      if(((DIVSTRUCT*)stm->state[state].prg[index].data)->idx==-1)
+          error(ln, "Value Does not exist");	  
+      stm->state[state].prg[index].level = level;
+
+      index++;
+
+    }
+    else if(strncmp(func, "MUL", 3)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s %s", func, arg3, arg1, arg2);
+      if(val != 4)
+        error(ln, "MUL wrong number of arguments.\n");
+    //  if(idx != index)
+    //    error(ln, "index error.\n");
+
+      stm->state[state].prg[index].type = MUL;
+      stm->state[state].prg[index].data = malloc(sizeof(MULSTRUCT));
+      ((MULSTRUCT*)stm->state[state].prg[index].data)->arg1idx = getValueIdx(stm, arg1);
+      if(((MULSTRUCT*)stm->state[state].prg[index].data)->arg1idx==-1)
+          error(ln, "Value Does not exist");
+      ((MULSTRUCT*)stm->state[state].prg[index].data)->arg2idx = getValueIdx(stm, arg2);
+      if(((MULSTRUCT*)stm->state[state].prg[index].data)->arg2idx==-1) 
+      {
+      //= atoi(arg2);
+          error(ln, "Value Does not exist");  
+      }
+      ((MULSTRUCT*)stm->state[state].prg[index].data)->idx = getValueIdx(stm, arg3);
+      if(((MULSTRUCT*)stm->state[state].prg[index].data)->idx==-1)
+          error(ln, "Value Does not exist");	  
+      stm->state[state].prg[index].level = level;
+
+      index++;
+
+    }
+    else if(strncmp(func, "ADD", 3)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s %s", func, arg3, arg2, arg1);
+      if(val != 4)
+        error(ln, "ADD wrong number of arguments.\n");
+    //  if(idx != index)
+    //    error(ln, "index error.\n");
+
+      stm->state[state].prg[index].type = ADD;
+      stm->state[state].prg[index].data = malloc(sizeof(ADDSTRUCT));
+      ((ADDSTRUCT*)stm->state[state].prg[index].data)->arg1idx = getValueIdx(stm, arg1);
+      if(((ADDSTRUCT*)stm->state[state].prg[index].data)->arg1idx==-1)
+          error(ln, "Value Does not exist");
+      ((ADDSTRUCT*)stm->state[state].prg[index].data)->arg2idx = getValueIdx(stm, arg2);
+      if(((ADDSTRUCT*)stm->state[state].prg[index].data)->arg2idx==-1) 
+      {
+      //= atoi(arg2);
+          error(ln, "Value Does not exist");  
+      }
+      ((ADDSTRUCT*)stm->state[state].prg[index].data)->idx = getValueIdx(stm, arg3);
+      if(((ADDSTRUCT*)stm->state[state].prg[index].data)->idx==-1)
+          error(ln, "Value Does not exist");	  
+      stm->state[state].prg[index].level = level;
+
+      index++;
+
+    }
+    else if(strncmp(func, "SUBT", 4)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s %s %s %s", func, arg3, arg1, arg2);
+      if(val != 4)
+        error(ln, "SUBT wrong number of arguments.\n");
+    //  if(idx != index)
+    //    error(ln, "index error.\n");
+
+      stm->state[state].prg[index].type = SUBT;
+      stm->state[state].prg[index].data = malloc(sizeof(SUBTSTRUCT));
+      ((SUBTSTRUCT*)stm->state[state].prg[index].data)->arg1idx = getValueIdx(stm, arg1);
+      if(((SUBTSTRUCT*)stm->state[state].prg[index].data)->arg1idx==-1)
+          error(ln, "Value Does not exist");
+      ((SUBTSTRUCT*)stm->state[state].prg[index].data)->arg2idx = getValueIdx(stm, arg2);
+      if(((SUBTSTRUCT*)stm->state[state].prg[index].data)->arg2idx==-1) 
+      {
+      //= atoi(arg2);
+          error(ln, "Value Does not exist");  
+      }
+      ((SUBTSTRUCT*)stm->state[state].prg[index].data)->idx = getValueIdx(stm, arg3);
+      if(((SUBTSTRUCT*)stm->state[state].prg[index].data)->idx==-1)
+          error(ln, "Value Does not exist");	  
+      stm->state[state].prg[index].level = level;
+
+      index++;
+
+    }
+    else if(strncmp(func, "ELSE", 4)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      val = sscanf(s,"%s", func);
+      if(val != 1)
+        error(ln, "wrong number of arguments.\n");
+      stm->state[state].prg[index].type = ELSE;
+      stm->state[state].prg[index].data = malloc(sizeof(ELSESTRUCT));
+      stm->state[state].prg[index].level = level;
+      index++;
+    }
+    else if(strncmp(func, "ENDTEST", 7)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      stm->state[state].prg[index].type = ENDTEST;
+      stm->state[state].prg[index].level = level;
+      SetLevelJmp(&stm->state[state], index);
+      level--;
+      if(level < 0)
+        error(ln, "TEST ENDTEST out of order.");
+      index++;
+    }
+    else if(strncmp(func, "END", 3)==0)
+    {
+			stm->state[state].prg=(STMCOMMANDSTRUCT *)realloc(stm->state[state].prg,(index+1)*sizeof(STMCOMMANDSTRUCT));
+      stm->state[state].prg[index].type = END;
+      stm->state[state].prg[index].level = level;
+      if(level != 0)
+        error(ln, "TEST ENDTEST out of order.");
+
+      stm->state[state].maxprgidx=index;
+			return index;
+    }
+		else if(strncmp(func,"INLINE",7)==0)
+		{
+			FILE *fpinline;
+			char name[128];
+			char inlinename[128];
+			sscanf(s," INLINE %s ",name);
+			sprintf(inlinename,"%s/statemachine/%s",databasePath,name);
+			printf("'->Inlining at level %i: %s\n",inlinelevel,inlinename);
+			fpinline = fopen(inlinename,"r");
+			if(fpinline==NULL){
+				printf("ERROR: Load inline stm-code: cannot open file: '%s'\n", inlinename);
+				exit(99);
+			}
+			lnold[inlinelevel] = ln;
+			fpold[inlinelevel++] = fp;
+			fp = fpinline;
+			ln=0;
+			if (inlinelevel>9)
+			{
+				printf("ERROR: More than 10 levels of Inline-nesting is not supported.\n");
+				exit(99);
+			}
+		}
+    else
+		{
+			printf("func: %s\n",func);
+      error(ln, "syntax error unknown command");
+		}
+  }
+  stm->state[state].maxprgidx=index;
+  return index;
+}
+

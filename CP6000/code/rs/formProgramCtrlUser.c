@@ -84,7 +84,7 @@ BX_BOOL formProgramCtrlUserUpdate(HBOX hBox)
 	char *name;
 	int private;
 	int level;
-	char s[128];
+	char s[1024];
 	tmpnStateMachine *prgstm;
 	prgstm=&tworkcell->statemachines.statemachine[prgIndex];
  	name=&prgstm->state[prgstateIndex].name[8]; 
@@ -223,7 +223,7 @@ BX_BOOL formProgramCtrl_cmdEdit_Click(HBOX hBox)
         hBx = BxCreateDialog(((BOXSTRUCT *)hBox)->hInstance, &formItem[0], formItemProc);
         if(DoModal(hBx)==IDOK)
         {
-          char str[256];
+          char str[512];
           int selnum = BxList_GetSelected(BxGetDlgItem(hBx, FORMITEM_LISTBOX));
           if (selnum<0) return TRUE;
           
@@ -275,7 +275,7 @@ BX_BOOL formProgramCtrl_cmdEdit_Click(HBOX hBox)
         hBx = BxCreateDialog(((BOXSTRUCT *)hBox)->hInstance, &formCPPattern[0], formCPPatternProc);
         if(DoModal(hBx)==IDOK)
         {
-          char str[256];
+          char str[512];
           int selnum = BxList_GetSelected(BxGetDlgItem(hBx, FORMCPPATTERN_LISTBOX));
           if (selnum<0) return TRUE;
           

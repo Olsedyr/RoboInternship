@@ -97,7 +97,7 @@ void drawTab(HBOX hBox)
 
 BX_BOOL formCWdataUserInit(HBOX hBox,BX_LPARAM lParam)
 {
-  char cwname[256];
+  char cwname[512];
 	tmpnLanguage *langptr=(tmpnLanguage*)&tworkcell->languages.language[tworkcell->languages.currentLanguage];	
 	BxAssignStringValue(BxGetDlgItem(hBox, FORMCWDATA_CMDMENU));
 	BxSetStringValue(BxGetDlgItem(hBox, FORMCWDATA_CMDMENU), getLanguageLineFromIdx(langptr, 54, "Close"));

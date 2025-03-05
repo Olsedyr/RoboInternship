@@ -1,0 +1,23 @@
+deleted from workcell 201:
+
+ConveyorOut.statemachine - to integrate CP4800 with the robot
+
+201COutFotoOne.statemachine 
+201COutFotoTwo.statemachine - sensors on ConveyorOut - used by robot in picking area
+
+201Plads3.statemachine 
+201Plads4.statemachine - places on conveyor in - control the flow of empty cases to CP4800
+201PladsLoad.statemachine - connected with plads3 - it appears also in 201UniChain.statemachine
+
+
+changed:
+
+201Plads5.statemachine - used for pushing empty cases to CP4800. Deleted Foto sensor - now empty case is always ready on right place to be pushed into machine and ST_EMPTY never appears
+201KassepakkerPakkerBottom.statemachine - adjusted to ConveyorOut and Plads5 modifications
+201UniChain.statemachine - adjusted to Plads3 modification
+
+To run in simulation:
+1)deactivate emeregency stop
+2)start program
+3)Unichain and Kassepakker motor
+4)KassepakkerTop: Kortbufferskubinde and Langbufferskubinde set to ON, Input Bakke 1 & 2 to ON

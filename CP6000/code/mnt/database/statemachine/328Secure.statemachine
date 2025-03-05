@@ -1,0 +1,59 @@
+STATEMACHINEVERSION 3
+Name=Secure
+Link=Foto SecureFoto
+Link=parent Parent
+linkValue=fototest test Foto
+linkValue=simulate simulatePallets Simulate
+Timeout=ErrDelay 15000000
+Value=errorCode 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_SAFE
+  TEST fototest = 0
+  AND simulate = 0
+		TIMEOUT ErrDelay ST_NOTSAFE
+		SETSTATE ST_NOTSAFE
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_NOTSAFE
+  TEST fototest = 1
+		SETSTATE ST_SAFE
+	ENDTEST
+	TEST ErrDelay = 1
+		SETSTATE ST_ERROR
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_ERROR
+  SET errorCode 1009
+	SETSTATE ST_IDLE
+END
+
+State=ST_RESET
+  TEST fototest = 1
+  OR simulate = 1
+    SETSTATE ST_SAFE
+  ELSE
+		TIMEOUT ErrDelay ST_NOTSAFE
+    SETSTATE ST_NOTSAFE
+  ENDTEST
+END

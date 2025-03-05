@@ -1,0 +1,7 @@
+digraph G {
+node [fontsize=10];
+ST_IDLE -> ST_RESET;
+ST_RESET -> ST_EMPTY;
+ST_EMPTY -> ST_RECEIVE;
+ST_RECEIVE -> ST_EMPTY;
+}

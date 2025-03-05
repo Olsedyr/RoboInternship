@@ -1,0 +1,24 @@
+STATEMACHINEVERSION 3
+Name=Frames
+Frame=base x=0.00 y=0.00 z=0.00 v=0.00 w=0.00 u=0.00
+Frame=home x=1000.00 y=1000.00 z=1000.00 v=90.00 w=0.00 u=0.00
+Frame=palletA0 x=1001.0000 y=1001.0000 z=1001.0000 v=90.0000 w=0.0000 u=0.0000
+
+Value=nextpalb 0
+Value=userPalletOut 0
+Value=cBItem 0
+Value=wBItem 0
+Value=itemCounter 0
+
+Value=nextpala 0
+Value=cAItem 0
+Value=wAItem 0
+
+State=ST_HALT
+END
+State=ST_IDLE
+END
+State=ST_TIMER
+END
+State=ST_RESET
+END

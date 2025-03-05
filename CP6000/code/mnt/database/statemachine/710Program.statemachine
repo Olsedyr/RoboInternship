@@ -1,0 +1,278 @@
+STATEMACHINEVERSION 3
+Name=Program
+Link=workcell WorkCell
+Value=usersection 0
+Const=programidx 4
+Value=loadfromleft 0
+Value=loadfromright 0
+Value=productsfromleft 0
+Value=productsfromright 0
+Value=newprogram 1
+Value=timeMotorInGoDown 0
+Value=timeKlapDown 0
+Value=noShakeOnLast 0
+Value=waitInR3 0
+Value=vibrateTime 8000000
+Value=manuelt 0
+Value=kasseStopType 1
+Value=secondProdConvOn 0
+;programmer
+Value=program 0
+Item=item C11
+Item=itemC18 C18
+Item=itemC14 C14
+Item=itemC11 C11
+Item=itemD9 D9
+CPPattern=cppattern C11Small8
+CPPattern=cppC11Small8 C11Small8
+CPPattern=cppHarndrup Harndrup
+CPPattern=cppDobbeltD9 DobbeltD9
+
+State=PROGRAM_C11
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET secondProdConvOn 0
+	SET program 0
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemC11
+	SETCPPATTERN cppattern cppHarndrup
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 800000
+	SETSTATE ST_RUNNING_C11
+END
+
+State=PROGRAM_C11_NOSHAKE
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET secondProdConvOn 0	
+	SET program 1
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemC11
+	SETCPPATTERN cppattern cppC11Small8
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_C11_NOSHAKE
+END
+
+State=PROGRAM_C14
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET secondProdConvOn 0
+	SET program 2
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemC14
+	SETCPPATTERN cppattern cppHarndrup
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 800000
+	SETSTATE ST_RUNNING_C14
+END
+
+State=PROGRAM_C14_NOSHAKE
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET secondProdConvOn 0
+	SET program 3
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemC14
+	SETCPPATTERN cppattern cppHarndrup
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_C14_NOSHAKE
+END
+
+State=PROGRAM_C18
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET secondProdConvOn 0
+	SET program 4
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemC18
+	SETCPPATTERN cppattern cppHarndrup
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 800000
+	SETSTATE ST_RUNNING_C18
+END
+
+State=PROGRAM_C18_NOSHAKE
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET secondProdConvOn 0
+	SET program 5
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemC18
+	SETCPPATTERN cppattern cppHarndrup
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_C18_NOSHAKE
+END
+
+State=PROGRAM_MANUAL
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET secondProdConvOn 1
+	SET program 6
+  SET manuelt 1
+	SET usersection 1 ; user editable below
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_MANUAL
+END
+
+State=ST_RUNNING_MANUAL
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_C14
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_C14_NOSHAKE
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_C11
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_C11_NOSHAKE
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_C18
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_C18_NOSHAKE
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_C11
+  ENDTEST
+  TEST programidx = 1
+    SETSTATE PROGRAM_C11_NOSHAKE
+  ENDTEST
+  TEST programidx = 2
+    SETSTATE PROGRAM_C14
+  ENDTEST
+  TEST programidx = 3
+    SETSTATE PROGRAM_C14_NOSHAKE
+  ENDTEST
+  TEST programidx = 4
+    SETSTATE PROGRAM_C18
+  ENDTEST
+  TEST programidx = 5
+    SETSTATE PROGRAM_C18_NOSHAKE
+  ENDTEST
+  TEST programidx = 6
+    SETSTATE PROGRAM_MANUAL
+  ENDTEST
+END

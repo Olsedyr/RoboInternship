@@ -1,0 +1,3872 @@
+# 1 "bxbuilder.cpp"
+# 1 "/home/luz/Desktop/340/code/bxbuilder/bxbuilder//"
+# 1 "<built-in>"
+#define __STDC__ 1
+#define __cplusplus 1
+#define __STDC_HOSTED__ 1
+#define __GNUC__ 4
+#define __GNUC_MINOR__ 4
+#define __GNUC_PATCHLEVEL__ 1
+#define __GNUG__ 4
+#define __SIZE_TYPE__ unsigned int
+#define __PTRDIFF_TYPE__ int
+#define __WCHAR_TYPE__ int
+#define __WINT_TYPE__ unsigned int
+#define __INTMAX_TYPE__ long long int
+#define __UINTMAX_TYPE__ long long unsigned int
+#define __CHAR16_TYPE__ short unsigned int
+#define __CHAR32_TYPE__ unsigned int
+#define __GXX_WEAK__ 1
+#define __DEPRECATED 1
+#define __GXX_RTTI 1
+#define __EXCEPTIONS 1
+#define __GXX_ABI_VERSION 1002
+#define __SCHAR_MAX__ 127
+#define __SHRT_MAX__ 32767
+#define __INT_MAX__ 2147483647
+#define __LONG_MAX__ 2147483647L
+#define __LONG_LONG_MAX__ 9223372036854775807LL
+#define __WCHAR_MAX__ 2147483647
+#define __CHAR_BIT__ 8
+#define __INTMAX_MAX__ 9223372036854775807LL
+#define __FLT_EVAL_METHOD__ 2
+#define __DEC_EVAL_METHOD__ 2
+#define __FLT_RADIX__ 2
+#define __FLT_MANT_DIG__ 24
+#define __FLT_DIG__ 6
+#define __FLT_MIN_EXP__ (-125)
+#define __FLT_MIN_10_EXP__ (-37)
+#define __FLT_MAX_EXP__ 128
+#define __FLT_MAX_10_EXP__ 38
+#define __FLT_MAX__ 3.40282347e+38F
+#define __FLT_MIN__ 1.17549435e-38F
+#define __FLT_EPSILON__ 1.19209290e-7F
+#define __FLT_DENORM_MIN__ 1.40129846e-45F
+#define __FLT_HAS_DENORM__ 1
+#define __FLT_HAS_INFINITY__ 1
+#define __FLT_HAS_QUIET_NAN__ 1
+#define __DBL_MANT_DIG__ 53
+#define __DBL_DIG__ 15
+#define __DBL_MIN_EXP__ (-1021)
+#define __DBL_MIN_10_EXP__ (-307)
+#define __DBL_MAX_EXP__ 1024
+#define __DBL_MAX_10_EXP__ 308
+#define __DBL_MAX__ 1.7976931348623157e+308
+#define __DBL_MIN__ 2.2250738585072014e-308
+#define __DBL_EPSILON__ 2.2204460492503131e-16
+#define __DBL_DENORM_MIN__ 4.9406564584124654e-324
+#define __DBL_HAS_DENORM__ 1
+#define __DBL_HAS_INFINITY__ 1
+#define __DBL_HAS_QUIET_NAN__ 1
+#define __LDBL_MANT_DIG__ 64
+#define __LDBL_DIG__ 18
+#define __LDBL_MIN_EXP__ (-16381)
+#define __LDBL_MIN_10_EXP__ (-4931)
+#define __LDBL_MAX_EXP__ 16384
+#define __LDBL_MAX_10_EXP__ 4932
+#define __DECIMAL_DIG__ 21
+#define __LDBL_MAX__ 1.18973149535723176502e+4932L
+#define __LDBL_MIN__ 3.36210314311209350626e-4932L
+#define __LDBL_EPSILON__ 1.08420217248550443401e-19L
+#define __LDBL_DENORM_MIN__ 3.64519953188247460253e-4951L
+#define __LDBL_HAS_DENORM__ 1
+#define __LDBL_HAS_INFINITY__ 1
+#define __LDBL_HAS_QUIET_NAN__ 1
+#define __DEC32_MANT_DIG__ 7
+#define __DEC32_MIN_EXP__ (-94)
+#define __DEC32_MAX_EXP__ 97
+#define __DEC32_MIN__ 1E-95DF
+#define __DEC32_MAX__ 9.999999E96DF
+#define __DEC32_EPSILON__ 1E-6DF
+#define __DEC32_SUBNORMAL_MIN__ 0.000001E-95DF
+#define __DEC64_MANT_DIG__ 16
+#define __DEC64_MIN_EXP__ (-382)
+#define __DEC64_MAX_EXP__ 385
+#define __DEC64_MIN__ 1E-383DD
+#define __DEC64_MAX__ 9.999999999999999E384DD
+#define __DEC64_EPSILON__ 1E-15DD
+#define __DEC64_SUBNORMAL_MIN__ 0.000000000000001E-383DD
+#define __DEC128_MANT_DIG__ 34
+#define __DEC128_MIN_EXP__ (-6142)
+#define __DEC128_MAX_EXP__ 6145
+#define __DEC128_MIN__ 1E-6143DL
+#define __DEC128_MAX__ 9.999999999999999999999999999999999E6144DL
+#define __DEC128_EPSILON__ 1E-33DL
+#define __DEC128_SUBNORMAL_MIN__ 0.000000000000000000000000000000001E-6143DL
+#define __REGISTER_PREFIX__ 
+#define __USER_LABEL_PREFIX__ 
+#define __VERSION__ "4.4.1"
+#define __GNUC_GNU_INLINE__ 1
+#define __NO_INLINE__ 1
+#define __FINITE_MATH_ONLY__ 0
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
+#define __GCC_HAVE_DWARF2_CFI_ASM 1
+#define __SSP__ 1
+#define __SIZEOF_INT__ 4
+#define __SIZEOF_LONG__ 4
+#define __SIZEOF_LONG_LONG__ 8
+#define __SIZEOF_SHORT__ 2
+#define __SIZEOF_FLOAT__ 4
+#define __SIZEOF_DOUBLE__ 8
+#define __SIZEOF_LONG_DOUBLE__ 12
+#define __SIZEOF_SIZE_T__ 4
+#define __SIZEOF_WCHAR_T__ 4
+#define __SIZEOF_WINT_T__ 4
+#define __SIZEOF_PTRDIFF_T__ 4
+#define __SIZEOF_POINTER__ 4
+#define __i386 1
+#define __i386__ 1
+#define i386 1
+#define __i486 1
+#define __i486__ 1
+#define __gnu_linux__ 1
+#define __linux 1
+#define __linux__ 1
+#define linux 1
+#define __unix 1
+#define __unix__ 1
+#define unix 1
+#define __ELF__ 1
+#define __DECIMAL_BID_FORMAT__ 1
+#define __BIGGEST_ALIGNMENT__ 16
+# 1 "<command-line>"
+#define _GNU_SOURCE 1
+#define QT_THREAD_SUPPORT 1
+#define _REENTRANT 1
+#define _FORTIFY_SOURCE 2
+# 1 "bxbuilder.cpp"
+# 13 "bxbuilder.cpp"
+# 1 "/usr/include/unistd.h" 1 3 4
+# 24 "/usr/include/unistd.h" 3 4
+#define _UNISTD_H 1
+
+# 1 "/usr/include/features.h" 1 3 4
+# 20 "/usr/include/features.h" 3 4
+#define _FEATURES_H 1
+# 95 "/usr/include/features.h" 3 4
+#undef __USE_ISOC99
+#undef __USE_ISOC95
+#undef __USE_POSIX
+#undef __USE_POSIX2
+#undef __USE_POSIX199309
+#undef __USE_POSIX199506
+#undef __USE_XOPEN
+#undef __USE_XOPEN_EXTENDED
+#undef __USE_UNIX98
+#undef __USE_XOPEN2K
+#undef __USE_XOPEN2K8
+#undef __USE_LARGEFILE
+#undef __USE_LARGEFILE64
+#undef __USE_FILE_OFFSET64
+#undef __USE_BSD
+#undef __USE_SVID
+#undef __USE_MISC
+#undef __USE_ATFILE
+#undef __USE_GNU
+#undef __USE_REENTRANT
+#undef __USE_FORTIFY_LEVEL
+#undef __FAVOR_BSD
+#undef __KERNEL_STRICT_NAMES
+
+
+
+
+#define __KERNEL_STRICT_NAMES 
+
+
+
+#define __USE_ANSI 1
+# 136 "/usr/include/features.h" 3 4
+#define __GNUC_PREREQ(maj,min) ((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
+# 153 "/usr/include/features.h" 3 4
+#undef _ISOC99_SOURCE
+#define _ISOC99_SOURCE 1
+#undef _POSIX_SOURCE
+#define _POSIX_SOURCE 1
+#undef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
+#undef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#undef _XOPEN_SOURCE_EXTENDED
+#define _XOPEN_SOURCE_EXTENDED 1
+#undef _LARGEFILE64_SOURCE
+#define _LARGEFILE64_SOURCE 1
+#undef _BSD_SOURCE
+#define _BSD_SOURCE 1
+#undef _SVID_SOURCE
+#define _SVID_SOURCE 1
+#undef _ATFILE_SOURCE
+#define _ATFILE_SOURCE 1
+# 189 "/usr/include/features.h" 3 4
+#define __USE_ISOC99 1
+
+
+
+
+
+#define __USE_ISOC95 1
+# 216 "/usr/include/features.h" 3 4
+#define __USE_POSIX 1
+
+
+
+#define __USE_POSIX2 1
+
+
+
+#define __USE_POSIX199309 1
+
+
+
+#define __USE_POSIX199506 1
+
+
+
+#define __USE_XOPEN2K 1
+#undef __USE_ISOC99
+#define __USE_ISOC99 1
+
+
+
+#define __USE_XOPEN2K8 1
+#undef _ATFILE_SOURCE
+#define _ATFILE_SOURCE 1
+
+
+
+#define __USE_XOPEN 1
+
+#define __USE_XOPEN_EXTENDED 1
+#define __USE_UNIX98 1
+#undef _LARGEFILE_SOURCE
+#define _LARGEFILE_SOURCE 1
+
+
+#define __USE_XOPEN2K8 1
+
+#define __USE_XOPEN2K 1
+#undef __USE_ISOC99
+#define __USE_ISOC99 1
+# 266 "/usr/include/features.h" 3 4
+#define __USE_LARGEFILE 1
+
+
+
+#define __USE_LARGEFILE64 1
+
+
+
+
+
+
+
+#define __USE_MISC 1
+
+
+
+#define __USE_BSD 1
+
+
+
+#define __USE_SVID 1
+
+
+
+#define __USE_ATFILE 1
+
+
+
+#define __USE_GNU 1
+
+
+
+#define __USE_REENTRANT 1
+# 309 "/usr/include/features.h" 3 4
+#define __USE_FORTIFY_LEVEL 0
+
+
+
+# 1 "/usr/include/bits/predefs.h" 1 3 4
+# 24 "/usr/include/bits/predefs.h" 3 4
+#define _PREDEFS_H 
+
+
+#define __STDC_IEC_559__ 1
+#define __STDC_IEC_559_COMPLEX__ 1
+# 314 "/usr/include/features.h" 2 3 4
+
+
+#define __STDC_ISO_10646__ 200009L
+
+
+
+
+
+
+
+#undef __GNU_LIBRARY__
+#define __GNU_LIBRARY__ 6
+
+
+
+#define __GLIBC__ 2
+#define __GLIBC_MINOR__ 10
+
+#define __GLIBC_PREREQ(maj,min) ((__GLIBC__ << 16) + __GLIBC_MINOR__ >= ((maj) << 16) + (min))
+
+
+
+
+
+
+
+#define __GLIBC_HAVE_LONG_LONG 1
+
+
+
+
+
+# 1 "/usr/include/sys/cdefs.h" 1 3 4
+# 21 "/usr/include/sys/cdefs.h" 3 4
+#define _SYS_CDEFS_H 1
+# 36 "/usr/include/sys/cdefs.h" 3 4
+#undef __P
+#undef __PMT
+# 51 "/usr/include/sys/cdefs.h" 3 4
+#define __THROW throw ()
+#define __NTH(fct) fct throw ()
+# 74 "/usr/include/sys/cdefs.h" 3 4
+#define __P(args) args
+#define __PMT(args) args
+
+
+
+
+#define __CONCAT(x,y) x ## y
+#define __STRING(x) #x
+
+
+#define __ptr_t void *
+#define __long_double_t long double
+
+
+
+
+#define __BEGIN_DECLS extern "C" {
+#define __END_DECLS }
+# 114 "/usr/include/sys/cdefs.h" 3 4
+#define __BEGIN_NAMESPACE_STD 
+#define __END_NAMESPACE_STD 
+#define __USING_NAMESPACE_STD(name) 
+#define __BEGIN_NAMESPACE_C99 
+#define __END_NAMESPACE_C99 
+#define __USING_NAMESPACE_C99(name) 
+
+
+
+
+
+#define __bounded 
+#define __unbounded 
+#define __ptrvalue 
+
+
+
+
+#define __bos(ptr) __builtin_object_size (ptr, __USE_FORTIFY_LEVEL > 1)
+#define __bos0(ptr) __builtin_object_size (ptr, 0)
+
+
+#define __warndecl(name,msg) extern void name (void) __attribute__((__warning__ (msg)))
+
+#define __warnattr(msg) __attribute__((__warning__ (msg)))
+#define __errordecl(name,msg) extern void name (void) __attribute__((__error__ (msg)))
+# 150 "/usr/include/sys/cdefs.h" 3 4
+#define __flexarr []
+# 177 "/usr/include/sys/cdefs.h" 3 4
+#define __REDIRECT(name,proto,alias) name proto __asm__ (__ASMNAME (#alias))
+
+#define __REDIRECT_NTH(name,proto,alias) name proto __THROW __asm__ (__ASMNAME (#alias))
+
+
+
+
+
+#define __ASMNAME(cname) __ASMNAME2 (__USER_LABEL_PREFIX__, cname)
+#define __ASMNAME2(prefix,cname) __STRING (prefix) cname
+# 207 "/usr/include/sys/cdefs.h" 3 4
+#define __attribute_malloc__ __attribute__ ((__malloc__))
+# 216 "/usr/include/sys/cdefs.h" 3 4
+#define __attribute_pure__ __attribute__ ((__pure__))
+# 225 "/usr/include/sys/cdefs.h" 3 4
+#define __attribute_used__ __attribute__ ((__used__))
+#define __attribute_noinline__ __attribute__ ((__noinline__))
+
+
+
+
+
+
+
+#define __attribute_deprecated__ __attribute__ ((__deprecated__))
+# 246 "/usr/include/sys/cdefs.h" 3 4
+#define __attribute_format_arg__(x) __attribute__ ((__format_arg__ (x)))
+# 256 "/usr/include/sys/cdefs.h" 3 4
+#define __attribute_format_strfmon__(a,b) __attribute__ ((__format__ (__strfmon__, a, b)))
+# 265 "/usr/include/sys/cdefs.h" 3 4
+#define __nonnull(params) __attribute__ ((__nonnull__ params))
+
+
+
+
+
+
+
+#define __attribute_warn_unused_result__ __attribute__ ((__warn_unused_result__))
+# 282 "/usr/include/sys/cdefs.h" 3 4
+#define __wur 
+
+
+
+
+#define __always_inline __inline __attribute__ ((__always_inline__))
+# 296 "/usr/include/sys/cdefs.h" 3 4
+#define __extern_inline extern __inline __attribute__ ((__gnu_inline__))
+
+#define __extern_always_inline extern __always_inline __attribute__ ((__gnu_inline__, __artificial__))
+# 318 "/usr/include/sys/cdefs.h" 3 4
+#define __va_arg_pack() __builtin_va_arg_pack ()
+#define __va_arg_pack_len() __builtin_va_arg_pack_len ()
+# 342 "/usr/include/sys/cdefs.h" 3 4
+#define __restrict_arr 
+# 353 "/usr/include/sys/cdefs.h" 3 4
+# 1 "/usr/include/bits/wordsize.h" 1 3 4
+
+
+
+
+
+
+#define __WORDSIZE 32
+# 354 "/usr/include/sys/cdefs.h" 2 3 4
+# 375 "/usr/include/sys/cdefs.h" 3 4
+#define __LDBL_REDIR1(name,proto,alias) name proto
+#define __LDBL_REDIR(name,proto) name proto
+#define __LDBL_REDIR1_NTH(name,proto,alias) name proto __THROW
+#define __LDBL_REDIR_NTH(name,proto) name proto __THROW
+#define __LDBL_REDIR_DECL(name) 
+
+#define __REDIRECT_LDBL(name,proto,alias) __REDIRECT (name, proto, alias)
+#define __REDIRECT_NTH_LDBL(name,proto,alias) __REDIRECT_NTH (name, proto, alias)
+# 347 "/usr/include/features.h" 2 3 4
+# 378 "/usr/include/features.h" 3 4
+# 1 "/usr/include/gnu/stubs.h" 1 3 4
+
+
+
+# 1 "/usr/include/bits/wordsize.h" 1 3 4
+
+
+
+
+
+
+#define __WORDSIZE 32
+# 5 "/usr/include/gnu/stubs.h" 2 3 4
+
+
+# 1 "/usr/include/gnu/stubs-32.h" 1 3 4
+# 10 "/usr/include/gnu/stubs-32.h" 3 4
+#define __stub___kernel_cosl 
+#define __stub___kernel_sinl 
+#define __stub___kernel_tanl 
+#define __stub_chflags 
+#define __stub_fattach 
+#define __stub_fchflags 
+#define __stub_fdetach 
+#define __stub_gtty 
+#define __stub_lchmod 
+#define __stub_revoke 
+#define __stub_setlogin 
+#define __stub_sigreturn 
+#define __stub_sstk 
+#define __stub_stty 
+# 8 "/usr/include/gnu/stubs.h" 2 3 4
+# 379 "/usr/include/features.h" 2 3 4
+# 27 "/usr/include/unistd.h" 2 3 4
+
+extern "C" {
+
+
+
+
+
+#define _POSIX_VERSION 200809L
+
+
+
+
+
+#define _POSIX2_VERSION 200809L
+
+
+
+#define _POSIX2_C_BIND 200809L
+
+
+
+#define _POSIX2_C_DEV 200809L
+
+
+
+#define _POSIX2_SW_DEV 200809L
+
+
+
+#define _POSIX2_LOCALEDEF 200809L
+
+
+
+#define _XOPEN_VERSION 700
+# 70 "/usr/include/unistd.h" 3 4
+#define _XOPEN_XCU_VERSION 4
+
+
+#define _XOPEN_XPG2 1
+#define _XOPEN_XPG3 1
+#define _XOPEN_XPG4 1
+
+
+#define _XOPEN_UNIX 1
+
+
+#define _XOPEN_CRYPT 1
+
+
+
+#define _XOPEN_ENH_I18N 1
+
+
+#define _XOPEN_LEGACY 1
+# 175 "/usr/include/unistd.h" 3 4
+# 1 "/usr/include/bits/posix_opt.h" 1 3 4
+# 21 "/usr/include/bits/posix_opt.h" 3 4
+#define _BITS_POSIX_OPT_H 1
+
+
+#define _POSIX_JOB_CONTROL 1
+
+
+#define _POSIX_SAVED_IDS 1
+
+
+#define _POSIX_PRIORITY_SCHEDULING 200809L
+
+
+#define _POSIX_SYNCHRONIZED_IO 200809L
+
+
+#define _POSIX_FSYNC 200809L
+
+
+#define _POSIX_MAPPED_FILES 200809L
+
+
+#define _POSIX_MEMLOCK 200809L
+
+
+#define _POSIX_MEMLOCK_RANGE 200809L
+
+
+#define _POSIX_MEMORY_PROTECTION 200809L
+
+
+#define _POSIX_CHOWN_RESTRICTED 0
+
+
+
+#define _POSIX_VDISABLE '\0'
+
+
+#define _POSIX_NO_TRUNC 1
+
+
+#define _XOPEN_REALTIME 1
+
+
+#define _XOPEN_REALTIME_THREADS 1
+
+
+#define _XOPEN_SHM 1
+
+
+#define _POSIX_THREADS 200809L
+
+
+#define _POSIX_REENTRANT_FUNCTIONS 1
+#define _POSIX_THREAD_SAFE_FUNCTIONS 200809L
+
+
+#define _POSIX_THREAD_PRIORITY_SCHEDULING 200809L
+
+
+#define _POSIX_THREAD_ATTR_STACKSIZE 200809L
+
+
+#define _POSIX_THREAD_ATTR_STACKADDR 200809L
+
+
+#define _POSIX_THREAD_PRIO_INHERIT 200809L
+
+
+#define _POSIX_THREAD_ROBUST_PRIO_INHERIT 200809L
+
+
+
+#define _POSIX_THREAD_PRIO_PROTECT 200809L
+
+
+#define _POSIX_THREAD_ROBUST_PRIO_PROTECT -1
+
+
+#define _POSIX_SEMAPHORES 200809L
+
+
+#define _POSIX_REALTIME_SIGNALS 200809L
+
+
+#define _POSIX_ASYNCHRONOUS_IO 200809L
+#define _POSIX_ASYNC_IO 1
+
+#define _LFS_ASYNCHRONOUS_IO 1
+
+#define _POSIX_PRIORITIZED_IO 200809L
+
+
+#define _LFS64_ASYNCHRONOUS_IO 1
+
+
+#define _LFS_LARGEFILE 1
+#define _LFS64_LARGEFILE 1
+#define _LFS64_STDIO 1
+
+
+#define _POSIX_SHARED_MEMORY_OBJECTS 200809L
+
+
+#define _POSIX_CPUTIME 0
+
+
+#define _POSIX_THREAD_CPUTIME 0
+
+
+#define _POSIX_REGEXP 1
+
+
+#define _POSIX_READER_WRITER_LOCKS 200809L
+
+
+#define _POSIX_SHELL 1
+
+
+#define _POSIX_TIMEOUTS 200809L
+
+
+#define _POSIX_SPIN_LOCKS 200809L
+
+
+#define _POSIX_SPAWN 200809L
+
+
+#define _POSIX_TIMERS 200809L
+
+
+#define _POSIX_BARRIERS 200809L
+
+
+#define _POSIX_MESSAGE_PASSING 200809L
+
+
+#define _POSIX_THREAD_PROCESS_SHARED 200809L
+
+
+#define _POSIX_MONOTONIC_CLOCK 0
+
+
+#define _POSIX_CLOCK_SELECTION 200809L
+
+
+#define _POSIX_ADVISORY_INFO 200809L
+
+
+#define _POSIX_IPV6 200809L
+
+
+#define _POSIX_RAW_SOCKETS 200809L
+
+
+#define _POSIX2_CHAR_TERM 200809L
+
+
+#define _POSIX_SPORADIC_SERVER -1
+#define _POSIX_THREAD_SPORADIC_SERVER -1
+
+
+#define _POSIX_TRACE -1
+#define _POSIX_TRACE_EVENT_FILTER -1
+#define _POSIX_TRACE_INHERIT -1
+#define _POSIX_TRACE_LOG -1
+
+
+#define _POSIX_TYPED_MEMORY_OBJECTS -1
+# 176 "/usr/include/unistd.h" 2 3 4
+
+
+
+# 1 "/usr/include/bits/environments.h" 1 3 4
+# 23 "/usr/include/bits/environments.h" 3 4
+# 1 "/usr/include/bits/wordsize.h" 1 3 4
+
+
+
+
+
+
+#define __WORDSIZE 32
+# 24 "/usr/include/bits/environments.h" 2 3 4
+# 70 "/usr/include/bits/environments.h" 3 4
+#define _POSIX_V7_ILP32_OFF32 1
+#define _POSIX_V7_ILP32_OFFBIG 1
+#define _POSIX_V6_ILP32_OFF32 1
+#define _POSIX_V6_ILP32_OFFBIG 1
+#define _XBS5_ILP32_OFF32 1
+#define _XBS5_ILP32_OFFBIG 1
+# 92 "/usr/include/bits/environments.h" 3 4
+#define __ILP32_OFF32_CFLAGS "-m32"
+#define __ILP32_OFFBIG_CFLAGS "-m32 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
+#define __ILP32_OFF32_LDFLAGS "-m32"
+#define __ILP32_OFFBIG_LDFLAGS "-m32"
+#define __LP64_OFF64_CFLAGS "-m64"
+#define __LP64_OFF64_LDFLAGS "-m64"
+# 180 "/usr/include/unistd.h" 2 3 4
+
+
+
+#define STDIN_FILENO 0
+#define STDOUT_FILENO 1
+#define STDERR_FILENO 2
+
+
+
+
+# 1 "/usr/include/bits/types.h" 1 3 4
+# 25 "/usr/include/bits/types.h" 3 4
+#define _BITS_TYPES_H 1
+
+
+# 1 "/usr/include/bits/wordsize.h" 1 3 4
+
+
+
+
+
+
+#define __WORDSIZE 32
+# 29 "/usr/include/bits/types.h" 2 3 4
+
+
+typedef unsigned char __u_char;
+typedef unsigned short int __u_short;
+typedef unsigned int __u_int;
+typedef unsigned long int __u_long;
+
+
+typedef signed char __int8_t;
+typedef unsigned char __uint8_t;
+typedef signed short int __int16_t;
+typedef unsigned short int __uint16_t;
+typedef signed int __int32_t;
+typedef unsigned int __uint32_t;
+
+
+
+
+__extension__ typedef signed long long int __int64_t;
+__extension__ typedef unsigned long long int __uint64_t;
+
+
+
+
+
+
+
+__extension__ typedef long long int __quad_t;
+__extension__ typedef unsigned long long int __u_quad_t;
+# 99 "/usr/include/bits/types.h" 3 4
+#define __S16_TYPE short int
+#define __U16_TYPE unsigned short int
+#define __S32_TYPE int
+#define __U32_TYPE unsigned int
+#define __SLONGWORD_TYPE long int
+#define __ULONGWORD_TYPE unsigned long int
+
+#define __SQUAD_TYPE __quad_t
+#define __UQUAD_TYPE __u_quad_t
+#define __SWORD_TYPE int
+#define __UWORD_TYPE unsigned int
+#define __SLONG32_TYPE long int
+#define __ULONG32_TYPE unsigned long int
+#define __S64_TYPE __quad_t
+#define __U64_TYPE __u_quad_t
+
+
+#define __STD_TYPE __extension__ typedef
+# 131 "/usr/include/bits/types.h" 3 4
+# 1 "/usr/include/bits/typesizes.h" 1 3 4
+# 25 "/usr/include/bits/typesizes.h" 3 4
+#define _BITS_TYPESIZES_H 1
+
+
+
+
+#define __DEV_T_TYPE __UQUAD_TYPE
+#define __UID_T_TYPE __U32_TYPE
+#define __GID_T_TYPE __U32_TYPE
+#define __INO_T_TYPE __ULONGWORD_TYPE
+#define __INO64_T_TYPE __UQUAD_TYPE
+#define __MODE_T_TYPE __U32_TYPE
+#define __NLINK_T_TYPE __UWORD_TYPE
+#define __OFF_T_TYPE __SLONGWORD_TYPE
+#define __OFF64_T_TYPE __SQUAD_TYPE
+#define __PID_T_TYPE __S32_TYPE
+#define __RLIM_T_TYPE __ULONGWORD_TYPE
+#define __RLIM64_T_TYPE __UQUAD_TYPE
+#define __BLKCNT_T_TYPE __SLONGWORD_TYPE
+#define __BLKCNT64_T_TYPE __SQUAD_TYPE
+#define __FSBLKCNT_T_TYPE __ULONGWORD_TYPE
+#define __FSBLKCNT64_T_TYPE __UQUAD_TYPE
+#define __FSFILCNT_T_TYPE __ULONGWORD_TYPE
+#define __FSFILCNT64_T_TYPE __UQUAD_TYPE
+#define __ID_T_TYPE __U32_TYPE
+#define __CLOCK_T_TYPE __SLONGWORD_TYPE
+#define __TIME_T_TYPE __SLONGWORD_TYPE
+#define __USECONDS_T_TYPE __U32_TYPE
+#define __SUSECONDS_T_TYPE __SLONGWORD_TYPE
+#define __DADDR_T_TYPE __S32_TYPE
+#define __SWBLK_T_TYPE __SLONGWORD_TYPE
+#define __KEY_T_TYPE __S32_TYPE
+#define __CLOCKID_T_TYPE __S32_TYPE
+#define __TIMER_T_TYPE void *
+#define __BLKSIZE_T_TYPE __SLONGWORD_TYPE
+#define __FSID_T_TYPE struct { int __val[2]; }
+#define __SSIZE_T_TYPE __SWORD_TYPE
+
+
+#define __FD_SETSIZE 1024
+# 132 "/usr/include/bits/types.h" 2 3 4
+
+
+__extension__ typedef __u_quad_t __dev_t;
+__extension__ typedef unsigned int __uid_t;
+__extension__ typedef unsigned int __gid_t;
+__extension__ typedef unsigned long int __ino_t;
+__extension__ typedef __u_quad_t __ino64_t;
+__extension__ typedef unsigned int __mode_t;
+__extension__ typedef unsigned int __nlink_t;
+__extension__ typedef long int __off_t;
+__extension__ typedef __quad_t __off64_t;
+__extension__ typedef int __pid_t;
+__extension__ typedef struct { int __val[2]; } __fsid_t;
+__extension__ typedef long int __clock_t;
+__extension__ typedef unsigned long int __rlim_t;
+__extension__ typedef __u_quad_t __rlim64_t;
+__extension__ typedef unsigned int __id_t;
+__extension__ typedef long int __time_t;
+__extension__ typedef unsigned int __useconds_t;
+__extension__ typedef long int __suseconds_t;
+
+__extension__ typedef int __daddr_t;
+__extension__ typedef long int __swblk_t;
+__extension__ typedef int __key_t;
+
+
+__extension__ typedef int __clockid_t;
+
+
+__extension__ typedef void * __timer_t;
+
+
+__extension__ typedef long int __blksize_t;
+
+
+
+
+__extension__ typedef long int __blkcnt_t;
+__extension__ typedef __quad_t __blkcnt64_t;
+
+
+__extension__ typedef unsigned long int __fsblkcnt_t;
+__extension__ typedef __u_quad_t __fsblkcnt64_t;
+
+
+__extension__ typedef unsigned long int __fsfilcnt_t;
+__extension__ typedef __u_quad_t __fsfilcnt64_t;
+
+__extension__ typedef int __ssize_t;
+
+
+
+typedef __off64_t __loff_t;
+typedef __quad_t *__qaddr_t;
+typedef char *__caddr_t;
+
+
+__extension__ typedef int __intptr_t;
+
+
+__extension__ typedef unsigned int __socklen_t;
+
+
+#undef __STD_TYPE
+# 191 "/usr/include/unistd.h" 2 3 4
+
+
+typedef __ssize_t ssize_t;
+#define __ssize_t_defined 
+
+
+#define __need_size_t 
+#define __need_NULL 
+# 1 "/usr/lib/gcc/i486-linux-gnu/4.4.1/include/stddef.h" 1 3 4
+# 186 "/usr/lib/gcc/i486-linux-gnu/4.4.1/include/stddef.h" 3 4
+#define __size_t__ 
+#define __SIZE_T__ 
+#define _SIZE_T 
+#define _SYS_SIZE_T_H 
+#define _T_SIZE_ 
+#define _T_SIZE 
+#define __SIZE_T 
+#define _SIZE_T_ 
+#define _BSD_SIZE_T_ 
+#define _SIZE_T_DEFINED_ 
+#define _SIZE_T_DEFINED 
+#define _BSD_SIZE_T_DEFINED_ 
+#define _SIZE_T_DECLARED 
+#define ___int_size_t_h 
+#define _GCC_SIZE_T 
+#define _SIZET_ 
+
+
+
+#define __size_t 
+
+
+
+
+
+typedef unsigned int size_t;
+# 233 "/usr/lib/gcc/i486-linux-gnu/4.4.1/include/stddef.h" 3 4
+#undef __need_size_t
+# 395 "/usr/lib/gcc/i486-linux-gnu/4.4.1/include/stddef.h" 3 4
+#undef NULL
+
+#define NULL __null
+# 406 "/usr/lib/gcc/i486-linux-gnu/4.4.1/include/stddef.h" 3 4
+#undef __need_NULL
+# 200 "/usr/include/unistd.h" 2 3 4
+
+
+
+
+
+typedef __gid_t gid_t;
+#define __gid_t_defined 
+
+
+
+typedef __uid_t uid_t;
+#define __uid_t_defined 
+
+
+
+
+typedef __off_t off_t;
+
+
+
+#define __off_t_defined 
+
+
+typedef __off64_t off64_t;
+#define __off64_t_defined 
+
+
+
+typedef __useconds_t useconds_t;
+#define __useconds_t_defined 
+
+
+
+typedef __pid_t pid_t;
+#define __pid_t_defined 
+
+
+
+
+
+typedef __intptr_t intptr_t;
+#define __intptr_t_defined 
+
+
+
+
+
+typedef __socklen_t socklen_t;
+#define __socklen_t_defined 
+
+
+
+
+
+#define R_OK 4
+#define W_OK 2
+#define X_OK 1
+#define F_OK 0
+
+
+extern int access (__const char *__name, int __type) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int euidaccess (__const char *__name, int __type)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+extern int eaccess (__const char *__name, int __type)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+extern int faccessat (int __fd, __const char *__file, int __type, int __flag)
+     throw () __attribute__ ((__nonnull__ (2))) ;
+
+
+
+
+
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
+
+
+
+
+#define L_SET SEEK_SET
+#define L_INCR SEEK_CUR
+#define L_XTND SEEK_END
+# 303 "/usr/include/unistd.h" 3 4
+extern __off_t lseek (int __fd, __off_t __offset, int __whence) throw ();
+# 314 "/usr/include/unistd.h" 3 4
+extern __off64_t lseek64 (int __fd, __off64_t __offset, int __whence)
+     throw ();
+
+
+
+
+
+
+extern int close (int __fd);
+
+
+
+
+
+
+extern ssize_t read (int __fd, void *__buf, size_t __nbytes) ;
+
+
+
+
+
+extern ssize_t write (int __fd, __const void *__buf, size_t __n) ;
+# 345 "/usr/include/unistd.h" 3 4
+extern ssize_t pread (int __fd, void *__buf, size_t __nbytes,
+        __off_t __offset) ;
+
+
+
+
+
+
+extern ssize_t pwrite (int __fd, __const void *__buf, size_t __n,
+         __off_t __offset) ;
+# 373 "/usr/include/unistd.h" 3 4
+extern ssize_t pread64 (int __fd, void *__buf, size_t __nbytes,
+   __off64_t __offset) ;
+
+
+extern ssize_t pwrite64 (int __fd, __const void *__buf, size_t __n,
+    __off64_t __offset) ;
+
+
+
+
+
+
+
+extern int pipe (int __pipedes[2]) throw () ;
+
+
+
+
+extern int pipe2 (int __pipedes[2], int __flags) throw () ;
+# 401 "/usr/include/unistd.h" 3 4
+extern unsigned int alarm (unsigned int __seconds) throw ();
+# 413 "/usr/include/unistd.h" 3 4
+extern unsigned int sleep (unsigned int __seconds);
+
+
+
+
+
+
+extern __useconds_t ualarm (__useconds_t __value, __useconds_t __interval)
+     throw ();
+
+
+
+
+
+
+extern int usleep (__useconds_t __useconds);
+# 437 "/usr/include/unistd.h" 3 4
+extern int pause (void);
+
+
+
+extern int chown (__const char *__file, __uid_t __owner, __gid_t __group)
+     throw () __attribute__ ((__nonnull__ (1))) ;
+
+
+
+extern int fchown (int __fd, __uid_t __owner, __gid_t __group) throw () ;
+
+
+
+
+extern int lchown (__const char *__file, __uid_t __owner, __gid_t __group)
+     throw () __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+extern int fchownat (int __fd, __const char *__file, __uid_t __owner,
+       __gid_t __group, int __flag)
+     throw () __attribute__ ((__nonnull__ (2))) ;
+
+
+
+extern int chdir (__const char *__path) throw () __attribute__ ((__nonnull__ (1))) ;
+
+
+
+extern int fchdir (int __fd) throw () ;
+# 479 "/usr/include/unistd.h" 3 4
+extern char *getcwd (char *__buf, size_t __size) throw () ;
+
+
+
+
+
+extern char *get_current_dir_name (void) throw ();
+
+
+
+
+
+
+extern char *getwd (char *__buf)
+     throw () __attribute__ ((__nonnull__ (1))) __attribute__ ((__deprecated__)) ;
+
+
+
+
+extern int dup (int __fd) throw () ;
+
+
+extern int dup2 (int __fd, int __fd2) throw ();
+
+
+
+
+extern int dup3 (int __fd, int __fd2, int __flags) throw ();
+
+
+
+extern char **__environ;
+
+extern char **environ;
+
+
+
+
+
+extern int execve (__const char *__path, char *__const __argv[],
+     char *__const __envp[]) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int fexecve (int __fd, char *__const __argv[], char *__const __envp[])
+     throw ();
+
+
+
+
+extern int execv (__const char *__path, char *__const __argv[])
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int execle (__const char *__path, __const char *__arg, ...)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int execl (__const char *__path, __const char *__arg, ...)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int execvp (__const char *__file, char *__const __argv[])
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int execlp (__const char *__file, __const char *__arg, ...)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int nice (int __inc) throw () ;
+
+
+
+
+extern void _exit (int __status) __attribute__ ((__noreturn__));
+
+
+
+
+
+# 1 "/usr/include/bits/confname.h" 1 3 4
+# 26 "/usr/include/bits/confname.h" 3 4
+enum
+  {
+    _PC_LINK_MAX,
+#define _PC_LINK_MAX _PC_LINK_MAX
+    _PC_MAX_CANON,
+#define _PC_MAX_CANON _PC_MAX_CANON
+    _PC_MAX_INPUT,
+#define _PC_MAX_INPUT _PC_MAX_INPUT
+    _PC_NAME_MAX,
+#define _PC_NAME_MAX _PC_NAME_MAX
+    _PC_PATH_MAX,
+#define _PC_PATH_MAX _PC_PATH_MAX
+    _PC_PIPE_BUF,
+#define _PC_PIPE_BUF _PC_PIPE_BUF
+    _PC_CHOWN_RESTRICTED,
+#define _PC_CHOWN_RESTRICTED _PC_CHOWN_RESTRICTED
+    _PC_NO_TRUNC,
+#define _PC_NO_TRUNC _PC_NO_TRUNC
+    _PC_VDISABLE,
+#define _PC_VDISABLE _PC_VDISABLE
+    _PC_SYNC_IO,
+#define _PC_SYNC_IO _PC_SYNC_IO
+    _PC_ASYNC_IO,
+#define _PC_ASYNC_IO _PC_ASYNC_IO
+    _PC_PRIO_IO,
+#define _PC_PRIO_IO _PC_PRIO_IO
+    _PC_SOCK_MAXBUF,
+#define _PC_SOCK_MAXBUF _PC_SOCK_MAXBUF
+    _PC_FILESIZEBITS,
+#define _PC_FILESIZEBITS _PC_FILESIZEBITS
+    _PC_REC_INCR_XFER_SIZE,
+#define _PC_REC_INCR_XFER_SIZE _PC_REC_INCR_XFER_SIZE
+    _PC_REC_MAX_XFER_SIZE,
+#define _PC_REC_MAX_XFER_SIZE _PC_REC_MAX_XFER_SIZE
+    _PC_REC_MIN_XFER_SIZE,
+#define _PC_REC_MIN_XFER_SIZE _PC_REC_MIN_XFER_SIZE
+    _PC_REC_XFER_ALIGN,
+#define _PC_REC_XFER_ALIGN _PC_REC_XFER_ALIGN
+    _PC_ALLOC_SIZE_MIN,
+#define _PC_ALLOC_SIZE_MIN _PC_ALLOC_SIZE_MIN
+    _PC_SYMLINK_MAX,
+#define _PC_SYMLINK_MAX _PC_SYMLINK_MAX
+    _PC_2_SYMLINKS
+#define _PC_2_SYMLINKS _PC_2_SYMLINKS
+  };
+
+
+enum
+  {
+    _SC_ARG_MAX,
+#define _SC_ARG_MAX _SC_ARG_MAX
+    _SC_CHILD_MAX,
+#define _SC_CHILD_MAX _SC_CHILD_MAX
+    _SC_CLK_TCK,
+#define _SC_CLK_TCK _SC_CLK_TCK
+    _SC_NGROUPS_MAX,
+#define _SC_NGROUPS_MAX _SC_NGROUPS_MAX
+    _SC_OPEN_MAX,
+#define _SC_OPEN_MAX _SC_OPEN_MAX
+    _SC_STREAM_MAX,
+#define _SC_STREAM_MAX _SC_STREAM_MAX
+    _SC_TZNAME_MAX,
+#define _SC_TZNAME_MAX _SC_TZNAME_MAX
+    _SC_JOB_CONTROL,
+#define _SC_JOB_CONTROL _SC_JOB_CONTROL
+    _SC_SAVED_IDS,
+#define _SC_SAVED_IDS _SC_SAVED_IDS
+    _SC_REALTIME_SIGNALS,
+#define _SC_REALTIME_SIGNALS _SC_REALTIME_SIGNALS
+    _SC_PRIORITY_SCHEDULING,
+#define _SC_PRIORITY_SCHEDULING _SC_PRIORITY_SCHEDULING
+    _SC_TIMERS,
+#define _SC_TIMERS _SC_TIMERS
+    _SC_ASYNCHRONOUS_IO,
+#define _SC_ASYNCHRONOUS_IO _SC_ASYNCHRONOUS_IO
+    _SC_PRIORITIZED_IO,
+#define _SC_PRIORITIZED_IO _SC_PRIORITIZED_IO
+    _SC_SYNCHRONIZED_IO,
+#define _SC_SYNCHRONIZED_IO _SC_SYNCHRONIZED_IO
+    _SC_FSYNC,
+#define _SC_FSYNC _SC_FSYNC
+    _SC_MAPPED_FILES,
+#define _SC_MAPPED_FILES _SC_MAPPED_FILES
+    _SC_MEMLOCK,
+#define _SC_MEMLOCK _SC_MEMLOCK
+    _SC_MEMLOCK_RANGE,
+#define _SC_MEMLOCK_RANGE _SC_MEMLOCK_RANGE
+    _SC_MEMORY_PROTECTION,
+#define _SC_MEMORY_PROTECTION _SC_MEMORY_PROTECTION
+    _SC_MESSAGE_PASSING,
+#define _SC_MESSAGE_PASSING _SC_MESSAGE_PASSING
+    _SC_SEMAPHORES,
+#define _SC_SEMAPHORES _SC_SEMAPHORES
+    _SC_SHARED_MEMORY_OBJECTS,
+#define _SC_SHARED_MEMORY_OBJECTS _SC_SHARED_MEMORY_OBJECTS
+    _SC_AIO_LISTIO_MAX,
+#define _SC_AIO_LISTIO_MAX _SC_AIO_LISTIO_MAX
+    _SC_AIO_MAX,
+#define _SC_AIO_MAX _SC_AIO_MAX
+    _SC_AIO_PRIO_DELTA_MAX,
+#define _SC_AIO_PRIO_DELTA_MAX _SC_AIO_PRIO_DELTA_MAX
+    _SC_DELAYTIMER_MAX,
+#define _SC_DELAYTIMER_MAX _SC_DELAYTIMER_MAX
+    _SC_MQ_OPEN_MAX,
+#define _SC_MQ_OPEN_MAX _SC_MQ_OPEN_MAX
+    _SC_MQ_PRIO_MAX,
+#define _SC_MQ_PRIO_MAX _SC_MQ_PRIO_MAX
+    _SC_VERSION,
+#define _SC_VERSION _SC_VERSION
+    _SC_PAGESIZE,
+#define _SC_PAGESIZE _SC_PAGESIZE
+#define _SC_PAGE_SIZE _SC_PAGESIZE
+    _SC_RTSIG_MAX,
+#define _SC_RTSIG_MAX _SC_RTSIG_MAX
+    _SC_SEM_NSEMS_MAX,
+#define _SC_SEM_NSEMS_MAX _SC_SEM_NSEMS_MAX
+    _SC_SEM_VALUE_MAX,
+#define _SC_SEM_VALUE_MAX _SC_SEM_VALUE_MAX
+    _SC_SIGQUEUE_MAX,
+#define _SC_SIGQUEUE_MAX _SC_SIGQUEUE_MAX
+    _SC_TIMER_MAX,
+#define _SC_TIMER_MAX _SC_TIMER_MAX
+
+
+
+    _SC_BC_BASE_MAX,
+#define _SC_BC_BASE_MAX _SC_BC_BASE_MAX
+    _SC_BC_DIM_MAX,
+#define _SC_BC_DIM_MAX _SC_BC_DIM_MAX
+    _SC_BC_SCALE_MAX,
+#define _SC_BC_SCALE_MAX _SC_BC_SCALE_MAX
+    _SC_BC_STRING_MAX,
+#define _SC_BC_STRING_MAX _SC_BC_STRING_MAX
+    _SC_COLL_WEIGHTS_MAX,
+#define _SC_COLL_WEIGHTS_MAX _SC_COLL_WEIGHTS_MAX
+    _SC_EQUIV_CLASS_MAX,
+#define _SC_EQUIV_CLASS_MAX _SC_EQUIV_CLASS_MAX
+    _SC_EXPR_NEST_MAX,
+#define _SC_EXPR_NEST_MAX _SC_EXPR_NEST_MAX
+    _SC_LINE_MAX,
+#define _SC_LINE_MAX _SC_LINE_MAX
+    _SC_RE_DUP_MAX,
+#define _SC_RE_DUP_MAX _SC_RE_DUP_MAX
+    _SC_CHARCLASS_NAME_MAX,
+#define _SC_CHARCLASS_NAME_MAX _SC_CHARCLASS_NAME_MAX
+
+    _SC_2_VERSION,
+#define _SC_2_VERSION _SC_2_VERSION
+    _SC_2_C_BIND,
+#define _SC_2_C_BIND _SC_2_C_BIND
+    _SC_2_C_DEV,
+#define _SC_2_C_DEV _SC_2_C_DEV
+    _SC_2_FORT_DEV,
+#define _SC_2_FORT_DEV _SC_2_FORT_DEV
+    _SC_2_FORT_RUN,
+#define _SC_2_FORT_RUN _SC_2_FORT_RUN
+    _SC_2_SW_DEV,
+#define _SC_2_SW_DEV _SC_2_SW_DEV
+    _SC_2_LOCALEDEF,
+#define _SC_2_LOCALEDEF _SC_2_LOCALEDEF
+
+    _SC_PII,
+#define _SC_PII _SC_PII
+    _SC_PII_XTI,
+#define _SC_PII_XTI _SC_PII_XTI
+    _SC_PII_SOCKET,
+#define _SC_PII_SOCKET _SC_PII_SOCKET
+    _SC_PII_INTERNET,
+#define _SC_PII_INTERNET _SC_PII_INTERNET
+    _SC_PII_OSI,
+#define _SC_PII_OSI _SC_PII_OSI
+    _SC_POLL,
+#define _SC_POLL _SC_POLL
+    _SC_SELECT,
+#define _SC_SELECT _SC_SELECT
+    _SC_UIO_MAXIOV,
+#define _SC_UIO_MAXIOV _SC_UIO_MAXIOV
+    _SC_IOV_MAX = _SC_UIO_MAXIOV,
+#define _SC_IOV_MAX _SC_IOV_MAX
+    _SC_PII_INTERNET_STREAM,
+#define _SC_PII_INTERNET_STREAM _SC_PII_INTERNET_STREAM
+    _SC_PII_INTERNET_DGRAM,
+#define _SC_PII_INTERNET_DGRAM _SC_PII_INTERNET_DGRAM
+    _SC_PII_OSI_COTS,
+#define _SC_PII_OSI_COTS _SC_PII_OSI_COTS
+    _SC_PII_OSI_CLTS,
+#define _SC_PII_OSI_CLTS _SC_PII_OSI_CLTS
+    _SC_PII_OSI_M,
+#define _SC_PII_OSI_M _SC_PII_OSI_M
+    _SC_T_IOV_MAX,
+#define _SC_T_IOV_MAX _SC_T_IOV_MAX
+
+
+    _SC_THREADS,
+#define _SC_THREADS _SC_THREADS
+    _SC_THREAD_SAFE_FUNCTIONS,
+#define _SC_THREAD_SAFE_FUNCTIONS _SC_THREAD_SAFE_FUNCTIONS
+    _SC_GETGR_R_SIZE_MAX,
+#define _SC_GETGR_R_SIZE_MAX _SC_GETGR_R_SIZE_MAX
+    _SC_GETPW_R_SIZE_MAX,
+#define _SC_GETPW_R_SIZE_MAX _SC_GETPW_R_SIZE_MAX
+    _SC_LOGIN_NAME_MAX,
+#define _SC_LOGIN_NAME_MAX _SC_LOGIN_NAME_MAX
+    _SC_TTY_NAME_MAX,
+#define _SC_TTY_NAME_MAX _SC_TTY_NAME_MAX
+    _SC_THREAD_DESTRUCTOR_ITERATIONS,
+#define _SC_THREAD_DESTRUCTOR_ITERATIONS _SC_THREAD_DESTRUCTOR_ITERATIONS
+    _SC_THREAD_KEYS_MAX,
+#define _SC_THREAD_KEYS_MAX _SC_THREAD_KEYS_MAX
+    _SC_THREAD_STACK_MIN,
+#define _SC_THREAD_STACK_MIN _SC_THREAD_STACK_MIN
+    _SC_THREAD_THREADS_MAX,
+#define _SC_THREAD_THREADS_MAX _SC_THREAD_THREADS_MAX
+    _SC_THREAD_ATTR_STACKADDR,
+#define _SC_THREAD_ATTR_STACKADDR _SC_THREAD_ATTR_STACKADDR
+    _SC_THREAD_ATTR_STACKSIZE,
+#define _SC_THREAD_ATTR_STACKSIZE _SC_THREAD_ATTR_STACKSIZE
+    _SC_THREAD_PRIORITY_SCHEDULING,
+#define _SC_THREAD_PRIORITY_SCHEDULING _SC_THREAD_PRIORITY_SCHEDULING
+    _SC_THREAD_PRIO_INHERIT,
+#define _SC_THREAD_PRIO_INHERIT _SC_THREAD_PRIO_INHERIT
+    _SC_THREAD_PRIO_PROTECT,
+#define _SC_THREAD_PRIO_PROTECT _SC_THREAD_PRIO_PROTECT
+    _SC_THREAD_PROCESS_SHARED,
+#define _SC_THREAD_PROCESS_SHARED _SC_THREAD_PROCESS_SHARED
+
+    _SC_NPROCESSORS_CONF,
+#define _SC_NPROCESSORS_CONF _SC_NPROCESSORS_CONF
+    _SC_NPROCESSORS_ONLN,
+#define _SC_NPROCESSORS_ONLN _SC_NPROCESSORS_ONLN
+    _SC_PHYS_PAGES,
+#define _SC_PHYS_PAGES _SC_PHYS_PAGES
+    _SC_AVPHYS_PAGES,
+#define _SC_AVPHYS_PAGES _SC_AVPHYS_PAGES
+    _SC_ATEXIT_MAX,
+#define _SC_ATEXIT_MAX _SC_ATEXIT_MAX
+    _SC_PASS_MAX,
+#define _SC_PASS_MAX _SC_PASS_MAX
+
+    _SC_XOPEN_VERSION,
+#define _SC_XOPEN_VERSION _SC_XOPEN_VERSION
+    _SC_XOPEN_XCU_VERSION,
+#define _SC_XOPEN_XCU_VERSION _SC_XOPEN_XCU_VERSION
+    _SC_XOPEN_UNIX,
+#define _SC_XOPEN_UNIX _SC_XOPEN_UNIX
+    _SC_XOPEN_CRYPT,
+#define _SC_XOPEN_CRYPT _SC_XOPEN_CRYPT
+    _SC_XOPEN_ENH_I18N,
+#define _SC_XOPEN_ENH_I18N _SC_XOPEN_ENH_I18N
+    _SC_XOPEN_SHM,
+#define _SC_XOPEN_SHM _SC_XOPEN_SHM
+
+    _SC_2_CHAR_TERM,
+#define _SC_2_CHAR_TERM _SC_2_CHAR_TERM
+    _SC_2_C_VERSION,
+#define _SC_2_C_VERSION _SC_2_C_VERSION
+    _SC_2_UPE,
+#define _SC_2_UPE _SC_2_UPE
+
+    _SC_XOPEN_XPG2,
+#define _SC_XOPEN_XPG2 _SC_XOPEN_XPG2
+    _SC_XOPEN_XPG3,
+#define _SC_XOPEN_XPG3 _SC_XOPEN_XPG3
+    _SC_XOPEN_XPG4,
+#define _SC_XOPEN_XPG4 _SC_XOPEN_XPG4
+
+    _SC_CHAR_BIT,
+#define _SC_CHAR_BIT _SC_CHAR_BIT
+    _SC_CHAR_MAX,
+#define _SC_CHAR_MAX _SC_CHAR_MAX
+    _SC_CHAR_MIN,
+#define _SC_CHAR_MIN _SC_CHAR_MIN
+    _SC_INT_MAX,
+#define _SC_INT_MAX _SC_INT_MAX
+    _SC_INT_MIN,
+#define _SC_INT_MIN _SC_INT_MIN
+    _SC_LONG_BIT,
+#define _SC_LONG_BIT _SC_LONG_BIT
+    _SC_WORD_BIT,
+#define _SC_WORD_BIT _SC_WORD_BIT
+    _SC_MB_LEN_MAX,
+#define _SC_MB_LEN_MAX _SC_MB_LEN_MAX
+    _SC_NZERO,
+#define _SC_NZERO _SC_NZERO
+    _SC_SSIZE_MAX,
+#define _SC_SSIZE_MAX _SC_SSIZE_MAX
+    _SC_SCHAR_MAX,
+#define _SC_SCHAR_MAX _SC_SCHAR_MAX
+    _SC_SCHAR_MIN,
+#define _SC_SCHAR_MIN _SC_SCHAR_MIN
+    _SC_SHRT_MAX,
+#define _SC_SHRT_MAX _SC_SHRT_MAX
+    _SC_SHRT_MIN,
+#define _SC_SHRT_MIN _SC_SHRT_MIN
+    _SC_UCHAR_MAX,
+#define _SC_UCHAR_MAX _SC_UCHAR_MAX
+    _SC_UINT_MAX,
+#define _SC_UINT_MAX _SC_UINT_MAX
+    _SC_ULONG_MAX,
+#define _SC_ULONG_MAX _SC_ULONG_MAX
+    _SC_USHRT_MAX,
+#define _SC_USHRT_MAX _SC_USHRT_MAX
+
+    _SC_NL_ARGMAX,
+#define _SC_NL_ARGMAX _SC_NL_ARGMAX
+    _SC_NL_LANGMAX,
+#define _SC_NL_LANGMAX _SC_NL_LANGMAX
+    _SC_NL_MSGMAX,
+#define _SC_NL_MSGMAX _SC_NL_MSGMAX
+    _SC_NL_NMAX,
+#define _SC_NL_NMAX _SC_NL_NMAX
+    _SC_NL_SETMAX,
+#define _SC_NL_SETMAX _SC_NL_SETMAX
+    _SC_NL_TEXTMAX,
+#define _SC_NL_TEXTMAX _SC_NL_TEXTMAX
+
+    _SC_XBS5_ILP32_OFF32,
+#define _SC_XBS5_ILP32_OFF32 _SC_XBS5_ILP32_OFF32
+    _SC_XBS5_ILP32_OFFBIG,
+#define _SC_XBS5_ILP32_OFFBIG _SC_XBS5_ILP32_OFFBIG
+    _SC_XBS5_LP64_OFF64,
+#define _SC_XBS5_LP64_OFF64 _SC_XBS5_LP64_OFF64
+    _SC_XBS5_LPBIG_OFFBIG,
+#define _SC_XBS5_LPBIG_OFFBIG _SC_XBS5_LPBIG_OFFBIG
+
+    _SC_XOPEN_LEGACY,
+#define _SC_XOPEN_LEGACY _SC_XOPEN_LEGACY
+    _SC_XOPEN_REALTIME,
+#define _SC_XOPEN_REALTIME _SC_XOPEN_REALTIME
+    _SC_XOPEN_REALTIME_THREADS,
+#define _SC_XOPEN_REALTIME_THREADS _SC_XOPEN_REALTIME_THREADS
+
+    _SC_ADVISORY_INFO,
+#define _SC_ADVISORY_INFO _SC_ADVISORY_INFO
+    _SC_BARRIERS,
+#define _SC_BARRIERS _SC_BARRIERS
+    _SC_BASE,
+#define _SC_BASE _SC_BASE
+    _SC_C_LANG_SUPPORT,
+#define _SC_C_LANG_SUPPORT _SC_C_LANG_SUPPORT
+    _SC_C_LANG_SUPPORT_R,
+#define _SC_C_LANG_SUPPORT_R _SC_C_LANG_SUPPORT_R
+    _SC_CLOCK_SELECTION,
+#define _SC_CLOCK_SELECTION _SC_CLOCK_SELECTION
+    _SC_CPUTIME,
+#define _SC_CPUTIME _SC_CPUTIME
+    _SC_THREAD_CPUTIME,
+#define _SC_THREAD_CPUTIME _SC_THREAD_CPUTIME
+    _SC_DEVICE_IO,
+#define _SC_DEVICE_IO _SC_DEVICE_IO
+    _SC_DEVICE_SPECIFIC,
+#define _SC_DEVICE_SPECIFIC _SC_DEVICE_SPECIFIC
+    _SC_DEVICE_SPECIFIC_R,
+#define _SC_DEVICE_SPECIFIC_R _SC_DEVICE_SPECIFIC_R
+    _SC_FD_MGMT,
+#define _SC_FD_MGMT _SC_FD_MGMT
+    _SC_FIFO,
+#define _SC_FIFO _SC_FIFO
+    _SC_PIPE,
+#define _SC_PIPE _SC_PIPE
+    _SC_FILE_ATTRIBUTES,
+#define _SC_FILE_ATTRIBUTES _SC_FILE_ATTRIBUTES
+    _SC_FILE_LOCKING,
+#define _SC_FILE_LOCKING _SC_FILE_LOCKING
+    _SC_FILE_SYSTEM,
+#define _SC_FILE_SYSTEM _SC_FILE_SYSTEM
+    _SC_MONOTONIC_CLOCK,
+#define _SC_MONOTONIC_CLOCK _SC_MONOTONIC_CLOCK
+    _SC_MULTI_PROCESS,
+#define _SC_MULTI_PROCESS _SC_MULTI_PROCESS
+    _SC_SINGLE_PROCESS,
+#define _SC_SINGLE_PROCESS _SC_SINGLE_PROCESS
+    _SC_NETWORKING,
+#define _SC_NETWORKING _SC_NETWORKING
+    _SC_READER_WRITER_LOCKS,
+#define _SC_READER_WRITER_LOCKS _SC_READER_WRITER_LOCKS
+    _SC_SPIN_LOCKS,
+#define _SC_SPIN_LOCKS _SC_SPIN_LOCKS
+    _SC_REGEXP,
+#define _SC_REGEXP _SC_REGEXP
+    _SC_REGEX_VERSION,
+#define _SC_REGEX_VERSION _SC_REGEX_VERSION
+    _SC_SHELL,
+#define _SC_SHELL _SC_SHELL
+    _SC_SIGNALS,
+#define _SC_SIGNALS _SC_SIGNALS
+    _SC_SPAWN,
+#define _SC_SPAWN _SC_SPAWN
+    _SC_SPORADIC_SERVER,
+#define _SC_SPORADIC_SERVER _SC_SPORADIC_SERVER
+    _SC_THREAD_SPORADIC_SERVER,
+#define _SC_THREAD_SPORADIC_SERVER _SC_THREAD_SPORADIC_SERVER
+    _SC_SYSTEM_DATABASE,
+#define _SC_SYSTEM_DATABASE _SC_SYSTEM_DATABASE
+    _SC_SYSTEM_DATABASE_R,
+#define _SC_SYSTEM_DATABASE_R _SC_SYSTEM_DATABASE_R
+    _SC_TIMEOUTS,
+#define _SC_TIMEOUTS _SC_TIMEOUTS
+    _SC_TYPED_MEMORY_OBJECTS,
+#define _SC_TYPED_MEMORY_OBJECTS _SC_TYPED_MEMORY_OBJECTS
+    _SC_USER_GROUPS,
+#define _SC_USER_GROUPS _SC_USER_GROUPS
+    _SC_USER_GROUPS_R,
+#define _SC_USER_GROUPS_R _SC_USER_GROUPS_R
+    _SC_2_PBS,
+#define _SC_2_PBS _SC_2_PBS
+    _SC_2_PBS_ACCOUNTING,
+#define _SC_2_PBS_ACCOUNTING _SC_2_PBS_ACCOUNTING
+    _SC_2_PBS_LOCATE,
+#define _SC_2_PBS_LOCATE _SC_2_PBS_LOCATE
+    _SC_2_PBS_MESSAGE,
+#define _SC_2_PBS_MESSAGE _SC_2_PBS_MESSAGE
+    _SC_2_PBS_TRACK,
+#define _SC_2_PBS_TRACK _SC_2_PBS_TRACK
+    _SC_SYMLOOP_MAX,
+#define _SC_SYMLOOP_MAX _SC_SYMLOOP_MAX
+    _SC_STREAMS,
+#define _SC_STREAMS _SC_STREAMS
+    _SC_2_PBS_CHECKPOINT,
+#define _SC_2_PBS_CHECKPOINT _SC_2_PBS_CHECKPOINT
+
+    _SC_V6_ILP32_OFF32,
+#define _SC_V6_ILP32_OFF32 _SC_V6_ILP32_OFF32
+    _SC_V6_ILP32_OFFBIG,
+#define _SC_V6_ILP32_OFFBIG _SC_V6_ILP32_OFFBIG
+    _SC_V6_LP64_OFF64,
+#define _SC_V6_LP64_OFF64 _SC_V6_LP64_OFF64
+    _SC_V6_LPBIG_OFFBIG,
+#define _SC_V6_LPBIG_OFFBIG _SC_V6_LPBIG_OFFBIG
+
+    _SC_HOST_NAME_MAX,
+#define _SC_HOST_NAME_MAX _SC_HOST_NAME_MAX
+    _SC_TRACE,
+#define _SC_TRACE _SC_TRACE
+    _SC_TRACE_EVENT_FILTER,
+#define _SC_TRACE_EVENT_FILTER _SC_TRACE_EVENT_FILTER
+    _SC_TRACE_INHERIT,
+#define _SC_TRACE_INHERIT _SC_TRACE_INHERIT
+    _SC_TRACE_LOG,
+#define _SC_TRACE_LOG _SC_TRACE_LOG
+
+    _SC_LEVEL1_ICACHE_SIZE,
+#define _SC_LEVEL1_ICACHE_SIZE _SC_LEVEL1_ICACHE_SIZE
+    _SC_LEVEL1_ICACHE_ASSOC,
+#define _SC_LEVEL1_ICACHE_ASSOC _SC_LEVEL1_ICACHE_ASSOC
+    _SC_LEVEL1_ICACHE_LINESIZE,
+#define _SC_LEVEL1_ICACHE_LINESIZE _SC_LEVEL1_ICACHE_LINESIZE
+    _SC_LEVEL1_DCACHE_SIZE,
+#define _SC_LEVEL1_DCACHE_SIZE _SC_LEVEL1_DCACHE_SIZE
+    _SC_LEVEL1_DCACHE_ASSOC,
+#define _SC_LEVEL1_DCACHE_ASSOC _SC_LEVEL1_DCACHE_ASSOC
+    _SC_LEVEL1_DCACHE_LINESIZE,
+#define _SC_LEVEL1_DCACHE_LINESIZE _SC_LEVEL1_DCACHE_LINESIZE
+    _SC_LEVEL2_CACHE_SIZE,
+#define _SC_LEVEL2_CACHE_SIZE _SC_LEVEL2_CACHE_SIZE
+    _SC_LEVEL2_CACHE_ASSOC,
+#define _SC_LEVEL2_CACHE_ASSOC _SC_LEVEL2_CACHE_ASSOC
+    _SC_LEVEL2_CACHE_LINESIZE,
+#define _SC_LEVEL2_CACHE_LINESIZE _SC_LEVEL2_CACHE_LINESIZE
+    _SC_LEVEL3_CACHE_SIZE,
+#define _SC_LEVEL3_CACHE_SIZE _SC_LEVEL3_CACHE_SIZE
+    _SC_LEVEL3_CACHE_ASSOC,
+#define _SC_LEVEL3_CACHE_ASSOC _SC_LEVEL3_CACHE_ASSOC
+    _SC_LEVEL3_CACHE_LINESIZE,
+#define _SC_LEVEL3_CACHE_LINESIZE _SC_LEVEL3_CACHE_LINESIZE
+    _SC_LEVEL4_CACHE_SIZE,
+#define _SC_LEVEL4_CACHE_SIZE _SC_LEVEL4_CACHE_SIZE
+    _SC_LEVEL4_CACHE_ASSOC,
+#define _SC_LEVEL4_CACHE_ASSOC _SC_LEVEL4_CACHE_ASSOC
+    _SC_LEVEL4_CACHE_LINESIZE,
+#define _SC_LEVEL4_CACHE_LINESIZE _SC_LEVEL4_CACHE_LINESIZE
+
+
+    _SC_IPV6 = _SC_LEVEL1_ICACHE_SIZE + 50,
+#define _SC_IPV6 _SC_IPV6
+    _SC_RAW_SOCKETS,
+#define _SC_RAW_SOCKETS _SC_RAW_SOCKETS
+
+    _SC_V7_ILP32_OFF32,
+#define _SC_V7_ILP32_OFF32 _SC_V7_ILP32_OFF32
+    _SC_V7_ILP32_OFFBIG,
+#define _SC_V7_ILP32_OFFBIG _SC_V7_ILP32_OFFBIG
+    _SC_V7_LP64_OFF64,
+#define _SC_V7_LP64_OFF64 _SC_V7_LP64_OFF64
+    _SC_V7_LPBIG_OFFBIG,
+#define _SC_V7_LPBIG_OFFBIG _SC_V7_LPBIG_OFFBIG
+
+    _SC_SS_REPL_MAX,
+#define _SC_SS_REPL_MAX _SC_SS_REPL_MAX
+
+    _SC_TRACE_EVENT_NAME_MAX,
+#define _SC_TRACE_EVENT_NAME_MAX _SC_TRACE_EVENT_NAME_MAX
+    _SC_TRACE_NAME_MAX,
+#define _SC_TRACE_NAME_MAX _SC_TRACE_NAME_MAX
+    _SC_TRACE_SYS_MAX,
+#define _SC_TRACE_SYS_MAX _SC_TRACE_SYS_MAX
+    _SC_TRACE_USER_EVENT_MAX,
+#define _SC_TRACE_USER_EVENT_MAX _SC_TRACE_USER_EVENT_MAX
+
+    _SC_XOPEN_STREAMS,
+#define _SC_XOPEN_STREAMS _SC_XOPEN_STREAMS
+
+    _SC_THREAD_ROBUST_PRIO_INHERIT,
+#define _SC_THREAD_ROBUST_PRIO_INHERIT _SC_THREAD_ROBUST_PRIO_INHERIT
+    _SC_THREAD_ROBUST_PRIO_PROTECT,
+#define _SC_THREAD_ROBUST_PRIO_PROTECT _SC_THREAD_ROBUST_PRIO_PROTECT
+  };
+
+
+enum
+  {
+    _CS_PATH,
+#define _CS_PATH _CS_PATH
+
+    _CS_V6_WIDTH_RESTRICTED_ENVS,
+#define _CS_V6_WIDTH_RESTRICTED_ENVS _CS_V6_WIDTH_RESTRICTED_ENVS
+#define _CS_POSIX_V6_WIDTH_RESTRICTED_ENVS _CS_V6_WIDTH_RESTRICTED_ENVS
+
+    _CS_GNU_LIBC_VERSION,
+#define _CS_GNU_LIBC_VERSION _CS_GNU_LIBC_VERSION
+    _CS_GNU_LIBPTHREAD_VERSION,
+#define _CS_GNU_LIBPTHREAD_VERSION _CS_GNU_LIBPTHREAD_VERSION
+
+    _CS_V5_WIDTH_RESTRICTED_ENVS,
+#define _CS_V5_WIDTH_RESTRICTED_ENVS _CS_V5_WIDTH_RESTRICTED_ENVS
+#define _CS_POSIX_V5_WIDTH_RESTRICTED_ENVS _CS_V5_WIDTH_RESTRICTED_ENVS
+
+    _CS_V7_WIDTH_RESTRICTED_ENVS,
+#define _CS_V7_WIDTH_RESTRICTED_ENVS _CS_V7_WIDTH_RESTRICTED_ENVS
+#define _CS_POSIX_V7_WIDTH_RESTRICTED_ENVS _CS_V7_WIDTH_RESTRICTED_ENVS
+
+    _CS_LFS_CFLAGS = 1000,
+#define _CS_LFS_CFLAGS _CS_LFS_CFLAGS
+    _CS_LFS_LDFLAGS,
+#define _CS_LFS_LDFLAGS _CS_LFS_LDFLAGS
+    _CS_LFS_LIBS,
+#define _CS_LFS_LIBS _CS_LFS_LIBS
+    _CS_LFS_LINTFLAGS,
+#define _CS_LFS_LINTFLAGS _CS_LFS_LINTFLAGS
+    _CS_LFS64_CFLAGS,
+#define _CS_LFS64_CFLAGS _CS_LFS64_CFLAGS
+    _CS_LFS64_LDFLAGS,
+#define _CS_LFS64_LDFLAGS _CS_LFS64_LDFLAGS
+    _CS_LFS64_LIBS,
+#define _CS_LFS64_LIBS _CS_LFS64_LIBS
+    _CS_LFS64_LINTFLAGS,
+#define _CS_LFS64_LINTFLAGS _CS_LFS64_LINTFLAGS
+
+    _CS_XBS5_ILP32_OFF32_CFLAGS = 1100,
+#define _CS_XBS5_ILP32_OFF32_CFLAGS _CS_XBS5_ILP32_OFF32_CFLAGS
+    _CS_XBS5_ILP32_OFF32_LDFLAGS,
+#define _CS_XBS5_ILP32_OFF32_LDFLAGS _CS_XBS5_ILP32_OFF32_LDFLAGS
+    _CS_XBS5_ILP32_OFF32_LIBS,
+#define _CS_XBS5_ILP32_OFF32_LIBS _CS_XBS5_ILP32_OFF32_LIBS
+    _CS_XBS5_ILP32_OFF32_LINTFLAGS,
+#define _CS_XBS5_ILP32_OFF32_LINTFLAGS _CS_XBS5_ILP32_OFF32_LINTFLAGS
+    _CS_XBS5_ILP32_OFFBIG_CFLAGS,
+#define _CS_XBS5_ILP32_OFFBIG_CFLAGS _CS_XBS5_ILP32_OFFBIG_CFLAGS
+    _CS_XBS5_ILP32_OFFBIG_LDFLAGS,
+#define _CS_XBS5_ILP32_OFFBIG_LDFLAGS _CS_XBS5_ILP32_OFFBIG_LDFLAGS
+    _CS_XBS5_ILP32_OFFBIG_LIBS,
+#define _CS_XBS5_ILP32_OFFBIG_LIBS _CS_XBS5_ILP32_OFFBIG_LIBS
+    _CS_XBS5_ILP32_OFFBIG_LINTFLAGS,
+#define _CS_XBS5_ILP32_OFFBIG_LINTFLAGS _CS_XBS5_ILP32_OFFBIG_LINTFLAGS
+    _CS_XBS5_LP64_OFF64_CFLAGS,
+#define _CS_XBS5_LP64_OFF64_CFLAGS _CS_XBS5_LP64_OFF64_CFLAGS
+    _CS_XBS5_LP64_OFF64_LDFLAGS,
+#define _CS_XBS5_LP64_OFF64_LDFLAGS _CS_XBS5_LP64_OFF64_LDFLAGS
+    _CS_XBS5_LP64_OFF64_LIBS,
+#define _CS_XBS5_LP64_OFF64_LIBS _CS_XBS5_LP64_OFF64_LIBS
+    _CS_XBS5_LP64_OFF64_LINTFLAGS,
+#define _CS_XBS5_LP64_OFF64_LINTFLAGS _CS_XBS5_LP64_OFF64_LINTFLAGS
+    _CS_XBS5_LPBIG_OFFBIG_CFLAGS,
+#define _CS_XBS5_LPBIG_OFFBIG_CFLAGS _CS_XBS5_LPBIG_OFFBIG_CFLAGS
+    _CS_XBS5_LPBIG_OFFBIG_LDFLAGS,
+#define _CS_XBS5_LPBIG_OFFBIG_LDFLAGS _CS_XBS5_LPBIG_OFFBIG_LDFLAGS
+    _CS_XBS5_LPBIG_OFFBIG_LIBS,
+#define _CS_XBS5_LPBIG_OFFBIG_LIBS _CS_XBS5_LPBIG_OFFBIG_LIBS
+    _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS,
+#define _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS
+
+    _CS_POSIX_V6_ILP32_OFF32_CFLAGS,
+#define _CS_POSIX_V6_ILP32_OFF32_CFLAGS _CS_POSIX_V6_ILP32_OFF32_CFLAGS
+    _CS_POSIX_V6_ILP32_OFF32_LDFLAGS,
+#define _CS_POSIX_V6_ILP32_OFF32_LDFLAGS _CS_POSIX_V6_ILP32_OFF32_LDFLAGS
+    _CS_POSIX_V6_ILP32_OFF32_LIBS,
+#define _CS_POSIX_V6_ILP32_OFF32_LIBS _CS_POSIX_V6_ILP32_OFF32_LIBS
+    _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS,
+#define _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS
+    _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS,
+#define _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS
+    _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS,
+#define _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS
+    _CS_POSIX_V6_ILP32_OFFBIG_LIBS,
+#define _CS_POSIX_V6_ILP32_OFFBIG_LIBS _CS_POSIX_V6_ILP32_OFFBIG_LIBS
+    _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS,
+#define _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS
+    _CS_POSIX_V6_LP64_OFF64_CFLAGS,
+#define _CS_POSIX_V6_LP64_OFF64_CFLAGS _CS_POSIX_V6_LP64_OFF64_CFLAGS
+    _CS_POSIX_V6_LP64_OFF64_LDFLAGS,
+#define _CS_POSIX_V6_LP64_OFF64_LDFLAGS _CS_POSIX_V6_LP64_OFF64_LDFLAGS
+    _CS_POSIX_V6_LP64_OFF64_LIBS,
+#define _CS_POSIX_V6_LP64_OFF64_LIBS _CS_POSIX_V6_LP64_OFF64_LIBS
+    _CS_POSIX_V6_LP64_OFF64_LINTFLAGS,
+#define _CS_POSIX_V6_LP64_OFF64_LINTFLAGS _CS_POSIX_V6_LP64_OFF64_LINTFLAGS
+    _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS,
+#define _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS
+    _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS,
+#define _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS
+    _CS_POSIX_V6_LPBIG_OFFBIG_LIBS,
+#define _CS_POSIX_V6_LPBIG_OFFBIG_LIBS _CS_POSIX_V6_LPBIG_OFFBIG_LIBS
+    _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS,
+#define _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS
+
+    _CS_POSIX_V7_ILP32_OFF32_CFLAGS,
+#define _CS_POSIX_V7_ILP32_OFF32_CFLAGS _CS_POSIX_V7_ILP32_OFF32_CFLAGS
+    _CS_POSIX_V7_ILP32_OFF32_LDFLAGS,
+#define _CS_POSIX_V7_ILP32_OFF32_LDFLAGS _CS_POSIX_V7_ILP32_OFF32_LDFLAGS
+    _CS_POSIX_V7_ILP32_OFF32_LIBS,
+#define _CS_POSIX_V7_ILP32_OFF32_LIBS _CS_POSIX_V7_ILP32_OFF32_LIBS
+    _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS,
+#define _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS
+    _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS,
+#define _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS
+    _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS,
+#define _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS
+    _CS_POSIX_V7_ILP32_OFFBIG_LIBS,
+#define _CS_POSIX_V7_ILP32_OFFBIG_LIBS _CS_POSIX_V7_ILP32_OFFBIG_LIBS
+    _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS,
+#define _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS
+    _CS_POSIX_V7_LP64_OFF64_CFLAGS,
+#define _CS_POSIX_V7_LP64_OFF64_CFLAGS _CS_POSIX_V7_LP64_OFF64_CFLAGS
+    _CS_POSIX_V7_LP64_OFF64_LDFLAGS,
+#define _CS_POSIX_V7_LP64_OFF64_LDFLAGS _CS_POSIX_V7_LP64_OFF64_LDFLAGS
+    _CS_POSIX_V7_LP64_OFF64_LIBS,
+#define _CS_POSIX_V7_LP64_OFF64_LIBS _CS_POSIX_V7_LP64_OFF64_LIBS
+    _CS_POSIX_V7_LP64_OFF64_LINTFLAGS,
+#define _CS_POSIX_V7_LP64_OFF64_LINTFLAGS _CS_POSIX_V7_LP64_OFF64_LINTFLAGS
+    _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS,
+#define _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS
+    _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS,
+#define _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS
+    _CS_POSIX_V7_LPBIG_OFFBIG_LIBS,
+#define _CS_POSIX_V7_LPBIG_OFFBIG_LIBS _CS_POSIX_V7_LPBIG_OFFBIG_LIBS
+    _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS
+#define _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS
+  };
+# 569 "/usr/include/unistd.h" 2 3 4
+
+
+extern long int pathconf (__const char *__path, int __name)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+extern long int fpathconf (int __fd, int __name) throw ();
+
+
+extern long int sysconf (int __name) throw ();
+
+
+
+extern size_t confstr (int __name, char *__buf, size_t __len) throw ();
+
+
+
+
+extern __pid_t getpid (void) throw ();
+
+
+extern __pid_t getppid (void) throw ();
+
+
+
+
+extern __pid_t getpgrp (void) throw ();
+# 605 "/usr/include/unistd.h" 3 4
+extern __pid_t __getpgid (__pid_t __pid) throw ();
+
+extern __pid_t getpgid (__pid_t __pid) throw ();
+
+
+
+
+
+
+extern int setpgid (__pid_t __pid, __pid_t __pgid) throw ();
+# 631 "/usr/include/unistd.h" 3 4
+extern int setpgrp (void) throw ();
+# 648 "/usr/include/unistd.h" 3 4
+extern __pid_t setsid (void) throw ();
+
+
+
+extern __pid_t getsid (__pid_t __pid) throw ();
+
+
+
+extern __uid_t getuid (void) throw ();
+
+
+extern __uid_t geteuid (void) throw ();
+
+
+extern __gid_t getgid (void) throw ();
+
+
+extern __gid_t getegid (void) throw ();
+
+
+
+
+extern int getgroups (int __size, __gid_t __list[]) throw () ;
+
+
+
+extern int group_member (__gid_t __gid) throw ();
+
+
+
+
+
+
+extern int setuid (__uid_t __uid) throw ();
+
+
+
+
+extern int setreuid (__uid_t __ruid, __uid_t __euid) throw ();
+
+
+
+
+extern int seteuid (__uid_t __uid) throw ();
+
+
+
+
+
+
+extern int setgid (__gid_t __gid) throw ();
+
+
+
+
+extern int setregid (__gid_t __rgid, __gid_t __egid) throw ();
+
+
+
+
+extern int setegid (__gid_t __gid) throw ();
+
+
+
+
+
+extern int getresuid (__uid_t *__ruid, __uid_t *__euid, __uid_t *__suid)
+     throw ();
+
+
+
+extern int getresgid (__gid_t *__rgid, __gid_t *__egid, __gid_t *__sgid)
+     throw ();
+
+
+
+extern int setresuid (__uid_t __ruid, __uid_t __euid, __uid_t __suid)
+     throw ();
+
+
+
+extern int setresgid (__gid_t __rgid, __gid_t __egid, __gid_t __sgid)
+     throw ();
+
+
+
+
+
+
+extern __pid_t fork (void) throw ();
+
+
+
+
+
+
+extern __pid_t vfork (void) throw ();
+
+
+
+
+
+extern char *ttyname (int __fd) throw ();
+
+
+
+extern int ttyname_r (int __fd, char *__buf, size_t __buflen)
+     throw () __attribute__ ((__nonnull__ (2))) ;
+
+
+
+extern int isatty (int __fd) throw ();
+
+
+
+
+
+extern int ttyslot (void) throw ();
+
+
+
+
+extern int link (__const char *__from, __const char *__to)
+     throw () __attribute__ ((__nonnull__ (1, 2))) ;
+
+
+
+
+extern int linkat (int __fromfd, __const char *__from, int __tofd,
+     __const char *__to, int __flags)
+     throw () __attribute__ ((__nonnull__ (2, 4))) ;
+
+
+
+
+extern int symlink (__const char *__from, __const char *__to)
+     throw () __attribute__ ((__nonnull__ (1, 2))) ;
+
+
+
+
+extern ssize_t readlink (__const char *__restrict __path,
+    char *__restrict __buf, size_t __len)
+     throw () __attribute__ ((__nonnull__ (1, 2))) ;
+
+
+
+
+extern int symlinkat (__const char *__from, int __tofd,
+        __const char *__to) throw () __attribute__ ((__nonnull__ (1, 3))) ;
+
+
+extern ssize_t readlinkat (int __fd, __const char *__restrict __path,
+      char *__restrict __buf, size_t __len)
+     throw () __attribute__ ((__nonnull__ (2, 3))) ;
+
+
+
+extern int unlink (__const char *__name) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int unlinkat (int __fd, __const char *__name, int __flag)
+     throw () __attribute__ ((__nonnull__ (2)));
+
+
+
+extern int rmdir (__const char *__path) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+extern __pid_t tcgetpgrp (int __fd) throw ();
+
+
+extern int tcsetpgrp (int __fd, __pid_t __pgrp_id) throw ();
+
+
+
+
+
+
+extern char *getlogin (void);
+
+
+
+
+
+
+
+extern int getlogin_r (char *__name, size_t __name_len) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int setlogin (__const char *__name) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
+#define __need_getopt 
+# 1 "/usr/include/getopt.h" 1 3 4
+# 50 "/usr/include/getopt.h" 3 4
+extern "C" {
+# 59 "/usr/include/getopt.h" 3 4
+extern char *optarg;
+# 73 "/usr/include/getopt.h" 3 4
+extern int optind;
+
+
+
+
+extern int opterr;
+
+
+
+extern int optopt;
+# 152 "/usr/include/getopt.h" 3 4
+extern int getopt (int ___argc, char *const *___argv, const char *__shortopts)
+       throw ();
+# 187 "/usr/include/getopt.h" 3 4
+}
+
+
+
+#undef __need_getopt
+# 852 "/usr/include/unistd.h" 2 3 4
+
+
+
+
+
+
+
+extern int gethostname (char *__name, size_t __len) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+extern int sethostname (__const char *__name, size_t __len)
+     throw () __attribute__ ((__nonnull__ (1))) ;
+
+
+
+extern int sethostid (long int __id) throw () ;
+
+
+
+
+
+extern int getdomainname (char *__name, size_t __len)
+     throw () __attribute__ ((__nonnull__ (1))) ;
+extern int setdomainname (__const char *__name, size_t __len)
+     throw () __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+extern int vhangup (void) throw ();
+
+
+extern int revoke (__const char *__file) throw () __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+
+extern int profil (unsigned short int *__sample_buffer, size_t __size,
+     size_t __offset, unsigned int __scale)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern int acct (__const char *__name) throw ();
+
+
+
+extern char *getusershell (void) throw ();
+extern void endusershell (void) throw ();
+extern void setusershell (void) throw ();
+
+
+
+
+
+extern int daemon (int __nochdir, int __noclose) throw () ;
+
+
+
+
+
+
+extern int chroot (__const char *__path) throw () __attribute__ ((__nonnull__ (1))) ;
+
+
+
+extern char *getpass (__const char *__prompt) __attribute__ ((__nonnull__ (1)));
+# 937 "/usr/include/unistd.h" 3 4
+extern int fsync (int __fd);
+
+
+
+
+
+
+extern long int gethostid (void);
+
+
+extern void sync (void) throw ();
+
+
+
+
+extern int getpagesize (void) throw () __attribute__ ((__const__));
+
+
+
+
+extern int getdtablesize (void) throw ();
+
+
+
+
+extern int truncate (__const char *__file, __off_t __length)
+     throw () __attribute__ ((__nonnull__ (1))) ;
+# 974 "/usr/include/unistd.h" 3 4
+extern int truncate64 (__const char *__file, __off64_t __length)
+     throw () __attribute__ ((__nonnull__ (1))) ;
+# 984 "/usr/include/unistd.h" 3 4
+extern int ftruncate (int __fd, __off_t __length) throw () ;
+# 994 "/usr/include/unistd.h" 3 4
+extern int ftruncate64 (int __fd, __off64_t __length) throw () ;
+# 1004 "/usr/include/unistd.h" 3 4
+extern int brk (void *__addr) throw () ;
+
+
+
+
+
+extern void *sbrk (intptr_t __delta) throw ();
+# 1025 "/usr/include/unistd.h" 3 4
+extern long int syscall (long int __sysno, ...) throw ();
+# 1042 "/usr/include/unistd.h" 3 4
+#define F_ULOCK 0
+#define F_LOCK 1
+#define F_TLOCK 2
+#define F_TEST 3
+
+
+extern int lockf (int __fd, int __cmd, __off_t __len) ;
+# 1058 "/usr/include/unistd.h" 3 4
+extern int lockf64 (int __fd, int __cmd, __off64_t __len) ;
+# 1068 "/usr/include/unistd.h" 3 4
+#define TEMP_FAILURE_RETRY(expression) (__extension__ ({ long int __result; do __result = (long int) (expression); while (__result == -1L && errno == EINTR); __result; }))
+# 1079 "/usr/include/unistd.h" 3 4
+extern int fdatasync (int __fildes);
+
+
+
+
+
+
+
+extern char *crypt (__const char *__key, __const char *__salt)
+     throw () __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern void encrypt (char *__block, int __edflag) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+extern void swab (__const void *__restrict __from, void *__restrict __to,
+    ssize_t __n) throw () __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+
+
+extern char *ctermid (char *__s) throw ();
+# 1117 "/usr/include/unistd.h" 3 4
+}
+# 14 "bxbuilder.cpp" 2
+# 30 "bxbuilder.cpp"
+# 1 "bxbuilder.h" 1
+# 19 "bxbuilder.h"
+#define BXBUILDER_H 
+# 39 "bxbuilder.h"
+# 1 "bxbuilderview.h" 1
+# 19 "bxbuilderview.h"
+#define BXBUILDERVIEW_H 
+
+
+
+
+
+# 1 "bxbuilderdoc.h" 1
+# 18 "bxbuilderdoc.h"
+#define BXBUILDERDOC_H 
+# 29 "bxbuilderdoc.h"
+class BxbuilderDoc : public QObject
+{
+  Q_OBJECT
+
+  public:
+    BxbuilderDoc();
+    ~BxbuilderDoc();
+    void newDoc();
+    bool save();
+    bool saveAs(const QString &filename);
+    bool load(const QString &filename);
+    bool isModified() const;
+
+  signals:
+    void documentChanged();
+
+  protected:
+    bool modified;
+};
+# 26 "bxbuilderview.h" 2
+
+
+
+
+
+class BxbuilderView : public QWidget
+{
+  Q_OBJECT
+  public:
+    BxbuilderView(QWidget *parent=0, BxbuilderDoc* doc=0);
+    ~BxbuilderView();
+
+  protected slots:
+    void slotDocumentChanged();
+
+};
+# 40 "bxbuilder.h" 2
+
+# 1 "bxdialoglistview.h" 1
+# 19 "bxdialoglistview.h"
+#define BXDIALOGLISTVIEW_H 
+# 29 "bxdialoglistview.h"
+class BxDialogListView : public QListView {
+   Q_OBJECT
+public slots:
+  void listBoxItemdoubleClicked( QListViewItem* i);
+
+public:
+ BxDialogListView(QWidget *parent);
+ ~BxDialogListView();
+
+};
+# 42 "bxbuilder.h" 2
+
+
+
+
+
+
+
+class BxbuilderApp : public QMainWindow
+{
+  Q_OBJECT
+
+  public:
+
+    BxbuilderApp();
+
+    ~BxbuilderApp();
+
+    void initActions();
+
+    void initMenuBar();
+
+
+    void initToolBar();
+
+    void initStatusBar();
+
+    void initDoc();
+
+    void initView();
+
+
+    bool queryExit();
+
+  int GenerateCode(QString filename, QString path);
+
+  int SaveProject(QString filename);
+
+  int LoadProject(QString filename);
+
+  int AddPicture(const QPixmap *pix, QString ofile);
+
+  int AddIcon(const QPixmap *pix, QString ofile);
+
+  int AddString(QString s, QString ofile);
+
+  public slots:
+
+
+    void slotFileNew();
+
+    void slotFileOpen();
+
+    void slotFileSave();
+
+    void slotFileSaveAs();
+
+    void slotFileClose();
+
+    void slotFileGenerate();
+
+    void slotFilePrint();
+
+    void slotFileQuit();
+
+
+    void slotEditCut();
+
+    void slotEditAdd();
+
+    void slotEditPaste();
+
+    void slotViewToolBar(bool toggle);
+
+    void slotViewStatusBar(bool toggle);
+
+
+    void slotHelpAbout();
+
+
+  private:
+
+
+
+
+
+
+    BxbuilderView *view;
+
+    BxDialogListView *dialoglist;
+
+
+
+    BxbuilderDoc *doc;
+
+
+    QPopupMenu *fileMenu;
+
+    QPopupMenu *editMenu;
+
+    QPopupMenu *viewMenu;
+
+    QPopupMenu *helpMenu;
+
+    QToolBar *fileToolbar;
+
+
+    QAction *fileNew;
+    QAction *fileOpen;
+    QAction *fileSave;
+    QAction *fileSaveAs;
+    QAction *fileClose;
+    QAction *fileGenerate;
+    QAction *filePrint;
+    QAction *fileQuit;
+
+    QAction *editCut;
+    QAction *editAdd;
+    QAction *editPaste;
+
+    QAction *viewToolBar;
+    QAction *viewStatusBar;
+
+    QAction *helpAboutApp;
+
+    QListViewItem *project;
+};
+# 31 "bxbuilder.cpp" 2
+
+# 1 "filesave.xpm" 1
+
+static const char *filesave[] = {
+"    14    14        3            1",
+". c #040404",
+"# c #808304",
+"a c #bfc2bf",
+"..............",
+".#.aaaaaaaa.a.",
+".#.aaaaaaaa...",
+".#.aaaaaaaa.#.",
+".#.aaaaaaaa.#.",
+".#.aaaaaaaa.#.",
+".#.aaaaaaaa.#.",
+".##........##.",
+".############.",
+".##.........#.",
+".##......aa.#.",
+".##......aa.#.",
+".##......aa.#.",
+"a............."
+};
+# 33 "bxbuilder.cpp" 2
+# 1 "fileopen.xpm" 1
+
+static const char *fileopen[] = {
+"    16    13        5            1",
+". c #040404",
+"# c #808304",
+"a c #bfc2bf",
+"b c #f3f704",
+"c c #f3f7f3",
+"aaaaaaaaa...aaaa",
+"aaaaaaaa.aaa.a.a",
+"aaaaaaaaaaaaa..a",
+"a...aaaaaaaa...a",
+".bcb.......aaaaa",
+".cbcbcbcbc.aaaaa",
+".bcbcbcbcb.aaaaa",
+".cbcb...........",
+".bcb.#########.a",
+".cb.#########.aa",
+".b.#########.aaa",
+"..#########.aaaa",
+"...........aaaaa"
+};
+# 34 "bxbuilder.cpp" 2
+# 1 "filenew.xpm" 1
+
+static const char * filenew[] = {
+"10 14 5 1",
+" 	c None",
+".	c #000000",
+"+	c #FFFFFF",
+"@	c #DCDCDC",
+"#	c #C0C0C0",
+".......   ",
+".++++@@.  ",
+".++++#+@. ",
+".++++#++@.",
+".++++#....",
+".+++++###.",
+".++++++++.",
+".++++++++.",
+".++++++++.",
+".++++++++.",
+".++++++++.",
+".++++++++.",
+".++++++++.",
+".........."};
+# 35 "bxbuilder.cpp" 2
+# 1 "generadlg.h" 1
+# 19 "generadlg.h"
+#define GENERADLG_H 
+
+
+# 1 "./generate.h" 1
+# 11 "./generate.h"
+#define FORMGENERATE_H 
+
+
+
+
+class QVBoxLayout;
+class QHBoxLayout;
+class QGridLayout;
+class QCheckBox;
+class QLabel;
+class QLineEdit;
+class QPushButton;
+
+class formGenerate : public QDialog
+{
+    Q_OBJECT
+
+public:
+    formGenerate( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    ~formGenerate();
+
+    QLabel* TextLabel1;
+    QPushButton* PushButton1;
+    QPushButton* PushButton2;
+    QPushButton* PushButton3;
+    QLineEdit* editPath;
+    QCheckBox* genUserFiles;
+    QCheckBox* genResource;
+
+public slots:
+    virtual void slotFindPath();
+
+protected:
+
+protected slots:
+    virtual void languageChange();
+};
+# 23 "generadlg.h" 2
+
+
+
+
+
+class generadlg : public formGenerate {
+   Q_OBJECT
+public:
+ generadlg(QWidget *parent=0, const char *name=0);
+ ~generadlg();
+public slots:
+
+  void slotFindPath();
+};
+# 36 "bxbuilder.cpp" 2
+
+#define PICTURE 0x01
+#define ICON 0x02
+
+typedef struct BX_RESOURCE_ELEMENT_HEADER {
+  char id[255];
+  int type;
+  int size;
+} BX_RESOURCE_ELEMENT_HEADER;
+
+BxbuilderApp::BxbuilderApp()
+{
+  setCaption(tr("Bxbuilder "));
+
+
+
+  initActions();
+  initMenuBar();
+  initToolBar();
+  initStatusBar();
+
+  initDoc();
+  initView();
+
+  QGridLayout *grid = new QGridLayout( view, 8, 8 );
+
+  dialoglist = new BxDialogListView(view);
+  project = new QListViewItem( dialoglist, __null );
+  project->setText(0, "New project");
+
+  connect( dialoglist, SIGNAL( doubleClicked( QListViewItem* ) ), dialoglist, SLOT( listBoxItemdoubleClicked( QListViewItem* ) ) );
+
+  grid->addMultiCellWidget( dialoglist, 8, 8, 7, 8 );
+
+  viewToolBar->setOn(true);
+  viewStatusBar->setOn(true);
+}
+
+BxbuilderApp::~BxbuilderApp()
+{
+  delete dialoglist;
+}
+
+
+void BxbuilderApp::initActions(){
+
+  QPixmap openIcon, saveIcon, newIcon;
+  newIcon = QPixmap(filenew);
+  openIcon = QPixmap(fileopen);
+  saveIcon = QPixmap(filesave);
+
+
+  fileNew = new QAction(tr("New File"), newIcon, tr("&New"), QAccel::stringToKey(tr("Ctrl+N")), this);
+  fileNew->setStatusTip(tr("Creates a new document"));
+  fileNew->setWhatsThis(tr("New File\n\nCreates a new document"));
+  connect(fileNew, SIGNAL(activated()), this, SLOT(slotFileNew()));
+
+  fileOpen = new QAction(tr("Open File"), openIcon, tr("&Open..."), 0, this);
+  fileOpen->setStatusTip(tr("Opens an existing document"));
+  fileOpen->setWhatsThis(tr("Open File\n\nOpens an existing document"));
+  connect(fileOpen, SIGNAL(activated()), this, SLOT(slotFileOpen()));
+
+  fileSave = new QAction(tr("Save File"), saveIcon, tr("&Save"), QAccel::stringToKey(tr("Ctrl+S")), this);
+  fileSave->setStatusTip(tr("Saves the actual document"));
+  fileSave->setWhatsThis(tr("Save File.\n\nSaves the actual document"));
+  connect(fileSave, SIGNAL(activated()), this, SLOT(slotFileSave()));
+
+  fileSaveAs = new QAction(tr("Save File As"), tr("Save &as..."), 0, this);
+  fileSaveAs->setStatusTip(tr("Saves the actual document under a new filename"));
+  fileSaveAs->setWhatsThis(tr("Save As\n\nSaves the actual document under a new filename"));
+  connect(fileSaveAs, SIGNAL(activated()), this, SLOT(slotFileSave()));
+
+  fileClose = new QAction(tr("Close File"), tr("&Close"), QAccel::stringToKey(tr("Ctrl+W")), this);
+  fileClose->setStatusTip(tr("Closes the actual document"));
+  fileClose->setWhatsThis(tr("Close File\n\nCloses the actual document"));
+  connect(fileClose, SIGNAL(activated()), this, SLOT(slotFileClose()));
+
+  fileGenerate = new QAction(tr("Generate Bx souece code"), tr("&Generate"), QAccel::stringToKey(tr("Ctrl+G")), this);
+  connect(fileGenerate, SIGNAL(activated()), this, SLOT(slotFileGenerate()));
+
+  filePrint = new QAction(tr("Print File"), tr("&Print"), QAccel::stringToKey(tr("Ctrl+P")), this);
+  filePrint->setStatusTip(tr("Prints out the actual document"));
+  filePrint->setWhatsThis(tr("Print File\n\nPrints out the actual document"));
+  connect(filePrint, SIGNAL(activated()), this, SLOT(slotFilePrint()));
+
+  fileQuit = new QAction(tr("Exit"), tr("E&xit"), QAccel::stringToKey(tr("Ctrl+Q")), this);
+  fileQuit->setStatusTip(tr("Quits the application"));
+  fileQuit->setWhatsThis(tr("Exit\n\nQuits the application"));
+  connect(fileQuit, SIGNAL(activated()), this, SLOT(slotFileQuit()));
+
+  editCut = new QAction(tr("Cut"), tr("Cu&t"), QAccel::stringToKey(tr("-")), this);
+  editCut->setStatusTip(tr("Cuts the selected dialogbox from the project"));
+  editCut->setWhatsThis(tr("Cut\n\nCuts the selected dialogbox from the project"));
+  connect(editCut, SIGNAL(activated()), this, SLOT(slotEditCut()));
+
+  editAdd = new QAction(tr("Add"), tr("&Add"), QAccel::stringToKey(tr("+")), this);
+  editAdd->setStatusTip(tr("Add Bx Dialog to the project"));
+  editAdd->setWhatsThis(tr("Add\n\nAdd Bx Dialog to the project"));
+  connect(editAdd, SIGNAL(activated()), this, SLOT(slotEditAdd()));
+
+  editPaste = new QAction(tr("Paste"), tr("&Paste"), QAccel::stringToKey(tr("Ctrl+V")), this);
+  editPaste->setStatusTip(tr("Pastes the clipboard contents to actual position"));
+  editPaste->setWhatsThis(tr("Paste\n\nPastes the clipboard contents to actual position"));
+  connect(editPaste, SIGNAL(activated()), this, SLOT(slotEditPaste()));
+
+  viewToolBar = new QAction(tr("Toolbar"), tr("Tool&bar"), 0, this, 0, true);
+  viewToolBar->setStatusTip(tr("Enables/disables the toolbar"));
+  viewToolBar->setWhatsThis(tr("Toolbar\n\nEnables/disables the toolbar"));
+  connect(viewToolBar, SIGNAL(toggled(bool)), this, SLOT(slotViewToolBar(bool)));
+
+  viewStatusBar = new QAction(tr("Statusbar"), tr("&Statusbar"), 0, this, 0, true);
+  viewStatusBar->setStatusTip(tr("Enables/disables the statusbar"));
+  viewStatusBar->setWhatsThis(tr("Statusbar\n\nEnables/disables the statusbar"));
+  connect(viewStatusBar, SIGNAL(toggled(bool)), this, SLOT(slotViewStatusBar(bool)));
+
+  helpAboutApp = new QAction(tr("About"), tr("&About..."), 0, this);
+  helpAboutApp->setStatusTip(tr("About the application"));
+  helpAboutApp->setWhatsThis(tr("About\n\nAbout the application"));
+  connect(helpAboutApp, SIGNAL(activated()), this, SLOT(slotHelpAbout()));
+
+}
+
+void BxbuilderApp::initMenuBar()
+{
+
+
+
+
+
+  fileMenu=new QPopupMenu();
+  fileNew->addTo(fileMenu);
+  fileOpen->addTo(fileMenu);
+  fileClose->addTo(fileMenu);
+  fileMenu->insertSeparator();
+  fileSave->addTo(fileMenu);
+  fileSaveAs->addTo(fileMenu);
+  fileMenu->insertSeparator();
+  fileGenerate->addTo(fileMenu);
+  fileMenu->insertSeparator();
+  filePrint->addTo(fileMenu);
+  fileMenu->insertSeparator();
+  fileQuit->addTo(fileMenu);
+
+
+
+  editMenu=new QPopupMenu();
+  editAdd->addTo(editMenu);
+  editCut->addTo(editMenu);
+  editPaste->addTo(editMenu);
+
+
+
+  viewMenu=new QPopupMenu();
+  viewMenu->setCheckable(true);
+  viewToolBar->addTo(viewMenu);
+  viewStatusBar->addTo(viewMenu);
+
+
+
+
+
+  helpMenu=new QPopupMenu();
+  helpAboutApp->addTo(helpMenu);
+
+
+
+  menuBar()->insertItem(tr("&File"), fileMenu);
+  menuBar()->insertItem(tr("&Edit"), editMenu);
+  menuBar()->insertItem(tr("&View"), viewMenu);
+  menuBar()->insertSeparator();
+  menuBar()->insertItem(tr("&Help"), helpMenu);
+
+}
+
+void BxbuilderApp::initToolBar()
+{
+
+
+  fileToolbar = new QToolBar(this, "file operations");
+  fileNew->addTo(fileToolbar);
+  fileOpen->addTo(fileToolbar);
+  fileSave->addTo(fileToolbar);
+  fileToolbar->addSeparator();
+  QWhatsThis::whatsThisButton(fileToolbar);
+
+}
+
+void BxbuilderApp::initStatusBar()
+{
+
+
+  statusBar()->message(tr("Ready."), 2000);
+}
+
+void BxbuilderApp::initDoc()
+{
+   doc=new BxbuilderDoc();
+}
+
+void BxbuilderApp::initView()
+{
+
+
+  view=new BxbuilderView(this, doc);
+  setCentralWidget(view);
+}
+
+bool BxbuilderApp::queryExit()
+{
+  int exit=QMessageBox::information(this, tr("Quit..."),
+                                    tr("Do your really want to quit?"),
+                                    QMessageBox::Ok, QMessageBox::Cancel);
+
+  if (exit==1)
+  {
+
+  }
+  else
+  {
+
+  };
+
+  return (exit==1);
+}
+
+
+
+
+
+
+void BxbuilderApp::slotFileNew()
+{
+  statusBar()->message(tr("Creating new project..."));
+  doc->newDoc();
+  dialoglist->clear();
+  project = new QListViewItem( dialoglist, __null );
+  project->setText(0, "New project");
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotFileOpen()
+{
+  QFileDialog fd;
+  QString s1, s2, s3, s4, snum, srec, path;
+
+  statusBar()->message(tr("Opening file..."));
+
+  QString fileName = fd.getOpenFileName(0,"*.bxp",this);
+  if (!fileName.isEmpty())
+  {
+    LoadProject(fileName);
+    QString s = fileName.section( '/', -1 );
+    project->setText(0, s);
+    project->setText(1, fileName);
+  }
+  else
+  {
+    statusBar()->message(tr("Opening aborted"), 2000);
+  }
+}
+
+
+void BxbuilderApp::slotFileSave()
+{
+  statusBar()->message(tr("Saving project under new filename..."));
+  QString fn = QFileDialog::getSaveFileName(0, "Project (*.bxp)", this);
+  if (!fn.isEmpty())
+  {
+    QString s = fn.section( ".bxp", -1 );
+    if(!s.isEmpty())
+      fn += ".bxp";
+    s = fn.section( '/', -1 );
+    project->setText(0, s);
+    project->setText(1, fn);
+    SaveProject(fn);
+
+  }
+  else
+  {
+    statusBar()->message(tr("Saving aborted"), 2000);
+  }
+
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotFileSaveAs()
+{
+  statusBar()->message(tr("Saving project under new filename..."));
+  QString fn = QFileDialog::getSaveFileName(0, "Project (*.bxp)", this);
+  if (!fn.isEmpty())
+  {
+    QString s = fn.section( ".bxp", -1 );
+    if(!s.isEmpty())
+      fn += ".bxp";
+    s = fn.section( '/', -1 );
+    project->setText(0, s);
+    project->setText(1, fn);
+    SaveProject(fn);
+
+  }
+  else
+  {
+    statusBar()->message(tr("Saving aborted"), 2000);
+  }
+
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotFileClose()
+{
+  statusBar()->message(tr("Closing file..."));
+
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotFileGenerate()
+{
+  generadlg gDlg;
+  QString fileName;
+  QString path;
+  statusBar()->message(tr("Generating..."));
+
+  gDlg.show();
+  QString s1 = project->text(1).section( '/', -1 );
+  QString s = project->text(1).section( "/"+s1, 0 );
+  gDlg.editPath->setText(s);
+
+  if( gDlg.exec() == QDialog::Accepted )
+  {
+    path = gDlg.editPath->text() + "/";
+
+    if(dialoglist->currentItem()!=0 && dialoglist->currentItem()!=project)
+    {
+      QListViewItem *e = dialoglist->currentItem();
+      fileName = e->text(1);
+      GenerateCode(fileName, path);
+    }
+    else
+    {
+      QString p1 = project->text(0).section( ".bxp", 0 );
+      QFile f1(path + p1 + QString(".bxr"));
+      if( f1.open( IO_WriteOnly ) == false)
+      {
+        printf("ERROR: cannot create new file.\n");
+        return;
+      }
+      f1.close();
+
+      QListViewItem *e = project->firstChild();
+      if(e)
+      {
+        while(e)
+        {
+          fileName = e->text(1);
+          GenerateCode(fileName, path);
+          e = e->nextSibling();
+        }
+      }
+    }
+  }
+
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotFilePrint()
+{
+  statusBar()->message(tr("Printing..."));
+  QPrinter printer;
+  if (printer.setup(this))
+  {
+    QPainter painter;
+    painter.begin(&printer);
+
+
+
+
+    painter.end();
+  };
+
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotFileQuit()
+{
+  statusBar()->message(tr("Exiting application..."));
+
+
+  if(doc->isModified())
+  {
+    if(queryExit())
+    {
+      qApp->quit();
+    }
+    else
+    {
+
+    };
+  }
+  else
+  {
+    qApp->quit();
+  };
+
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotEditCut()
+{
+  statusBar()->message(tr("Cutting selection..."));
+
+  if( dialoglist->currentItem() != 0 && dialoglist->currentItem() != project)
+    delete dialoglist->currentItem();
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotEditAdd()
+{
+  QFileDialog fd;
+  QString s1, s2, s3, s4, snum, srec, path;
+
+  statusBar()->message(tr("Adding BxDialogbox..."));
+
+  QString fileName = fd.getOpenFileName(0,"*.ui",this);
+  if (!fileName.isEmpty())
+  {
+    QListViewItem *element = new QListViewItem( project, dialoglist->lastItem());
+    QString s = fileName.section( '/', -1 );
+    element->setText(0, s);
+    element->setText(1, fileName);
+
+
+    QString message=tr("Added document: ")+fileName;
+    statusBar()->message(message, 2000);
+  }
+  else
+  {
+    statusBar()->message(tr("Adding aborted"), 2000);
+  }
+}
+
+void BxbuilderApp::slotEditPaste()
+{
+  statusBar()->message(tr("Inserting clipboard contents..."));
+
+  statusBar()->message(tr("Ready."));
+}
+
+
+void BxbuilderApp::slotViewToolBar(bool toggle)
+{
+  statusBar()->message(tr("Toggle toolbar..."));
+
+
+
+  if (toggle== false)
+  {
+    fileToolbar->hide();
+  }
+  else
+  {
+    fileToolbar->show();
+  };
+
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotViewStatusBar(bool toggle)
+{
+  statusBar()->message(tr("Toggle statusbar..."));
+
+
+
+  if (toggle == false)
+  {
+    statusBar()->hide();
+  }
+  else
+  {
+    statusBar()->show();
+  }
+
+  statusBar()->message(tr("Ready."));
+}
+
+void BxbuilderApp::slotHelpAbout()
+{
+
+  QMessageBox::about(this,tr("About..."),
+
+tr("//*****************************************************************************\n//* Copyright (C) 2003 by MPN A/S - Guided by vision(R) Lars Marcher Sandig   *\n//* All rights reserved.                                                      *\n//*****************************************************************************"));
+}
+
+
+int BxbuilderApp::GenerateCode(QString filename, QString path)
+{
+  QString s1, s2, s3, s4, snum, srec;
+  int i, id;
+  int genUserHeader=false, genUserCode=false;
+  QString idstr;
+
+  QDialog *creditForm = (QDialog *) QWidgetFactory::create( filename );
+
+
+  QObjectList *l = creditForm->queryList( );
+  QObjectListIt it( *l );
+  QObject *obj;
+
+
+  QString p1 = project->text(0).section( ".bxp", 0 );
+  s1 = creditForm->name();
+  s2 = s1 + ".h";
+  QFile f1(path + s1 + ".h");
+  QFile f2(path + s1 + ".c");
+  QFile f3(path + s1 + "Code.c");
+  QFile f4(path + s1 + "User.h");
+  QFile f5(path + s1 + "User.c");
+  QFile f6(path + p1 + "Bxr.h");
+
+  f1.open( IO_WriteOnly );
+ f2.open( IO_WriteOnly );
+ f3.open( IO_WriteOnly );
+
+  if( f4.open( IO_ReadOnly ) == false)
+ {
+    f4.open( IO_WriteOnly );
+    genUserHeader = true;
+  }
+  else
+    f4.close();
+
+ if( f5.open( IO_ReadOnly ) == false)
+  {
+    f5.open( IO_WriteOnly );
+    genUserCode = true;
+  }
+  else
+    f5.close();
+
+  f6.open( IO_WriteOnly | IO_Append);
+
+ QTextStream t1 ( &f1 );
+ QTextStream t2 ( &f2 );
+ QTextStream t3 ( &f3 );
+ QTextStream t4 ( &f4 );
+ QTextStream t5 ( &f5 );
+ QTextStream t6 ( &f6 );
+
+
+
+
+
+ t1 << "//Copyright (C) 2005 by MPN A/S - Guided by vision(R)\n";
+ t1 << "// " + s2 + '\n';
+ t1 << "#if !defined(" + s1.upper() + "_H)\n";
+ t1 << "#define " + s1.upper() + "_H\n";
+ t1 << "#include \"Bx.h\"\n";
+ t1 << "#include \"" + s1 + "User.h\"\n";
+
+ t2 << "//Copyright (C) 2005 by MPN A/S - Guided by vision(R)\n";
+ t2 << "// " + s1 + ".c\n";
+ t2 << "#include \"Bx.h\"\n";
+ t2 << "#include \"" + s1 + ".h\"\n\n";
+ t2 << "BOXSTRUCT " + s1 + "[] = {\n";
+  srec.sprintf("{%d,%d,%d,%d}", 0, 0, creditForm->width(), creditForm->height());
+ t2 << " {10000," + srec + ",DIALOG,\"\",BXS_VISIBLE,&" + s1 + "[1], NULL}\n";
+
+ t3 << "//Copyright (C) 2005 by MPN A/S - Guided by vision(R)\n";
+ t3 << "// " + s1 + "Code.c\n";
+ t3 << "#include \"Bx.h\"\n";
+ t3 << "#include \"" + s1 + ".h\"\n\n";
+
+ if( genUserHeader )
+ {
+  t4 << "//Copyright (C) 2005 by MPN A/S - Guided by vision(R)\n";
+  t4 << "// " + s1 + "User.h\n\n";
+  t4 << "extern BX_BOOL " + s1 + "UserInit(HBOX hBox,BX_LPARAM lParam);\n";
+  t4 << "extern BX_BOOL " + s1 + "UserUpdate(HBOX hBox);\n";
+  }
+
+ if( genUserCode )
+ {
+  t5 << "//Copyright (C) 2005 by MPN A/S - Guided by vision(R)\n";
+  t5 << "// " + s1 + "User.c\n";
+  t5 << "#include \"Bx.h\"\n";
+  t5 << "#include \"" + s1 + ".h\"\n\n";
+  t5 << "BX_BOOL " + s1 + "UserInit(HBOX hBox,BX_LPARAM lParam)\n";
+  t5 << "{\n";
+    t5 << "  return TRUE;\n";
+  t5 << "}\n\n";
+  t5 << "BX_BOOL " + s1 + "UserUpdate(HBOX hBox)\n";
+  t5 << "{\n";
+    t5 << "  return TRUE;\n";
+  t5 << "}\n\n";
+ }
+
+ i = 1;
+ while ( (obj = it.current()) != 0 )
+  {
+
+    ++it;
+    if (
+        ((QWidget*)obj)->isHidden() == FALSE &&
+        (strcmp ( obj->className(), "QPushButton" ) == 0 ||
+        strcmp ( obj->className(), "QLabel" ) == 0 ||
+        strcmp ( obj->className(), "QGroupBox" ) == 0 ||
+        strcmp ( obj->className(), "QListBox" ) == 0 ||
+        strcmp ( obj->className(), "QScrollBar" ) == 0 ||
+        strcmp ( obj->className(), "QCheckBox" ) == 0 ||
+        strcmp ( obj->className(), "QRadioButton" ) == 0)
+       )
+    {
+      s3 = obj->name();
+      s4.sprintf("%d",i++);
+     t1 << "#define " + s1.upper() + "_" + s3.upper() + " " + s4 + '\n';
+      if ( strcmp ( obj->className(), "QPushButton" ) == 0 ||
+          strcmp ( obj->className(), "QListBox" ) == 0 ||
+          strcmp ( obj->className(), "QScrollBar" ) == 0 ||
+          strcmp ( obj->className(), "QCheckBox" ) == 0 ||
+          strcmp ( obj->className(), "QRadioButton" ) == 0
+      )
+   t1 << "extern BX_BOOL " + s1 + "_" + s3 + "_Click(HBOX hBox);\n";
+   if( genUserCode )
+   {
+        if ( strcmp ( obj->className(), "QPushButton" ) == 0 ||
+            strcmp ( obj->className(), "QCheckBox" ) == 0 ||
+            strcmp ( obj->className(), "QRadioButton" ) == 0 ||
+            strcmp ( obj->className(), "QScrollBar" ) == 0 ||
+            strcmp ( obj->className(), "QListBox" ) == 0 )
+      {
+          t5 << "BX_BOOL " + s1 + "_" + s3 + "_Click(HBOX hBox)\n";
+     t5 << "{\n";
+          t5 << "  return TRUE;\n";
+     t5 << "}\n\n";
+        }
+   }
+
+      if (((QWidget*)obj)->parentWidget() != ((QWidget*)obj)->topLevelWidget())
+        srec.sprintf("{%d,%d,%d,%d}", (((QWidget*)obj)->parentWidget())->frameGeometry().left() + ((QWidget*)obj)->frameGeometry().left(),
+            (((QWidget*)obj)->parentWidget())->frameGeometry().top() + ((QWidget*)obj)->frameGeometry().top(),
+            (((QWidget*)obj)->parentWidget())->frameGeometry().left() + ((QWidget*)obj)->frameGeometry().right(),
+            (((QWidget*)obj)->parentWidget())->frameGeometry().top() + ((QWidget*)obj)->frameGeometry().bottom());
+      else
+        srec.sprintf("{%d,%d,%d,%d}", ((QWidget*)obj)->frameGeometry().left(),
+            ((QWidget*)obj)->frameGeometry().top(),
+            ((QWidget*)obj)->frameGeometry().right(),
+            ((QWidget*)obj)->frameGeometry().bottom());
+      if ( strcmp ( obj->className(), "QLabel" ) == 0)
+      {
+ int bbstrue = 0;
+        t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",STATIC,\"" + ((QLabel*)obj)->text() + "\",";
+        if(((QLabel*)obj)->frameShape() != QGroupBox::NoFrame)
+ {
+   t2 << "BXS_BORDER";
+   bbstrue++;
+ }
+        if ( ((QLabel*)obj)->pixmap() != 0)
+ {
+   if (bbstrue) t2 << "|";
+   t2 << "BSS_BITMAP";
+   bbstrue++;
+ }
+        if ( ((QLabel*)obj)->alignment() & AlignRight)
+ {
+   if (bbstrue) t2 << "|";
+          t2 << "BSS_RIGHT";
+   bbstrue++;
+ }
+        if ( ((QLabel*)obj)->alignment() & AlignHCenter)
+ {
+   if (bbstrue) t2 << "|";
+          t2 << "BSS_CENTER";
+   bbstrue++;
+ }
+ if (((QWidget*)obj)->isEnabled()==TRUE)
+ {
+   if (bbstrue) t2 << "|";
+   t2 << "BXS_VISIBLE,";
+ }
+ else t2 << ",";
+
+      }
+      if ( strcmp ( obj->className(), "QGroupBox" ) == 0)
+      {
+ if (((QWidget*)obj)->isEnabled()==TRUE)
+ {
+   t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",STATIC,\"" + ((QGroupBox*)obj)->title() + "\",BSS_WHITEFRAME|BXS_VISIBLE,";
+ }
+ else
+ {
+   t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",STATIC,\"" + ((QGroupBox*)obj)->title() + "\",BSS_WHITEFRAME,";
+ }
+      }
+      if ( strcmp ( obj->className(), "QListBox" ) == 0)
+      {
+    if (((QWidget*)obj)->isEnabled()==TRUE)
+    {
+     t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",LIST,\"" "\",BXS_VISIBLE,";
+    }
+    else
+    {
+     t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",LIST,\"" "\",";
+    }
+        t3 << "BXLISTSTRUCT " + s1 + "_" + s3 + "List;\n";
+      }
+      if ( strcmp ( obj->className(), "QScrollBar" ) == 0)
+      {
+ if (((QWidget*)obj)->isEnabled()==TRUE)
+ {
+        t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",STATIC,\"" "\",BXS_VISIBLE,";
+ }
+ else
+ {
+   t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",STATIC,\"" "\",";
+ }
+        t3 << "BXSCROLLBARSTRUCT " + s1 + "_" + s3 + "Scroll;\n";
+      }
+      if ( strcmp ( obj->className(), "QPushButton" ) == 0)
+      {
+        if ( ((QButton*)obj)->pixmap() == 0)
+          t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",BUTTON,\"" + ((QButton*)obj)->text() + "\",BBS_PUSHBUTTON";
+        else
+          t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",BUTTON,\"" + ((QButton*)obj)->text() + "\",BBS_BITMAP";
+ if (((QWidget*)obj)->isEnabled()==TRUE)
+   t2 << "|BXS_VISIBLE,";
+ else
+   t2 << ",";
+      }
+      if ( strcmp ( obj->className(), "QCheckBox" ) == 0)
+      {
+ t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",BUTTON,\"" + ((QButton*)obj)->text() + "\",BBS_CHECKBOX";
+ if (((QWidget*)obj)->isEnabled()==TRUE)
+   t2 << "|BXS_VISIBLE,";
+ else
+   t2 << ",";
+      }
+      if ( strcmp ( obj->className(), "QRadioButton" ) == 0)
+      {
+ t2 << " ,{" + s1.upper() + "_" + s3.upper() + "," + srec + ",BUTTON,\"" + ((QButton*)obj)->text() + "\",BBS_RADIOBOX";
+ if (((QWidget*)obj)->isEnabled()==TRUE)
+   t2 << "|BXS_VISIBLE,";
+ else
+   t2 << ",";
+      }
+      t2 << "&" + s1 + "[" + snum.setNum(i) + "], &" + s1 + "[0]}\n";
+    }
+  }
+ t2 << " ,{BXID_STATIC,{0,0,0,0},STATIC,\"\",0,";
+ t2 << "NULL, &" + s1 + "[0]}\n";
+
+ t2 << "};\n\n";
+
+    t2 << "BX_BOOL " + s1 + "Proc(HBOX hBox, BX_UINT uMsg	,BX_WPARAM wParam, BX_LPARAM lParam)\n";
+    t2 << "{\n";
+   t2 << " switch(uMsg)\n";
+    t2 << "	{\n";
+    t2 << "		case BM_UPDATE:\n";
+    t2 << "			{\n";
+    t2 << "				" + s1 + "Update(hBox);\n";
+    t2 << "				return " + s1 + "UserUpdate(hBox);\n";
+    t2 << "				break;\n";
+    t2 << "			}\n";
+    t2 << "		case BM_INITDIALOG:\n";
+    t2 << "			{\n";
+    t2 << "				" + s1 + "Init(hBox);\n";
+    t2 << "				return " + s1 + "UserInit(hBox,lParam);\n";
+    t2 << "				break;\n";
+    t2 << "			}\n";
+    t2 << "		case BM_COMMAND:\n";
+    t2 << "			{\n";
+    t2 << "				switch(BX_LOWORD(wParam))\n";
+    t2 << "				{\n";
+    QObjectListIt it2( *l );
+    while ( (obj = it2.current()) != 0 )
+    {
+      ++it2;
+   s3 = obj->name();
+      if (
+           ((QWidget*)obj)->isHidden() == FALSE &&
+           (strcmp ( obj->className(), "QPushButton" ) == 0 ||
+           strcmp ( obj->className(), "QListBox" ) == 0 ||
+           strcmp ( obj->className(), "QScrollBar" ) == 0 ||
+           strcmp ( obj->className(), "QCheckBox" ) == 0 ||
+           strcmp ( obj->className(), "QRadioButton" ) == 0)
+         )
+      {
+     t2 << "         case " + s1.upper() + "_" + s3.upper() + ":\n";
+    t2 << "             return " + s1 + "_" + s3 + "_Click(hBox);\n";
+      }
+    }
+    t2 << "				}\n";
+    t2 << "				break;\n";
+    t2 << "			}\n";
+    t2 << "		default:\n";
+    t2 << "			return(DefBoxProc(hBox,uMsg,wParam,lParam));\n";
+    t2 << "	}\n";
+    t2 << "	return 0L;\n";
+    t2 << "}\n";
+
+  t1 << "extern BX_CHAR " + s1 + "Text[][MAXLANGUAGE][255];\n";
+  t1 << "extern BOXSTRUCT " + s1 + "[];\n";
+  t1 << "extern BX_BOOL " + s1 + "Proc(HBOX hBox, BX_UINT uMsg ,BX_WPARAM wParam, BX_LPARAM lParam);\n";
+  t1 << "extern BX_VOID " + s1 + "Update(HBOX hBox);\n";
+  t1 << "extern BX_VOID " + s1 + "Init(HBOX hBox);\n";
+
+  t1 << "#endif // " + s1.upper() + "_H\n";
+
+  t3 << "BX_VOID " + s1 + "Init(HBOX hBox)\n";
+  t3 << "{\n";
+    QObjectListIt it3( *l );
+    while ( (obj = it3.current()) != 0 )
+    {
+      ++it3;
+
+      if(((QWidget*)obj)->isHidden() == FALSE)
+      {
+        s3 = obj->name();
+        if ( strcmp ( obj->className(), "QLabel" ) == 0)
+        {
+          if ( ((QLabel*)obj)->pixmap() != 0)
+          {
+            if (((QLabel*)obj)->pixmap()->mask() != 0)
+            {
+              id = AddIcon(((QLabel*)obj)->pixmap(), path+p1+QString(".bxr"));
+              idstr.sprintf("%d", id);
+              t6 << "#define " + s1.upper() + "_" + s3.upper() + "_ICON " + idstr + '\n';
+              t3 << "  //ICON ID = " + idstr + "\n";
+              t3 << "  BxSendMessage(BxGetDlgItem(hBox, " + s1.upper() + "_" + s3.upper() + "), BSTM_SETICON, (BX_WPARAM)BxResourceLoadBxIcon(" + idstr + ", \"" + "data/" + p1 + QString(".bxr") + "\"), 0);\n";
+            }
+            else
+            {
+              id = AddPicture(((QLabel*)obj)->pixmap(), path+p1+QString(".bxr"));
+              idstr.sprintf("%d", id);
+              t6 << "#define " + s1.upper() + "_" + s3.upper() + "_PIXMAP " + idstr + '\n';
+              t3 << "  //PIXMAP ID = " + idstr + "\n";
+              t3 << "  BxSendMessage(BxGetDlgItem(hBox, " + s1.upper() + "_" + s3.upper() + "), BSTM_SETIMAGE, (BX_WPARAM)BxResourceLoadBxBitmap(" + idstr + ", \"" + "data/" + p1 + QString(".bxr") + "\"), 0);\n";
+            }
+          }
+          else
+          {
+
+
+
+          }
+        }
+        if ( strcmp ( obj->className(), "QPushButton" ) == 0)
+        {
+          if ( ((QButton*)obj)->pixmap() != 0)
+          {
+            if (((QLabel*)obj)->pixmap()->mask() != 0)
+            {
+              id = AddIcon(((QLabel*)obj)->pixmap(), path+p1+QString(".bxr"));
+              idstr.sprintf("%d", id);
+              t6 << "#define " + s1.upper() + "_" + s3.upper() + "_ICON " + idstr + '\n';
+              t3 << "  //ICON ID = " + idstr + "\n";
+              t3 << "  BxSendMessage(BxGetDlgItem(hBox, " + s1.upper() + "_" + s3.upper() + "), BSTM_SETIMAGE, (BX_WPARAM)BxResourceLoadBxIcon(" + idstr + ", \"" + "data/" + p1 + QString(".bxr") + "\"), 0);\n";
+            }
+            else
+            {
+              id = AddPicture(((QButton*)obj)->pixmap(), path+p1+QString(".bxr"));
+              idstr.sprintf("%d", id);
+              t6 << "#define " + s1.upper() + "_" + s3.upper() + "_PIXMAP " + idstr + '\n';
+              t3 << "  //PIXMAP ID = " + idstr + "\n";
+              t3 << "  BxSendMessage(BxGetDlgItem(hBox, " + s1.upper() + "_" + s3.upper() + "), BBM_SETBITMAP, (BX_WPARAM)BxResourceLoadBxBitmap(" + idstr + ", \"" + "data/" + p1 + QString(".bxr") + "\"), 0);\n";
+            }
+          }
+          else
+          {
+
+
+
+          }
+        }
+        if ( strcmp ( obj->className(), "QRadioButton" ) == 0)
+        {
+
+
+
+          if (((QRadioButton*)obj)->isOn())
+          {
+            t3 << "  BxSetCheck(BxGetDlgItem(hBox, " + s1.upper() + "_" + s3.upper() + "), TRUE);\n";
+          }
+        }
+        if ( strcmp ( obj->className(), "QCheckBox" ) == 0)
+        {
+
+
+
+        }
+        if ( strcmp ( obj->className(), "QGroupBox" ) == 0)
+        {
+
+
+
+        }
+        if (strcmp ( obj->className(), "QListBox" ) == 0)
+        {
+          t3 << "  BxList_Create(BxGetDlgItem(hBox, " + s1.upper() + "_" + s3.upper() + "), &" + s1 + "_" + s3 + "List, 0);\n";
+        }
+        if (strcmp ( obj->className(), "QScrollBar" ) == 0)
+        {
+          t3 << "  BxScrollBar_Create(BxGetDlgItem(hBox, " + s1.upper() + "_" + s3.upper() + "), &" + s1 + "_" + s3 + "Scroll, " + (((QScrollBar*)obj)->orientation() == Qt::Horizontal ? "BSB_HORIZONTAL);\n" : "BSB_VERTICAL);\n") ;
+        }
+      }
+    }
+  t3 << "}\n\n";
+
+  t3 << "BX_VOID " + s1 + "Update(HBOX hBox)\n";
+  t3 << "{\n";
+  t3 << "}\n\n";
+
+
+  f1.close();
+  f2.close();
+  f3.close();
+
+   if( genUserHeader )
+     f4.close( );
+    if( genUserCode )
+      f5.close( );
+    f6.close();
+    delete l;
+
+  return 0;
+}
+
+int BxbuilderApp::AddPicture(const QPixmap *pix, QString ofile){
+  QFile f1(ofile);
+  BX_RESOURCE_ELEMENT_HEADER rhd;
+  int t,w,h,bpl, count=0;
+  short d,bpp;
+  QImage img, img2;
+
+  img = *pix;
+  img.convertDepth(32);
+
+  if( f1.open( IO_ReadOnly ) == true)
+  {
+    f1.readBlock((char*)&rhd, sizeof(BX_RESOURCE_ELEMENT_HEADER));
+    while(f1.atEnd()==false)
+    {
+      if(rhd.type == 0x01)
+      {
+        f1.readBlock((char*)&t, sizeof(int));
+        f1.readBlock((char*)&w, sizeof(int));
+        f1.readBlock((char*)&h, sizeof(int));
+        f1.readBlock((char*)&bpl, sizeof(int));
+        f1.readBlock((char*)&d, sizeof(short));
+        f1.readBlock((char*)&bpp, sizeof(short));
+        img2.create(w,h,d);
+        f1.readBlock((char*)img2.bits(), rhd.size-20);
+        if(img==img2)
+        {
+
+           f1.close();
+           return atoi(rhd.id);
+        }
+      }
+      else
+      {
+        if(f1.at(f1.at()+rhd.size)==FALSE)
+          exit(0);
+      }
+      count++;
+      f1.readBlock((char*)&rhd, sizeof(BX_RESOURCE_ELEMENT_HEADER));
+    }
+  }
+  f1.close();
+
+  if( f1.open( IO_WriteOnly | IO_Append) == false)
+  {
+    printf("ERROR: cannot create new file.\n");
+    return -2;
+  }
+
+  unsigned char *idat;
+  int dat;
+
+
+  sprintf(rhd.id,"%d", count);
+  rhd.type = 0x01;
+  rhd.size = img.numBytes() + 20;
+  f1.writeBlock((char*)&rhd, sizeof(BX_RESOURCE_ELEMENT_HEADER));
+
+  dat = 0;
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = img.width();
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = img.height();
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = img.bytesPerLine();
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = img.depth();
+  f1.writeBlock((char*)&dat, sizeof(short));
+  f1.writeBlock((char*)&dat, sizeof(short));
+  idat = img.bits();
+  for(int i=0;i<img.numBytes();i++)
+    f1.writeBlock((char*)idat++, 1);
+
+  f1.close();
+
+  return atoi(rhd.id);
+}
+
+int BxbuilderApp::AddIcon(const QPixmap *pix, QString ofile){
+  QFile f1(ofile);
+  BX_RESOURCE_ELEMENT_HEADER rhd;
+  int t,w,h,bpl, count=0;
+  short d,bpp;
+  QImage img, imgm, img2;
+
+  img = *pix;
+  img.convertDepth(32);
+
+  if(pix->mask()!=0)
+  {
+    imgm = pix->mask()->convertToImage().convertDepth(32);
+  }
+
+  if( f1.open( IO_ReadOnly ) == true)
+  {
+    f1.readBlock((char*)&rhd, sizeof(BX_RESOURCE_ELEMENT_HEADER));
+    while(f1.atEnd()==false)
+    {
+      if(rhd.type == 0x02)
+      {
+        f1.readBlock((char*)&t, sizeof(int));
+        f1.readBlock((char*)&w, sizeof(int));
+        f1.readBlock((char*)&h, sizeof(int));
+        f1.readBlock((char*)&bpl, sizeof(int));
+        f1.readBlock((char*)&d, sizeof(short));
+        f1.readBlock((char*)&bpp, sizeof(short));
+        img2.create(w,h,d);
+        f1.readBlock((char*)img2.bits(), (rhd.size/2)-20);
+        if(imgm==img2)
+        {
+
+          f1.close();
+          return atoi(rhd.id);
+        }
+        else
+          f1.at(f1.at()+(rhd.size/2));
+      }
+      else
+      {
+        if(f1.at(f1.at()+rhd.size)==FALSE)
+          exit(0);
+      }
+      count++;
+      f1.readBlock((char*)&rhd, sizeof(BX_RESOURCE_ELEMENT_HEADER));
+    }
+  }
+  f1.close();
+
+  if( f1.open( IO_WriteOnly | IO_Append) == false)
+  {
+    printf("ERROR: cannot create new file.\n");
+    return -2;
+  }
+
+  unsigned char *idat;
+  int dat;
+
+
+  sprintf(rhd.id,"%d", count);
+  rhd.type = 0x02;
+  rhd.size = (img.numBytes() + 20) * 2;
+  f1.writeBlock((char*)&rhd, sizeof(BX_RESOURCE_ELEMENT_HEADER));
+
+  dat = 0;
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = imgm.width();
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = imgm.height();
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = imgm.bytesPerLine();
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = imgm.depth();
+  f1.writeBlock((char*)&dat, sizeof(short));
+  f1.writeBlock((char*)&dat, sizeof(short));
+  idat = imgm.bits();
+  for(int i=0;i<imgm.numBytes();i++)
+    f1.writeBlock((char*)idat++, 1);
+
+
+  dat = 0;
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = img.width();
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = img.height();
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = img.bytesPerLine();
+  f1.writeBlock((char*)&dat, sizeof(int));
+  dat = img.depth();
+  f1.writeBlock((char*)&dat, sizeof(short));
+  f1.writeBlock((char*)&dat, sizeof(short));
+  idat = img.bits();
+  for(int i=0;i<img.numBytes();i++)
+    f1.writeBlock((char*)idat++, 1);
+
+  f1.close();
+  return atoi(rhd.id);
+}
+
+int BxbuilderApp::AddString(QString s, QString ofile){
+  QFile f1(ofile);
+  QTextStream s1(&f1);
+  int count=0;
+
+  if( f1.open( IO_ReadOnly ) == true)
+  {
+    while(s1.eof()==false)
+    {
+      if(s == s1.readLine())
+      {
+        f1.close();
+        return count;
+      }
+      count++;
+    }
+  }
+  f1.close();
+
+  if( f1.open( IO_WriteOnly | IO_Append) == false)
+  {
+    printf("ERROR: cannot create new bxl-file.\n");
+    return -2;
+  }
+
+  s1<<s + "\n";
+
+  f1.close();
+
+  return count;
+}
+
+
+int BxbuilderApp::SaveProject(QString filename)
+{
+  QFile f1(filename);
+  f1.open( IO_WriteOnly );
+
+  QTextStream t1 ( &f1 );
+
+  QListViewItem *e = project->firstChild();
+  if(e)
+  {
+    while(e)
+    {
+      t1 << e->text(1) + "\n";
+      e = e->nextSibling();
+    }
+  }
+
+  f1.close();
+  return TRUE;
+}
+
+int BxbuilderApp::LoadProject(QString filename)
+{
+  QString fileName, s, s3;
+  QListViewItem *element;
+  QFile f1(filename);
+  f1.open( IO_ReadOnly );
+  QString s1 = filename.section( "/", -1 );
+  QString s2 = filename.section( "/"+s1, 0 );
+
+  QTextStream t1 ( &f1 );
+
+  dialoglist->clear();
+  project = new QListViewItem( dialoglist, __null );
+  project->setText(0, "New project");
+
+  while(!f1.atEnd())
+  {
+    fileName = t1.readLine();
+    element = new QListViewItem( project, dialoglist->lastItem() );
+    s = fileName.section( '/', -1 );
+    element->setText(0, s);
+    s3 = s2 + "/" + s;
+    element->setText(1, s3);
+  }
+  f1.close();
+  return TRUE;
+}

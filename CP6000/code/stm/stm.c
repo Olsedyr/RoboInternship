@@ -755,7 +755,7 @@ void *stm_task(void * argument )
 		for (i=0;i<tworkcell->dios.maxidx;i++)
 			readAdvantys2((tmpnDIO*)&tworkcell->dios.dio[i]);
     rdtscll(ttstop);
-		if(((float)(ttstop-ttstart)/(float)tdiff)>0.02)
+		if(rs_param.io_debug>=2 && ((float)(ttstop-ttstart)/(float)tdiff)>0.02)
 			printf("readAdvantys executed in %010Ld clk %f\n",(ttstop-ttstart),(float)(ttstop-ttstart)/(float)tdiff);
     //TODO filter on input
 //*****************************************************
@@ -835,7 +835,7 @@ void *stm_task(void * argument )
 			writeAdvantys2((tmpnDIO*)&tworkcell->dios.dio[i]);
     rdtscll(ttstop);
     usleep(800);
-    if(((float)(ttstop-ttstart)/(float)tdiff)>0.02)
+    if(rs_param.io_debug>=2 && ((float)(ttstop-ttstart)/(float)tdiff)>0.02)
       printf("writeAdvantys executed in %010Ld clk %f\n",(ttstop-ttstart),(float)(ttstop-ttstart)/(float)tdiff);
     stop = times(NULL);
     diff=(float)(stop-start)/(float)sysconf(_SC_CLK_TCK);

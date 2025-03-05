@@ -6,10 +6,10 @@ export LANG="da_DK.ISO8859-1"
 # -------------------------------------------------
 TOPDIR = ../
 INCLUDES = -I./ -I$(TOPDIR)Bx -I$(TOPDIR)hmi -I$(TOPDIR)io -I$(TOPDIR)stm -I$(TOPDIR)libmpnrobot/libmpnrobot
-CFLAGS = -Wall -Wstrict-prototypes -O0 -pg -save-temps -g3 
-CCFLAGS = -Wall -Wstrict-prototypes -O0 -pg -save-temps -g3 
+CFLAGS = -Wall -Wstrict-prototypes -O0 -pg -save-temps -g3 -m32
+CCFLAGS = -Wall -Wstrict-prototypes -O0 -pg -save-temps -g3 -m32
 #CCFLAGS = -O2 -fomit-frame-pointer
-LDFLAGS = -L$(TOPDIR)Bx  -L$(TOPDIR)hmi -L$(TOPDIR)io -L$(TOPDIR)stm -L/usr/X11R6/lib -L$(TOPDIR)libmpnrobot/libmpnrobot -lstdc++
+LDFLAGS = -L$(TOPDIR)Bx  -L$(TOPDIR)hmi -L$(TOPDIR)io -L$(TOPDIR)stm -L/usr/X11R6/lib -L$(TOPDIR)libmpnrobot/libmpnrobot -lstdc++ -m32
 
 #CC=gcc
 CPP=g++
@@ -235,7 +235,8 @@ clean:
 		*~ \
 		$(OBJDIR)robostacker \
 		*.s \
-		*.i 
+		*.i \
+		*.ii
 	$(CLEAN)
 
 distclean:	clean

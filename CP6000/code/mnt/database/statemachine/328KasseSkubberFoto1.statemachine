@@ -1,0 +1,34 @@
+STATEMACHINEVERSION 3
+Name=KasseSkubberFoto1
+linkValue=Foto test ConveyorInFotoKassePakker
+Link=parent Parent
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SETSTATE ST_RESET
+END
+
+State=ST_ON
+  TEST Foto = 0
+    SETSTATE ST_OFF
+  ENDTEST
+END
+
+State=ST_OFF
+  TEST Foto = 1
+    SETSTATE ST_ON
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST Foto = 1
+    SETSTATE ST_ON
+  ELSE
+    SETSTATE ST_OFF
+  ENDTEST
+END

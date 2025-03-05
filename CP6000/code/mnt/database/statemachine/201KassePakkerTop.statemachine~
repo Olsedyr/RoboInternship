@@ -1,0 +1,397 @@
+STATEMACHINEVERSION 3
+Name=KassePakkerTop
+Delaystop=5000000
+Input=Bakke1 "KassePakker bakkeKlar1"
+Input=Bakke2 "KassePakker bakkeKlar2"
+Input=Kortbufferskubinde "KassePakker kortBufferSkub+"
+Input=Kortbufferskubude "KassePakker kortBufferSkub-"
+Input=Langbufferskubude "KassePakker langBufferSkub+"
+Input=Langbufferskubinde "KassePakker langBufferSkub-"
+Input=Bund1open "KassePakker bundOpen1+"
+Input=Bund1closed "KassePakker bundOpen1-"
+Input=Bund2open "KassePakker bundOpen2+"
+Input=Bund2closed "KassePakker bundOpen2-"
+Input=Molestind "KassePakker ProduktMolester-"
+Output=Kortskub "KassePakker kortBufferSkub"
+Output=Langskub "KassePakker langBufferSkub"
+Output=Langind "KassePakker langBufferInd"
+Output=Openbund1 "KassePakker bundOpen1"
+Output=Openbund2 "KassePakker bundOpen2"
+Output=Closebund1 "KassePakker bundClose1"
+Output=Closebund2 "KassePakker bundClose2"
+Output=Molestprodukt "KassePakker MolestProdukt"
+Link=KassePakkerBottom
+Link=WorkCell
+Link=Parent
+Link=KassePakkerMotor
+Timeout=WaitTwoDelay 180000
+Timeout=WaitCloseF 250000
+Timeout=WaitCloseS 250000
+Timeout=WaitFirst 5000000
+Timeout=WaitCloseFL 120000
+Timeout=StartDelay 1200000
+Timeout=ErrDelay 3000000
+Timeout=TimeMolestDown 500000
+Timeout=WaitMolest 250000
+Value=errorCode 0
+Value=numpush 0
+Value=diffpush 1
+Value=maxpush 3
+Value=layer 0
+Value=difflayer 1
+Value=maxlayers 2
+Value=zeronum 0
+Value=reboot 1
+Value=one 1
+Value=two 2
+Value=three 3
+
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_ERROR
+END
+
+State=ST_IDLE
+  SET Openbund1 0
+  SET Openbund2 0
+  SET Kortskub 0
+  SET Langskub 0
+  SET Langind 0
+  SET Closebund1 0
+  SET Closebund2 0
+  SET Molestprodukt 0
+  TEST Parent = ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST
+  TEST reboot = zeronum
+    TEST errorCode = zeronum 
+      SET errorCode 1000
+    ENDTEST
+    SETSTATE ST_STARTDUMP
+  ENDTEST
+END
+
+State=ST_STARTDUMP
+  SET numpush 0
+  SET layer 0
+  TEST KassePakkerBottom = ST_IDLE
+    SET Openbund1 1
+    SET Openbund2 1
+    SET Kortskub 0
+    SET Langskub 0
+    SET Langind 1
+    SET Closebund1 0
+    SET Closebund2 0
+    SETSTATE ST_DUMP
+  ELSE
+    SET Openbund1 0
+    SET Openbund2 0
+    SET Kortskub 0
+    SET Langskub 0
+    SET Langind 1
+    SET Closebund1 0
+    SET Closebund2 0
+  ENDTEST
+END
+
+State=ST_DUMPOK
+  TEST Kortbufferskubude = 1
+    SET Closebund1 0
+    SET Closebund2 0
+    SET Openbund1 0
+    SET Openbund2 0
+    SET Langskub 0
+    SET Langind 1
+    SET Kortskub 0
+    SETSTATE ST_DUMPWAITDONE
+  ENDTEST
+END
+
+State=ST_DUMP
+  TEST Bund1open = 1
+  AND Bund2open = 1
+    SET Openbund1 0
+    SET Openbund2 0
+    SET Kortskub 1
+    SET Langskub 0
+    SET Langind 1
+    SET Closebund1 0
+    SET Closebund2 0
+    SETSTATE ST_DUMPOK
+  ENDTEST
+END
+
+State=ST_DUMPWAITDONE
+  TEST Kortbufferskubinde = 1
+  AND Langbufferskubinde = 1
+    SET Closebund1 0
+    SET Closebund2 0
+    SET Langind 1
+    SET Langskub 0
+    SET reboot 3
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_GET1
+  SET Langind 1
+  SET Langskub 0
+  TEST WorkCell = ST_IDLE
+  OR WorkCell = ST_PAUSED
+  OR WorkCell = ST_PAUSING
+  OR WorkCell = ST_STOPPING
+    SET reboot 1
+    SETSTATE ST_IDLE
+  ELSE
+    TEST Bakke1 = 1
+      SETSTATE ST_GET2_TEST
+    ELSE
+      TEST Bakke2 = 1
+      AND KassePakkerMotor = ST_RUN
+        TIMEOUT WaitFirst ST_GET1_TEST
+        SETSTATE ST_GET1_TEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GET1_TEST
+  TEST Bakke1 = 1
+    SETSTATE ST_GET2_TEST
+  ELSE
+    TEST KassePakkerMotor != ST_RUN
+      SETSTATE ST_GET1   
+    ENDTEST
+    TEST WaitFirst = 1
+      TEST Bakke2 = 1
+        SET errorCode 1002
+        SET reboot 1
+        SETSTATE ST_IDLE
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GET2_TEST
+  TEST WorkCell = ST_IDLE
+  OR WorkCell = ST_PAUSED
+  OR WorkCell = ST_PAUSING
+  OR WorkCell = ST_STOPPING
+    SET reboot 1
+    SETSTATE ST_IDLE
+  ELSE
+    TEST Bakke2 = 1
+      TIMEOUT WaitTwoDelay ST_GET2 
+      SETSTATE ST_GET2
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GET2
+  TEST WaitTwoDelay = 1
+    TEST Bakke2 = 1
+    AND KassePakkerMotor = ST_RUN
+      CALC numpush = diffpush + numpush
+      SET Langind 0
+      SET Langskub 1
+      TIMEOUT ErrDelay ST_PUSHOVER
+      SETSTATE ST_PUSHOVER
+    ELSE
+      SETSTATE ST_GET2_TEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_PUSHOVER
+  TEST Langbufferskubude = 1
+    TEST numpush >= maxpush
+      SET numpush 0
+      SET Kortskub 1
+      SETSTATE ST_PREPARE
+    ELSE
+      SET Langskub 0
+      SET Langind 1
+      SETSTATE ST_RETURN
+    ENDTEST
+  ELSE
+    TEST ErrDelay = 1
+      SET errorCode 1005
+      SET reboot 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_PREPARE
+  TEST Kortbufferskubude = 1
+    SETSTATE ST_FULL
+  ENDTEST
+END
+
+State=ST_RETURN
+  TEST Kortbufferskubinde = 1
+  AND Langbufferskubinde = 1
+    SETSTATE ST_GET1
+  ENDTEST
+END
+
+State=ST_DONE
+  TEST WorkCell = ST_IDLE
+  OR WorkCell = ST_PAUSED
+  OR WorkCell = ST_PAUSING
+  OR WorkCell = ST_STOPPING
+    SET reboot 1
+    SETSTATE ST_IDLE
+  ELSE
+    TEST Bund1closed = 1
+    AND Bund2closed = 1
+      SET Closebund1 0
+      SET Closebund2 0
+      SETSTATE ST_RETURN
+    ELSE
+      TEST ErrDelay = 1
+        SET errorCode 1004
+        SET reboot 0
+        SETSTATE ST_IDLE
+      ENDTEST
+    ENDTEST
+  ENDTEST 
+END
+
+State=ST_FOO
+  TEST WaitCloseS = 1
+    SET Langskub 0
+    SET Langind 1
+    SET Closebund1 1
+    SET Closebund2 1
+    TIMEOUT ErrDelay ST_DONE
+    SETSTATE ST_DONE
+  ENDTEST
+END
+
+State=ST_BAR
+  TEST WaitCloseF = 1
+  AND Molestind = 1
+    SET layer 0
+    TIMEOUT WaitCloseS ST_FOO
+    SETSTATE ST_FOO
+  ENDTEST
+END
+
+State=ST_NEXTLAYER
+  TEST Bund1closed = 1
+  AND Bund2closed = 1
+    SET Closebund1 0
+    SET Closebund2 0
+    SETSTATE ST_RETURN
+  ENDTEST 
+END
+
+State=ST_BARFL
+  TEST WaitCloseFL = 1
+  AND Molestind = 1
+    SET Closebund1 1
+    SET Closebund2 1
+    SETSTATE ST_NEXTLAYER
+  ENDTEST
+END
+
+State=ST_FULL
+  TEST KassePakkerBottom = ST_READY
+    SET Molestprodukt 1
+    TIMEOUT TimeMolestDown ST_OPEN
+    SETSTATE ST_OPEN
+  ENDTEST
+  TEST WorkCell = ST_IDLE
+  OR WorkCell = ST_PAUSED
+  OR WorkCell = ST_PAUSING
+  OR WorkCell = ST_STOPPING
+    SET reboot 2
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_OPEN
+  TEST TimeMolestDown = 1
+    SET Closebund1 0
+    SET Closebund2 0
+    SET Openbund1 1
+    SET Openbund2 1
+    CALC layer = difflayer + layer
+    SETSTATE ST_TESTOK
+  ENDTEST
+END
+
+State=ST_TESTOK
+  TEST Bund1open = 1
+  AND Bund2open = 1
+    SET Openbund1 0
+    SET Openbund2 0
+    TIMEOUT WaitMolest ST_WAITMOLEST
+    SETSTATE ST_WAITMOLEST
+  ENDTEST
+END
+
+State=ST_WAITMOLEST
+  TEST WaitMolest = 1 
+    SET Molestprodukt 0
+    SET Kortskub 0
+    SET Langskub 0
+    SET Langind 1
+    TEST layer >= maxlayers
+      TIMEOUT WaitCloseF ST_BAR
+      SETSTATE ST_BAR
+    ELSE
+      TIMEOUT WaitCloseFL ST_BARFL
+      SETSTATE ST_BARFL
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+  SET Openbund1 0
+  SET Openbund2 0
+  SET Closebund1 1
+  SET Closebund2 1
+  SET Molestprodukt 0
+  TIMEOUT StartDelay ST_RESTART
+  SETSTATE ST_RESTART
+END
+
+State=ST_RESTART
+  TEST StartDelay = 1
+    SET Closebund1 0
+    SET Closebund2 0
+    SET errorCode 0
+    TEST reboot = one
+      SET reboot 0
+      SET Kortskub 0
+      SET Langskub 0
+      SET Langind 1
+      SETSTATE ST_RETURN
+    ELSE
+      TEST reboot = two
+        SET reboot 0
+        SET Kortskub 1
+        SET Langskub 1
+        SET Langind 0
+        SETSTATE ST_FULL
+      ELSE
+        SET reboot 0
+        SET numpush 0
+        SET layer 0
+        SET Kortskub 0
+        SET Langskub 0
+        SET Langind 1
+        TIMEOUT ErrDelay ST_DONE
+        SETSTATE ST_DONE
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+

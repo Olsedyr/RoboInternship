@@ -38,7 +38,7 @@ BX_BOOL formTestUserUpdate(HBOX hBox)
 {
   //  HBOX hBx;
   int t, m, s;
-  char workcellstr[256];
+  char workcellstr[512];
   char infostr[256];
   char tidstr[256];
   int stmErrorCode;

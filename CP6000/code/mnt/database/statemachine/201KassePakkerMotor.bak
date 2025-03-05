@@ -1,0 +1,97 @@
+STATEMACHINEVERSION 3
+Name=KassePakkerMotor
+Delaystop=5000000
+Input=Printstop "PrinterStop"
+Output=Skubbepladsmotor "KassePakker skubbePladsMotor"
+Link=KassePakkerTop
+;Link=UniChain
+Timeout=MaxWaitFull 600000
+Timeout=MaxWaitPrintStop 8000000
+Timeout=timeBeforeRunState 2000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Skubbepladsmotor 0
+  TEST KassePakkerTop = ST_RESET
+     SET Skubbepladsmotor 1
+     SETSTATE ST_RUN
+  ENDTEST
+END
+
+State=ST_RUN
+;  TEST UniChain = ST_NOPRODUCTS
+;    SET Skubbepladsmotor 0
+;    SETSTATE ST_STOPNP
+;  ELSE  
+;    TEST UniChain = ST_STOP
+;    AND Printstop = 1
+;      TIMEOUT MaxWaitPrintStop ST_STOPPRINT
+;      SETSTATE ST_STOPPRINT 
+;    ELSE
+      TEST KassePakkerTop = ST_FULL
+        TIMEOUT MaxWaitFull ST_STOPTEST
+        SETSTATE ST_STOPTEST    
+      ENDTEST
+;    ENDTEST
+;  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STOPTEST
+  TEST KassePakkerTop != ST_FULL
+    SETSTATE ST_RUN
+  ELSE
+    TEST MaxWaitFull = 1
+      SET Skubbepladsmotor 0
+      SETSTATE ST_STOP
+    ENDTEST
+  ENDTEST
+END
+ 
+;State=ST_STOPNP ;(stop if NO_Products on UniChain)
+;  TEST UniChain != ST_NOPRODUCTS
+;    SET Skubbepladsmotor 1
+;    TIMEOUT timeBeforeRunState ST_RUN
+;    SETSTATE ST_TIMER
+;  ENDTEST
+;  TEST KassePakkerTop = ST_IDLE
+;    SETSTATE ST_IDLE
+;  ENDTEST
+;END
+
+;State=ST_STOPPRINT ;(stop if stopsignal from Label Printer - or device before CP4800)
+;  TEST MaxWaitPrintStop = 1
+;    SET Skubbepladsmotor 0
+;  ENDTEST
+;  TEST Printstop = 0
+;    SET Skubbepladsmotor 1
+;    TIMEOUT timeBeforeRunState ST_RUN
+;    SETSTATE ST_TIMER
+;  ENDTEST
+;  TEST KassePakkerTop = ST_IDLE
+;    SETSTATE ST_IDLE
+;  ENDTEST
+;END
+
+State=ST_STOP
+  TEST KassePakkerTop != ST_FULL
+    SET Skubbepladsmotor 1
+    SETSTATE ST_RUN
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RESET
+  SET Skubbepladsmotor 1
+  TIMEOUT timeBeforeRunState ST_RUN
+  SETSTATE ST_TIMER
+END

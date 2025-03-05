@@ -6,7 +6,7 @@ Input=powerok "Accumulating Conveyor HZOK"
 Output=motorEnable "Accumulating Conveyor Enable"
 Output=motor "Accumulating Conveyor Setpoint"
 Output=clap "Accumulating Conveyor Clap"
-Output=startulma "Sync Out 1"
+Output=stopFlowpacker "Sync Out 2"
 ;** Link **
 Link=queFoto AccumulatingConveyorQueFullFoto
 Link=master ProductConveyors
@@ -26,7 +26,7 @@ END
 
 State=ST_IDLE
   SET motorEnable 0
-	SET startulma 0
+	SET stopFlowpacker 0
   SET motor 0.0
   TEST master = ST_RUN
     SETSTATE ST_RESET
@@ -40,7 +40,7 @@ END
 State=ST_RUN
   TEST master = ST_RUN
     SET motorEnable 1
-		SET startulma 1 
+;		SET startulma 1 
     SET motor motorSpeed
     SET clap 0
   ELSE
@@ -48,6 +48,7 @@ State=ST_RUN
   ENDTEST
   TEST master = ST_IDLE
   OR powerok = 0
+    SET stopFlowpacker 1
     SETSTATE ST_IDLE
   ENDTEST
 END
@@ -75,21 +76,24 @@ State=ST_ACCUMULATE
   TEST master = ST_IDLE
   OR powerok = 0
     SET queFotoOn 0
+    SET stopFlowpacker 1
     SETSTATE ST_IDLE
   ENDTEST
 END
 
 State=ST_STOP
+;  SET stopFlowpacker 0
   TEST master = ST_RUN
     SETSTATE ST_RUN
   ELSE
     SET motorEnable 0
-		SET startulma 0
+;		SET stopFlowpacker 1
     SET motor 0.0
     SET clap 1
   ENDTEST
   TEST master = ST_IDLE
   OR powerok = 0
+    SET stopFlowpacker 1
     SETSTATE ST_IDLE
   ENDTEST
 END

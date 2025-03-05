@@ -1,0 +1,43 @@
+VERSION 2
+328
+;*********************************
+;*       COMMON                  *
+;*********************************
+ITEM C18.item
+ITEM Cm18In.item
+ITEM Cm18Out.item
+ITEM Cm11In.item
+ITEM Cm11Out.item
+ITEM Cm14In.item
+ITEM Cm14Out.item
+ITEM Dm9In.item
+ITEM Dm9Out.item
+ITEM Europalle.item
+STATETEKST danish.statetekst
+STATETEKST english.statetekst
+STATETEKST spanish.statetekst
+LANGUAGE danish.language
+LANGUAGE english.language
+LANGUAGE spanish.language
+;*********************************
+;* CS1200U 328                   *
+;*********************************
+ROBOT 328.robot
+TOOL 328.tool
+DIO 328.io
+STM 328Simulate.statemachine
+STM 328MC.statemachine
+STM 328ContinueKnap.statemachine
+STM 328Frames.statemachine
+STM 328Loader.statemachine
+STM 328ErrorCode.statemachine
+STM 328WorkCell.statemachine
+STM 328Parent.statemachine
+STM 328Program.statemachine
+STM 328ProgramB1.statemachine
+STM 328Emergency.statemachine
+STM 328IOError.statemachine
+STM 328Robot.statemachine
+STM 328Tool.statemachine
+STM 328RoboError.statemachine
+BOPTCOEFF 328.boptcoeff

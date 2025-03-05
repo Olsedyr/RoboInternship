@@ -1,0 +1,8 @@
+VERSION 1
+yredd user=1
+layer=0 maxpush=3 gettime=100000
+ppp=1 pacc=54 pspeed=54
+ppp=1 pacc=100 pspeed=100
+ppp=1 pacc=100 pspeed=100
+layer=1 maxpush=1 gettime=100000
+ppp=1 pacc=100 pspeed=100

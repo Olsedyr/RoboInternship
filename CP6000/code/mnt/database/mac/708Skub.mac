@@ -8,6 +8,8 @@ Address=254
 ;SoftWareReset
 Init37=0 "START_MODE" "Passive startmode" longint
 Init36=0x20 "CNTRL_BITS" "Resync position" longint
+;Init36=0x08 "CNTRL_BITS" "Relative move using PSOLL" longint
+;Init36=0x28 "CNTRL_BITS" "Resync position + Relative move using PSOLL" longint
 Init2=0 "MODE_REG" "Passive mode" longint
 Init3=0 "P_SOLL" "Commanded position" longint
 Init10=0 "P_IST" "Actual motor position set to zero" longint

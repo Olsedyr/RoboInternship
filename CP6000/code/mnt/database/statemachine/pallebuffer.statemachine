@@ -1,0 +1,156 @@
+STATEMACHINEVERSION 3
+Name=Pallebufer
+Input=palletInPlace "dummyOff"
+Output=MotorFwd "dummyOut"
+Output=MotorRev "dummyOut"
+Link=next Pallebane1
+Link=prev Pallebane1
+Link=parent Parent 
+linkValue=shuttlePos curPos Shuttle
+linkValue=shuttlePickDir pickDir Shuttle
+linkValue=shuttlePlaceDir placeDir Shuttle 
+linkValue=command Shuttle
+linkValue=shuttleCasekind casekind Shuttle
+Timeout=maxDelayStop 10000000
+Timeout=StartupTimeout 5000000
+Timeout=StopDelay 0
+Timeout=PickupDelay 0
+Timeout=ReadyDelay 0
+Const=autoDetectPallet 1
+Const=ON 1
+Const=posPBuf 0
+Const=bufSide 1
+Const=comSend 0
+Const=comReceive 0
+Value=simulate 0
+
+;en pallebane går automatisk fra ready til empty hvis fotocelle slukker
+;en pallebane går automatisk fra empty til ready hvis fotocelle tænder
+
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET MotorFwd 0
+  SET MotorRev 0
+  TEST parent = ST_RESET
+  OR parent = ST_RUN
+  OR simulate = 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_READY
+  TEST palletInPlace != ON 
+  AND autoDetectPallet = 1
+    TIMEOUT PickupDelay ST_EMPTY
+    SET casekind defaultCase
+    SETSTATE ST_TIMER
+  ELSE
+    TEST shuttlePos = posPBuf
+    AND shuttlePickDir = bufSide
+    AND command = comSend
+      TEST next = ST_EMPTY
+      OR next = ST_RECEIVE
+        TIMEOUT maxDelayStop ST_SEND
+        SETSTATE ST_SEND
+      ENDTEST
+    ELSE 
+      SET MotorFwd 0
+      SET MotorRev 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST next = ST_READY
+    SET casekind 0
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST maxDelayStop = 1
+      SETSTATE ST_RESET
+    ELSE
+      TEST next = ST_RECEIVE
+        SET MotorFwd 0
+        SET MotorRev 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST palletInPlace = ON 
+  AND autoDetectPallet = 1
+    SET casekind defaultCase
+    TIMEOUT ReadyDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST shuttlePos = posPBuf
+    AND shuttlePlaceDir = bufSide
+    AND command = comReceive
+    AND prev = ST_SEND
+      TIMEOUT maxDelayStop ST_RECEIVE
+      SETSTATE ST_RECEIVE
+    ELSE 
+      SET MotorFwd 0
+      SET MotorRev 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST palletInPlace = ON
+    ;SET casekind shuttleCasekind
+    SET casekind defaultCase 
+    TIMEOUT StopDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST maxDelayStop = 1
+      SETSTATE ST_RESET
+    ELSE
+      TEST prev = ST_SEND
+        SET MotorFwd 1
+        SET MotorRev 0
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST palletInPlace = ON
+    SET casekind defaultCase
+    SETSTATE ST_READY
+  ELSE
+    TIMEOUT StartupTimeout ST_STOP
+    SETSTATE ST_STOP
+  ENDTEST
+END
+
+State=ST_STOP
+  TEST palletInPlace = ON
+    SET casekind defaultCase
+    TIMEOUT StopDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST StartupTimeout = 1
+      SET casekind 0
+      SETSTATE ST_EMPTY
+    ELSE
+      SET MotorFwd 1
+      SET MotorRev 0
+    ENDTEST
+  ENDTEST
+END
+

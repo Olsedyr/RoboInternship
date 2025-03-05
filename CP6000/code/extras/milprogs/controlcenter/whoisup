@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ROBOTS="305 306 307 308 309 310 311 312 313 314 315 602 701"
+ROBOTS="305 306 307 308 309 310 311 312 313 314 315 317 602 701"
 
 for n in $ROBOTS ; do
   RETVAL=`echo "" | nc -w3 localhost 1$n`

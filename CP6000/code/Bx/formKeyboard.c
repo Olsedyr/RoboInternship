@@ -13,13 +13,13 @@ char formKeyboardText[][MAXLANGUAGE][255] = {
 	,""
 	 ,""}
 	,{"Help"
-	,"Hjælp"
+	,"Hjï¿½lp"
 	,"Hilfe"
 	,"Aiuto"
 	,"Aide"}  //BxButton2 = FORMKEYBOARD_BXBUTTON2
 	,{"Close"
 	,"Luk"
-	,"Schließ"
+	,"Schlieï¿½"
 	,"Chiuso"
 	,"Fermer"}  //BxButton1 = FORMKEYBOARD_BXBUTTON1
 	,{"OK"
@@ -148,13 +148,13 @@ char formKeyboardText[][MAXLANGUAGE][255] = {
 	,"z"
 	,"z"}  //cmdZ = FORMKEYBOARD_CMDZ
 	,{"/"
-	,"ø"
-	,"ö"
+	,"ï¿½"
+	,"ï¿½"
 	,"/"
 	,"/"}  //cmdL2 = FORMKEYBOARD_CMDL2
 	,{"'"
-	,"æ"
-	,"ä"
+	,"ï¿½"
+	,"ï¿½"
 	,"'"
 	,"x"}  //cmdL1 = FORMKEYBOARD_CMDL1
 	,{"l"
@@ -198,8 +198,8 @@ char formKeyboardText[][MAXLANGUAGE][255] = {
 	,"s"
 	,"s"}  //cmdS = FORMKEYBOARD_CMDS
 	,{":"
-	,"å"
-	,"ü"
+	,"ï¿½"
+	,"ï¿½"
 	,":"
 	,":"}  //cmdL3 = FORMKEYBOARD_CMDL3
 	,{"p"

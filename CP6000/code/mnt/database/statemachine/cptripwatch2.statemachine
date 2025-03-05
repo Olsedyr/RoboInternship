@@ -43,6 +43,12 @@ State=ST_WATCH
 	AND skubberstatus != 64
 	AND skubberstatus != 80
 	AND skubberstatus != 0
+	AND skubberstatus != 524288
+	AND skubberstatus != 524304
+	AND skubberstatus != 524320
+	AND skubberstatus != 524336
+	AND skubberstatus != 524352
+	AND skubberstatus != 524368
 		SET errorCode 1101
 	ENDTEST
 	TEST bufferstatus != 16
@@ -51,6 +57,12 @@ State=ST_WATCH
 	AND bufferstatus != 64
 	AND bufferstatus != 80
 	AND bufferstatus != 0
+	AND bufferstatus != 524288
+	AND bufferstatus != 524304
+	AND bufferstatus != 524320
+	AND bufferstatus != 524336
+	AND bufferstatus != 524352
+	AND bufferstatus != 524368
 		SET errorCode 1102
 	ENDTEST
 	TEST liftstatus != 16
@@ -58,7 +70,13 @@ State=ST_WATCH
 	AND liftstatus != 48
 	AND liftstatus != 64
 	AND liftstatus != 80
-	AND liftstatus != 0
+	AND liftstatus != 0	
+	AND liftstatus != 524288
+	AND liftstatus != 524304
+	AND liftstatus != 524320
+	AND liftstatus != 524336
+	AND liftstatus != 524352
+	AND liftstatus != 524368	
 		SET errorCode 1103
 	ENDTEST
 	TEST inliner = 1

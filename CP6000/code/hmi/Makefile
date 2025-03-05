@@ -6,8 +6,8 @@ VERSION=1.0a
 # -------------------------------------------------
 INCLUDES = -I./ -I../Bx -I../libmpnrobot/libmpnrobot
 #CCFLAGS = -O2 -fomit-frame-pointer 
-CCFLAGS = -Wall -pg -save-temps -g
-LDFLAGS = -s -N
+CCFLAGS = -Wall -pg -save-temps -g -m32
+LDFLAGS = -s -N -m32
 CC=gcc
 CPP=g++
 BINDIR=/sbin
@@ -61,7 +61,8 @@ clean:
 		$(OBJDIR)libhmi.$(LIBEXT) \
         *.s \
         *.o \
-        *.i
+        *.i \
+		*.ii
 	$(CLEAN)
  
 distclean:	clean

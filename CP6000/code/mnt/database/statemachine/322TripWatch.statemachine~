@@ -1,0 +1,44 @@
+STATEMACHINEVERSION 3
+Name=TripWatch
+Input=conveyorin "ConveyorIn Tripped"
+Input=pallebane9 "Pallebane9 Tripped"
+Input=skubbePladsMotor "KassePakker skubbePladsMotor Tripped"
+Input=KassePakkerMotor "KassePakker Motor Tripped"
+Link=parent Parent
+Value=errorCode 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST conveyorin = 1
+		SET errorCode 1101
+	ENDTEST
+	TEST pallebane9 = 1
+		SET errorCode 1102
+	ENDTEST
+	TEST skubbePladsMotor = 1
+		SET errorCode 1102
+	ENDTEST
+	TEST KassePakkerMotor = 1
+		SET errorCode 1102
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

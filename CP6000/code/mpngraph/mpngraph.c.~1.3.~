@@ -1,0 +1,216 @@
+/****************************************************************************
+* Copyright (C) 2008 by MPN A/S - Guided by vision(R) Lukasz Zymla          *
+* All rights reserved.                                                      *
+*MPNGraph Rev.1                                                             *
+*MPNGraph creates .dot files from .statemachine files, which are            *
+*interpreted by Graphviz to generate picture                                *
+*****************************************************************************/
+
+//TODO: includes
+//TODO: 
+
+#include <stdio.h>    //standard input/output
+#include <stdlib.h>  //for exit function, realloc
+#include <string.h>  //operations on strings: strcpy, etc
+#include <sys/stat.h>
+#include "mpngraph.h" //definitions of structures 
+
+static int ln=0;
+static char databasePath[256]="/home/mrr/sandbox/mnt/database/statemachine/";
+
+//*****************************************************************************
+// Print usage/help text
+//*****************************************************************************
+void usage(char *progName){
+  printf("Usage: %s [OPTION]...\n",progName);
+  printf("\n");
+  printf("  -f filename statemachine filename\n");
+  printf("  -db path    overwrite path to directory containing statemachine\n");
+  printf("\n");
+}
+
+int main(int argc, char *argv[])
+{
+  tmpnStateMachine statemachine;
+  char* fn = NULL;
+  char filename[384];
+  // char filename[128] = "308ConveyorOut.statemachine";
+  int i;
+  for(i = 1; i < argc; i++)
+  {
+      if(!strcmp(argv[i], "--help"))
+      {
+        usage(argv[0]);
+        exit(101);
+      }
+      if(!strcmp(argv[i], "-f"))
+      {
+        i++;
+        if(argc > i)
+          if((fn = argv[i]) != 0)
+          {
+            //sprintf(filename, "%dsystem.ini", workcellid);
+	    continue;
+          }
+          else
+          {
+            printf("Error: '%s' doesn't seem to be a valid workcell id.\n", argv[i]);
+            usage(argv[0]);
+            exit(101);
+          }
+        else
+        {
+          printf("Error: need workcell id number after -w argument.\n");
+          usage(argv[0]);
+          exit(101);
+        }
+      }
+      if(!strcmp(argv[i], "-db"))
+      {
+        i++;
+        if(argc > i)
+        {
+          struct stat buf;
+          if(stat(argv[i], &buf) == 0)
+          {
+            sprintf(databasePath, "%s", argv[i]);
+            continue;
+          }
+          else
+          {          
+            printf("Error: '%s' doesn't seem to be a directory.\n", argv[i]);
+            usage(argv[0]);
+            exit(101);
+          }
+        }
+        else
+        {
+          printf("Error: need statemachine path after -db argument.\n");
+          usage(argv[0]);
+          exit(101);
+        }
+      }
+      printf("Error: unknown argument: '%s'.\n",argv[i]);
+      usage(argv[0]);
+      exit(101);
+    }
+  sprintf(filename,"%s%s",databasePath,fn);
+  statemachine.numstate=0;
+  StateLoad(&filename,&statemachine);
+  GenerateDotFile(fn,&statemachine);
+  return 0;
+}
+
+//function which load states from the statemachines and checks for links inside each state
+int StateLoad(const char *filename, tmpnStateMachine *statemachine)
+{
+  FILE *fp;
+  char func[256], s[256],arg1[128], arg2[128];
+  char buffer[256];
+  int version=0,idx, idx2, i, imax, clone;
+  ln=0;
+  
+  
+
+  fp = fopen(filename,"r");
+  fscanf(fp,"STATEMACHINEVERSION %d\n",&version);
+  ln++;
+  while(fgets(buffer, 256, fp)!=NULL)
+  {
+    ln++;
+    sscanf(buffer,"%s", func);
+    if(strncmp(func, ";", 1)==0)
+    {
+      //comment - in case if state is commented
+    }
+    else if(strncmp(func, "State=", 6)==0)
+    {
+      if(version==2)
+        sscanf(buffer,"State=%d,%s\n",&idx,s);
+      else
+        sscanf(buffer,"State=%s\n",s);
+      idx=++statemachine->numstate;
+      statemachine->state[idx].statenum = idx;
+      strcpy(statemachine->state[idx].name,s);
+      // printf("\nstate %d  name: %s ", statemachine->numstate, statemachine->state[idx].name);
+      statemachine->state[idx].numtransition=0;
+      //printf(",transition: ");
+    }
+    else if(strncmp(func, "SETSTATE", 8)==0)
+    {
+      clone=0;
+      sscanf(buffer,"%s %s", func, arg1);
+      if(strncmp(arg1, "ST_TIMER", 8)==0); //if SESTSTATE ST_TIMER do nothing 
+      else
+      {
+	idx2=++statemachine->state[idx].numtransition;
+	strcpy(statemachine->state[idx].transition[idx2].name, arg1);
+	if(idx2>=2)
+	{
+          for(i=1;i<idx2;i++)
+	  {
+	    if(strncmp(statemachine->state[idx].transition[i].name, statemachine->state[idx].transition[idx2].name, sizeof(arg1))==0)
+	      clone++;
+	  }
+	}
+	if(clone!=0)
+	  statemachine->state[idx].numtransition--;
+      }
+    } 
+    else if(strncmp(func, "TIMEOUT", 7)==0)
+    {
+      sscanf(buffer,"%s %s %s", func, arg1, arg2);
+      clone=0;
+      sscanf(buffer,"%s %s", func, arg1);
+      idx2=++statemachine->state[idx].numtransition;
+      strcpy(statemachine->state[idx].transition[idx2].name, arg2);
+      if(idx2>=2)
+      {
+	for(i=1;i<idx2;i++)
+	{
+	  if(strncmp(statemachine->state[idx].transition[i].name, statemachine->state[idx].transition[idx2].name, sizeof(arg2))==0)
+	    clone++;
+	}
+      }
+      if(clone!=0)
+	statemachine->state[idx].numtransition--;
+    }
+  }
+  fclose(fp);
+  return 1;
+}
+
+int GenerateDotFile(const char *fn, tmpnStateMachine *statemachine)
+{ 
+  FILE *fp;
+  int i,j,idx;
+  char dotPath[256] = "/home/mrr/sandbox/mpngraph/dot/";
+  char dotFilename[384];
+  char graphPath[256] = "/home/mrr/sandbox/mpngraph/graph/";
+  char shellCommand[384];
+
+  sprintf(dotFilename,"%s%s.dot",dotPath,fn);
+  fp = fopen(dotFilename,"w");
+  if(fp==NULL)
+  {
+    printf("Couldn't open file\n");
+    return 0;
+  }
+  fprintf(fp,"digraph G {\n");
+  fprintf(fp,"size=\"8!,11!\";\n");//maximum size of picture(with ! desired)
+  fprintf(fp,"node [fontsize=10];\n");
+  for(i=1;i<=statemachine->numstate;i++)
+  {
+    for(j=1;j<=statemachine->state[i].numtransition;j++)
+    {
+      fprintf(fp,"%s -> %s;\n", statemachine->state[i].name, statemachine->state[i].transition[j].name);
+    }
+  }
+  fprintf(fp,"}");
+  fclose(fp);
+  sprintf(shellCommand, "dot -Tpng %s -o %s%s.png", dotFilename, graphPath, fn);
+  system(shellCommand);
+return 1;
+}
+
+

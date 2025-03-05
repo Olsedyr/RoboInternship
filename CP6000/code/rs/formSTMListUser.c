@@ -30,7 +30,7 @@ BX_BOOL formSTMListUserInit(HBOX hBox,BX_LPARAM lParam)
 
 BX_BOOL formSTMListUserUpdate(HBOX hBox)
 {
-  BX_CHAR str[256];
+  BX_CHAR str[1024];
   BX_INT i;
 	tmpnLanguage *langptr=(tmpnLanguage*)&tworkcell->languages.language[tworkcell->languages.currentLanguage];
   sprintf(str, "%s %d",getLanguageLineFromIdx(langptr, 48, "STM samplerate"), stmcyclespersec);

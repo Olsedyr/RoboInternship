@@ -1,0 +1,39 @@
+VERSION 2
+322
+ROBOT 322.robot
+TOOL 322.tool
+ACCESSORY 322ConveyorOutA.accessory
+ACCESSORY 322ConveyorOutB.accessory
+ACCESSORY 322RollerIn.accessory
+ACCESSORY 322RollerOut.accessory
+BOPTCOEFF 322.boptcoeff
+LANGUAGE danish.language
+LANGUAGE russian.language
+LANGUAGE english.language
+STATETEKST danish.statetekst
+STATETEKST russian.statetekst
+STATETEKST english.statetekst
+REMOTEHOST 192.168.0.152
+DIO 322.io
+STM 322Simulate.statemachine
+STM 322ContinueKnap.statemachine
+STM 322MC.statemachine
+STM 322Frames.statemachine
+STM 322Loader.statemachine
+STM 322ErrorCode.statemachine
+STM 322WorkCell.statemachine
+STM 322Parent.statemachine
+STM 322Program.statemachine
+STM 322ProgramB2.statemachine
+STM 322Emergency.statemachine
+STM 322TripWatch.statemachine
+STM 322Manometer.statemachine
+STM 322IOError.statemachine
+STM 322TrafficLight.statemachine
+STM 322Robot.statemachine
+;*********************************
+;*            CP4800 V1          *
+;*********************************
+STM 201KassePakkerBottom.statemachine
+STM 201KassePakkerTop.statemachine
+STM 201KassePakkerMotor.statemachine

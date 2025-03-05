@@ -1,0 +1,38 @@
+; INLINE 328inlineLoadHome.statemachine
+TEST pap = 0
+  CALC temp = cAItem - 1
+  CALC temp = temp % 2
+  TEST temp = 0
+    TEST casekind = 4
+      SETFRAME toFrame1 palletA1P
+    ELSE 
+      SETFRAME toFrame1 palletA1
+    ENDTEST
+    CALC ftemp = itemIn.sy * cAStackleft
+    SET leftrightA 0
+  ELSE
+    TEST casekind = 4
+      SETFRAME toFrame1 palletA0P
+    ELSE
+      SETFRAME toFrame1 palletA0
+    ENDTEST
+    CALC ftemp = itemIn.sy * cAStackright
+    SET leftrightA 1
+  ENDTEST
+  CALC toFrame1.y = toFrame1.y + ftemp
+  CALC toFrame1.y = toFrame1.y + itemIn.gy
+;C11 box offset på grund af stop
+  TEST casekind = 1
+    CALC toFrame1.x = toFrame1.x + 5
+  ENDTEST
+  LOAD home_palletA home toFrame1
+  TEST casekind = 4		
+    SETFRAME toFrame2 conveyorBP
+  ELSE	
+    SETFRAME toFrame2 conveyorB
+  ENDTEST
+  CALC toFrame2.y = toFrame2.y + itemOut.gy
+  CALC toFrame2.x = toFrame2.x - itemOut.gx
+  SET home_conveyorB.mode normalmode
+  LOAD home_conveyorB home toFrame2
+ENDTEST

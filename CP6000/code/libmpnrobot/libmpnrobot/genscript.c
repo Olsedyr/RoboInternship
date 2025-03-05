@@ -147,10 +147,6 @@ void spiralMacro(tmpnRobot *robot,tmpnPathDef *ptrpath,int* curidx, tmpnFloat A,
   }
 }
 
-inline tmpnFloat spiralspeed(tmpnFloat L, tmpnFloat T) 
-{
-  return -((3*L)/(2*T));
-}
 
 ///***************************************************************
 ///* A macro that makes an upward vertical line.                 *
@@ -193,10 +189,6 @@ void uplineMacro(tmpnRobot *robot,tmpnPathDef *ptrpath, int* curidx, tmpnFloat L
   }	
 }
 
-inline tmpnFloat uplinespeed(tmpnFloat L, tmpnFloat T) 
-{
-  return ((3*L)/(2*T));
-}
 
 void fastUplineMacro(tmpnRobot *robot,tmpnPathDef *ptrpath, int* curidx, tmpnFloat L, tmpnFloat T, tmpnVector* pos, int nos, int TCPidx,int positionhint) 
 {
@@ -269,10 +261,7 @@ void downlineMacro(tmpnRobot *robot,tmpnPathDef *ptrpath, int* curidx,  tmpnFloa
   }
 }
 
-inline tmpnFloat downlinespeed(tmpnFloat L, tmpnFloat T) 
-{
-  return (-(3*L)/(2*T));
-}
+
 
 void fastDownlineMacro(tmpnRobot *robot,tmpnPathDef *ptrpath, int* curidx,  tmpnFloat L, tmpnFloat T, tmpnVector* pos, int nos, int TCPidx, int positionhint) 
 {
@@ -2459,7 +2448,7 @@ COMMANDSTRUCT *generateProgramNS(COMMANDSTRUCT *ptrcmd
   //             -----
   //             |3|2|
   //             -----
-  char s[256];
+  char s[1024];
   int i,id=5100,iA,bagsPrLayer=7;
   tmpnFloat towerHight=400,difw;
   tmpnPPScriptItem *moveItem;

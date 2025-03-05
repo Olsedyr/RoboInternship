@@ -1,0 +1,667 @@
+STATEMACHINEVERSION 3
+Name=Shuttle
+Output=ShuttleFwd "Shuttle Fwd"
+Output=ShuttleBwd "Shuttle Bwd"
+Output=MotorFwd "Shuttle MotorRev"
+Output=MotorRev "Shuttle MotorFwd"
+; 2 velocities: normal and slow
+Output=ShuttleFast "Shuttle Fast"
+Input=Foto1 "Shuttle Foto2"
+Input=Foto2 "Shuttle Foto1"
+Link=parent Parent
+Link=PositionSensor ShuttlePositionSensor
+Link=PB1 Pallebane1
+Link=PB4 Pallebane4
+Link=PB5 Pallebane5
+Link=PB6 Pallebane6
+Link=PB9 Pallebane9
+Link=PBuf1 PalleBuffer1
+Link=PBuf2 PalleBuffer2
+Link=PBuf3 PalleBuffer3
+Link=PBuf4 PalleBuffer4
+Link=PM Pallemagasin
+linkValue=HomeSensor test ShuttleHomeSensor
+linkValue=Prgcase casekind Program328
+linkValue=PBuf1case casekind PalleBuffer1
+linkValue=PBuf2case casekind PalleBuffer2
+linkValue=PBuf3case casekind PalleBuffer3
+linkValue=PBuf4case casekind PalleBuffer4
+linkValue=order BufferLight
+linkValue=ordercase casekind BufferLight
+linkValue=cAItem Frames
+linkValue=cBItem Frames
+linkValue=wAItem Frames
+linkValue=wBItem Frames
+linkValue=nextpala Frames
+;command 0 see constants
+Value=command 0
+Value=nextCmd 0  
+Value=pickPos 0
+Value=placePos 0
+Value=pickDir 0 
+Value=placeDir 0
+;pick/place Dir - 0 robot side, 1 buffer side
+Value=homed 0
+Value=curPos 0
+Value=dir 0
+Value=temp 0
+Value=simulate 0
+Value=userShuttleRestart 0
+;casekind 0 no case, 1 C11, 2 C14/15, 3 C18, 4 D9
+Value=casekind 0 
+Value=PB4almostEmpty 0
+Const=posHome 0
+Const=posPB9 0
+Const=posPB6 3
+Const=posPB5 6
+Const=posPB4 9
+Const=posPB1 12
+Const=posBuf1 0
+Const=posBuf2 3
+Const=posBuf3 6
+Const=posBuf4 9
+Const=posPM 12
+Const=autoDetectPallet 1
+Const=comPB9receive 	1
+Const=comPB6receive 	3
+Const=comPB6send 	4
+Const=comPB5receive 	5
+Const=comPB4receive 	7
+Const=comPB4send 	8
+Const=comPB1send 	10
+Const=comBuf1receive 	11
+Const=comBuf1send 	12
+Const=comBuf2receive 	13
+Const=comBuf2send 	14
+Const=comBuf3receive 	15
+Const=comBuf3send 	16
+Const=comBuf4receive 	17
+Const=comBuf4send 	18
+Const=comPMreceive 	19
+Const=comPMsend 	20
+Timeout=maxDelayStop 10000000
+Timeout=PickupDelay 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET ShuttleFwd 0
+  SET ShuttleBwd 0
+  SET ShuttleFast 0
+  SET MotorFwd 0
+  SET MotorRev 0
+  TEST parent = ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_HOME
+  TEST HomeSensor = 1
+    SET ShuttleBwd 0
+    SET homed 1
+    SET curPos 0  
+    SETSTATE ST_WAIT_CMD
+  ELSE
+    SET ShuttleBwd 1
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_CMD
+;check shuttle is empty
+;calc state of PB4
+  CALC temp = wBItem - cBItem
+  CALC temp = temp - 4
+  TEST temp < cAItem
+    SET PB4almostEmpty 0
+  ELSE
+    SET PB4almostEmpty 1
+  ENDTEST 
+  TEST PB4 = ST_EMPTY
+  AND PBuf1 = ST_READY
+  AND PBuf1case = Prgcase
+    SET pickPos posBuf1
+    SET pickDir 1
+    SET command comBuf1send
+    SET placePos posPB4
+    SET placeDir 0
+    SET nextCmd comPB4receive
+    SET casekind 4
+    TEST curPos = pickPos
+      SETSTATE ST_EMPTY
+    ELSE 
+      SETSTATE ST_PREPARE_PICK
+    ENDTEST
+  ELSETEST PB4 = ST_EMPTY
+  AND PBuf2 = ST_READY
+  AND PBuf2case = Prgcase
+    SET pickPos posBuf2
+    SET pickDir 1
+    SET command comBuf2send
+    SET placePos posPB4
+    SET placeDir 0
+    SET nextCmd comPB4receive
+    SET casekind 1
+    TEST curPos = pickPos
+      SETSTATE ST_EMPTY
+    ELSE 
+      SETSTATE ST_PREPARE_PICK
+    ENDTEST
+  ELSETEST PB4 = ST_EMPTY
+  AND PBuf3 = ST_READY
+  AND PBuf3case = Prgcase
+    SET pickPos posBuf3
+    SET pickDir 1
+    SET command comBuf3send
+    SET placePos posPB4
+    SET placeDir 0
+    SET nextCmd comPB4receive
+    SET casekind 2
+    TEST curPos = pickPos
+      SETSTATE ST_EMPTY
+    ELSE 
+      SETSTATE ST_PREPARE_PICK
+    ENDTEST
+  ELSETEST PB4 = ST_EMPTY  
+  AND PBuf4 = ST_READY
+  AND PBuf4case = Prgcase
+    SET pickPos posBuf4
+    SET pickDir 1
+    SET command comBuf4send
+    SET placePos posPB4
+    SET placeDir 0
+    SET nextCmd comPB4receive
+    TEST curPos = pickPos
+      SET casekind 3
+      SETSTATE ST_EMPTY
+    ELSE 
+      SETSTATE ST_PREPARE_PICK
+    ENDTEST 
+  ELSETEST PB6 = ST_EMPTY 
+  AND PB5 = ST_EMPTY
+;PB6 need a pallet
+  AND PM = ST_READY
+    SET pickPos posPM
+    SET pickDir 1
+    SET command comPMsend
+    SET placePos posPB5
+    SET placeDir 0
+    SET nextCmd comPB5receive
+    TEST curPos = pickPos
+      SETSTATE ST_EMPTY
+    ELSE
+      SETSTATE ST_PREPARE_PICK
+    ENDTEST
+  ELSETEST PB6 = ST_READY 
+; pallet B is full
+    SET pickPos posPB6
+    SET pickDir 0
+    SET command comPB6send
+    SET placePos posPB9
+    SET placeDir 0
+    SET nextCmd comPB9receive
+    SET casekind Prgcase
+    TEST curPos = pickPos
+      SETSTATE ST_EMPTY
+    ELSE
+      SETSTATE ST_PREPARE_PICK
+    ENDTEST
+  ELSETEST PB5 = ST_EMPTY
+  AND PB4almostEmpty = 0
+  AND PB4 = ST_READY_ROBOT
+  AND nextpala = 0
+  AND PM = ST_READY
+    SET pickPos posPM
+    SET pickDir 1
+    SET command comPMsend
+    SET placePos posPB5
+    SET placeDir 0
+    SET nextCmd comPB5receive
+    TEST curPos = pickPos
+      SETSTATE ST_EMPTY
+    ELSE
+      SETSTATE ST_PREPARE_PICK
+    ENDTEST 
+  ELSETEST PB4 = ST_READY_OUT
+    SET pickPos posPB4
+    SET pickDir 0
+    SET command comPB4send
+    SET placePos posPB9
+    SET placeDir 0
+    SET nextCmd comPB9receive
+    SET casekind 0
+    TEST curPos = pickPos
+      SETSTATE ST_EMPTY
+    ELSE
+      SETSTATE ST_PREPARE_PICK
+    ENDTEST
+  ELSETEST PB1 = ST_READY 
+  AND order > 0
+; something to receive - pallets or boxes
+    SET pickPos posPB1
+    SET pickDir 0
+    SET command comPB1send
+    TEST order = 1
+      SET placePos posBuf2
+      SET placeDir 1
+      SET nextCmd comBuf2receive
+      SET casekind 1
+    ELSETEST order = 2
+      SET placePos posBuf3
+      SET placeDir 1
+      SET nextCmd comBuf3receive
+      SET casekind 2
+    ELSETEST order = 3
+      SET placePos posBuf4
+      SET placeDir 1
+      SET nextCmd comBuf4receive
+      SET casekind 3
+    ELSETEST order = 4
+      SET placePos posBuf1
+      SET placeDir 1
+      SET nextCmd comBuf1receive
+      SET casekind 4
+    ELSETEST order = 5
+      SET placePos posPM
+      SET placeDir 1
+      SET nextCmd comPMreceive
+    ENDTEST
+    TEST curPos = pickPos
+      SETSTATE ST_EMPTY
+    ELSE
+      SETSTATE ST_PREPARE_PICK
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_PREPARE_PICK
+  TEST curPos < pickPos
+    SET ShuttleFwd 1
+    SET dir 0
+    SET ShuttleFast 1
+  ELSE
+    SET ShuttleBwd 1
+    SET dir 1
+    SET ShuttleFast 1
+  ENDTEST
+  SETSTATE ST_GO_TO_PICK
+END
+
+State=ST_GO_TO_PICK
+;estimate shuttle driving time and check if not overlapsed
+  TEST dir = 0
+    CALC temp = pickPos - curPos
+    TEST curPos = pickPos
+      SET ShuttleFwd 0
+      SETSTATE ST_EMPTY
+    ELSETEST temp = 1
+      SET ShuttleFast 0
+    ENDTEST
+    TEST PositionSensor = ST_HIGH
+      CALC curPos = curPos + 1
+    ENDTEST
+  ELSE
+    CALC temp = curPos - pickPos
+    TEST curPos = pickPos
+      SET ShuttleBwd 0
+      SETSTATE ST_EMPTY
+    ELSETEST temp = 1
+      SET ShuttleFast 0
+    ENDTEST
+    TEST PositionSensor = ST_HIGH
+      CALC curPos = curPos - 1
+    ENDTEST
+  ENDTEST
+;  TEST parent = ST_IDLE
+;  AND simulate = 0
+;    SETSTATE ST_IDLE
+;  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST pickDir = 0
+    SET MotorFwd 1
+    SET MotorRev 0
+    TIMEOUT maxDelayStop ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSE 
+    SET MotorFwd 0
+    SET MotorRev 1
+    TIMEOUT maxDelayStop ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ENDTEST
+;  TEST parent = ST_IDLE
+;  AND simulate = 0
+;    SETSTATE ST_IDLE
+;  ENDTEST  
+END
+
+State=ST_RECEIVE
+  TEST pickDir = 0
+    TEST Foto2 = 1
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command nextCmd
+      SETSTATE ST_READY
+    ENDTEST
+  ELSE
+    TEST Foto1 = 1
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command nextCmd
+      SETSTATE ST_READY
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+;  AND maxDelayStop = 1
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_READY
+  SETSTATE ST_PREPARE_PLACE
+END
+
+State=ST_PREPARE_PLACE
+  TEST curPos < placePos
+    SET ShuttleFwd 1
+    SET dir 0
+    SET ShuttleFast 1
+  ELSE
+    SET ShuttleBwd 1
+    SET dir 1
+    SET ShuttleFast 1
+  ENDTEST
+  SETSTATE ST_GO_TO_PLACE
+END
+
+State=ST_GO_TO_PLACE
+;estimate shuttle driving time and check if not overlapsed
+  TEST dir = 0
+    CALC temp = placePos - curPos
+    TEST curPos = placePos
+      SET ShuttleFwd 0
+      SETSTATE ST_READY2
+    ELSETEST temp = 1
+      SET ShuttleFast 0
+    ENDTEST
+    TEST PositionSensor = ST_HIGH
+      CALC curPos = curPos + 1
+    ENDTEST
+  ELSE
+    CALC temp = curPos - placePos
+    TEST curPos = placePos
+      SET ShuttleBwd 0
+      SETSTATE ST_READY2
+    ELSETEST temp = 1
+      SET ShuttleFast 0
+    ENDTEST
+    TEST PositionSensor = ST_HIGH
+      CALC curPos = curPos - 1
+    ENDTEST
+  ENDTEST
+;  TEST parent = ST_IDLE
+;  AND simulate = 0
+;    SETSTATE ST_IDLE
+;  ENDTEST
+END
+
+State=ST_READY2
+;evt test for command instead placeDir
+  TEST placePos = posPB4
+  AND placeDir = 0
+    TEST PB4 = ST_EMPTY
+    OR PB4 = ST_RECEIVE
+      SET MotorFwd 0
+      SET MotorRev 1
+      TIMEOUT maxDelayStop ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ELSETEST placePos = posPB5
+  AND placeDir = 0
+    TEST PB5 = ST_EMPTY
+    OR PB5 = ST_RECEIVE
+      SET MotorFwd 0
+      SET MotorRev 1
+      TIMEOUT maxDelayStop ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ELSETEST placePos = posPB9
+  AND placeDir = 0
+    TEST PB9 = ST_EMPTY
+    OR PB9 = ST_RECEIVE
+      SET MotorFwd 0
+      SET MotorRev 1
+      TIMEOUT maxDelayStop ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ELSETEST placePos = posBuf1
+  AND placeDir = 1
+    TEST PBuf1 = ST_EMPTY
+    OR PBuf1 = ST_RECEIVE
+      SET MotorFwd 1
+      SET MotorRev 0
+      TIMEOUT maxDelayStop ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ELSETEST placePos = posBuf2
+  AND placeDir = 1
+    TEST PBuf2 = ST_EMPTY
+    OR PBuf2 = ST_RECEIVE
+      SET MotorFwd 1
+      SET MotorRev 0
+      TIMEOUT maxDelayStop ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ELSETEST placePos = posBuf3
+  AND placeDir = 1
+    TEST PBuf3 = ST_EMPTY
+    OR PBuf3 = ST_RECEIVE
+      SET MotorFwd 1
+      SET MotorRev 0
+      TIMEOUT maxDelayStop ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ELSETEST placePos = posBuf4
+  AND placeDir = 1
+    TEST PBuf4 = ST_EMPTY
+    OR PBuf4 = ST_RECEIVE
+      SET MotorFwd 1
+      SET MotorRev 0
+      TIMEOUT maxDelayStop ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ELSETEST placePos = posPM
+  AND placeDir = 1
+    TEST PM = ST_LOADPOS
+    OR PM = ST_RECEIVE
+      SET MotorFwd 1
+      SET MotorRev 0
+      TIMEOUT maxDelayStop ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST placePos = posPB4
+  AND placeDir = 0
+    TEST PB4 = ST_PALLET_REV_TIMEOUT
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command 0
+      SETSTATE ST_WAIT_CMD
+    ELSE
+;      TEST maxDelayStop = 1
+;        SETSTATE ST_IDLE
+;     ELSE
+       TEST PB4 = ST_RECEIVE
+          SET MotorFwd 0
+          SET MotorRev 1
+        ENDTEST
+;      ENDTEST
+    ENDTEST
+  ELSETEST placePos = posPB5
+  AND placeDir = 0
+    TEST PB5 = ST_READY
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command 0
+      SETSTATE ST_WAIT_CMD
+    ELSE
+;      TEST maxDelayStop = 1
+;        SETSTATE ST_IDLE
+;     ELSE
+       TEST PB5 = ST_RECEIVE
+          SET MotorFwd 0
+          SET MotorRev 1
+        ENDTEST
+;      ENDTEST
+    ENDTEST
+  ELSETEST placePos = posPB9
+  AND placeDir = 0
+    TEST PB9 = ST_READY
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command 0
+      SETSTATE ST_WAIT_CMD
+    ELSE
+;      TEST maxDelayStop = 1
+;        SETSTATE ST_IDLE
+;      ELSE
+        TEST PB9 = ST_RECEIVE
+          SET MotorFwd 0
+          SET MotorRev 1
+        ENDTEST
+;      ENDTEST
+    ENDTEST
+  ELSETEST placePos = posBuf1
+  AND placeDir = 1
+    TEST PBuf1 = ST_READY
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command 0
+      SETSTATE ST_WAIT_CMD
+    ELSE
+;      TEST maxDelayStop = 1
+;        SETSTATE ST_IDLE
+;      ELSE
+        TEST PBuf1 = ST_RECEIVE
+          SET MotorFwd 1
+          SET MotorRev 0
+        ENDTEST
+;      ENDTEST
+    ENDTEST
+  ELSETEST placePos = posBuf2
+  AND placeDir = 1
+    TEST PBuf2 = ST_READY
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command 0
+      SETSTATE ST_WAIT_CMD
+    ELSE
+;      TEST maxDelayStop = 1
+;        SETSTATE ST_IDLE
+;      ELSE
+        TEST PBuf2 = ST_RECEIVE
+          SET MotorFwd 1
+          SET MotorRev 0
+        ENDTEST
+;      ENDTEST
+    ENDTEST
+  ELSETEST placePos = posBuf3
+  AND placeDir = 1
+    TEST PBuf3 = ST_READY
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command 0
+      SETSTATE ST_WAIT_CMD
+    ELSE
+;      TEST maxDelayStop = 1
+;        SETSTATE ST_IDLE
+;      ELSE
+        TEST PBuf3 = ST_RECEIVE
+          SET MotorFwd 1
+          SET MotorRev 0
+        ENDTEST
+;      ENDTEST
+    ENDTEST
+  ELSETEST placePos = posBuf4
+  AND placeDir = 1
+    TEST PBuf4 = ST_READY
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command 0
+      SETSTATE ST_WAIT_CMD
+    ELSE
+;      TEST maxDelayStop = 1
+;        SETSTATE ST_IDLE
+;      ELSE
+        TEST PBuf4 = ST_RECEIVE
+          SET MotorFwd 1
+          SET MotorRev 0
+        ENDTEST
+;      ENDTEST
+    ENDTEST
+  ELSETEST placePos = posPM
+  AND placeDir = 1
+    TEST PM = ST_READY
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET command 0
+      SETSTATE ST_WAIT_CMD
+    ELSE
+;      TEST maxDelayStop = 1
+;        SETSTATE ST_IDLE
+;      ELSE
+        TEST PM = ST_RECEIVE
+          SET MotorFwd 1
+          SET MotorRev 0
+        ENDTEST
+;      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST homed = 0
+    SETSTATE ST_HOME
+  ELSE
+    TEST command = 0
+      SETSTATE ST_WAIT_CMD
+    ELSE
+      ;check if shuttle is not in the middle of operation - if so continue
+      CALC temp = command % 2
+      TEST temp = 0
+        ;TEST Foto1 = 0
+        ;AND Foto2 = 0  
+          SETSTATE ST_PREPARE_PICK
+        ;ELSE
+          ;SETSTATE ST_RECEIVE
+        ;ENDTEST
+      ELSE
+        SETSTATE ST_PREPARE_PLACE
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END

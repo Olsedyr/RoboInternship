@@ -42,7 +42,7 @@ State=ST_IDLE
 END
 
 State=ST_RESET
-	SET Motor1Enable 1
+;	SET Motor1Enable 1
 	SET Motor2Enable 1
 	SETSTATE ST_STARTUP
 END

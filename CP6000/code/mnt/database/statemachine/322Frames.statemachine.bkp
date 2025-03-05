@@ -1,0 +1,37 @@
+STATEMACHINEVERSION 3
+Name=Frames
+Frame=base x=0.00 y=0.00 z=0.00 v=0.00 w=0.00 u=0.00
+Frame=home x=1046.00 y=1100.00 z=1185.00 v=90.00 w=0.00 u=0.00
+Frame=homeHigh x=1046.00 y=2200.00 z=1185.00 v=90.00 w=0.00 u=0.00
+Frame=palletA0 x=1050.0000 y=255.0000 z=2352.0000 v=90.0000 w=0.0000 u=0.0000
+Frame=palletA1 x=1050.0000 y=255.0000 z=2752.0000 v=90.0000 w=0.0000 u=0.0000
+Frame=palletB0 x=1020.0000 y=251.0000 z=60.0000 v=90.0000 w=0.0000 u=0.0000
+Frame=palletB1 x=1020.0000 y=251.0000 z=473.0000 v=90.0000 w=0.0000 u=0.0000
+Frame=palletB0P x=1080.0000 y=498.9762 z=75.0517 v=89.9960 w=0.0085 u=0.0000
+Frame=palletB0PH x=1080.0000 y=498.9762 z=75.0517 v=89.9960 w=0.0085 u=0.0000
+Frame=palletB1P x=1080.0000 y=499.0087 z=485.2314 v=89.9948 w=0.0085 u=0.0000
+Frame=conveyorA x=1117.00 y=530.00 z=1625.00 v=90.00 w=0.00 u=0.00
+Frame=conveyorB x=1722.00 y=507.00 z=1065.00 v=90.00 w=0.00 u=0.00
+Frame=conveyorBP x=1394.0000 y=768.0619 z=1249.8975 v=90.0000 w=0.0000 u=0.0000
+Frame=palletA x=450.00 y=258.00 z=2170.00 v=90.00 w=0.00 u=0.00
+Frame=palletB x=435.00 y=258.00 z=-135.00 v=90.00 w=0.00 u=0.00
+Frame=homeP x=1046.00 y=1500.00 z=1185.00 v=90.00 w=0.00 u=0.00
+
+Value=nextpalb 0
+Value=userPalletOut 0
+Value=cBItem 0
+Value=wBItem 0
+Value=itemCounter 0
+
+Value=nextpala 0
+Value=cAItem 0
+Value=wAItem 0
+
+State=ST_HALT
+END
+State=ST_IDLE
+END
+State=ST_TIMER
+END
+State=ST_RESET
+END

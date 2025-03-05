@@ -1,0 +1,7 @@
+digraph G {
+node [fontsize=10];
+ST_HALT -> ST_IDLE;
+ST_IDLE -> ST_RESET;
+ST_RUN -> ST_IDLE;
+ST_RESET -> ST_RUN;
+}

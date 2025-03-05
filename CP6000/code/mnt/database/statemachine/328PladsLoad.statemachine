@@ -1,0 +1,92 @@
+STATEMACHINEVERSION 3
+Name=PladsLoad
+Link=parent Parent
+linkValue=Foto1 test PladsLoadFoto1
+linkValue=Foto2 test PladsLoadFoto2
+linkValue=pathtype pathtype Robot
+linkValue=axis_t axis_t Robot
+Timeout=TimeWaitRobotGone 2000000
+Const=kasseTest 600000
+Const=posReady 500000
+Const=posReceive 400000
+Value=errorCode 0
+Value=simulate 0
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST 
+END
+
+State=ST_TIMER
+END
+
+State=ST_ERROR
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST 
+END
+
+State=ST_READY
+  TEST Foto1 = 0
+  AND Foto2 = 0
+    SETSTATE ST_EMPTY
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_RECEIVE
+  TEST pathtype != 21
+    TEST axis_t > posReady
+    AND axis_t < 900000
+      TEST Foto1 = 1
+      OR Foto2 = 1
+        TIMEOUT TimeWaitRobotGone ST_READY
+        SETSTATE ST_TIMER
+      ELSE
+        SETSTATE ST_EMPTY
+      ENDTEST
+    ENDTEST
+  ELSETEST axis_t < kasseTest
+    TEST Foto1 = 1
+    OR Foto2 = 1
+      TEST simulate = 0
+        SET errorCode 3015  
+        SETSTATE ST_ERROR
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_EMPTY
+  TEST Foto1 = 1
+  OR Foto2 = 1
+    SETSTATE ST_READY
+  ELSETEST pathtype = 21
+	AND axis_t > posReceive
+	AND axis_t < 900000
+    SETSTATE ST_RECEIVE
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_RESET
+  TEST Foto1 = 0
+  AND Foto2 = 0
+    SETSTATE ST_EMPTY
+  ELSE
+    SETSTATE ST_READY
+  ENDTEST
+END

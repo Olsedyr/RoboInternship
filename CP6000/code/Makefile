@@ -12,3 +12,4 @@ clean:
 	make -C io clean
 	make -C stm clean
 	make -C rs clean
+	make -C mpnguide clean

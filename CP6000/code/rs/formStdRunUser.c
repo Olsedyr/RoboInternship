@@ -87,12 +87,14 @@ static int *continueknap=NULL;
 static int framesstm = -1;
 static int pallestablerstm = -1;
 static int pallemagasinstm = -1;
+static int shuttlestm = -1;
 static int *userpalletout=NULL;
 static int *userPalletAOut=NULL;
 static int *userPalletBOut=NULL;
 static int *userPalletStackerOut=NULL;//Søris
 static int *restartPallestabler=NULL;//Søris
 static int *restartPallemagasin=NULL;//Søris
+static int *restartShuttle=NULL;//Harndrup
 static int *userClearRoboError=NULL;//used to continue after followerror and emergency stop when workcell is RUNNING
 static int *itemCounter=NULL;
 static int *userSetcBItem=NULL;
@@ -214,11 +216,18 @@ BX_BOOL formStdRunUserInit(HBOX hBox,BX_LPARAM lParam)
       restartPallestabler = getMachineValuePtr(pallestablerstm,"restart");
     }
     pallemagasinstm = getMachineIdx("Pallemagasin");
-    printf("stm: %d", pallemagasinstm);
     if(pallemagasinstm != -1)
     {
+      printf("PalleMagasin stm: %d", pallemagasinstm);
       restartPallemagasin = getMachineValuePtr(pallemagasinstm,"userPMrestart");
-      printf("%s", restartPallemagasin);
+      printf("%d", *restartPallemagasin);
+    } 
+    shuttlestm = getMachineIdx("Shuttle");
+    if(shuttlestm != -1)
+    {
+      printf("Shuttle stm: %d", shuttlestm);
+      restartShuttle = getMachineValuePtr(shuttlestm,"userShuttleRestart");
+      printf("%d", *restartShuttle);
     } 
     caitem = getMachineValuePtr(framesstm,"cAItem");
 		cbitem = getMachineValuePtr(framesstm,"cBItem");
@@ -253,7 +262,7 @@ BX_BOOL formStdRunUserUpdate(HBOX hBox)
   //  HBOX hBx6;
   int t, m, s;
   char workcellstr[256];
-  char robotstr[256];
+  char robotstr[512];
   char msgtype[256];
   char msgstr[256];
   char tidstr[256];
@@ -343,11 +352,13 @@ BX_BOOL formStdRunUserUpdate(HBOX hBox)
 
 	if(testState(robotstm,staterobot_halt))
 	{
-		sprintf(robotstate,getLanguageLineFromIdx(langptr, 121,"Robot not ready"));
+		char *language_line = getLanguageLineFromIdx(langptr, 121, "Robot not ready");
+    sprintf(robotstate, "%s", language_line);
 	}
   else if(testState(robotstm,staterobot_idle)||testState(robotstm,staterobot_idle))
 	{
-		sprintf(robotstate,getLanguageLineFromIdx(langptr, 122,"Awaiting command"));
+    char *language_line = getLanguageLineFromIdx(langptr, 122,"Awaiting command");
+		sprintf(robotstate,"%s", language_line);
 	}
 	else if (testState(robotstm,staterobot_followerror))
 	{
@@ -479,22 +490,26 @@ BX_BOOL formStdRunUserUpdate(HBOX hBox)
     }
     else
       //old style
-      sprintf(robotstate,getLanguageLineFromIdx(langptr, 124,"The robot's emergency stop is activated"));
+      //char *language_line = getLanguageLineFromIdx(langptr, 124,"The robot's emergency stop is activated");
+      sprintf(robotstate, getLanguageLineFromIdx(langptr, 124,"The robot's emergency stop is activated"));
   }
 	else if (testState(robotstm,staterobot_supervisor))
 	{
-		sprintf(robotstate,getLanguageLineFromIdx(langptr, 125,"The robot can't start due to power failure. Call supervisor."));
+    char *language_line = getLanguageLineFromIdx(langptr, 125,"The robot can't start due to power failure. Call supervisor.");
+		sprintf(robotstate,"%s", language_line);
 		
 		if (accesslevel>MANAGERLEVEL)
 			*supervisorlevel=1;
 	}
 	else if (testState(robotstm,staterobot_mc_comerror))
 	{
-		sprintf(robotstate,getLanguageLineFromIdx(langptr, 126,"Communication error with Trio"));
+    char *language_line = getLanguageLineFromIdx(langptr, 126,"Communication error with Trio");
+		sprintf(robotstate,"%s",language_line);
 	}
 	else if (testState(robotstm,staterobot_simulate_mc))
 	{
-		sprintf(robotstate,getLanguageLineFromIdx(langptr, 127,"Motion-controller simulation"));
+    char *language_line = getLanguageLineFromIdx(langptr, 127,"Motion-controller simulation");
+		sprintf(robotstate,"%s",language_line);
 	}
 	else if (testState(robotstm,staterobot_running))
 	{
@@ -512,6 +527,7 @@ BX_BOOL formStdRunUserUpdate(HBOX hBox)
 //    valA= atoi(getCounterValue("cAItems"));
 //    valB= atoi(getCounterValue("cBItems"));
 //    sprintf(robotstr,"%s (%d) %d cItems: (%i,%i)(0,%d)",robotstate,*mpnstate,*axist,valA,valB,*palletB_cBItems);
+
     sprintf(robotstr,"%s (%d) %d",robotstate,*mpnstate,*axist);
   }
   else
@@ -1203,6 +1219,15 @@ BX_BOOL formStd_RestartPallemagasin_Click(HBOX hBox)
   return TRUE;
 }
 
+BX_BOOL formStd_RestartShuttle_Click(HBOX hBox)
+{  
+	if (restartShuttle != NULL)
+	{
+		*restartShuttle = 1;
+	}
+  return TRUE;
+}
+
 BX_BOOL formStd_userClearRoboError_Click(HBOX hBox)
 {  
 	if (userClearRoboError != NULL)
@@ -1362,7 +1387,7 @@ BX_BOOL formStdRun_cmdMenu_Click(HBOX hBox)
 	//extern BxIcon *icon3;
 	//extern BxIcon *icon4;
 	tmpnLanguage *langptr=(tmpnLanguage*)&tworkcell->languages.language[tworkcell->languages.currentLanguage];
-  HBOX hBx, ToolBx, ToolJogBx, hOptions, hCalib, hInfo, hSetZero,hPalletOut,hReverse;
+  HBOX hBx, ToolBx, ToolJogBx, hOptions, hCalib, hInfo, hSetZero,hPalletOut,hReverse, hSetHome;
 
   hBx = BxMenu_Create(BxGetDlgItem(hBox, FORMSTDRUN_CMDMENU), &pBxMainMenu);
 	if ((testState(robotstm,staterobot_supervisor)&&accesslevel<=MANAGERLEVEL)
@@ -1396,6 +1421,10 @@ BX_BOOL formStdRun_cmdMenu_Click(HBOX hBox)
       BxMenu_Add(hBx ,getLanguageLineFromIdx(langptr, 265,"PS: Pallet out"), MENU, formStd_PalleUdStabler_Click, TRUE, NULL);
       BxMenu_Add(hBx ,getLanguageLineFromIdx(langptr, 266,"Restart Palletstacker"), MENU, formStd_RestartPallestabler_Click, TRUE, NULL);
       BxMenu_Add(hBx ,getLanguageLineFromIdx(langptr, 302,"Restart Palletmagasin"), MENU, formStd_RestartPallemagasin_Click, TRUE, NULL);
+    }
+    if(shuttlestm != -1)
+    {
+      BxMenu_Add(hBx ,getLanguageLineFromIdx(langptr, 303,"Restart Shuttle"), MENU, formStd_RestartShuttle_Click, TRUE, NULL);
     }
   }
 	if (reversebutton1!=NULL)
@@ -1447,28 +1476,26 @@ BX_BOOL formStdRun_cmdMenu_Click(HBOX hBox)
     BxMenu_Add(ToolBx ,getLanguageLineFromIdx(langptr, 25, "STM control"), MENU, formTools_cmdSTMCtrl_Click, TRUE, NULL);
 		
     hInfo = BxMenu_Add(hOptions ,getLanguageLineFromIdx(langptr, 26, "Info"), SUB, NULL, TRUE, NULL);
-//		BxMenu_Add(hInfo ,getLanguageLineFromIdx(langptr, 27, "Stats"), MENU, formTools_cmdStatus_Click, TRUE, NULL);
     BxMenu_Add(hInfo ,getLanguageLineFromIdx(langptr, 28, "Log"), MENU, formTools_cmdLog_Click, TRUE, NULL);
-//    BxMenu_Add(hInfo ,getLanguageLineFromIdx(langptr, 29, "Debug"), MENU, formTools_cmdDebug_Click, TRUE, NULL);
     if(accesslevel>SERVICELEVEL)
       BxMenu_Add(ToolBx ,getLanguageLineFromIdx(langptr, 30, "Axis parameter"), MENU, formTools_cmdAxis_Click, TRUE, NULL);
-//    BxMenu_Add(hOptions ,getLanguageLineFromIdx(langptr, 0, "System"), MENU, formTools_cmdSystem_Click, TRUE, NULL);
+      BxMenu_Add(hInfo ,getLanguageLineFromIdx(langptr, 27, "Stats"), MENU, formTools_cmdStatus_Click, TRUE, NULL);    
+      BxMenu_Add(hInfo ,getLanguageLineFromIdx(langptr, 29, "Debug"), MENU, formTools_cmdDebug_Click, TRUE, NULL);    
+      BxMenu_Add(hOptions ,getLanguageLineFromIdx(langptr, 0, "System"), MENU, formTools_cmdSystem_Click, TRUE, NULL);
     BxMenu_Add(hOptions ,getLanguageLineFromIdx(langptr, 250, "Language"), MENU, formTools_cmdLanguage_Click, TRUE, NULL);
     if(accesslevel>SERVICELEVEL){
       hCalib = BxMenu_Add(hOptions ,getLanguageLineFromIdx(langptr, 32, "Calibrate"), SUB, NULL, TRUE, NULL);
       BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 33, "Adjust frames"), MENU, formTools_cmdFixPoints_Click, TRUE, NULL);
-      if(accesslevel>=SERVICELEVEL)
-        BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 257, "Patterns"), MENU, formEditBoxPattern_Click, TRUE, NULL);
+      BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 257, "Patterns"), MENU, formEditBoxPattern_Click, TRUE, NULL);
       BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 34, "Calibrate TCP"), MENU, formTools_cmdCalTcp_Click, TRUE, NULL);
       BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 35, "Setup system parameters"), MENU, formTools_cmdSetupSysParam_Click, TRUE, NULL);
-      
       BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 36, "AutoHome"), MENU, formTools_cmdAutoHome_Click, TRUE, NULL);
       BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 37, "ZeroTool"), MENU, formTools_cmdSetZeroTool_Click, TRUE, NULL);
       BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 38, "Tool90"), MENU, formTools_cmdSetTool90_Click, TRUE, NULL);
     }
     if(accesslevel>=MANAGERLEVEL)
     {
-/*      if(accesslevel==MAXLEVEL)
+      if(accesslevel==MAXLEVEL)
       {
         hSetHome = BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 39, "Home"), SUB, NULL, TRUE, NULL);
         BxMenu_Add(hSetHome ,"A", MENU, formTools_cmdMoveHomeA_Click, TRUE, NULL);
@@ -1477,7 +1504,7 @@ BX_BOOL formStdRun_cmdMenu_Click(HBOX hBox)
         BxMenu_Add(hSetHome ,"D", MENU, formTools_cmdMoveHomeD_Click, TRUE, NULL);
         BxMenu_Add(hSetHome ,"E", MENU, formTools_cmdMoveHomeE_Click, TRUE, NULL);
         BxMenu_Add(hSetHome ,"F", MENU, formTools_cmdMoveHomeF_Click, TRUE, NULL);
-      }*/
+      }
       hSetZero = BxMenu_Add(hCalib ,getLanguageLineFromIdx(langptr, 40, "Zero"), SUB, NULL, TRUE, NULL);
       BxMenu_Add(hSetZero ,"A", MENU, formTools_cmdSetZeroA_Click, TRUE, NULL);
       if(accesslevel==MAXLEVEL)

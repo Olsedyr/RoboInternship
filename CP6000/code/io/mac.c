@@ -245,7 +245,7 @@ int	get_MacRequest(char *array, MacTalkPacket *mtp, int type)
 int sendMactalk(MacTalkPacket *request, MacTalkPacket *answer, tmpnMac *mac)
 {
 	char sendpacket[20];
-	char recpacket[20];
+	char recpacket[256];
 	int spacketlen;
 	struct timeval tv;
   fd_set readfds;
@@ -280,7 +280,7 @@ int sendMactalk(MacTalkPacket *request, MacTalkPacket *answer, tmpnMac *mac)
 		retselect = select(mac->sfd+1, &readfds, NULL, NULL, &tv);
 		if(retselect<=0)
 		{
-			printf("mactalk: timeout\n",mac->ipaddr, mac->port);
+			printf("mactalk: timeout, ipaddr: %s, port: %d\n", mac->ipaddr, mac->port);
 			return 0;
 		}
 		if (FD_ISSET(mac->sfd, &readfds))
@@ -422,7 +422,7 @@ void parseGetPack(MacTalkPacket *getpack, macConnect *mccon)
 		break;
 	case MAC_SHORTUINT_ASFLOAT:
 		ui=getpack->data&0xFFFF;
-		mccon->fdata=si*mccon->factor;
+		mccon->fdata=ui*mccon->factor;
 	}
 }
 
@@ -462,7 +462,7 @@ void *macTask(void * arg )
   clock_t stop;
   float diff;
 	char notstr[5];
-	char betastr[5];
+	char betastr[20];
 	int cycles=0;
 	MacTalkPacket sendpack;
 	MacTalkPacket getpack;

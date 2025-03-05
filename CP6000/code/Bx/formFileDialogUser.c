@@ -13,7 +13,7 @@
 #include <dirent.h>
 
 static BXLISTSTRUCT FileDlgList;
-static char currentPath[255] = "";
+static char currentPath[512] = "";
 static BX_BOOL FILE_SELECTED = FALSE;
 static BXMENUSTRUCT pBxMenu;
 
@@ -26,7 +26,7 @@ static void setupList(HBOX hBox, char *dir, char *type)
   struct stat dstat;
 #endif
   int n, i, j;
-  char s[255];
+  char s[512];
 
   n = BxList_GetCount(BxGetDlgItem(hBox, FORMFILEDIALOG_LISTFILE));
   for(i=0;i<n;i++)
@@ -188,7 +188,7 @@ BX_BOOL formFileDialog_listFile_Click(HBOX hBox)
 
 BX_BOOL formFileDialog_listDir_Click(HBOX hBox)
 {
-  BX_CHAR *str, dirs[255], newPath[255];
+  BX_CHAR *str, dirs[512], newPath[1024];
   BXFILEDLGSTRUCT *pBxFDlgList = (BXFILEDLGSTRUCT *)((BOXSTRUCT*)hBox)->m_userData;
 
   if((str = BxList_GetString(BxGetDlgItem(hBox, FORMFILEDIALOG_LISTDIR), BxList_GetSelected(BxGetDlgItem(hBox, FORMFILEDIALOG_LISTDIR)))) != NULL )
@@ -199,7 +199,7 @@ BX_BOOL formFileDialog_listDir_Click(HBOX hBox)
       dirs[strlen(dirs)-2]='\0';
       sprintf(newPath,"%s/%s", pBxFDlgList->Path, dirs );
       chdir(newPath);
-      getcwd(pBxFDlgList->Path, 255);
+      getcwd(pBxFDlgList->Path, 512);
       initList(hBox);
       FILE_SELECTED = FALSE;
       BxSetBoxText(BxGetDlgItem(hBox, FORMFILEDIALOG_CMDFILENAME), "");
@@ -212,7 +212,7 @@ BX_BOOL formFileDialog_cmdOk_Click(HBOX hBox)
 {
   BXFILEDLGSTRUCT *pBxFDlgList = (BXFILEDLGSTRUCT *)((BOXSTRUCT*)hBox)->m_userData;
   //BX_PSTRING pStr;
-	//  BxGetBoxText(BxGetDlgItem(hBox, FORMFILEDIALOG_CMDFILENAME), pStr,	255);
+	//  BxGetBoxText(BxGetDlgItem(hBox, FORMFILEDIALOG_CMDFILENAME), pStr,	512);
 
   if(pBxFDlgList->Type!=NULL)
     sprintf(pBxFDlgList->Filename, "%s/%s.%s", pBxFDlgList->Path, currentPath, pBxFDlgList->Type);
@@ -234,7 +234,7 @@ BX_BOOL formFileDialog_cmdCancel_Click(HBOX hBox)
 BX_BOOL formFileDialog_cmdCreateDir_Click(HBOX hBox)
 {
   BX_PSTRING str;
-  BX_CHAR newPath[255];
+  BX_CHAR newPath[512];
   BXFILEDLGSTRUCT *pBxFDlgList = (BXFILEDLGSTRUCT *)((BOXSTRUCT*)hBox)->m_userData;
   
   if(BxVirtualKeyboard( hBox, "", 25)==IDOK)
@@ -249,7 +249,7 @@ BX_BOOL formFileDialog_cmdCreateDir_Click(HBOX hBox)
       mkdir(newPath);
 #endif
       chdir(newPath);
-      getcwd(pBxFDlgList->Path, 255);
+      getcwd(pBxFDlgList->Path, 512);
       initList(hBox);
       FILE_SELECTED = FALSE;
       BxSetBoxText(BxGetDlgItem(hBox, FORMFILEDIALOG_CMDFILENAME), "");
@@ -282,7 +282,7 @@ BX_BOOL formFileDialog_cmdRename_Click(HBOX hBox)
 {
 /*
   BXFILEDLGSTRUCT *pBxFDlgList = (BXFILEDLGSTRUCT *)((BOXSTRUCT*)hBox)->m_userData;
-  BX_CHAR dirs[255];
+  BX_CHAR dirs[512];
 
   if(pBxFDlgList->Type!=NULL)
     sprintf(pBxFDlgList->Filename, "%s/%s.%s", pBxFDlgList->Path, currentPath, pBxFDlgList->Type);
@@ -302,7 +302,7 @@ BX_BOOL formFileDialog_cmdRename_Click(HBOX hBox)
 BX_BOOL formFileDialog_cmdDelete_Click(HBOX hBox)
 {
   BXFILEDLGSTRUCT *pBxFDlgList = (BXFILEDLGSTRUCT *)((BOXSTRUCT*)hBox)->m_userData;
-  BX_CHAR dirs[255];
+  BX_CHAR dirs[2048];
   
   if(pBxFDlgList->Type!=NULL)
     sprintf(pBxFDlgList->Filename, "%s/%s.%s", pBxFDlgList->Path, currentPath, pBxFDlgList->Type);
@@ -355,7 +355,7 @@ BX_INT BxFileDialog( HBOX hBox, BXFILEDLGSTRUCT* pFDlg )
   BxSetBoxText(BxGetDlgItem(hFileDlg, FORMFILEDIALOG_CMDFILENAME), pFDlg->Filename);
  
   if(strcmp(pFDlg->Path, "")==0)
-    getcwd(pFDlg->Path, 255);
+    getcwd(pFDlg->Path, 512);
 
   rtnVal = DoModal(hFileDlg);
 

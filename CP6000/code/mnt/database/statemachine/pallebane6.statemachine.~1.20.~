@@ -1,0 +1,310 @@
+STATEMACHINEVERSION 3
+Name=Pallebane6
+;*******************************************
+;*
+;* pallebane model "alfred" 305,307,308,309 prev=1 prev2=0
+;* pallebane model "katrine" 306 prev=1 prev2=1
+;*
+;* "nyhuus" copy off "alfred" execpt pallebane5 replaced by pallemagasin 
+;
+;* "katrine" tager paller fra 2 sider
+;*
+;*******************************************
+Input=palletInPlace "dummyOff"
+Input=fotoAlign "dummyOff"
+Input=fotoAlign2 "dummyOff"
+Input=emptyPallet "dummyOff"
+Output=MotorFwd "dummyOut"
+Output=MotorRev "dummyOut"
+Output=ChainFwd "dummyOut"
+Output=ChainRev "dummyOut"
+Output=Cyl "dummyOut"
+Link=next Pallebane7
+;prev=right
+Link=prev Pallebane5 
+;prev2=left
+Link=prev2 Pallebane5
+Link=parent Parent
+linkValue=firstRun WorkCell
+linkValue=nextpalb Frames
+linkValue=simulate simulatePallets Simulate
+Timeout=TimeoutDelay 5000000
+Timeout=TimeoutForPalletRev 1000000
+Timeout=TimeoutForPalletSideAlign 2000000
+Timeout=TimeoutForPalletLift 2000000
+Timeout=maxDelayStop 10000000
+Timeout=TimeoutRev 150000
+Timeout=EmptyDelay 30000000
+;usePrev=1 prev 
+;usePrev=2 right
+Const=usePrev 0
+;usePrev2=1 prev2
+;usePrev2=2 left
+Const=usePrev2 0
+Const=ON 1
+Value=errorCode 0
+Value=cPallet 0
+Const=useEmptyDelay 1
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+ END
+
+State=ST_IDLE
+  SET MotorFwd 0
+  SET MotorRev 0
+  SET ChainFwd 0
+  SET ChainRev 0
+  SET Cyl 0
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+;*******************************************
+;* PALLET IS NOT EMPTY, SHOULD IT BE SEND
+;* OUT OF WORKCELL AND MAKE ROOM FOR A NEW 
+;* ask boxcounter.statemachine how many boxes 
+;* are on pallet and set cBItems
+;*******************************************
+State=ST_PALLET_NOT_EMPTY
+  SETSTATE ST_OK
+END
+
+State=ST_OK
+	TEST nextpalb = 1
+		SETSTATE ST_READY
+	ELSE
+		SETSTATE ST_READY_ROBOT
+	ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+ END
+
+;*******************************************
+;* PHOTOCELL HAS TOLD US THAT PALLET IS EMPTY
+;* SHOULD WE DO MORE TESTING TO BE SURE ?
+;* THIS STATE SHOULD BE RESPONSIBLE FOR 
+;* THE CORRECT VALUE of cBItems
+;*******************************************
+State=ST_PALLET_EMPTY
+	SET nextpalb 0
+  SETSTATE ST_READY_ROBOT
+END
+
+State=ST_READY_ROBOT
+	TEST nextpalb = 1
+		SETSTATE ST_READY
+	ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_READY
+  TEST next = ST_EMPTY
+    TIMEOUT maxDelayStop ST_SEND
+    SETSTATE ST_SEND
+  ELSE
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET ChainFwd 0
+    SET ChainRev 0
+    SET Cyl 0
+    SET MotorRev 0
+  ENDTEST
+  TEST simulate = 1
+    SETSTATE ST_PALLET_EMPTY
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_SEND
+  TEST next = ST_READY
+    CALC cPallet = cPallet + 1
+    SETSTATE ST_EMPTY
+  ELSE
+    SET MotorFwd 1
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND maxDelayStop = 1
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_EMPTY
+  SET MotorFwd 0
+  SET MotorRev 0
+  SET ChainFwd 0
+  SET ChainRev 0
+  SET Cyl 0
+  TEST usePrev > 0
+    TEST prev = ST_READY
+    AND usePrev = 1
+      SET Cyl 1
+      TIMEOUT TimeoutForPalletLift ST_EMPTY_SHIFT
+      SETSTATE ST_TIMER
+    ELSE
+;usePrev=2 -> pallet is comeing from pallebane45 (middle)
+      TEST prev = ST_READY_RIGHT
+      AND usePrev = 2
+        SET Cyl 1
+        TIMEOUT TimeoutForPalletLift ST_EMPTY_SHIFT
+        SETSTATE ST_TIMER
+      ENDTEST
+    ENDTEST
+  ELSE 
+    TEST usePrev2 > 0 
+      TEST prev2 = ST_READY
+      AND usePrev2 = 1
+        SET Cyl 1
+        TIMEOUT TimeoutForPalletLift ST_EMPTY_SHIFT2
+        SETSTATE ST_TIMER
+      ELSE 
+        TEST prev2 = ST_READY_LEFT
+        AND usePrev2 = 2
+          SET Cyl 1
+          TIMEOUT TimeoutForPalletLift ST_EMPTY_SHIFT2
+          SETSTATE ST_TIMER
+        ENDTEST 
+      ENDTEST 
+    ENDTEST
+  ENDTEST
+  TEST prev = ST_EMPTY
+  AND useEmptyDelay = 1
+    TIMEOUT EmptyDelay ST_TESTEMPTY
+    SETSTATE ST_TESTEMPTY 
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+  TEST palletInPlace = ON 
+    SET errorCode 3013
+    SETSTATE ST_IDLE
+;     palleplads ikke tom
+  ENDTEST  
+END
+
+State=ST_TESTEMPTY
+  TEST prev != ST_EMPTY
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST EmptyDelay = 1
+      SET errorCode 1001
+;pallet missing
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST prev = ST_SEND
+  OR prev = ST_SEND_RIGHT
+    SET ChainRev 1
+  ENDTEST
+  TEST fotoAlign = 1
+    TIMEOUT TimeoutForPalletSideAlign ST_PALLET_SIDE_ALIGN_TIMEOUT
+    SETSTATE ST_TIMER
+  ELSE
+    TEST maxDelayStop = 1
+      ;pallet stuck
+      SET errorCode 3014
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RECEIVE2
+  TEST prev2 = ST_SEND
+  OR prev2 = ST_SEND_LEFT
+    SET ChainFwd 1
+  ENDTEST
+  TEST fotoAlign2 = 1
+    TIMEOUT TimeoutForPalletSideAlign ST_PALLET_SIDE_ALIGN_TIMEOUT2
+    SETSTATE ST_TIMER
+  ELSE
+    TEST maxDelayStop = 1
+      ;pallet stuck
+      SET errorCode 3014
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_PALLET_SIDE_ALIGN_TIMEOUT
+  SET ChainRev 0
+  SET Cyl 0
+  SETSTATE ST_PALLET_REV
+END
+
+State=ST_PALLET_SIDE_ALIGN_TIMEOUT2
+  SET ChainFwd 0
+  SET Cyl 0
+  SETSTATE ST_PALLET_REV
+END
+
+State=ST_PALLET_REV
+  TEST palletInPlace = ON
+		TEST emptyPallet = 1
+			SET MotorRev 1
+		ENDTEST
+    TIMEOUT TimeoutForPalletRev ST_PALLET_REV_TIMEOUT
+    SETSTATE ST_TIMER
+  ELSE
+    SET MotorRev 1
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_PALLET_REV_TIMEOUT
+  SET MotorRev 0
+  TEST emptyPallet = 1
+    SETSTATE ST_PALLET_EMPTY
+  ELSE
+    SETSTATE ST_PALLET_NOT_EMPTY
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST simulate = 1
+    SETSTATE ST_READY_ROBOT
+  ELSE
+    TEST palletInPlace = ON
+    AND emptyPallet = 0
+      SETSTATE ST_PALLET_NOT_EMPTY
+    ELSE 
+      SET MotorRev 1
+      TIMEOUT TimeoutDelay ST_STOP
+      SETSTATE ST_STOP
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_STOP
+  TEST palletInPlace = ON
+    TIMEOUT TimeoutForPalletRev ST_PALLET_REV_TIMEOUT
+    SETSTATE ST_TIMER
+  ELSE 
+    TEST TimeoutDelay = 1
+      SETSTATE ST_EMPTY
+    ENDTEST	
+  ENDTEST
+END
+
+State=ST_EMPTY_SHIFT
+  TIMEOUT maxDelayStop ST_RECEIVE
+  SETSTATE ST_RECEIVE
+END
+
+State=ST_EMPTY_SHIFT2
+  TIMEOUT maxDelayStop ST_RECEIVE2
+  SETSTATE ST_RECEIVE2
+END

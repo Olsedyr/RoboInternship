@@ -1,0 +1,6 @@
+STATEMACHINEVERSION 3
+Include=cpservoskub.statemachine
+Name=ServoSkub
+;** User section **
+Const=cruise_speed 1500.0000
+Const=acceleration 3500.0000

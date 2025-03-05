@@ -3,7 +3,7 @@ Name=Program322
 ;signal to WorkCell that a new program has been selected
 Value=newprogram 1
 Value=usersection 0
-Const=programidx 4
+Const=programidx 6
 Link=workcell WorkCell
 Value=casekind 0
 Value=wALayer 0

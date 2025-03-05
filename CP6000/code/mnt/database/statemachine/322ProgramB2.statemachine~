@@ -1,0 +1,210 @@
+STATEMACHINEVERSION 3
+Name=ProgramB2
+Value=DEBUG 1
+Value=DEBUG 1
+;*******************************************
+;* LINK's                 
+;*******************************************
+Link=program Program322
+Link=parent Parent
+Link=robot Robot
+
+;*******************************************
+;* VALUE's                
+;*******************************************
+Value=errorCode 0
+linkValue=roboMessageCached RoboError
+;*******************************************
+;* FRAME LINKVALUE's                
+;*******************************************
+linkValue=base Frames 
+linkValue=home Frames
+linkValue=homeHigh Frames
+linkValue=pick Frames
+linkValue=place Frames
+
+
+;*******************************************
+;* ALL EXISTING PATH TYPES
+;*******************************************
+Path=home_pick          16 21
+Path=pick_place         17 25
+Path=place_pick         16 25
+Path=home_home          17 16
+
+Value=normalmode 17
+
+;*******************************************
+;* FRAME's                   
+;*******************************************
+Frame=fromFrame x=0.0000 y=0.0000 z=0.0000 v=0.0000 w=0.0000 u=0.0000
+Frame=toFrame1 x=0.0000 y=0.0000 z=0.0000 v=0.0000 w=0.0000 u=0.0000
+Frame=toFrame2 x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+;*******************************************
+;* TIMEOUT's                    
+;*******************************************
+
+;*******************************************
+;* STATES                    
+;*******************************************
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_ERROR
+	TEST parent != ST_RUN
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_IDLE
+  TEST parent = ST_RUN
+		SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  SET errorCode 0
+	;set state = ST_IDLE for alle path's and set maxidx = 0 in pathTable
+	;stafet value
+  SETSTATE ST_START
+END
+
+
+;*******************************************
+;* START FROM SCRATCH
+;*******************************************
+State=ST_START
+;  kun een bopt fil for hver robot
+;  en ppscripttype for hver konfiguration(tool)
+  TEST home_home.state < ST_INACTIVE 
+	LOAD home_home homeHigh home
+  ENDTEST
+  SETSTATE ST_WAIT_HOME_HOME_LOADED
+END
+;*******************************************
+;* ST_WAIT_HOME_HOME_LOADED
+;*******************************************
+State=ST_WAIT_HOME_HOME_LOADED
+  TEST home_home.state = ST_LOADED
+     TEST home_pick.state < ST_INACTIVE
+	;mateuszpaths
+	  LOAD home_pick home pick
+	  LOAD pick_place pick place
+	  LOAD place_pick place pick
+      EXEC home_home
+      PRINT home_home
+      SETSTATE ST_HOME_HOME
+    ENDTEST
+  ENDTEST
+END
+;*******************************************
+;*
+;*       F R A M E - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME
+;*******************************************
+State=ST_HOME
+  TEST parent = ST_RUN
+  AND roboMessageCached = 0
+  AND home_pick.state = ST_LOADED
+					EXEC home_pick
+                    PRINT home_pick
+					SETSTATE ST_HOME_PICK
+  ELSETEST roboMessageCached = 333
+		SET errorCode 333
+		SETSTATE ST_ERROR
+	ELSE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+;*******************************************
+;* ST_PICK
+;*******************************************
+State=ST_PICK
+  TEST parent = ST_RUN
+  AND roboMessageCached = 0
+					EXEC pick_place 
+                    PRINT pick_place 
+					SETSTATE ST_PICK_PLACE
+  ELSETEST roboMessageCached = 333
+		SET errorCode 333
+		SETSTATE ST_ERROR
+	ELSE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+;*******************************************
+;* ST_PLACE
+;*******************************************
+State=ST_PLACE
+  TEST parent = ST_RUN
+  AND roboMessageCached = 0
+					EXEC place_pick 
+                    PRINT place_pick 
+					SETSTATE ST_PLACE_PICK
+  ELSETEST roboMessageCached = 333
+		SET errorCode 333
+		SETSTATE ST_ERROR
+	ELSE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+;*******************************************
+;*
+;*       P A T H - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME_HOME
+;*******************************************
+State=ST_HOME_HOME
+  TEST home_home.state = ST_EXECUTING
+  ELSETEST home_home.state = ST_FINISHED
+    SETSTATE ST_HOME
+  ELSETEST home_home.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_HOME_PICK
+;*******************************************
+State=ST_HOME_PICK
+  TEST home_pick.state = ST_FINISHED
+    SETSTATE ST_PICK
+  ELSETEST home_pick.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_PICK_PLACE
+;*******************************************
+State=ST_PICK_PLACE
+  TEST pick_place.state = ST_FINISHED
+    SETSTATE ST_PLACE
+  ELSETEST pick_place.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+;*******************************************
+;* ST_PLACE_PICK
+;*******************************************
+State=ST_PLACE_PICK
+  TEST place_pick.state = ST_FINISHED
+    SETSTATE ST_PICK
+  ELSETEST place_pick.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END

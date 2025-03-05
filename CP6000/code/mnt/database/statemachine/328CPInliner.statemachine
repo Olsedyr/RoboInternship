@@ -1,0 +1,90 @@
+STATEMACHINEVERSION 3
+Name=CPInliner
+Output=motor "CPInliner Motor"
+Link=next checkWeigherPrevS1  
+Value=simulate 0
+Const=maxPulsCount 14
+Value=pulsCount 0
+Value=modCount 0
+Timeout=pulsTime 450000
+Timeout=StartDelay 1000000
+Const=pulsTimeOn 450000
+Const=pulsTimeOff 1000000
+Timeout=timeRunAgain 0
+Timeout=timeStop 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motor 0
+  TEST next = ST_GO
+  OR simulate = 1
+		TIMEOUT StartDelay ST_RESET
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+
+State=ST_START
+  TEST pulsCount < maxPulsCount
+    TEST pulsTime = 1
+      CALC modCount = pulsCount % 2    
+      TEST modCount = 0
+        SET motor 1
+        SET pulsTime pulsTimeOn
+        TIMEOUT pulsTime ST_START
+        SETSTATE ST_START
+      ELSE
+        SET motor 0
+        SET pulsTime pulsTimeOff
+        TIMEOUT pulsTime ST_START
+        SETSTATE ST_START
+      ENDTEST  
+      CALC pulsCount = pulsCount + 1
+    ENDTEST
+  ELSE
+    SETSTATE ST_RUN
+  ENDTEST
+  TEST next != ST_GO
+  AND next != ST_GOSTOP
+  AND simulate = 0
+    TIMEOUT timeStop ST_GOSTOP
+    SETSTATE ST_GOSTOP
+  ENDTEST
+END
+
+State=ST_RUN
+  SET motor 1
+  TEST next != ST_GO
+  AND next != ST_GOSTOP
+  AND simulate = 0
+    TIMEOUT timeStop ST_GOSTOP
+    SETSTATE ST_GOSTOP
+  ENDTEST
+END
+
+State=ST_GOSTOP
+  TEST timeStop = 1
+    SETSTATE ST_STOP
+  ENDTEST
+END
+
+State=ST_STOP
+  TEST next = ST_GO
+    TIMEOUT timeRunAgain ST_RUN
+    SETSTATE ST_TIMER
+  ELSE
+    SET motor 0
+  ENDTEST
+END
+
+State=ST_RESET
+  SET pulsCount 1
+  SET motor 1
+  SET pulsTime pulsTimeOn
+  TIMEOUT pulsTime ST_START
+  SETSTATE ST_START
+END

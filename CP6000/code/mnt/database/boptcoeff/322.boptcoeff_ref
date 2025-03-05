@@ -1,0 +1,15 @@
+BOPTCOEFFVERSION 1
+322
+
+mode 16 pathtype 20 :
+pathName home_palletA
+def.fromFrame home
+def.toFrame palletA0
+def.toItem C18
+viatype NONE
+macro1 type=NOMACRO
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.5000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=15.0000 timefactor=1.0000 maxlength=3500.0000
+

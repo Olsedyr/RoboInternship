@@ -149,28 +149,6 @@
             <string>Stop</string>
         </property>
     </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cmdRun</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>390</x>
-                <y>490</y>
-                <width>120</width>
-                <height>90</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-                <family>Helvetica [Urw]</family>
-                <pointsize>18</pointsize>
-            </font>
-        </property>
-        <property name="text">
-            <string>Kør</string>
-        </property>
-    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>TextLabel2_2_2</cstring>
@@ -237,6 +215,28 @@
             <string>50.0</string>
         </property>
     </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdRun</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>390</x>
+                <y>490</y>
+                <width>120</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Kør</string>
+        </property>
+    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>groupBox1_2_2</cstring>
@@ -260,51 +260,6 @@
                 <rect>
                     <x>20</x>
                     <y>40</y>
-                    <width>740</width>
-                    <height>35</height>
-                </rect>
-            </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
-                </color>
-            </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>255</blue>
-                </color>
-            </property>
-            <property name="font">
-                <font>
-                    <family>Helvetica [Urw]</family>
-                    <pointsize>18</pointsize>
-                </font>
-            </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
-            <property name="text">
-                <string>Information type</string>
-            </property>
-            <property name="alignment">
-                <set>AlignCenter</set>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>laberror1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>140</y>
                     <width>740</width>
                     <height>35</height>
                 </rect>
@@ -515,6 +470,67 @@
                 <set>AlignCenter</set>
             </property>
         </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>laberror1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>140</y>
+                    <width>740</width>
+                    <height>35</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>Information type</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>pushButton5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>220</x>
+                <y>520</y>
+                <width>95</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>pushButton5</string>
+        </property>
     </widget>
 </widget>
 <images>

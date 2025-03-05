@@ -5,7 +5,7 @@ typedef struct BXFILEDLGSTRUCT {
   BX_CHAR   Path[255];
   BX_CHAR   Type[255];
   BX_INT    Style;
-  BX_CHAR   Filename[255];
+  BX_CHAR   Filename[1024];
 } BXFILEDLGSTRUCT;
 
 extern BX_INT BxFileDialog( HBOX hBox, BXFILEDLGSTRUCT* pFDlg );

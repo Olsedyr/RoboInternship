@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=PallemagasinPhoto
+Input=input "Pallemagasin Foto"
+Timeout=TimeOn 200000
+Timeout=TimeOff 200000
+Value=test 0
+Const=active 1

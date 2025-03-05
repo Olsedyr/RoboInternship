@@ -1,0 +1,50 @@
+BOPTCOEFFVERSION 1
+323
+
+mode 21 pathtype 24 :
+pathName conveyorB_palletB
+def.fromFrame conveyorB
+def.toFrame palletB
+def.fromItem 10KgNet
+def.toItem 10KgNet
+def.toPattern 10Kg_40
+viatype BOTH
+via1pos.y c=200.00
+via1pos.z c=0.00
+via1vel.y c=100.00
+via1vel.z c=0.00
+via2pos.y c=140.00
+via2pos.z c=150.0000 gg=20.00 ll=2400.00 llll=100.00
+via2pos.w r=-30.0000
+via2vel.y c=0.0000
+via2vel.z c=-150.0000 g=-80.00 gg=-150.00 ll=-600.00 llll=-500.00
+via2vel.w r=40.0000
+macro1 type=FASTUPLINE length=40.0000 time=0.250
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.5000 b=2.5000 c=2.6000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=1.0500 maxlength=2500.0000
+
+mode 21 pathtype 24 :
+pathName conveyorB_palletB
+def.fromFrame conveyorB
+def.toFrame palletB
+def.fromItem 10KgNet
+def.toItem 10KgNet
+def.toPattern 10Kg_40
+viatype BOTH
+via1pos.y c=200.00
+via1pos.z c=0.00
+via1vel.y c=100.00
+via1vel.z c=0.00
+via2pos.y c=140.00
+via2pos.z c=150.0000 gg=20.00 ll=2400.00 llll=100.00
+via2pos.w r=-30.0000
+via2vel.y c=0.0000
+via2vel.z c=-150.0000 g=-80.00 gg=-150.00 ll=-600.00 llll=-500.00
+via2vel.w r=40.0000
+macro1 type=FASTUPLINE length=40.0000 time=0.250
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.5000 b=2.5000 c=2.6000 d=6.0000 e=6.0000
+params tcpidx=1 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=1.0500 maxlength=2500.0000

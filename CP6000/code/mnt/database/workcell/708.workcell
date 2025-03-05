@@ -8,13 +8,16 @@ ITEM C11.item
 ITEM C14.item
 ITEM C18.item
 ITEM HSdoubleD9Cardboard.item
-CPPATTERN Harndrup.cppattern
 CPPATTERN DobbeltD9.cppattern
-CPPATTERN C11Small8.cppattern
+CPPATTERN Grape1Lag.cppattern
+CPPATTERN Peber1Lag.cppattern
+CPPATTERN Peber2Lag.cppattern
 STATETEKST danish.statetekst
+STATETEKST polish.statetekst
 STATETEKST english.statetekst
 STATETEKST spanish.statetekst
 LANGUAGE danish.language
+LANGUAGE polish.language
 LANGUAGE english.language
 LANGUAGE spanish.language
 ;*********************************

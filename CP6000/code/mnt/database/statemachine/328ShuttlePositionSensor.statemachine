@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=ShuttlePositionSensor
+Input=input "Shuttle Induktiv"
+Timeout=TimeOn 50000
+Timeout=TimeOff 5000
+Value=test 0
+Const=active 1

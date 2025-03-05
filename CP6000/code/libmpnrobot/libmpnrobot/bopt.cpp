@@ -162,10 +162,10 @@ tmpnDouble bane::findalpha(const baneConf& c, int i) { // i=jointnr.
   kof.a3[3].array[i] = (-3*cp0+12*cp1-42*cp2+100*cp3-67*cp4-cv0+41*cv4)*rfivesix;
 
   /*********************************/
-  register tmpnDouble maxvel=0;
-  register tmpnDouble maxacc=0;
-  register tmpnDouble dq; //dq^2
-  register tmpnDouble ddq; //ddq^2
+  tmpnDouble maxvel=0;
+  tmpnDouble maxacc=0;
+  tmpnDouble dq; //dq^2
+  tmpnDouble ddq; //ddq^2
   for (int j=0;j<4;j++) { //delpolynomie
     int jp1=j+1;
     tmpnDouble k1 = kof.a1[j].array[i];
@@ -408,7 +408,7 @@ void bane::gradientMetode() {
 					if (fabs(p1.x-p3.x)<deta) break;  
 				}
       }
-      p4.x = (p1.x+p3.x)*0.5; //saet midtpunkt mellem brackets -> kendes med en sikkerhed på deta.
+      p4.x = (p1.x+p3.x)*0.5; //saet midtpunkt mellem brackets -> kendes med en sikkerhed pï¿½ deta.
       Q.pos[1].array[i] = Q.pos[1].array[i]-p4.x*v[i][0];
       Q.pos[2].array[i] = Q.pos[2].array[i]-p4.x*v[i][1];
       Q.pos[3].array[i] = Q.pos[3].array[i]-p4.x*v[i][2];
@@ -524,7 +524,7 @@ tmpnDouble bane::ddcubicpoly(const int joint, const tmpnDouble t) {
 
 //#define TESTA //Graf af linjesoegning
 
-//#define TESTB //Test at løsning er globalt optimal
+//#define TESTB //Test at lï¿½sning er globalt optimal
 
 //#define TESTC // Test eksekveringstid
 
@@ -548,7 +548,7 @@ int main () {
 
   tmpnDouble g[5][3];
   tmpnDouble maxeta=0.2;
-  //b.controlpoints.pos[2].array[0]=3.5; //Tving viapunkt til bestemt værdi
+  //b.controlpoints.pos[2].array[0]=3.5; //Tving viapunkt til bestemt vï¿½rdi
   baneConf Q(b.controlpoints);
   baneConf Qr(b.controlpoints);
   int i=0;

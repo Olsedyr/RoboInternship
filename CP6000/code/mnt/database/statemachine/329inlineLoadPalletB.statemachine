@@ -1,0 +1,19 @@
+; INLINE 329inlineLoadPalletB.statemachine
+SETFRAME fromFrame toFrame
+;*****************************************
+SETFRAME toFrame conveyorB
+CALC toFrame.y = toFrame.y + item.gy
+CALC toFrame.x = toFrame.x - item.gx
+TEST currentpal = 1
+  ;SET palletA_conveyorB.mode CurrentMode
+  ;LOAD palletA_conveyorB fromFrame toFrame
+  ;*****************************************
+  SET palletA_home.mode CurrentMode
+  LOAD palletA_home fromFrame home
+ELSE
+  ;SET palletB_conveyorB.mode CurrentMode
+  ;LOAD palletB_conveyorB fromFrame toFrame
+  ;*****************************************
+  SET palletB_home.mode CurrentMode
+  LOAD palletB_home fromFrame home
+ENDTEST

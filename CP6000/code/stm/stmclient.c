@@ -28,7 +28,7 @@ static int reinitialize=0;
 
 char recvbuf[STMCLIENT_RECVBUFFER];
 
-extern int getline(char *instring, char *outstring, int lim);
+extern int getStrFromLine(char *instring, char *outstring, int lim);
 
 
 int getResponse(int* ibytes, int rbytes,char *instring,char *outstring1,char *outstring2,char *outstring3,char *outstring4) 
@@ -39,7 +39,7 @@ int getResponse(int* ibytes, int rbytes,char *instring,char *outstring1,char *ou
   /* Parse messages */
   if(*ibytes<rbytes)
   {
-    linelen = getline(&instring[*ibytes], line, 255);
+    linelen = getStrFromLine(&instring[*ibytes], line, 255);
     *ibytes+=(linelen+1);
     if (!strncmp("STATE",line,5)) 
     {
@@ -110,7 +110,7 @@ int getResponse(int* ibytes, int rbytes,char *instring,char *outstring1,char *ou
 
 int queryRemoteHost(tmpnWorkcell *workcell, tmpnRemoteHost *remotehost)
 {
-  char s[256];
+  char s[512];
   int i;
   int rbytes=0,ibytes=0;
   int resp = RESPONSE_RUBBISH;

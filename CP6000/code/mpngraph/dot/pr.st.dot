@@ -1,0 +1,7 @@
+digraph G {
+node [fontsize=10];
+PROGRAM_C11 -> ST_RUNNING_C11;
+ST_RUNNING_C11 -> ST_RESET;
+ST_IDLE -> ST_RESET;
+ST_RESET -> PROGRAM_C11;
+}

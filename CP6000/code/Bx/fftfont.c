@@ -9,9 +9,9 @@ extern BX_BOOL InitSDLFontServer(FONT *font, char* fontname, int height);
 #endif
 #endif
 
-BxFont* DefaultSmallFont;
-BxFont* DefaultFont;
-BxFont* DefaultButtonFont;
+//BxFont* DefaultSmallFont;
+//BxFont* DefaultFont;
+//BxFont* DefaultButtonFont;
 FONT __sysFont;
 FONT __sysSmallFont;
 

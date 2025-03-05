@@ -15,7 +15,7 @@ int logMsg(char *s)
   char logBuffer[MAXLOG][256];
   char logTime[32];
   int j,i=1;
-  char filename[256];
+  char filename[512];
   
   time_t t;
 
@@ -56,7 +56,7 @@ int logStatus(char *s)
   FILE *fp;
   char logBuffer[256];
   char logTime[32];
-  char filename[256];
+  char filename[512];
   
   time_t t;
 

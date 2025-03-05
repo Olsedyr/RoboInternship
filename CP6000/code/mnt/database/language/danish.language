@@ -73,7 +73,7 @@ Dansk
 0070 "io12:  disp. " "io12:  avail. "
 0071 "io13:  disp. " "io13:  avail. "
 0072 "io14:  disp. " "io14:  avail. "
-0073 "io15:  disp. " "io15:  avail. "
+0073 "io15:  test " "io15:  avail. "
 0074 "Ok" "Ok"
 0075 "Vippe" "Tilt"
 0076 "Dreje" "Turn"
@@ -308,3 +308,4 @@ Dansk
 0300 "Nulstil sakssikkerhed" "Reset Scissor Secure"
 0301 "Manual" "Manual"
 0302 "Genstart Pallemagasin" "Restart Palletmagasin"
+0303 "Genstart Shuttle" "Restart Shuttle"

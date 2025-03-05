@@ -34,8 +34,8 @@ static char casecountstr[256]="";
 static FONT strFont;
 static int useprogramstm=-1;
 
-tmpnStateMachineValue *ppmin;
-tmpnStateMachineValue *casecount;
+//tmpnStateMachineValue *ppmin;
+//tmpnStateMachineValue *casecount;
 
 static int wstm = -1;
 static int statew_idle = -1;

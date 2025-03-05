@@ -1,56 +1,55 @@
-VERSION 1
+VERSION 2
 307
-Robots 1
-307.robot
-Tools 1
-307.tool
-Items 4
-C18.item
-C14.item
-C11.item
-Europalle.item
-Patterns 0
-Accessories 4
-307RollerIn.accessory
-307RollerOut.accessory
-307ConveyorA.accessory
-307ConveyorB.accessory
-PPScripts 6
-307C14In.ppscript
-307C14Out.ppscript
-307C18In.ppscript
-307C18Out.ppscript
-307C11In.ppscript
-307C11Out.ppscript
-Dio 1
-307.io
-Comsks 0
-LoadCells 0
-Macs 0
-Statemachines 23
-307WorkCell.statemachine
-307Robot.statemachine
-307COutFotoOne.statemachine
-307COutFotoTwo.statemachine
-307ConveyorIn.statemachine
-307ConveyorOut.statemachine
-307CInFotoFive.statemachine
-307PladsLoad.statemachine
-307Plads3.statemachine
-307Plads4.statemachine
-307Plads5.statemachine
-307KassePakkerBottom.statemachine
-307KassePakkerTop.statemachine
-307KassePakkerMotor.statemachine
-307UniChain.statemachine
-307PB1.statemachine
-307PB3.statemachine
-307PB4.statemachine
-307PalletAWatch.statemachine
-307PB5.statemachine
-307PB6.statemachine
-307PB7.statemachine
-307PB9.statemachine
-m_stateTeksts=307
+;*Robots 1
+ROBOT 307.robot
+;*Tools 1
+TOOL 307.tool
+;*Items 4
+ITEM C18.item
+ITEM C14.item
+ITEM C11.item
+ITEM Europalle.item
+;* Patterns 0
+;* Accessories 4
+ACCESSORY 307RollerIn.accessory
+ACCESSORY 307RollerOut.accessory
+ACCESSORY 307ConveyorA.accessory
+ACCESSORY 307ConveyorB.accessory
+PPSCRIPT 307C14In.ppscript
+PPSCRIPT 307C14Out.ppscript
+PPSCRIPT 307C18In.ppscript
+PPSCRIPT 307C18Out.ppscript
+PPSCRIPT 307C11In.ppscript
+PPSCRIPT 307C11Out.ppscript
+;* Dio 1
+DIO 307.io
+;*Comsks 0
+;*LoadCells 0
+;*Macs 0
+;*Statemachines 23
+STM 307WorkCell.statemachine
+STM 307Robot.statemachine
+STM 307COutFotoOne.statemachine
+STM 307COutFotoTwo.statemachine
+STM 307ConveyorIn.statemachine
+STM 307ConveyorOut.statemachine
+STM 307CInFotoFive.statemachine
+STM 307PladsLoad.statemachine
+STM 307Plads3.statemachine
+STM 307Plads4.statemachine
+STM 307Plads5.statemachine
+STM 307KassePakkerBottom.statemachine
+STM 307KassePakkerTop.statemachine
+STM 307KassePakkerMotor.statemachine
+STM 307UniChain.statemachine
+STM 307PB1.statemachine
+STM 307PB3.statemachine
+STM 307PB4.statemachine
+STM 307PalletAWatch.statemachine
+STM 307PB5.statemachine
+STM 307PB6.statemachine
+STM 307PB7.statemachine
+STM 307PB9.statemachine
+;*m_stateTeksts=307
 SCRIPT 307C18
 SCRIPT 307C11

@@ -1,0 +1,14 @@
+STATEMACHINEVERSION 3
+Name=Frames
+Frame=base x=0.00 y=0.00 z=0.00 v=0.00 w=0.00 u=0.00
+Frame=home x=1046.00 y=1100.00 z=1185.00 v=90.00 w=0.00 u=0.00
+Frame=homeHigh x=1046.00 y=2200.00 z=1185.00 v=90.00 w=0.00 u=0.00
+Frame=conveyorA x=1046.00 y=500.00 z=1185.00 v=90.00 w=0.00 u=0.00
+State=ST_HALT
+END
+State=ST_IDLE
+END
+State=ST_TIMER
+END
+State=ST_RESET
+END

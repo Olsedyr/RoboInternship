@@ -8,7 +8,7 @@ static BX_VOID setupList(HBOX hBox)
 {
   BX_CHAR cmd[256];
   FILE *fp;
-  char filename[256];  
+  char filename[512];  
   while(BxList_GetCount(BxGetDlgItem(hBox, FORMLOGGER_LISTBOX))>0)
     BxList_DeleteString(BxGetDlgItem(hBox, FORMLOGGER_LISTBOX), 0);
 

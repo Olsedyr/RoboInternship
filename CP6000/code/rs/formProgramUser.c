@@ -8,7 +8,7 @@
 
 static int useprogramstm=-1;
 static int numofprogramstates=0;
-char programStateMachineName[256]="Program";
+char programStateMachineName[512]="Program";
 extern char mcstm[256];
 
 int prgToIdxMap[50];
@@ -66,7 +66,7 @@ BX_BOOL formProgramUserInit(HBOX hBox, BX_LPARAM lParam)
 		BxEnableBox(BxGetDlgItem(hBox, FORMPROGRAM_CMDNEW), TRUE);
 	else
 		BxEnableBox(BxGetDlgItem(hBox, FORMPROGRAM_CMDNEW), FALSE);
-	BxEnableBox(BxGetDlgItem(hBox, FORMPROGRAM_CMDDELETE), FALSE);
+	BxEnableBox(BxGetDlgItem(hBox, FORMPROGRAM_CMDDELETE), TRUE);
   return TRUE;
 }
 

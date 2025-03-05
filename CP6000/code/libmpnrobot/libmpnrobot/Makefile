@@ -6,11 +6,11 @@ DIST_NAME=LIBMPNROBOT.$(VERSION).tar
 # -------------------------------------------------
 
 INCLUDES = -I./
-CCFLAGS =  -Wall -pg -save-temps -g#3 -O0
+CCFLAGS =  -Wall -pg -save-temps -g -m32#3 -O0
 #CCFLAGS = -O2 -fomit-frame-pointer
-CPPFLAGS = -Wall -pg -save-temps -g3 -O0
+CPPFLAGS = -Wall -pg -save-temps -g3 -O0 -m32
 #CPPFLAGS = -Wall -O2  -fomit-frame-pointer 
-LDFLAGS = -s -N
+LDFLAGS = -s -N -m32
 CC=gcc
 CPP=g++
 BINDIR=/sbin
@@ -94,6 +94,7 @@ depend: $(C_SRCS)
 clean:
 	$(DELETE) \
 	  *.[ois] \
+	  *.ii \
 		$(OBJFILES) \
 		$(OBJDIR)libmpnrobot.$(LIBEXT)
 	$(CLEAN)

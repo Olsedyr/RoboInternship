@@ -13,6 +13,9 @@
 #include "cmd.h"
 
 int newtau=1;
+tmpnScopeData scopeitem[10]; // This is the definition
+tmpnStateMachineValue *ppmin;
+tmpnStateMachineValue *casecount;
 
 static tmpnRobot gtrobot = {
 "Palm.robot"

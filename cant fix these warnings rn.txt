@@ -1,0 +1,22 @@
+ main.c: In function 'supervisorLogin':
+main.c:123:19: warning: initialization discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  123 |   char *oldlang = tworkcell->languages.language[tworkcell->languages.currentLanguage].name;
+      |                   ^~~~~~~~~
+
+
+ formStdRunUser.c: In function 'formStdRunUserUpdate':
+formStdRunUser.c:494:7: warning: format not a string literal and no format arguments [-Wformat-security]
+  494 |       sprintf(robotstate, getLanguageLineFromIdx(langptr, 124,"The robot's emergency stop is activated"));
+      |       ^~~~~~~
+
+
+formItemUser.c: In function 'formItem_cmdEdit_Click':
+formItemUser.c:257:30: warning: passing argument 1 of 'tmpnItemSave' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  257 |             if(!tmpnItemSave(item))
+      |                              ^~~~
+
+
+In file included from formItemUser.c:5:
+../libmpnrobot/libmpnrobot/cmd.h:101:35: note: expected 'tmpnItem *' but argument is of type 'volatile tmpnItem *'
+  101 | extern int tmpnItemSave(tmpnItem *item);
+      |                         ~~~~~~~~~~^~~~

@@ -1,0 +1,70 @@
+/*#include <stdio.h>
+#include <conio.h>
+
+struct test
+{
+       int x;
+       char name[100];
+       float marks;
+};
+
+int main(void)
+{
+       int i;
+       struct test p[2];
+
+       for(i = 0; i < 2; i++)
+       {
+               clrscr();
+               printf("Enter The Roll No.      : ");
+               scanf("%d", &p[i].x);
+               fflush(stdin);
+               printf("Enter The Name         : ");
+               scanf("%s", p[i].name);
+               fflush(stdin);
+               printf("Enter The percentage marks: ");
+               scanf("%f", &p[i].marks);
+       }
+
+       printf("\n");
+
+       for(i = 0; i < 2; i++)
+       {
+               printf("Roll No of \"%s\" is %d, getting %5.3f marks.\n", p[i].name, p[i].x, p[i].marks);
+       }
+
+       getch();
+       return 0;
+}**********************************************************
+ 
+*based on tmpnrobot.h
+ *typedef to define new name for the type:
+ *        typedef int Apples;
+ *        typedef int Oranges;
+ *        Apples coxes; //same as int coxes
+ *        Oranges jaffa; 
+ *
+ *Type definition for a structure:
+ *#include<stdio.h>
+ *
+ *typedef struct person
+ *{
+ *  char *name;
+ *  int age;
+ *} PERSON;
+ *
+ *int main()
+ *{
+ *  PERSON p;
+ *  p.name = "John Smith";
+ *  p.age = 25;
+ *  printf("%s",p.name);
+ *  printf("%d",p.age);
+ *  return 0;
+ *}
+ *
+ *Arrays of structures?
+ *Anonymous structure! typedef struct s1 { ... } s1
+ which parses : [ typedef [ struct s1 { ... } ] s1 ]
+linked lists
+ ***********************************************************/

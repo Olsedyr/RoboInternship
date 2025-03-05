@@ -1,0 +1,102 @@
+STATEMACHINEVERSION 3
+Name=ConveyorIn
+Output=Motor "ConveyorIn Motor"
+Link=PladsLoad PladsLoad 
+Link=Plads3 
+Link=Plads4
+Link=Plads5
+Link=parent Parent 
+Timeout=TimeoutDelay 5000000
+Timeout=TimeBeforeStart 200000
+Value=simulate 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET Motor 0
+  TEST parent = ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RUN
+  TEST Plads5 = ST_EMPTY
+  OR Plads5 = ST_READY
+  OR simulate = 1
+    TEST PladsLoad != ST_READY
+    AND Plads4 != ST_SEND
+    AND Plads3 != ST_SEND
+    OR PladsLoad = ST_RECEIVE
+      SETSTATE ST_STOP
+    ELSETEST TimeoutDelay = 1
+      SETSTATE ST_STOP2
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ELSE 
+    SETSTATE ST_STOP
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STOP
+  TEST Plads5 = ST_EMPTY
+  OR Plads5 = ST_READY
+    TEST PladsLoad = ST_READY
+    OR PladsLoad = ST_EMPTY
+      TEST Plads5 = ST_EMPTY
+      AND Plads4 = ST_SEND
+        TIMEOUT TimeoutDelay ST_RUN
+        SETSTATE ST_RUN
+      ELSETEST Plads4 = ST_EMPTY
+      AND Plads3 = ST_SEND
+        TIMEOUT TimeoutDelay ST_RUN
+        SETSTATE ST_RUN
+      ELSETEST Plads3 = ST_EMPTY
+      AND PladsLoad = ST_READY
+        TIMEOUT TimeoutDelay ST_RUN
+        SETSTATE ST_RUN
+      ELSE
+        SET Motor 0
+      ENDTEST
+    ELSE
+      SET Motor 0
+    ENDTEST
+  ELSE 
+    SET Motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STOP2
+  TEST Plads5 != ST_READY
+  AND Plads5 != ST_EMPTY 
+  AND simulate = 0
+    SET Motor 0
+  ELSETEST PladsLoad = ST_RECEIVE
+  OR Plads5 = ST_EMPTY
+  OR simulate = 1
+    SETSTATE ST_STOP
+  ELSE 
+    SET Motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RESET
+  TIMEOUT TimeoutDelay ST_RUN
+  SETSTATE ST_RUN
+END

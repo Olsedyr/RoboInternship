@@ -1,0 +1,160 @@
+STATEMACHINEVERSION 3
+Name=UniChain
+Delaystop=5000000
+Input=Full "KassePakker conveyorFull"
+Input=Printstop "PrinterStop"
+Output=Motor "KassePakker bufferPladsMotor"
+Output=uniMotor "KassePakker UniChainMotor"
+Output=Stopflow "stopFlowPakker"
+Link=KassePakkerTop
+;Link=PladsLoad
+;Link=Plads3
+Timeout=StopDelay 20000
+Timeout=StartDelay 20000
+Timeout=WaitStop 4000000
+Timeout=BeginDelay 2000000
+Value=message 0
+Value=Countnum 0
+Value=Countnoprod 0 
+Value=Countdown 0
+Value=Countmax 90
+Value=Countmaxdown 20
+Value=Count1 1
+Value=forcedIdle 1
+Value=Countnoprodmax 200
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET message 0
+  SET Stopflow 1	
+  TEST forcedIdle = Count1
+    SET forcedIdle 0
+    TIMEOUT WaitStop ST_IDLE
+    SETSTATE ST_IDLE
+  ELSE
+    TEST WaitStop = 1
+      SET Stopflow 0	
+      SET Motor 0
+;      SET uniMotor 0
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUN
+;  TEST PladsLoad = ST_EMPTY
+;  AND Plads3 = ST_EMPTY
+;  AND Plads3 = ST_EMPTY
+;  AND Plads3 = ST_EMPTY
+;    SET message 2003
+;  ELSE
+;    SET message 0
+;  ENDTEST
+  SET Stopflow 0
+  SET Countdown 0
+  SET Motor 1
+;  SET uniMotor 1
+  TEST Countnum >= Countmax
+    SETSTATE ST_STOP
+  ELSE
+    TIMEOUT StopDelay ST_COUNTUP
+    SETSTATE ST_COUNTUP
+  ENDTEST
+  TEST Printstop = 1
+    SETSTATE ST_STOP
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_COUNTUP
+ TEST StopDelay = 1
+   TEST Full = 1
+     SET Countnoprod 0
+     CALC Countnum = Count1 + Countnum
+   ELSE
+     CALC Countnoprod = Count1 + Countnoprod
+     SET Countnum 0
+   ENDTEST
+   SETSTATE ST_RUN
+   TEST Countnoprod >= Countnoprodmax
+     SETSTATE ST_NOPRODUCTS
+   ENDTEST
+ ENDTEST
+END
+
+State=ST_NOPRODUCTS
+  SET message 2000
+  TEST Full = 1
+    SETSTATE ST_RUN
+  ENDTEST
+  TEST Printstop = 1
+    SETSTATE ST_STOP
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STOP
+  SET Stopflow 1
+  SET Countnum 0
+  TEST Countdown >= Countmaxdown
+    TEST Printstop = 0
+      SETSTATE ST_RUN
+    ENDTEST
+  ELSE
+    TIMEOUT StartDelay ST_COUNTDOWN
+    SETSTATE ST_COUNTDOWN
+  ENDTEST
+  TEST Printstop = 1
+    SET message 2001
+    SET Motor 0
+;    SET uniMotor 0
+  ELSE
+    SET Motor 1
+;    SET uniMotor 1
+    SET message 2002
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_COUNTDOWN
+ TEST StartDelay = 1
+   TEST Full = 0
+     CALC Countdown = Count1 + Countdown
+   ELSE
+     SET Countdown 0
+   ENDTEST
+   SETSTATE ST_STOP
+ ENDTEST
+END
+
+State=ST_RESET
+  SET Motor 0
+;  SET uniMotor 0
+  SET forcedIdle 1
+  TIMEOUT BeginDelay ST_RESTART
+  SETSTATE ST_RESTART
+END
+
+State=ST_RESTART
+  TEST BeginDelay = 1
+    SET message 0
+    SET Countnum 0
+    SET Countnoprod 0
+    SET Countdown 0
+    SET Motor 1
+;    SET uniMotor 1
+    SET Stopflow 1
+    SETSTATE ST_STOP
+  ENDTEST
+END
+

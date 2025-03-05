@@ -130,7 +130,7 @@ BX_BOOL formMac_listBoxInit_Click(HBOX hBox)
 			if(VirtNumKeyBox( hBox ) == IDOK)
 			{
 				char s[256*2];
-				float olddata;
+				float olddata = 0.0f;
 				mac->initdata[sel].fdata = BxVirtNumBox_GetFloatValue();
 				if (SaveMacInitVal((tmpnMac *) &tworkcell->macs.mac[dioIndex], modIndex, sel))
 				{

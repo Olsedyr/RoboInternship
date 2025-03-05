@@ -1,0 +1,8 @@
+digraph G {
+node [fontsize=10];
+ST_IDLE -> ST_RESET;
+ST_RESET -> ST_WATCH;
+ST_WATCH -> ST_ERROR;
+ST_WATCH -> ST_IDLE;
+ST_ERROR -> ST_IDLE;
+}

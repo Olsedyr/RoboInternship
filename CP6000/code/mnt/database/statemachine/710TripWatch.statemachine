@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=cptripwatch2.statemachine
+Name=TripWatch
+Input=conveyor2 "ProduktConveyor_2 HZOK"
+Input=extra1 "Accumulating Conveyor HZOK"
+Const=extra1Pol 0
+;** User section **

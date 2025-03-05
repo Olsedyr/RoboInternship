@@ -5,8 +5,8 @@ VERSION=1.0a
 # -------------------------------------------------
 INCLUDES = -I./ -I../libmpnrobot/libmpnrobot -I../io -I../Bx
 #CCFLAGS = -O2 -fomit-frame-pointer 
-CCFLAGS = -Wall -O0 -pg -save-temps -g3
-LDFLAGS = -s -N
+CCFLAGS = -Wall -O0 -pg -save-temps -g3 -m32
+LDFLAGS = -s -N -m32
 CC=gcc
 CPP=g++
 BINDIR=/sbin
@@ -66,7 +66,8 @@ clean:
 		$(OBJDIR)libstm.$(LIBEXT) \
         *.s \
         *.o \
-        *.i
+        *.i \
+		*.ii
 	$(CLEAN)
  
 distclean:	clean

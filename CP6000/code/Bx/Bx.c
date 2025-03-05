@@ -24,9 +24,9 @@ extern BX_INT BxGfxX11Drv_Shutdown(BX_VOID);
 
 BX_INT BX_LANGUAGE = 0;
 BX_INT BX_DEFSTRLEN = 255;
-extern BxFont* DefaultSmallFont;
-extern BxFont* DefaultFont;
-extern BxFont* DefaultButtonFont;
+BxFont* DefaultSmallFont;
+BxFont* DefaultFont;
+BxFont* DefaultButtonFont;
 
 BX_COLORREF BXSYSTEM_PALETTE[25] = {
 	BX_RGB(0x00,0x00,0x00),   //BXCOLOR_SCROLLBAR         
