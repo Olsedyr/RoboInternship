@@ -1,0 +1,37 @@
+STATEMACHINEVERSION 3
+Include=cmcamgenlift.statemachine
+Name=CamGenLift
+linkValue=casekind Program802
+Item=item Netto
+Item=itemC18 C18
+Item=itemNetto Netto
+;** User section **
+Const=posHome 15.0000
+Const=posTop 795
+
+; casekind: casekind.statemachine
+
+State=ST_RESET
+	TEST firstRun = 1
+		TEST casekind = casekind_C18
+			SETITEM item itemC18
+		ELSE
+			TEST casekind = casekind_Netto
+				SETITEM item itemNetto
+			ENDTEST
+		ENDTEST
+	ENDTEST
+  SET setpoint encoder
+  TEST casekind = casekind_Netto
+  	CALC posf = posTop - item.my
+    CALC posf = posf - nettoStabelmy
+	  CALC posf = posf - posStopFree
+	  CALC posf = posf * tickspermm
+  ELSE
+	  CALC posf = posTop - item.my
+	  CALC posf = posf - item.dy
+	  CALC posf = posf - posStopFree
+	  CALC posf = posf * tickspermm
+  ENDTEST
+  SETSTATE ST_NOCHOOSETRACK
+END

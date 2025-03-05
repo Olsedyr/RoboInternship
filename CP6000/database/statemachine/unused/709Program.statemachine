@@ -1,0 +1,208 @@
+STATEMACHINEVERSION 3
+Name=Program
+Link=workcell WorkCell
+Value=usersection 0
+Value=programidx 1
+Value=loadfromleft 0
+Value=loadfromright 0
+Value=loadfromback 0
+Value=productsfromleft 0
+Value=productsfromright 0
+Value=newprogram 1
+Value=timeMotorInGoDown 0
+Value=timeKlapDown 0
+Value=noShakeOnLast 0
+Value=waitInR3 0
+Value=vibrateTime 8000000
+Value=manuelt 0
+Value=kasseStopType 3
+Value=secondProdConvOn 0
+;programmer
+Value=program 0
+Item=item C11
+Item=itemC11 C11
+Item=itemHybschA HybschA
+CPPattern=cppattern C11Small8
+CPPattern=cppC11Small8 C11Small8
+CPPattern=cppC11Large6 C11Large6
+CPPattern=cppPapSmall8 PapSmall8
+
+State=PROGRAM_C11SMALL8
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 0
+	SET loadfromright 1
+	SET loadfromback 0
+	SET productsfromleft 1
+	SET productsfromright 0
+	SET program 0
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemC11
+  SETCPPATTERN cppattern cppC11Small8
+	SET timeMotorInGoDown 500000
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_C11SMALL8
+END
+
+State=PROGRAM_C11LARGE6
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 0
+	SET loadfromright 1
+	SET loadfromback 0
+	SET productsfromleft 1
+	SET productsfromright 0
+	SET program 1
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemC11
+  SETCPPATTERN cppattern cppC11Large6
+	SET timeMotorInGoDown 500000
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_C11LARGE6
+END
+
+State=PROGRAM_PAPSMALL8_TURN
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 0
+	SET loadfromright 0
+	SET loadfromback 1
+	SET productsfromleft 1
+	SET productsfromright 0
+	SET program 2
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemHybschA
+  SETCPPATTERN cppattern cppPapSmall8
+	SET timeMotorInGoDown 500000
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_PAPSMALL8_TURN
+END
+
+State=PROGRAM_PAPSMALL8
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 0
+	SET loadfromright 0
+	SET loadfromback 1
+	SET productsfromleft 1
+	SET productsfromright 0
+	SET program 3
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+  SETITEM item itemHybschA
+  SETCPPATTERN cppattern cppPapSmall8
+	SET timeMotorInGoDown 800000
+	SET timeKlapDown 300000
+	SET noShakeOnLast 1
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_PAPSMALL8
+END
+
+State=PROGRAM_MANUAL
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 0
+	SET loadfromright 1
+	SET productsfromleft 0
+	SET productsfromright 0
+	SET program 4
+  SET manuelt 1
+	SET usersection 1 ; user editable below
+	SET timeMotorInGoDown 500000
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_MANUAL
+END
+
+State=ST_RUNNING_C11SMALL8
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_C11LARGE6
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_PAPSMALL8_TURN
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_PAPSMALL8
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_MANUAL
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_C11SMALL8
+  ENDTEST
+  TEST programidx = 1
+    SETSTATE PROGRAM_C11LARGE6
+  ENDTEST
+  TEST programidx = 2
+    SETSTATE PROGRAM_PAPSMALL8_TURN
+  ENDTEST
+	TEST programidx = 3
+    SETSTATE PROGRAM_PAPSMALL8
+  ENDTEST
+  TEST programidx = 4
+    SETSTATE PROGRAM_MANUAL
+  ENDTEST
+END

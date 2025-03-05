@@ -1,0 +1,6 @@
+STATEMACHINEVERSION 3
+Include=cpservoskub.statemachine
+Name=ServoSkub
+;** User section **
+Timeout=TimeTest 3000000
+Const=testmode 0

@@ -1,0 +1,129 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut
+Output=Motor "ConveyorOut Motor Enable"
+Output=MotorSetpoint "ConveyorOut Setpoint"
+Const=MotorSpeed 65.0000
+Link=prev ConveyorOut2
+Link=parent Parent
+;moveBag also set from ProgramB2
+Value=moveBag 0
+Value=bagCount 0
+Value=gotBag 0
+linkValue=nextBagCount ProgramB2
+linkValue=ConvTimeForwardPerBag Program402
+linkValue=manuelt manuelt Program402
+Timeout=sendTime 1000000
+Timeout=forwardTime 180000
+Timeout=motorFirstEnableTime 1000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Motor 0
+	TEST parent = ST_RESET
+	AND manuelt = 0
+    SET MotorSetpoint 0.0
+    SET Motor 1
+		TIMEOUT motorFirstEnableTime ST_RESET
+    SETSTATE ST_TIMER
+	ENDTEST
+END
+
+State=ST_RESET
+  SET Motor 0
+  TEST nextBagCount != 0
+    SET forwardTime ConvTimeForwardPerBag
+    SET MotorSetpoint MotorSpeed
+    TEST bagCount >= nextBagCount
+		  SETSTATE ST_READY_ROBOT
+    ELSE
+      SETSTATE ST_GET
+	  ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_READY_ROBOT
+  TEST moveBag = 1
+    SET moveBag 2
+    TIMEOUT sendTime ST_SEND
+    SETSTATE ST_SEND
+  ELSE 
+    SET Motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST sendTime = 1
+    SET moveBag 3
+    SET bagCount 0
+    SETSTATE ST_PREGET
+  ELSE
+    SET Motor 1
+  ENDTEST
+END
+
+State=ST_PREGET
+  TEST moveBag = 4
+    SET moveBag 0
+    SETSTATE ST_GET
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_GET
+  TEST prev = ST_SEND
+    CALC bagCount = bagCount + 1
+		TIMEOUT forwardTime ST_NEXT
+    SETSTATE ST_NEXT
+  ELSE
+    SET Motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_NEXT
+  TEST gotBag = 0
+    TEST prev != ST_SEND
+      SET gotBag 1
+    ENDTEST
+  ELSE
+    TEST gotBag = 1
+      TEST bagCount = 1
+        SET gotBag 0
+        TEST bagCount = nextBagCount
+		      SETSTATE ST_READY_ROBOT
+        ELSE
+          SETSTATE ST_GET
+	      ENDTEST
+      ELSE
+        SET gotBag 2
+        SET Motor 1
+        TIMEOUT forwardTime ST_NEXT
+        SETSTATE ST_NEXT
+      ENDTEST
+    ELSE
+			TEST forwardTime = 1
+				SET gotBag 0
+				TEST bagCount = nextBagCount
+		      SETSTATE ST_READY_ROBOT
+        ELSE
+          SETSTATE ST_GET
+	      ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END

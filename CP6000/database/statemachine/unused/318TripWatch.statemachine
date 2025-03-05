@@ -1,0 +1,60 @@
+STATEMACHINEVERSION 3
+Name=TripWatch
+Input=pm "PM POS.1.1 Tripped"
+Input=pc6chain "PC6 POS.1.3 Chain Tripped"
+Input=pc6 "PC6 POS.1.3 Tripped"
+Input=pc7 "PC7 POS.1.4 Tripped"
+Input=pc9 "PC9 POS.1.5 Tripped"
+Input=conv2a "Conveyor POS.1.7 Tripped"
+Input=conv2b "Conveyor POS.1.9 Tripped"
+Input=conv3b "Conveyor POS.1.10 Tripped"
+Input=bend1 "Conveyor POS.1.12 Tripped"
+Input=bend2 "Conveyor POS.1.13 Tripped"
+Input=bend3 "Conveyor POS.1.14 Tripped"
+Input=bend4 "Conveyor POS.1.15 Tripped"
+linkValue=emerg emergency Emergency
+linkValue=manometer test Manometer
+Link=parent Parent
+Value=errorCode 0
+Const=manoTrip 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST conv2a = 1
+  OR conv2b = 1
+  OR conv3b = 1
+  OR bend1 = 1
+  OR bend2 = 1
+  OR bend3 = 1
+  OR bend4 = 1
+		SET errorCode 1114
+	ENDTEST
+	TEST pm = 1
+	OR pc6 = 1
+	OR pc7 = 1
+	OR pc9 = 1
+		SET errorCode 1116
+  ELSETEST manometer = manoTrip
+    SET errorCode 1117
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

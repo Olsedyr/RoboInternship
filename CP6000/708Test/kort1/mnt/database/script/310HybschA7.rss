@@ -1,0 +1,182 @@
+VERSION 2
+SUB 310HybschA7
+COUNTER restart += 1
+LABEL testA
+LABEL testB
+SLEEP 100
+TESTEVENT Pallebane6 ST_OK
+SUB sektion6ok
+  COUNTER restart > 1
+  SUB
+*    SIGNALEVENT 1 Pallebane6 ST_READY_ROBOT
+*    GOTO testReadyRobot
+    COUNTER cBItems >= wBItems
+    SUB PalleUd
+      GOTO afterEachPathB
+    END
+    COUNTER cBItems == sBItems
+    SUB
+      SIGNALEVENT 1 Pallebane6 ST_READY
+      GOTO testReadyRobot
+    END
+    SIGNALEVENT 1 Pallebane6 ST_READY_ROBOT
+    GOTO testReadyRobot
+  END
+  SIGNALEVENT 1 Pallebane6 ST_READY
+END
+LABEL testReadyRobot
+TESTEVENT Pallebane6 ST_READY_ROBOT
+SUB sektion6readyRobot
+ COUNTER cBItems >= wBItems
+ SUB PalleUd
+   COUNTER cBItems = sBItems
+   RESETPRELOAD 1
+   SIGNALEVENT 1 Pallebane6 ST_READY
+   GOTO testA
+ END
+ TESTEVENT ConveyorOut ST_READY_ROBOT
+ SUB sektion36ready
+  COUNTER cBItems == 0
+  SUB path0
+   PPSCRIPT 310HybschA7Out idx=0,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 1
+  SUB path1
+   PPSCRIPT 310HybschA7Out idx=1,loadgroup=1
+   GOTO afterEachPathB
+  END 
+  COUNTER cBItems == 2
+  SUB path2
+   PPSCRIPT 310HybschA7Out idx=2,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 3
+  SUB path3
+   PPSCRIPT 310HybschA7Out idx=3,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 4
+  SUB path4
+   PPSCRIPT 310HybschA7Out idx=4,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 5
+  SUB path5
+   PPSCRIPT 310HybschA7Out idx=5,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 6
+  SUB path6
+   PPSCRIPT 310HybschA7Out idx=6,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 7
+  SUB path7
+   PPSCRIPT 310HybschA7Out idx=7,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 8
+  SUB path8
+   PPSCRIPT 310HybschA7Out idx=8,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 9
+  SUB path9
+   PPSCRIPT 310HybschA7Out idx=9,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 10
+  SUB path10
+   PPSCRIPT 310HybschA7Out idx=10,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 11
+  SUB path11
+   PPSCRIPT 310HybschA7Out idx=11,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 12
+  SUB path12
+   PPSCRIPT 310HybschA7Out idx=12,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 13
+  SUB path13
+   PPSCRIPT 310HybschA7Out idx=13,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 14
+  SUB path14
+   PPSCRIPT 310HybschA7Out idx=14,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 15
+  SUB path15
+   PPSCRIPT 310HybschA7Out idx=15,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 16
+  SUB path16
+   PPSCRIPT 310HybschA7Out idx=16,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 17
+  SUB path17
+   PPSCRIPT 310HybschA7Out idx=17,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 18
+  SUB path18
+   PPSCRIPT 310HybschA7Out idx=18,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 19
+  SUB path19
+   PPSCRIPT 310HybschA7Out idx=19,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 20
+  SUB path20
+   PPSCRIPT 310HybschA7Out idx=20,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 21
+  SUB path21
+   PPSCRIPT 310HybschA7Out idx=21,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 22
+  SUB path22
+   PPSCRIPT 310HybschA7Out idx=22,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 23
+  SUB path23
+   PPSCRIPT 310HybschA7Out idx=23,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 24
+  SUB path24
+   PPSCRIPT 310HybschA7Out idx=24,loadgroup=1
+   GOTO afterEachPathB
+  END
+  COUNTER cBItems == 25
+  SUB path25
+   PPSCRIPT 310HybschA7Out idx=25,loadgroup=1
+   GOTO afterEachPathB
+  END
+  GOTO testA
+LABEL afterEachPathB
+  COUNTER cBItems >= wBItems
+  SUB
+   COUNTER cBPallet += 1
+   COUNTER cBItems = sBItems
+   RESETPRELOAD 1
+   SIGNALEVENT 1 Pallebane6 ST_READY
+  END
+ END
+END
+GOTO testA
+END
+

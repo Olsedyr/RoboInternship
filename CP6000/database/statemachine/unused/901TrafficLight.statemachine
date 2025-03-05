@@ -1,0 +1,68 @@
+STATEMACHINEVERSION 3
+Name=TrafficLight
+Output=yellow "901 Yellow Light"
+Timeout=blinkRate 500000
+Link=parent ConveyorParent
+Link=emergency ConveyorsEmergency
+Link=errorcode ConveyorsErrorCode
+Value=OFF 0
+Value=ON 1
+Value=BLINK 0
+Value=error 0
+Const=enable 1
+
+State=ST_HALT
+  TIMEOUT blinkRate ST_RUN
+  SETSTATE ST_RUN
+END
+ 
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	TEST enable = 1
+		TIMEOUT blinkRate ST_RUN
+		SETSTATE ST_RUN
+	ENDTEST
+END
+
+State=ST_RESET
+  SET error 0
+	SETSTATE ST_IDLE
+END
+
+State=ST_RUN
+	TEST enable = 0
+		SETSTATE ST_IDLE
+	ENDTEST
+  TEST errorcode = ST_ERROR
+    SET error 1
+  ENDTEST
+  TEST blinkRate = 1
+		TEST BLINK = ON
+			SET BLINK OFF
+		ELSE
+			SET BLINK ON
+		ENDTEST
+		TIMEOUT blinkRate ST_RUN
+		SETSTATE ST_RUN
+  ENDTEST
+  TEST emergency = ST_POWEROFF
+		SET yellow ON
+  ELSE
+		TEST parent = ST_RUN
+			SET yellow OFF
+		ELSE
+			TEST parent = ST_IDLE
+        TEST error = 0
+					SET yellow ON
+				ELSE
+					SET yellow BLINK
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+	TEST parent = ST_RESET
+    SET error 0
+  ENDTEST
+END

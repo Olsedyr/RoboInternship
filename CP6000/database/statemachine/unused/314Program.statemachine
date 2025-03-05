@@ -1,0 +1,135 @@
+STATEMACHINEVERSION 3
+Include=casekind.statemachine
+Name=Program314
+;signal to WorkCell that a new program has been selected
+Value=usersection 0
+Value=newprogram 1
+Value=programidx 0
+Value=casekind 0
+Link=workcell WorkCell
+Value=usersection 0
+Value=casekind 0
+Value=wALayer 0
+Value=wBLayer 0
+Value=wAItemsPerLayer 0
+Value=wBItemsPerLayer 0
+Value=timeInPalletB 0
+
+; Put programstates in top
+
+; also edit 'subPrograms' for example VendePattern and PushPattern for particular program
+
+State=PROGRAM_NETTO_5LAG
+	SET usersection 0
+	SET newprogram 1
+	SET casekind casekind_Netto
+	SET wALayer 0
+	SET wBLayer 5
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET timeInPalletB 800000
+	SETSTATE ST_RUNNING_NETTO_5LAG
+END
+
+State=PROGRAM_NETTO_8LAG
+	SET usersection 0
+	SET newprogram 1
+	SET casekind casekind_Netto
+	SET wALayer 0
+	SET wBLayer 8
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET timeInPalletB 800000
+	SETSTATE ST_RUNNING_NETTO_8LAG
+END
+
+State=PROGRAM_PAP
+	SET usersection 0
+	SET newprogram 1
+	SET casekind casekind_LNA
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET wALayer 0
+	SET wBLayer 10
+	SET timeInPalletB 500000
+	SETSTATE ST_RUNNING_PAP
+END
+
+State=PROGRAM_STD1
+	SET usersection 0
+	SET newprogram 1
+	SET usersection 1 ; user editable below
+	SET casekind casekind_Netto 
+	SET wBItemsPerLayer 2
+	SET wALayer 0
+	SET wBLayer 5
+	SET timeInPalletB 800000
+	SETSTATE ST_RUNNING_STD1
+END
+
+; RUNNING STATES
+
+State=ST_RUNNING_NETTO_5LAG
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 0
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_NETTO_8LAG
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 1
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_PAP
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 2
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_STD1
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 3
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_NETTO_5LAG
+  ENDTEST
+  TEST programidx = 1
+    SETSTATE PROGRAM_NETTO_8LAG
+  ENDTEST
+  TEST programidx = 2
+    SETSTATE PROGRAM_PAP
+  ENDTEST
+  TEST programidx = 3
+    SETSTATE PROGRAM_STD1
+  ENDTEST
+END

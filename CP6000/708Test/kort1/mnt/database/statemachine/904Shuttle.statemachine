@@ -1,0 +1,479 @@
+STATEMACHINEVERSION 3
+Name=Shuttle
+Output=rullerreceive "Shuttle PC POS.5.10 Motor Receive"
+Output=rullersend "Shuttle PC POS.5.10 Motor Send"
+Link=parent Parent
+Link=servo ServoShuttle
+Link=Pos3_5
+Link=Pos3_4
+Link=Pos4_4
+Link=Pos4_8
+Link=Pos4_9
+Link=Pos5_9
+Link=Pos5_10 PalletMagazine
+linkValue=palletInPlace test ShuttlePhoto
+linkValue=pos5_10command command PalletMagazine
+linkValue=pos5_9Id Id Pos5_9
+linkValue=pos4_9Id Id Pos4_9
+linkValue=pos4_8Id Id Pos4_8
+linkValue=pos4_4Id Id Pos4_4
+linkValue=pos3_4Id Id Pos3_4
+linkValue=pos3_5Id Id Pos3_5
+linkValue=firstRun WorkCell
+Value=errorCode 0
+Value=message 0
+Value=testmode 0
+Value=teststate 0
+;pallet=0 -> nopallet pallet=1 europallet pallet=2 sheetpallet
+Value=pallet 0
+;Where the shuttle should go:
+Value=gotoPosition 0
+;Shuttle position
+Value=position 0
+Value=signalId 0
+Value=posHome 0
+Value=posUnknown 0
+Const=emptyIsEuroPallet 1
+;current:
+Const=pos3_5mm 14734
+Const=pos3_4mm 13147
+Const=pos4_4mm 9720
+Const=pos4_8mm 7000
+Const=pos4_9mm 5385
+Const=pos5_9mm 1298
+Const=pos5_10mm 21
+;målt op i Saransk
+;Const=pos3_5mm 14845
+;Const=pos3_4mm 13241
+;Const=pos4_4mm 9781
+;Const=pos4_8mm 7045
+;Const=pos4_9mm 5420
+;Const=pos5_9mm 1298
+;Const=pos5_10mm 0
+;indstillet fra MPN_HQ
+;Const=pos3_5mm 14760
+;Const=pos3_4mm 13200
+;Const=pos4_4mm 9750
+;Const=pos4_8mm 7020
+;Const=pos4_9mm 5380
+;Const=pos5_9mm 1300
+;Const=pos5_10mm 2
+;fra tegning:
+;pos3_5mm 14735
+;pos3_4mm 13165
+;pos4_4mm 9715
+;pos4_8mm 6950
+;pos4_9mm 5320
+;pos5_9mm 1300
+;pos5_10mm 0
+linkValue=curposmm ServoShuttle
+linkValue=gotoPosNum testPos ServoShuttle
+linkValue=gotoMMPos testGotoPos ServoShuttle
+linkValue=manualShuttle testmode ServoShuttle
+linkValue=useslipoffset useslipoffset ServoShuttle
+Timeout=signalTime 5000000
+Timeout=commandTime 30000000
+Timeout=maxSendTime 10000000
+Timeout=maxReceiveTime 10000000
+Timeout=StartupTime 2000000
+Timeout=TimeTest 2000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET rullerreceive 0
+  SET rullersend 0
+  SET signalId 0
+	TEST parent = ST_RESET
+    SET errorCode 0
+    SET message 0
+    SET rullerreceive 1
+    SET rullersend 0
+    TIMEOUT StartupTime ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  TEST palletInPlace = 1
+  OR StartupTime = 1
+    SET rullerreceive 0
+    TEST firstRun = 1
+    AND palletInPlace = 1
+      ;get rid of unknown pallettype
+      SET pallet 2
+    ENDTEST
+    SETSTATE ST_DECIDE
+  ENDTEST
+END
+
+State=ST_BEGINMOVE
+  TEST servo = ST_START
+    SETSTATE ST_MOVE
+  ENDTEST
+	TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_DECIDE
+	SET pos5_10command 0
+	SET rullerreceive 0
+  TEST servo = ST_CHOOSETRACK
+		;****************************
+		; Shuttle is ready
+		;****************************
+    TEST palletInPlace = 1
+      TEST pallet = 2
+        TEST Pos5_9 = ST_EMPTY
+					SET message 0
+					;****************************
+					;send to 5_9
+					;****************************
+					TEST position = pos5_9mm
+						SET signalId pos5_9Id
+            TIMEOUT signalTime ST_READY
+            SETSTATE ST_READY
+          ELSE
+            SET gotoPosition pos5_9mm
+            SETSTATE ST_BEGINMOVE
+          ENDTEST
+        ELSE
+          SET message 5009
+					;pallet(sheet) is full. Please remove.
+        ENDTEST
+      ELSE
+        TEST Pos3_5 != ST_EMPTY
+          TEST Pos4_9 != ST_EMPTY
+            TEST Pos4_4 = ST_READY
+            OR Pos3_4 = ST_READY
+            OR Pos4_8 = ST_READY
+							;****************************
+							;send to 5_10
+							;****************************
+              TEST position = pos5_10mm
+                SET pos5_10command 2
+                TEST Pos5_10 = ST_EMPTY_SHUTTLE
+								OR Pos5_10 = ST_RECEIVE
+								  TIMEOUT signalTime ST_READY
+                  SETSTATE ST_READY
+                ELSE
+									;nothing
+                ENDTEST
+              ELSE
+                SET gotoPosition pos5_10mm
+                SETSTATE ST_BEGINMOVE
+              ENDTEST
+            ELSE
+							;nothing   
+            ENDTEST
+          ELSE
+						;****************************
+						;send to 4_9
+						;****************************
+						TEST position = pos4_9mm
+							SET signalId pos4_9Id
+							TIMEOUT signalTime ST_READY
+							SETSTATE ST_READY
+            ELSE
+              SET gotoPosition pos4_9mm
+              SETSTATE ST_BEGINMOVE
+            ENDTEST
+          ENDTEST 
+        ELSE
+					;****************************
+					;send to 3_5
+					;****************************
+          TEST position = pos3_5mm
+            SET signalId pos3_5Id
+            TIMEOUT signalTime ST_READY
+            SETSTATE ST_READY
+          ELSE
+            SET gotoPosition pos3_5mm
+            SETSTATE ST_BEGINMOVE
+          ENDTEST
+        ENDTEST 
+      ENDTEST
+    ELSE
+			;****************************
+			; Shuttle is empty
+			;****************************
+      TEST Pos4_4 = ST_READY
+      AND emptyIsEuroPallet = 1
+				;***************************
+				;receive from 4_4
+				;****************************
+        TEST position = pos4_4mm
+          SET signalId pos4_4Id
+          TIMEOUT signalTime ST_EMPTY
+          SETSTATE ST_EMPTY
+        ELSE
+          SET gotoPosition pos4_4mm
+          SETSTATE ST_BEGINMOVE
+        ENDTEST
+      ELSE
+        TEST Pos3_5 = ST_EMPTY
+        OR Pos4_9 = ST_EMPTY
+					;****************************
+					;receive from 5_10
+					;****************************
+          TEST position = pos5_10mm
+						;TODO special timeout for pallemagasin
+            SET pos5_10command 1
+            TEST Pos5_10 = ST_READY
+              TIMEOUT signalTime ST_EMPTY
+              SETSTATE ST_EMPTY
+            ELSE
+							;nothing
+            ENDTEST
+          ELSE
+            SET gotoPosition pos5_10mm
+            SETSTATE ST_BEGINMOVE
+          ENDTEST
+        ELSE
+          TEST Pos3_4 = ST_READY
+						;****************************
+						;receive sheet from 3_4
+						;****************************
+            TEST position = pos3_4mm
+						  TEST Pos5_9 = ST_EMPTY
+								SET signalId pos3_4Id
+								TIMEOUT signalTime ST_EMPTY
+								SETSTATE ST_EMPTY
+							ELSE
+								SET message 5009
+							ENDTEST
+            ELSE
+              SET gotoPosition pos3_4mm
+              SETSTATE ST_BEGINMOVE
+            ENDTEST
+          ELSE
+						;****************************
+						;receive sheet from 4_8
+						;****************************
+						TEST Pos4_8 = ST_READY
+							TEST position = pos4_8mm
+								TEST Pos5_9 = ST_EMPTY
+									SET signalId pos4_8Id
+									TIMEOUT signalTime ST_EMPTY
+									SETSTATE ST_EMPTY
+								ELSE
+									SET message 5009
+								ENDTEST
+							ELSE
+								SET gotoPosition pos4_8mm
+								SETSTATE ST_BEGINMOVE
+							ENDTEST
+						ELSE
+              TEST Pos4_4 = ST_READY
+              AND emptyIsEuroPallet = 0
+				        ;***************************
+				        ;receive sheet from 4_4
+				        ;****************************
+                TEST position = pos4_4mm
+					        TEST Pos5_9 = ST_EMPTY
+                    SET signalId pos4_4Id
+                    TIMEOUT signalTime ST_EMPTY
+                    SETSTATE ST_EMPTY
+					        ELSE
+						        SET message 5009
+                  ENDTEST
+                ELSE
+                  SET gotoPosition pos4_4mm
+                  SETSTATE ST_BEGINMOVE
+                ENDTEST
+              ELSE
+							  ;nothing
+              ENDTEST
+						ENDTEST
+					ENDTEST
+        ENDTEST 
+      ENDTEST 
+    ENDTEST
+  ENDTEST
+  TEST testmode = 1
+    TEST teststate = 0
+      SET teststate 1
+      SET gotoPosition pos5_9mm
+      SETSTATE ST_BEGINMOVE
+    ELSE
+      TEST teststate = 1
+        SET teststate 0
+        SET gotoPosition pos4_9mm
+        SETSTATE ST_BEGINMOVE
+      ENDTEST
+    ENDTEST
+  ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_MOVE
+  TEST servo = ST_STOP
+    SET position gotoPosition
+    TEST testmode = 1
+      TIMEOUT TimeTest ST_DECIDE
+      SETSTATE ST_TIMER
+    ELSE      
+      PRINT position
+      SETSTATE ST_DECIDE
+    ENDTEST
+  ELSE
+    TEST servo = ST_IDLE
+      SET position 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST signalTime = 1
+    TEST signalId > 0
+      SET signalId 0
+      TIMEOUT signalTime ST_EMPTY
+		  SETSTATE ST_EMPTY
+    ELSE
+      SETSTATE ST_DECIDE
+    ENDTEST
+  ELSETEST position = pos4_4mm
+  AND Pos4_4 = ST_SEND
+    PRINT Pos4_4
+    TIMEOUT maxReceiveTime ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSETEST position = pos3_4mm
+  AND Pos3_4 = ST_SEND
+    PRINT Pos3_4
+    TIMEOUT maxReceiveTime ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSETEST position = pos4_8mm
+  AND Pos4_8 = ST_SEND
+    PRINT Pos4_8
+    PRINT pos4_8mm
+    TIMEOUT maxReceiveTime ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSETEST position = pos5_10mm
+  AND Pos5_10 = ST_SEND
+    PRINT Pos5_10
+    TIMEOUT maxReceiveTime ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ENDTEST    
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_READY
+  TEST signalTime = 1
+    TEST signalId > 0
+      SET signalId 0
+      TIMEOUT signalTime ST_READY
+		  SETSTATE ST_READY
+    ELSE
+      SETSTATE ST_DECIDE
+    ENDTEST
+  ELSETEST position = pos3_5mm
+  AND Pos3_5 = ST_RECEIVE   
+    TIMEOUT maxSendTime ST_SEND
+    SETSTATE ST_SEND
+  ELSETEST position = pos4_9mm   
+  AND Pos4_9 = ST_RECEIVE   
+    TIMEOUT maxSendTime ST_SEND
+    SETSTATE ST_SEND
+  ELSETEST position = pos5_9mm
+  AND Pos5_9 = ST_RECEIVE   
+    TIMEOUT maxSendTime ST_SEND
+    SETSTATE ST_SEND
+  ELSETEST position = pos5_10mm
+  AND Pos5_10 = ST_RECEIVE		
+    TIMEOUT maxSendTime ST_SEND
+    SETSTATE ST_SEND
+  ENDTEST 
+END
+
+State=ST_SEND
+  SET signalId 0
+;sent timeout er en fejl
+  SET rullerreceive 0
+  SET rullersend 1
+  SET pallet 0
+  TEST position = pos4_9mm
+		TEST Pos4_9 = ST_READY
+		OR Pos4_9 = ST_SEND
+			SET rullersend 0
+			SETSTATE ST_DECIDE
+		ENDTEST
+		TEST Pos4_9 != ST_RECEIVE
+		AND maxSendTime = 1
+			SET rullersend 0
+			SETSTATE ST_DECIDE
+		ENDTEST
+  ELSETEST position = pos3_5mm
+		TEST Pos3_5 = ST_READY
+		OR Pos3_5 = ST_SEND
+			SET rullersend 0
+			SETSTATE ST_DECIDE
+		ENDTEST
+		TEST Pos3_5 != ST_RECEIVE
+		AND maxSendTime = 1
+			SET rullersend 0
+			SETSTATE ST_DECIDE
+		ENDTEST
+  ELSETEST position = pos5_9mm
+		TEST Pos5_9 = ST_READY
+		OR Pos5_9 = ST_SEND
+			SET rullersend 0
+			SETSTATE ST_DECIDE
+		ENDTEST
+		TEST Pos5_9 != ST_RECEIVE
+		AND maxSendTime = 1
+			SET rullersend 0
+			SETSTATE ST_DECIDE
+		ENDTEST
+  ELSETEST position = pos5_10mm
+		TEST Pos5_10 = ST_READY
+		OR Pos5_10 = ST_SEND
+			SET pos5_10command 0
+			SET rullersend 0
+			SETSTATE ST_DECIDE
+		ENDTEST
+		TEST Pos5_10 != ST_RECEIVE
+		AND maxSendTime = 1
+			SET pos5_10command 0
+			SET rullersend 0
+			SETSTATE ST_DECIDE
+		ENDTEST
+	ENDTEST
+  TEST maxSendTime = 1
+    SET errorCode 5011
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  SET signalId 0
+  SET rullerreceive 1
+  SET rullersend 0
+  SET pallet 0
+  TEST palletInPlace = 1
+    TEST position = pos3_4mm
+    OR position = pos4_8mm
+    OR position = pos4_4mm
+    AND emptyIsEuroPallet = 0
+      SET pallet 2
+    ELSE
+      SET pallet 1
+    ENDTEST
+		SET pos5_10command 0
+		SETSTATE ST_DECIDE
+  ELSE
+    TEST maxReceiveTime = 1
+      SET errorCode 5011
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END

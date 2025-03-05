@@ -1,0 +1,90 @@
+STATEMACHINEVERSION 3
+Name=ProductState
+Delaystop=10000000
+Link=Skubber LangBufferSkub
+Link=Counter ProductCount
+Link=Conveyors ProductConveyors
+Link=PushPattern
+linkValue=numofproducts ProductCount
+linkValue=curppp PushPattern
+linkValue=gettime PushPattern
+linkValue=full BufferPlads
+linkValue=manuelt Program
+Link=parent LangBufferSkub 
+Value=errorCode 0
+Timeout=TimeGet 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+  AND manuelt = 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SETSTATE ST_STARTUP
+END
+
+State=ST_STARTUP	
+	TEST Counter = ST_RUN
+		TEST Conveyors != ST_STARTUP
+			TEST Conveyors = ST_STOP
+				TEST numofproducts > curppp
+        AND PushPattern = ST_GO
+					SETSTATE ST_READY
+				ELSE
+					SETSTATE ST_NOTREADY
+				ENDTEST
+			ELSE
+				SETSTATE ST_NOTREADY
+			ENDTEST
+		ENDTEST		
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_NOTREADY
+	TEST numofproducts = curppp
+  AND PushPattern = ST_GO
+		SET TimeGet gettime
+		TIMEOUT TimeGet ST_TESTREADY
+		SETSTATE ST_TESTREADY
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_TESTREADY
+;if Conveyor is stoped before products are ready to be pushed the products are too close together
+	TEST Conveyors = ST_STOP
+		TEST full = 1
+			SETSTATE ST_NOTREADY
+;		ELSE
+;			SET errorCode 1011
+;			SETSTATE ST_IDLE
+		ENDTEST	
+	ENDTEST
+	TEST TimeGet = 1
+		SETSTATE ST_READY
+	ENDTEST
+END
+
+State=ST_READY
+	TEST numofproducts < curppp
+  OR PushPattern != ST_GO
+		SETSTATE ST_NOTREADY
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

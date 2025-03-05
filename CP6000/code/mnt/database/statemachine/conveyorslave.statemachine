@@ -1,0 +1,78 @@
+STATEMACHINEVERSION 3
+Name=ConveyorSlave
+Output=motor "Red Light"
+Link=master Master
+Link=parent Parent
+;when followMaster = 1 slave will run when master is in ST_RUN (add more states?) Otherwise slave will run for delayStopTime when delayStop is set to 1 from Master.
+Const=followMaster 1
+;master can set delayStop and slave will run for delayStopTime and stop. If delayStop is set before time is up the time will breset
+Value=delayStop 0
+Timeout=delayStopTime 5000000
+Const=simulate 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET motor 0
+	TEST parent = ST_RESET
+  OR parent = ST_RUN
+  OR simulate = 1
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_RUN
+END
+
+State=ST_RUN
+  TEST followMaster = 1
+    TEST master = ST_RUN
+    OR master = ST_GOSTOP
+      SET motor 1
+    ELSE
+      SETSTATE ST_STOP
+    ENDTEST
+  ELSE
+    ;wait for external statemachine to set delayStop = 1
+    TEST delayStop = 1
+      SET motor 1
+      SET delayStop 0
+      TIMEOUT delayStopTime ST_DELAY_STOP
+      SETSTATE ST_DELAY_STOP
+    ENDTEST
+	ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_STOP
+  TEST master = ST_RUN
+    SETSTATE ST_RUN
+  ELSE
+    SET motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_DELAY_STOP
+  TEST delayStop = 1
+    SET delayStop 0
+    TIMEOUT delayStopTime ST_DELAY_STOP
+    SETSTATE ST_DELAY_STOP
+  ELSE
+    TEST delayStopTime = 1
+      SET motor 0
+      SETSTATE ST_RUN
+    ENDTEST
+  ENDTEST
+END

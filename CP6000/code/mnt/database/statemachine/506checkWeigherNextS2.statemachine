@@ -1,0 +1,10 @@
+STATEMACHINEVERSION 3
+Include=506checkWeigherNextS1.statemachine
+Name=checkWeigherNextS2
+Input=syncIn "S2 Extern Sync In"
+Link=next Conv2
+linkValue=motorRunning motorRunning next
+Const=m2107 2117
+Const=extSyncInPol 1
+Value=message 0
+Value=simulate 0

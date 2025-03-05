@@ -1,0 +1,48 @@
+STATEMACHINEVERSION 3
+Name=RemoteControl
+Input=button1 "Remote Control Button 1"
+Input=button2 "Remote Control Button 2"
+Input=button3 "Remote Control Button 3"
+Value=button1Pressed 0
+Value=button2Pressed 0
+Value=button3Pressed 0
+Timeout=timeout 2000000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_RESET
+  SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+; Handle button 1
+  TEST button1 = 1
+    SET button1Pressed 1
+    TIMEOUT timeout ST_IDLE
+  ENDTEST
+  TEST timeout = 1
+    SET button1Pressed 0
+  ENDTEST
+;
+; Handle button 2
+  TEST button2 = 1
+    SET button2Pressed 1
+    TIMEOUT timeout ST_IDLE
+  ENDTEST
+  TEST timeout = 1
+    SET button2Pressed 0
+  ENDTEST
+;
+;Handle button 3
+  TEST button3 = 1
+    SET button3Pressed 1
+    TIMEOUT timeout ST_IDLE
+  ENDTEST
+  TEST timeout = 1
+    SET button3Pressed 0
+  ENDTEST
+END

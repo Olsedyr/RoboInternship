@@ -1,0 +1,79 @@
+STATEMACHINEVERSION 3
+Name=TripWatch
+Input=conveyor1 "ProduktConveyor_1 HZOK"
+Input=conveyor2 "dummyOn"
+Input=skubberstatus "LangBufferSkub Status"
+Input=bufferstatus "BufferPlads Status"
+Input=liftstatus "KasseLift Status"
+Input=inliner "KasseInliner Motor Tripped"
+Input=liftconveyor "KasseLift Conveyor Motor Tripped"
+Input=vibrator "KasseLift Vibrator Tripped"
+Input=extra1 "dummyOff"
+Const=extra1Pol 1
+Const=extra1ErrorCode 1100
+Link=parent Parent
+Value=errorCode 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+	  SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST conveyor1 = 0
+	OR conveyor2 = 0
+		SET errorCode 1100
+	ENDTEST
+	TEST skubberstatus != 16
+	AND skubberstatus != 32
+	AND skubberstatus != 48
+	AND skubberstatus != 64
+	AND skubberstatus != 80
+	AND skubberstatus != 0
+		SET errorCode 1101
+	ENDTEST
+	TEST bufferstatus != 16
+	AND bufferstatus != 32
+	AND bufferstatus != 48
+	AND bufferstatus != 64
+	AND bufferstatus != 80
+	AND bufferstatus != 0
+		SET errorCode 1102
+	ENDTEST
+	TEST liftstatus != 16
+	AND liftstatus != 32
+	AND liftstatus != 48
+	AND liftstatus != 64
+	AND liftstatus != 80
+	AND liftstatus != 0
+		SET errorCode 1103
+	ENDTEST
+	TEST inliner = 1
+		SET errorCode 1104
+	ENDTEST
+	TEST liftconveyor = 1
+		SET errorCode 1105
+	ENDTEST
+	TEST vibrator = 1
+		SET errorCode 1106
+	ENDTEST
+  TEST extra1 = extra1Pol
+    SET errorCode extra1ErrorCode
+  ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

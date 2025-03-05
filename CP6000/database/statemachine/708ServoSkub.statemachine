@@ -1,0 +1,10 @@
+STATEMACHINEVERSION 3
+Include=cpservoskub3.statemachine
+Name=ServoSkub
+;** User section **
+Const=cruise_speed 4000.0000
+Const=acceleration 4500.0000
+Timeout=TimeStartMax 1000000
+Const=posBackOffset 2000
+Const=posRound -240000
+Const=posForwardOffset -12000

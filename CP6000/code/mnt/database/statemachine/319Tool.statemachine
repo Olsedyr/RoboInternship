@@ -1,0 +1,154 @@
+STATEMACHINEVERSION 3
+Name=Tool
+Input=sucking "Read Damper Closed"
+Input=blowing "Read Damper Open"
+Output=startvac "UniGrip Start Vacuum"
+Output=stopvac "UniGrip Stop Vacuum"
+Output=suck "UniGrip Damper Close"
+Output=blow "UniGrip Damper Open"
+Link=robotprg ProgramB2
+Link=parent Parent
+Link=ConveyorIn
+Link=ScissorDepalletizer2_3
+Const=ticksSensorTest0 50000.0
+Const=ticksSensorTest1 100000.0
+Const=ticksSensorTest2 300000.0
+Const=crashDetect 0.0000
+Const=doubleCaseTest 0.0
+Const=toolUsePressostat 2.0000
+Const=toolSensorSelect 1.0000
+Timeout=msAirDelayClose 3500000
+Timeout=msAirDelayOpen 2000000
+Timeout=TimePause 50000000
+Timeout=TimeStartVac 6000000
+Timeout=TimeCmd 500000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	SET startvac 0
+	SET stopvac 0
+	SET suck 0
+	SET blow 0
+	TEST parent = ST_RUN
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_PAUSE
+END
+
+State=ST_WAIT
+	TEST robotprg = ST_HOME
+		SET suck 0
+		SET blow 1
+		TIMEOUT TimePause ST_GO
+		SETSTATE ST_GO
+	ELSETEST robotprg = ST_CONVEYORB
+  OR robotprg = ST_PALLETB_ABORT
+		SET suck 0
+		SET blow 1
+		TIMEOUT msAirDelayOpen ST_OPEN
+		SETSTATE ST_OPEN
+	ELSETEST robotprg = ST_PALLETB
+		SET suck 1
+		SET blow 0
+		TIMEOUT msAirDelayClose ST_CLOSE
+		SETSTATE ST_CLOSE
+	ELSETEST robotprg = ST_IDLE
+		TEST blowing = 1
+			SET startvac 0
+			SET stopvac 1
+		ENDTEST
+		TIMEOUT TimeCmd ST_IDLE
+		SETSTATE ST_TIMER
+	ENDTEST
+END
+
+State=ST_GO
+	TEST robotprg = ST_HOME_HOME
+	OR robotprg = ST_HOME_PALLETB
+	OR robotprg = ST_CONVEYORB_PALLETB
+	OR robotprg = ST_PALLETB_CONVEYORB
+	OR robotprg = ST_CONVEYORB_HOME
+		SETSTATE ST_WAIT
+	ELSETEST robotprg = ST_PALLETB_HOME
+  OR robotprg = ST_PALLETB_ABORT
+		; abort suck
+		SET suck 0
+		SET blow 1
+		SETSTATE ST_WAIT
+	ELSETEST robotprg = ST_IDLE
+		TEST blowing = 1
+			SET startvac 0
+			SET stopvac 1
+		ENDTEST
+		TIMEOUT TimeCmd ST_IDLE
+		SETSTATE ST_TIMER
+	ELSETEST robotprg = ST_HOME
+		TEST TimePause = 1
+			SET startvac 0
+			SET stopvac 1
+			TIMEOUT TimeCmd ST_PAUSE
+			SETSTATE ST_TIMER
+		ENDTEST
+	ELSE
+		TIMEOUT TimePause ST_GO
+		SETSTATE ST_GO
+	ENDTEST	
+END
+
+State=ST_PAUSE
+	SET startvac 0
+	SET stopvac 0
+	TEST ScissorDepalletizer2_3 = ST_READY_ROBOT
+	AND ConveyorIn = ST_READY_ROBOT
+		SET startvac 1
+		SET stopvac 0
+		TIMEOUT TimeCmd ST_START
+		SETSTATE ST_TIMER
+	ELSETEST robotprg = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_START
+	SET startvac 0
+	SET stopvac 0
+	TIMEOUT TimeStartVac ST_WAITSTART
+	SETSTATE ST_WAITSTART
+END
+
+State=ST_WAITSTART
+	TEST TimeStartVac = 1
+		SETSTATE ST_WAIT
+	ELSETEST robotprg = ST_IDLE
+		TEST blowing = 1
+			SET startvac 0
+			SET stopvac 1
+		ENDTEST
+		TIMEOUT TimeCmd ST_IDLE
+		SETSTATE ST_TIMER
+	ENDTEST
+END
+
+State=ST_OPEN
+	TEST msAirDelayOpen = 1
+	AND blowing = 1
+		TIMEOUT TimePause ST_GO
+		SETSTATE ST_GO
+	ENDTEST
+END
+
+State=ST_CLOSE
+	TEST msAirDelayClose = 1
+	AND sucking = 1
+		TIMEOUT TimePause ST_GO
+		SETSTATE ST_GO
+	ENDTEST
+END

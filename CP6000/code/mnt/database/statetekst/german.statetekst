@@ -1,0 +1,150 @@
+STATETEKSTVERSION 1
+Deutsch
+00001 Info: Kontrolliert Hardware.
+00002 Info: Notstop drücken.
+00003 Info: Notstop lösen und Reset drücken.
+00004 Info: Startet Achsen.
+00005 Info: Setzt Anfangswerte.
+00006 Info: Setzt einheiten.
+00007 Info: Reset Achsen.
+00008 Info: Findet Nullpunkten.
+00034 Fejl: 2 Kasser har hængt sammen. Fjern kasser.
+00035 Fejl: Cylinder til kontrol af sammenh. kasser fejler (readkontakt).
+00100 Fehler: Folgefehler.
+00101 Notstop aktiviert.
+00102 Notstop aktiviert am Roboter.
+00103 Notstop aktiviert am checkWaage S1.
+00104 Notstop aktiviert am checkWaage S2.
+00105	Notstop aktiviert am checkWaage S3.
+00106 Notstop aktiviert am checkWaage S4.
+00107 Notstop aktiviert am Kistenmagazin.
+00108 Notstop aktiviert am KistenFüller.
+00109 Notstop aktiviert am Transportband
+00202 Ein Fehler ist entstanden - Der Roboter ist GESTOPPED.
+00202 Durchfüren Sie bitte ein vollständiger start von die maschine.
+00203 Notstop ist während betrieb aktiviert geworden.
+00203 Durchfüren Sie bitte ein vollständiger start von die maschine.
+00204 Ein Vakuumfehler ist entstanden.
+00204 Fehler korigieren, Entfernt die Kiste, Fortsetz oder Stop drücken.
+00208 Der Crash-sensor den Roboter ist aktiviert.
+00214 Der Roboter hat eine Kiste verloren.
+00214 Fehler korigieren, Fortsetz oder Stop drücken.
+00215 Der Roboter ist in pause gesetz.
+00216 Ein Fehler ist entstanden - Der Roboter ist Gestopped.
+00231 Der Roboter hat die leeren Kisten verloren.
+00232 Der Roboter hat die volle Kisten verloren.
+00233 Der Roboter hat die volle Kisten nicht richtig placiert.
+01000 Fehler: Entleeren Sie bitte den KistenFüller vom produkten. 
+01001 Fehler: Es fehlen ein Palleten. Neue einlegen bitte.
+01002 Fehler: Die produkten steht seitwärts am die Schiebplatz. Richtigstellen.
+01003 Fehler: Kisten sitzen fest (Aus). Kiste raus nehmen und auf dem band stellen.
+01004 Fehler: Produkten sitzen fest in bufferplatz. Produkten entfernen.
+01005 Fehler: Produkten sitzen fest beim Schiebplatz. Produkten entfernen.
+01006 Fehler: Kisten sitzen fest (Ein). Schieb die Kiste im Kistefüller.
+01007 Fehler: Kisten steht nicht richtig am Transportband (Aus). Richtigstellen.
+01008 Fehler: Kisten steht nicht richtig am Transportband (Ein). Richtigstellen.
+01009 Fehler: Palleten (ein) steht zu dicht an ein Andere. Zurück ziehen.
+01010 Fehler: Falscher Kistentype für gewähltes program.
+01011 Fehler: Abstand zwischen Produkten sind zu klein. (KistenFüller)
+01012 Fehler: Kisten sitzt fest in dem Kistenfüller.
+01013 Fehler: Abstand zwischen Produkten sind zu klein. (Dreher)
+01014 Fehler: Kisten sitzt fest (Aus). Kiste raus nehmen bitte.
+01015 Fehler: Kisten steht nicht richtig beim KistenFüller (Aus). Richtigstellen.
+01016 Fehler: Depalletierung, sensor nicht erricht.
+01017 Fehler:
+01018 Fehler:
+01019 Error: Follow error on lift.
+01020 Error: Follow error on pusher.
+01021 Error: Follow error on buffer.
+01022 Fehler: Depalletierung, sensor nicht erricht.
+01023 Error: Scissortable could not find correct position. Test sensor.
+01050 Fehler: Homing-rutinen kunne ikke finde en sensor. (Schieber)
+01051 Fehler: Homing-rutinen kunne ikke finde en sensor. (Buffer)
+01052 Fehler: Homing-rutinen kunne ikke finde en sensor. (Lift)
+01053 Fehler: Homing-rutinen kunne ikke finde en sensor. (Dreher1)
+01054 Fehler: Homing-rutinen kunne ikke finde en sensor. (Dreher2)
+01055 Fehler: Entfernen Sie bitte die Produkten vor der Start.
+01056 Fehler: Palleten station kann nicht richtig position finden.
+01057 Fehler: Homing-rutinen kunne ikke finde en sensor. (CardBoardShuttle)
+01070 Fehler: Inkompatible programmen für der Roboter und der KistenFüller.
+01071 Fehler: 
+01100 Fehler: Produktband tripped
+01101 Fehler: Schieber tripped
+01102 Fehler: BufferPlatz tripped
+01103 Fehler: KistenLift tripped
+01104 Fehler: KistenInLiner tripped
+01105 Fehler: KistenLift Band tripped
+01106 Fehler: Vibrierer tripped
+01107 Fehler: Dreher1 band tripped
+01108 Fehler: Dreher1 tripped
+01109 Fehler: Dreher2 band tripped
+01110 Fehler: Dreher2 tripped
+01111 Fehler: Kurveband tripped
+01112 Fehler: Kurveband2 tripped
+01113 Fehler: Flipperband tripped
+01150 Fehler: Werkzeugtype og Programtype stimme nicht übereins.
+02000 Info: Keine Produkten aus band.
+02001 Info: Printerstop. Einsetzen vielleicht neue Rolle von Etiketten.
+02002 Info: Flowpackmaschine wird gestopped weil produkten steht zu nahe aus dem band.
+02003 Info: Flowpackmaschine wird gestopped. Keine Kisten. Warte aus der Robotter.
+02004 Fehler: Die FotoSensor auf dem checkWage wird zu lange gesperrt geworden.
+02050 Info: Datanetzverbindung felht zum anderen teile der anlage.
+02051 Info:
+02052 Info:
+02053 Info:
+02054 Info:
+02100 Info: Nullpunkt wird gesetzt. Bitte warten. S1.
+02101 Fehler: Unerreichbar gewicht. Entfernen der produkt und druck kør.
+02103 Info: Waagezeit (ein) überscritten. (S1)
+02104 Info: Waagezeit (frei) überscritten. (S1)
+02105 Info: Waagezeit(wiegen) überscritten. (S1)
+02106 Info: Waagezeit(ein) overskredet. (S2)
+02107 Info: Waagezeit(frei) overskredet. (S2)
+02108 Info: Waagezeit(wiegen) overskredet. (S2)
+02109 Info: Fotosensor aus checkwaage ist zu lange aktiveirt geworden.
+02110 Info: Nullpunkt wird gesetzt. Bitte warten. S2.
+02120 Info: Nullpunkt wird gesetzt. Bitte warten. S3.
+03011 Fehler: Fotosensor auf TransportBand (aus) sind zu lange aktiveirt geworden. Testen vielleicht der Fotosensor.
+03012 Fehler: Der Roboter hat die leeren Kisten verloren.  Austesten vielleicht der Fotosensor.
+03013 Fehler: Palletenplatz sind leer. Austesten Fotosensoren.
+03014 Fehler: Der Pallette sitz fest. Austesten Fotosensoren.
+03015 Fehler: Robotten har tabt/fejlplaceret tomme kasser. Austesten Fotosensoren.
+04000 04000-04199 Kasse magasin
+04001 Info: Porten på palle stationen åbner.
+04002 Info: Porten kan ikke åbnes. Tryk stop eller lad køre færdig.
+04003 Info: Porten på palle stationen lukker.
+04004 Info: 
+04005 Info: Porten kunne ikke lukkes. Fjern blokerende objekter eller test portkontakter
+04006 Info:
+04007 Info:
+04101 Fejl: Afleveringstiden er overskredet på bånd kasse station
+04102 Fejl: Palle station: Test fotoceller.
+04103 Fejl: Modtagetiden er overskredet på bånd kasse station
+04104 Fejl: Bånd kasse station: Test fotoceller.
+04105 Fejl: Kør frem tid overskredet på bånd kasse station.
+04106 Fejl:
+04107 Fejl:
+04108 Fejl:
+04109 Fejl:
+04110 Fejl:
+04111 Fehler:
+04112 Fehler:
+04113 Fehler:
+04114 Fehler:
+04115 Fehler:
+04116 Fehler:
+04117 Fehler:
+04118 Fehler:
+04119 Fehler:
+04120 Fehler:
+04121 Fehler:
+04122 Fehler:
+04123 Fehler:
+04124 Error: Follow error on lift. Case/lift stuck.
+04125 Fehler:
+04126 Fehler:
+30002 Findet Startposition
+30003 Sucht Objekt
+30004 Hebt Objekt
+30005 Bewegt Objekt
+30006 Zurück zum Startposition

@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=901PreCW1.statemachine
+Name=PreCW3
+Output=motor "PreCW 3 Motor"
+Link=master checkWeigherPrevS1
+Timeout=timeRunAgain 0
+Timeout=timeStop 0

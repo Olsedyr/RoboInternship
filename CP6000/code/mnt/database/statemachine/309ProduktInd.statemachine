@@ -1,0 +1,61 @@
+STATEMACHINEVERSION 2
+Name=ProduktInd
+Delaystop=10000000
+Input=0,Endestop "ConveyorIn endestop"
+Output=0,Motor "ProduktInd Motor"
+Link=0,ProduktIndPuls
+Link=1,UniChain
+Timeout=0,stopDelay 2000000
+Timeout=1,startDelay 4000000
+Value=0,valmanuel 0
+Value=1,one 1
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_IDLE
+  SET Motor 0
+END
+
+State=5,ST_RESET
+  TEST Endestop = 0
+    TIMEOUT startDelay ST_RUN
+    SETSTATE ST_TIMER
+  ELSE
+    TEST valmanuel = one
+      SETSTATE ST_MANUEL
+		ELSE
+			SETSTATE ST_MAN_NORUN
+    ENDTEST
+  ENDTEST
+END
+
+State=5,ST_MANUEL
+  SET Motor 1
+END
+
+State=5,ST_MAN_NORUN
+  SET Motor 0
+  TEST UniChain = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=5,ST_RESET_MANRUN
+  SET valmanuel 1
+END
+
+State=5,ST_RESET_MANSTOP
+  SET valmanuel 0
+END
+
+State=5,ST_RUN
+  SET Motor 1
+  TEST UniChain = ST_IDLE
+    TIMEOUT stopDelay ST_IDLE
+    SETSTATE ST_TIMER
+  ENDTEST
+END

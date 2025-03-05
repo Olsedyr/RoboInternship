@@ -1,0 +1,263 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>formItem</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>formItem</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>799</width>
+            <height>599</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="baseSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="paletteBackgroundColor">
+        <color>
+            <red>0</red>
+            <green>85</green>
+            <blue>255</blue>
+        </color>
+    </property>
+    <property name="caption">
+        <string>Items</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>220</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>Items</string>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter</set>
+        </property>
+    </widget>
+    <widget class="QListBox">
+        <item>
+            <property name="text">
+                <string>New Item</string>
+            </property>
+        </item>
+        <property name="name">
+            <cstring>listBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>60</y>
+                <width>640</width>
+                <height>400</height>
+            </rect>
+        </property>
+        <property name="vScrollBarMode">
+            <enum>AlwaysOff</enum>
+        </property>
+        <property name="hScrollBarMode">
+            <enum>AlwaysOff</enum>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdCreate</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>490</y>
+                <width>130</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Opret ny</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdDelete</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>490</y>
+                <width>130</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Slet</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdEdit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>290</x>
+                <y>490</y>
+                <width>130</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Edit</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdAdd</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>660</x>
+                <y>60</y>
+                <width>130</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Tilføj</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdRemove</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>660</x>
+                <y>160</y>
+                <width>130</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Fjern</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdOk</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>660</x>
+                <y>490</y>
+                <width>130</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Vælg</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdCancel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>520</x>
+                <y>490</y>
+                <width>130</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Afbryd</string>
+        </property>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

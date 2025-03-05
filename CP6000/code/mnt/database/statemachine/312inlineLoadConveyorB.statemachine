@@ -1,0 +1,29 @@
+; INLINE 312inlineLoadConveyorB.statemachine
+CALC temp = cBItem % 2
+TEST temp = 0
+	SET leftrightB 1
+ELSE
+	SET leftrightB 0
+ENDTEST
+SETFRAME fromFrame conveyorB
+CALC fromFrame.y = fromFrame.y + item.gy
+CALC fromFrame.x = fromFrame.x - item.gx
+TEST leftrightB = 1
+	;*******************************************
+	SETFRAME toFrame palletB0
+	CALC ftemp = item.sy * cBStackright
+	CALC toFrame.y = toFrame.y + ftemp
+	CALC toFrame.y = toFrame.y + item.my
+	SET conveyorB_palletB0.mode B0normalmode
+	LOAD conveyorB_palletB0 fromFrame toFrame
+ELSE
+	;*******************************************
+	SETFRAME toFrame palletB1
+	CALC ftemp = item.sy * cBStackleft
+	CALC toFrame.y = toFrame.y + ftemp
+	CALC toFrame.y = toFrame.y + item.my
+	SET conveyorB_palletB1.mode B1normalmode
+	LOAD conveyorB_palletB1 fromFrame toFrame
+ENDTEST
+;*******************************************
+LOAD conveyorB_home fromFrame home

@@ -1,0 +1,92 @@
+STATEMACHINEVERSION 2
+Name=Sektor25
+Delaystop=10000000
+Input=0,Foto1 "Sektor25 Foto1"
+Output=0,Motor "Sektor25 Motor"
+Output=1,Motor1 "Sektor25 Motor1"
+Link=0,Sektor26
+Link=1,Sektor23
+Link=2,Sektor46
+Link=3,Sektor44
+Timeout=0,Stopdelay 5000000
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_IDLE
+  SET Motor 0
+  SET Motor1 0
+  END
+
+State=1,ST_READY
+  TEST Foto1 = 0  
+    SETSTATE ST_EMPTY
+  ELSE 
+    TEST Sektor26 = ST_EMPTY 
+      TEST Sektor46 != ST_RECEIVE
+      AND Sektor44 != ST_SEND
+        SETSTATE ST_SEND
+      ELSE
+        SET Motor 0
+        SET Motor1 0
+      ENDTEST
+    ELSE
+     SET Motor 0
+     SET Motor1 0
+   ENDTEST
+ ENDTEST
+  TEST Sektor23 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+ END
+
+State=2,ST_SEND
+  TEST Sektor46 != ST_RECEIVE
+  AND Sektor44 != ST_SEND
+    TEST Sektor26 = ST_READY
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+      SET Motor1 0
+    ENDTEST
+  ELSE
+    SET Motor 0
+    SET Motor1 0
+  ENDTEST
+  END
+
+State=3,ST_EMPTY
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ELSE
+    TEST Sektor23 = ST_READY
+      SET Motor 1
+      SET Motor1 1
+      SETSTATE ST_RECIEVE
+    ELSE 
+      SET Motor 0
+      SET Motor1 0
+    ENDTEST
+  ENDTEST
+  TEST Sektor23 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+  END
+
+State=4,ST_RECIEVE
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ENDTEST
+  END
+
+State=5,ST_RESET
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ELSE
+    SETSTATE ST_EMPTY
+  ENDTEST
+  END
+

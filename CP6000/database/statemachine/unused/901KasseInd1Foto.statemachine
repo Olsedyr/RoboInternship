@@ -1,0 +1,10 @@
+STATEMACHINEVERSION 3
+Include=fotoinput.statemachine
+Name=KasseInd1Foto
+Value=DEBUG 0
+Input=input "Kasse Ind 1 Foto"
+Timeout=blockTime 200000
+Timeout=freeTime 200000
+Value=test 0
+Const=free 1
+Const=blocked 0

@@ -1,0 +1,72 @@
+STATEMACHINEVERSION 2
+Name=SkumKlap
+Delaystop=5000000
+Input=0,Foto "UniChain skumKlapFoto"
+Input=1,Foto1 "BakkeTipper Foto"
+Output=0,Klap "UniChain skumKlap"
+Link=0,BakkeTipper
+Link=1,InLiner
+Timeout=0,SendTime 200000
+Timeout=1,NextTime 600000
+Timeout=2,NextTimeSlow 1500000
+Value=0,slow 0
+Value=1,countslow 6
+Value=2,one 1
+
+State=0,ST_TIMER
+END
+
+State=0,ST_HALT
+END
+
+State=0,ST_IDLE
+  SET Klap 0
+END
+
+State=0,ST_READY
+  SET Klap 0
+  TEST BakkeTipper = ST_RUN
+  AND InLiner = ST_RUN
+  AND Foto1 = 1
+    SETSTATE ST_SEND
+  ENDTEST
+  TEST BakkeTipper = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=0,ST_SEND
+  SET Klap 1
+;  TEST BakkeTipper != ST_RUN
+;  OR InLiner != ST_RUN
+;  OR Foto1 = 0
+;    SETSTATE ST_READY
+;  ENDTEST
+  TEST Foto = 1
+    TIMEOUT SendTime ST_WAIT
+    SETSTATE ST_TIMER
+  ENDTEST
+  TEST BakkeTipper = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=0,ST_WAIT
+  SET Klap 0
+  TEST slow <= countslow
+    ADD slow one slow
+    TIMEOUT NextTimeSlow ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TIMEOUT NextTime ST_READY
+    SETSTATE ST_TIMER
+  ENDTEST
+  TEST BakkeTipper = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=0,ST_RESET
+  SET slow 0
+  SETSTATE ST_READY
+END

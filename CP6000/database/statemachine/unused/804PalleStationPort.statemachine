@@ -1,0 +1,126 @@
+STATEMACHINEVERSION 3
+Name=PalleStationPort
+Output=open "PalleStation Open Port Ventil"
+Output=close "PalleStation Close Port Ventil"
+Output=lock "PalleStation Port Lock Ventil"
+;tryOpen and tryClose is set from formCMUser.c
+Value=tryOpen 0
+Value=tryClose 0
+Value=isOpen 0
+Value=isClosed 0
+Value=message 0
+Timeout=openLockTime 3000000
+Timeout=openingTime 5000000
+Timeout=maxClosingTime 5000000
+Timeout=closeLockTime 1000000
+Link=pallestation PalleStation
+Link=stabel1 PalleStationFotoStabel1
+Link=stabel2 PalleStationFotoStabel2
+linkValue=portKontakt test PalleStationPortLukketKontakt
+Link=parent Parent
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET open 0
+  SET close 0
+  SET lock 0
+  SETSTATE ST_WAITING
+END
+
+State=ST_RESET
+  SETSTATE ST_WAITING
+END
+
+State=ST_WAITING
+  TEST tryOpen = 1
+    SET tryOpen 0
+    ;if everything is ok, the pallet is empty and the actuators are idle
+;    TEST stabel1 = ST_FREE
+;    AND stabel2 = ST_FREE
+    TEST pallestation = ST_HOME
+      SET isOpen 0
+      SET isClosed 0
+      SET lock 0
+      SET message 4001
+      TIMEOUT openLockTime ST_OPENING_LOCK
+      SETSTATE ST_OPENING_LOCK
+    ELSE
+      TEST parent != ST_RUN
+        SET isOpen 0
+        SET isClosed 0
+        SET lock 0
+        SET message 4001
+        TIMEOUT openLockTime ST_OPENING_LOCK
+        SETSTATE ST_OPENING_LOCK
+      ELSE
+        SET message 4002  
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST tryClose = 1
+    SET tryClose 0
+    SET isOpen 0
+    SET isClosed 0
+    SET lock 0
+    SET message 4003
+    TIMEOUT openLockTime ST_OPENING_LOCK_BEFORE_CLOSE
+    SETSTATE ST_OPENING_LOCK_BEFORE_CLOSE
+  ENDTEST
+  TEST portKontakt = 0
+    SET isClosed 0
+  ENDTEST
+END
+
+State=ST_OPENING_LOCK
+  TEST openLockTime = 1
+    SET open 1
+    SET close 0
+    TIMEOUT openingTime ST_OPENING
+    SETSTATE ST_OPENING
+  ENDTEST
+END
+
+State=ST_OPENING
+  TEST openingTime = 1
+    SET isOpen 1
+    SET open 0
+    SET close 0
+    SET message 0
+    SETSTATE ST_WAITING
+  ENDTEST
+END
+
+State=ST_OPENING_LOCK_BEFORE_CLOSE
+  TEST openLockTime = 1
+    SET open 0
+    SET close 1
+    TIMEOUT maxClosingTime ST_CLOSING
+    SETSTATE ST_CLOSING
+  ENDTEST
+END
+
+State=ST_CLOSING
+  TEST portKontakt = 1
+    SET lock 1
+    TIMEOUT closeLockTime ST_LOCKING
+    SETSTATE ST_LOCKING
+  ENDTEST
+  TEST maxClosingTime = 1
+    SET message 4005
+    SETSTATE ST_WAITING
+  ENDTEST
+END
+
+State=ST_LOCKING
+  TEST closeLockTime = 1
+    SET open 0
+    SET isClosed 1
+    SET message 0
+    SETSTATE ST_WAITING
+  ENDTEST
+END
+
+State=ST_TIMER
+END

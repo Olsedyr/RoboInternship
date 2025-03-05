@@ -1,0 +1,60 @@
+MACVERSION 1
+ipaddr=192.168.0.205
+port=4001
+simulate=0
+NumOfMotors=1
+Name=ShuttleMotor
+Address=254
+Init37=0 "START_MODE" "Passive startmode" longint
+Init36=0x20 "CNTRL_BITS" "Resync position" longint
+Init2=0 "MODE_REG" "Passive mode" longint
+Init3=0 "P_SOLL" "Commanded position" longint
+Init10=0 "P_IST" "Actual motor position set to zero" longint
+Init12=0 "V_IST" "Actual velocity set to zero" longint
+Init38=0 "P_HOME" "Zero search Position" longint
+Init23=0x01 "UV_HANDLE" "Set errorbit when UV" longint
+Init22=2000 "FLWERRMAX" "Maximum Followerror" longint
+Init26=1000 "FNCERRMAX" "Maximum Funtionerror" longint
+Init42=0x00 "HOME_MODE" "Set Home_Done=0" longint
+Init35=0x00 "ERR_STAT" "Clear errors" longint
+Init28=0x80000000 "MIN_P_IST" "Min pos limit set to min of longint" longint
+Init30=0x7FFFFFFF "MAX_P_IST" "Max pos limit set to max of longint" longint
+InBits35="Shuttle Status" "ERR_STAT" longint
+Bit0="Shuttle I2T_ERR" "I2t error"
+Bit1="Shuttle FLW_ERR" "Follow error"
+Bit2="Shuttle FNC_ERR" "Function error"
+Bit3="Shuttle UIT_ERR" "Regenerative error"
+Bit4="Shuttle IN_POS"  "In position"
+Bit5="Shuttle ACC_FLAG" "Accelerating"
+Bit6="Shuttle DEC_FLAG" "Decelerating"
+Bit7="Shuttle PLIM_ERR" "Position limits error"
+Bit8="Shuttle DEGC_ERR" "Temperature error"
+Bit9="Shuttle UV_ERR"  "Undervoltage error"
+Bit10="Shuttle UV_DETECT" "Low voltage at high volt bus"
+Bit11="Shuttle OV_ERR" "Overvoltage error"
+Bit12="Shuttle IPEAK_ERR" "Motor over current"
+Bit13="Shuttle SPEED_ERR" "Over speed error"
+Bit14="Shuttle DIS_P_LIM" "SW limits disabled"
+Bit15="Shuttle INDEX_ERR" "internal encoder error"
+Bit16="Shuttle OLD_FILT_ERR" "Filter setting not valid"
+Bit17="Shuttle U24V_ERR" "Control supply has been too low"
+EndBits
+InBits42="Shuttle Home Mode" "HOME_MODE" longint
+Bit16="Shuttle HOME_DONE" "Home Done" 
+EndBits
+In29="Shuttle Temperature" "DEGC" longint factor=0.12207
+InOut169="Shuttle Curtorque" "VF_OUT" longint factor=0.293255
+InOut10="Shuttle Curpos" "P_IST" longint
+In12="Shuttle Curvel" "V_IST" longint factor=5.7750057750
+In20="Shuttle Follow Error" "FLWERR" longint
+InOut24="Shuttle Function Error" "FNCERR" longint
+Out2="Shuttle Mode" "MODE_REG" longint
+Out13="Shuttle Load Factor" "KVOUT" fixed16
+Out3="Shuttle MacSetpoint" "P_SOLL" longint
+Out5="Shuttle Maxvel" "V_SOLL" longint factor=0.36093786
+Out6="Shuttle Maxacc" "A_SOLL" longint factor=277.921911
+Out40="Shuttle Homevel" "V_HOME" longint factor=0.36093786
+Out41="Shuttle Hometorque" "T_HOME" longint factor=0.293255
+Out35="Shuttle Status" "ERR_STAT" longint
+Out28="Shuttle Minpos" "MIN_P_IST" longint
+Out30="Shuttle Maxpos" "MAX_P_IST" longint

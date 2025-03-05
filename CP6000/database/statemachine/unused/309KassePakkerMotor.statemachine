@@ -1,0 +1,68 @@
+STATEMACHINEVERSION 2
+Name=KassePakkerMotor
+Delaystop=5000000
+Input=0,Printstop "PrinterStop"
+Input=1,Langbufferskubinde "KassePakker langBufferSkub-"
+Input=2,Langbufferskubude "KassePakker langBufferSkub+"
+Output=0,Motor "KassePakker skubbePladsMotor"
+Link=0,KassePakkerTop
+Timeout=0,MaxWaitFull 600000
+Timeout=1,MaxWaitPrintStop 8000000
+Timeout=2,TimeGoStop 2000000
+
+State=0,ST_TIMER
+END
+
+State=0,ST_HALT
+END
+
+State=0,ST_IDLE
+  SET Motor 0
+END
+
+State=5,ST_RESET
+  SET Motor 0
+  TIMEOUT TimeGoStop ST_RUN
+  SETSTATE ST_TIMER
+END
+
+State=5,ST_RUN
+  SET Motor 1
+  TEST Langbufferskubinde = 0
+    SET Motor 0
+    TIMEOUT TimeGoStop ST_GOSTOP
+    SETSTATE ST_GOSTOP
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+  OR KassePakkerTop = ST_MANUEL
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=5,ST_GORUN
+  TEST Langbufferskubinde = 1
+    SET Motor 1
+    SETSTATE ST_RUN
+  ENDTEST
+END
+
+State=5,ST_GOSTOP
+  TEST TimeGoStop = 1
+    SETSTATE ST_RUN
+  ENDTEST
+  TEST Langbufferskubude = 1
+    SETSTATE ST_STOP
+  ENDTEST
+END
+
+State=5,ST_STOP
+  SET Motor 0
+  TEST Langbufferskubude = 0
+;    SET Motor 1
+    SETSTATE ST_GORUN
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+  OR KassePakkerTop = ST_MANUEL
+    SETSTATE ST_IDLE
+  ENDTEST
+END

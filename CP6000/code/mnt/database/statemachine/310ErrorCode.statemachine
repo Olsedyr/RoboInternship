@@ -1,0 +1,55 @@
+STATEMACHINEVERSION 3
+Name=ErrorCode
+Link=parent Parent
+linkValue=error1 errorCode ConveyorOut
+linkValue=error2 errorCode Emergency
+linkValue=error3 errorCode Robot
+linkValue=error4 errorCode PladsLoad 
+linkValue=error5 errorCode RemoteWatch
+linkValue=error6 errorCode TripWatch
+linkValue=error7 errorCode Pallebane6 
+linkValue=error8 errorCode ConveyorOutCP
+linkValue=error9 errorCode Secure
+linkValue=error10 errorCode ToolTester
+linkValue=error11 errorCode RoboError
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST error1 != 0
+	OR error2 != 0
+	OR error3 != 0
+	OR error4 != 0
+	OR error5 != 0
+	OR error6 != 0
+	OR error7 != 0
+	OR error8 != 0
+	OR error9 != 0
+	OR error10 != 0
+	OR error11 != 0
+		SETSTATE ST_ERROR
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_ERROR
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END

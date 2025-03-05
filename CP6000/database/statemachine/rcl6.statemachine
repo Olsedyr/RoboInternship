@@ -1,0 +1,204 @@
+STATEMACHINEVERSION 3
+Name=Pallebane6
+;***************************************************
+;* rcl6 first used in model RCL3000 PB6.statemachine
+;* no fotoTest
+;* no ST_READY_ROBOT
+;***************************************************
+Input=palletInPlace "Pallebane6 FotoRev"
+Input=fotoAlign "Pallebane6 FotoAlign"
+Output=MotorFwd "Pallebane6 MotorFwd"
+Output=MotorRev "Pallebane6 MotorRev"
+Output=Chain "Pallebane6 Chain"
+Output=Cyl "Pallebane6 Cyl"
+Link=next Pallebane7
+Link=prev Pallebane4 
+Link=parent Parent
+linkValue=firstRun WorkCell
+linkValue=nextpalb Frames
+Timeout=TimeoutDelay 5000000
+Timeout=TimeoutForPalletRev 1000000
+Timeout=TimeoutForPalletSideAlign 2000000
+Timeout=TimeoutForPalletLift 2000000
+Timeout=maxDelayStop 10000000
+Timeout=TimeoutRev 150000
+Timeout=EmptyDelay 30000000
+Const=ON 1
+Const=alignON 1
+Value=simulate 0
+Value=keep 0
+Value=errorCode 0
+Value=cPallet 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+ END
+
+State=ST_IDLE
+  SET MotorFwd 0
+  SET MotorRev 0
+  SET Chain 0
+  SET Cyl 0
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_PALLET_NOT_EMPTY
+  SETSTATE ST_OK
+END
+
+State=ST_OK
+	TEST nextpalb = 1
+	AND keep = 0
+		SETSTATE ST_READY
+	ELSE
+		SETSTATE ST_READY_ROBOT
+	ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+ END
+
+State=ST_PALLET_EMPTY
+	SET nextpalb 0
+  SETSTATE ST_READY_ROBOT
+END
+
+State=ST_READY_ROBOT
+	TEST nextpalb = 1
+	AND keep = 0
+		SETSTATE ST_READY
+	ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_READY
+  TEST next = ST_EMPTY
+    TIMEOUT maxDelayStop ST_SEND
+    SETSTATE ST_SEND
+  ELSE
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET Chain 0
+    SET Cyl 0
+    SET MotorRev 0
+  ENDTEST
+  TEST simulate = 1
+    SETSTATE ST_PALLET_EMPTY
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_SEND
+  TEST next = ST_READY
+    CALC cPallet = cPallet + 1
+	  SET nextpalb 0
+    SETSTATE ST_EMPTY
+  ELSE
+    SET MotorFwd 1
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND maxDelayStop = 1
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_EMPTY
+  SET MotorFwd 0
+  SET MotorRev 0
+  SET Chain 0
+  SET Cyl 0
+  TEST prev = ST_EMPTY_SHIFT
+    SET Cyl 1
+    TIMEOUT TimeoutForPalletLift ST_EMPTY_SHIFT
+    SETSTATE ST_TIMER
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+  TEST palletInPlace = ON 
+    SET errorCode 3013
+    SETSTATE ST_IDLE
+;     palleplads ikke tom
+  ENDTEST  
+END
+
+State=ST_RECEIVE
+  TEST prev = ST_SEND
+    SET Chain 1
+  ENDTEST
+  TEST fotoAlign = alignON
+  OR simulate = 1
+    TIMEOUT TimeoutForPalletSideAlign ST_PALLET_SIDE_ALIGN_TIMEOUT
+    SETSTATE ST_TIMER
+  ELSE
+    TEST maxDelayStop = 1
+;     pallet stuck
+      TEST parent = ST_IDLE
+        SET errorCode 3014
+        SETSTATE ST_IDLE
+      ENDTEST  
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_PALLET_SIDE_ALIGN_TIMEOUT
+  SET Chain 0
+  SET Cyl 0
+  SETSTATE ST_PALLET_REV
+END
+
+State=ST_PALLET_REV
+  TEST palletInPlace = ON
+  OR simulate = 1
+    TIMEOUT TimeoutForPalletRev ST_PALLET_REC_TIMEOUT
+    SETSTATE ST_TIMER
+  ELSE
+    SET MotorRev 1
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_PALLET_REC_TIMEOUT
+  SET MotorRev 0
+  SETSTATE ST_PALLET_EMPTY
+END
+
+State=ST_PALLET_REV_TIMEOUT
+  SET MotorRev 0
+  SETSTATE ST_PALLET_NOT_EMPTY
+END
+
+State=ST_RESET
+  SET MotorRev 1
+  TIMEOUT TimeoutDelay ST_STOP
+  SETSTATE ST_STOP
+END
+
+State=ST_STOP
+  TEST palletInPlace = ON
+  OR simulate = 1
+    TIMEOUT TimeoutForPalletRev ST_PALLET_REV_TIMEOUT
+    SETSTATE ST_TIMER
+  ELSE 
+    TEST TimeoutDelay = 1
+      SETSTATE ST_EMPTY
+    ENDTEST	
+  ENDTEST
+END
+
+State=ST_EMPTY_SHIFT
+  TIMEOUT maxDelayStop ST_RECEIVE
+  SETSTATE ST_RECEIVE
+END

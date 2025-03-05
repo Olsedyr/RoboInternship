@@ -1,0 +1,78 @@
+STATEMACHINEVERSION 3
+Name=Program801
+Link=workcell WorkCell
+Value=programidx 1
+Value=casekind 0
+Value=newprogram 1
+Value=convrun 0
+
+; casekind = 0  -> none
+; casekind = 1  -> C11
+; casekind = 2  -> C14
+; casekind = 3  -> C18
+; casekind = 4  -> hybschA
+; casekind = 5  -> hybschB
+; casekind = 6  -> Netto
+; casekind = 7  -> EPS610
+; casekind = 8  -> IFCO16
+; casekind = 9  -> IFCO18
+; casekind = 10 -> IFCO20
+
+; Put programstates in top
+
+; also edit KasseStativ and CamGenLift for particular program
+
+; PROGRAM STATES
+
+State=PROGRAM_C18
+  SET newprogram 1
+  SET casekind 3
+  SETSTATE ST_RUNNING_C18
+END
+
+State=PROGRAM_NETTO
+  SET newprogram 1
+  SET casekind 6
+  SETSTATE ST_RUNNING_NETTO
+END
+
+; RUNNING STATES
+
+State=ST_RUNNING_C18
+	SET newprogram 0
+	TEST workcell = ST_IDLE
+	OR workcell = ST_PAUSED
+		TEST programidx != 0
+			SETSTATE ST_RESET
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_RUNNING_NETTO
+	SET newprogram 0
+	TEST workcell = ST_IDLE
+	OR workcell = ST_PAUSED
+		TEST programidx != 1
+			SETSTATE ST_RESET
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+	TEST programidx = 0
+		SETSTATE PROGRAM_C18
+	ENDTEST
+	TEST programidx = 1
+		SETSTATE PROGRAM_NETTO
+	ENDTEST
+END

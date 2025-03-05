@@ -1,0 +1,22 @@
+PPSCRIPTVERSION 2
+310
+type=20
+itemsPrLayer=2
+inlayers=11
+outlayers=11
+
+0 move from home to palletA
+1 move from home to conveyorB
+2 move from palletA to conveyorA withitem
+3 move from palletA to palletA(+1)
+4 move from palletA to conveyorB
+5 move from palletA to home
+6 move from conveyorA to home
+7 move from conveyorA to palletA
+8 move from conveyorA to conveyorB
+9 move from conveyorB to palletB withitem
+10 move from conveyorB to home
+11 move from palletB to home
+12 move from palletB to conveyorB
+13 move from palletB to palletA
+14 move from home to home

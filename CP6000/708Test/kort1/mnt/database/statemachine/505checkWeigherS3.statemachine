@@ -1,0 +1,20 @@
+STATEMACHINEVERSION 3
+Include=checkweigher.statemachine
+Name=checkWeigherS3
+;************************
+Input=fotoInRaw "S3 Foto Product In"
+Link=motor checkWeigherMotorS3
+Link=parent ParentS3
+Link=checkWeigherCalc checkWeigherCalcS3
+Link=Program ProgramS3
+Link=fotoInS fotoInS3
+Link=fotoOutS fotoOutS3
+Link=fotoOutLongS fotoOutLongS3
+;************************
+Const=m2100 2120
+Const=m2102 2122
+Const=m2103 2123
+Const=m2104 2124
+Const=m2105 2125
+Const=m2108 2128
+Const=detectStyle 1

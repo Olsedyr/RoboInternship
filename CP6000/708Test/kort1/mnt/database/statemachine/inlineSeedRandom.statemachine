@@ -1,0 +1,2 @@
+; INLINE inlineSeedRandom.statemachine
+SET rand_next randseed

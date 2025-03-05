@@ -1,0 +1,663 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>formItemEdit</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>formItemEdit</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>799</width>
+            <height>599</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="baseSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="paletteBackgroundColor">
+        <color>
+            <red>0</red>
+            <green>85</green>
+            <blue>255</blue>
+        </color>
+    </property>
+    <property name="caption">
+        <string>Adjust frame</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdCancel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>660</x>
+                <y>480</y>
+                <width>130</width>
+                <height>100</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdReturn</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>520</x>
+                <y>480</y>
+                <width>130</width>
+                <height>100</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Ok</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>10</y>
+                <width>230</width>
+                <height>36</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>CP6000</string>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2_2_2_3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>110</y>
+                <width>70</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>dx</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2_2_2_3_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>180</y>
+                <width>70</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>dy</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2_2_2_3_3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>250</y>
+                <width>70</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>dz</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2_2_2_3_3_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>320</y>
+                <width>70</width>
+                <height>36</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>sy</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2_2_2_3_3_2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>390</y>
+                <width>70</width>
+                <height>36</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>gy</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2_2_2_3_4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>470</x>
+                <y>110</y>
+                <width>70</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>my</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2_2_2_3_2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>470</x>
+                <y>180</y>
+                <width>70</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>gx</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2_2_2_3_3_3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>470</x>
+                <y>250</y>
+                <width>70</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>wieght</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdmy</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>540</x>
+                <y>100</y>
+                <width>190</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>0.0000</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdgx</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>540</x>
+                <y>170</y>
+                <width>190</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>0.0000</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdweight</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>540</x>
+                <y>240</y>
+                <width>190</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>0.0000</string>
+        </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>390</x>
+                <y>10</y>
+                <width>340</width>
+                <height>70</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Frame</string>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabelName</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>310</width>
+                    <height>36</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>ItemName</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdgy</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>380</y>
+                <width>190</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>0.0000</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdsy</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>310</y>
+                <width>190</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>0.0000</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmddz</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>240</y>
+                <width>190</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>0.0000</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmddy</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>170</y>
+                <width>190</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>0.0000</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmddx</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>100</y>
+                <width>190</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>0.0000</string>
+        </property>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

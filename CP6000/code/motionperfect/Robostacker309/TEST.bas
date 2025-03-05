@@ -1,0 +1,4 @@
+FOR i = 0 TO 200000
+TABLE(i,i)
+NEXT i
+

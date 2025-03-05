@@ -1,0 +1,220 @@
+STATETEKSTVERSION 1
+Polish
+00001 Info: Skanuję osprzęt.
+00002 Info: Wciśnij stop bezpieczeństwa.
+00003 Info: Zwolnij stop bezpieczeństwa i wciśnij reset.
+00004 Info: Uruchamianie silników.
+00005 Info: Ustawianie wartości początkowych.
+00006 Info: Ustawianie jednostek.
+00007 Info: Resetowanie osi.
+00008 Info: Znajdowanie pozycji zerowych.
+00034 Error: 2 skrzynki utknęły razem. Usuń skrzynki.
+00035 Error: Cylinder for control of cases stuck together is malfunctioning (readswitch).
+00100 Error: Follow error.
+00101 Stop bezpieczeństwa jest aktywny.
+00102 Stop bezpieczeństwa jest aktywny na robocie.
+00103 Stop bezpieczeństwa jest aktywny na checkWeigher S1.
+00104 Stop bezpieczeństwa jest aktywny na checkWeigher S2.
+00105 Stop bezpieczeństwa jest aktywny na checkWeigher S3.
+00106 Stop bezpieczeństwa jest aktywny na checkWeigher S4.
+00107 Stop bezpieczeństwa jest aktywny na caseMagazine.
+00108 Stop bezpieczeństwa jest aktywny na casePacker.
+00109 Stop bezpieczeństwa jest aktywny na zdalnych przenośnikach.
+00203 Stop bezpieczeństwa został aktywowany podczas pracy.
+00203 Przeprowadź kompletny rozruch maszyny od początku.
+00206 Robot został wstrzymany - robot jest ZATRZYMANY.
+00206 Przeprowadź kompletny rozruch maszyny.
+00207 Wystąpił błąd kontrolera - robot jest ZATRZYMANY.
+00207 Przeprowadź kompletny rozruch maszyny.
+00208 Czujnik uderzenia robota został aktywowany - robot jest ZATRZYMANY.
+00208 Przeprowadź kompletny rozruch maszyny.
+00215 Robot jest spauzowany.
+00231 Wystąpił błąd - robot jest WSTRZYMANY.
+00231 Robot upuścił/źle umieścił puste skrzynki.
+00232 An error has occured - the robot is halted.
+00232 The robot has dropped the filled cases.
+00234 An error has occured - the robot is halted.
+00234 Cases are stuck together.
+00333 An error has occured - the robot is halted.
+00333 The robot has misplaced the filled cases.
+00500 IO-error: Connection to a component is missing.
+00501 IO-error: Connection to advantys is missing.
+00502 IO-error: Connection to comsk is missing.
+00503 IO-error: Connection to trio is missing.
+00504 IO-error: Connection to loadcell is missing.
+00505 IO-error: Connection to mac is missing.
+01000 Błąd: opróżnij CasePacker z produktów.
+01001 Error: A pallet is lacking. Put in a new one.
+01002 Error: Punnets is laying askew by pushing-place. Fix the punnets in front. 
+01003 Błąd: Skrzynka utknęła (Na wyjściu). Wyciągnij skrzynkę.
+01004 Error: Punnets are jammed in the buffer-place. Empty out all products.
+01005 Error: Punntes are jammed at the pushing-place. Empty for products.
+01006 Błąd: Skrzynka utknęła (Na wejściu). Wyciągnij skrzynkę.
+01007 Error: Cases are standing askew at the conveyor (out). Fix it.
+01008 Error: Cases are standing askew at the conveyor (in). Fix it.
+01009 Error: Pallets (in) are standing too close. Pull back.
+01010 Error: Wrong type of case for the program you have chosen.
+01011 Błąd: Zbyt mały odstęp pomiędzy produktami.
+01012 Błąd: Skrzynka utknęła wewnątrz casePacker'a.
+01013 Error: There is too little distance between products. (ts)
+01014 Error: Cases are standing askew at the conveyor (out). Fix it. Test photocells.
+01015 Error: Cases are standing askew at the casePacker (out). Fix it. Test photocells.
+01016 Error: The depalletizer hasn't reached the middle position in the max. allowed time.
+01017 Error: There is too little distance between products on collectconveyor.
+01018 Error: There is a product stuck or no distance between products on collectconveyor.
+01019 Błąd: Skrzynka utknęła na podnośniku skrzynek casePacker'a.
+01020 Błąd: Follow error na popychaczu.
+01021 Błąd: Follow error on buffer.
+01022 Error: The depalletizer hasn't reached the bottom position in the max. allowed time.
+01023 Error: Scissortable could not find correct position. Test sensor.
+01048 Błąd: Rutyna startująca nie znalazła czujnika. (CardBoardConveyor)
+01049 Błąd: Rutyna startująca nie znalazła czujnika. (PalletShuttle) ść ń C Łł Żż Źź ó ą  ę
+01050 Błąd: Rutyna startująca nie znalazła czujnika. (Pusher)
+01051 Błąd: Rutyna startująca nie znalazła czujnika. (Buffer)
+01052 Błąd: Rutyna startująca nie znalazła czujnika. (Lift)
+01053 Błąd: Rutyna startująca nie znalazła czujnika. (Turner1)
+01054 Błąd: Rutyna startująca nie znalazła czujnika. (Turner2)
+01055 Błąd: Usuń produkty przed rozpoczęciem.
+01056 Error: The palletstation can't go to the correct pulling position.
+01057 Error: The homing routine was not completed within maximum time. (CardBoard Shuttle)
+01070 Błąd: Nieprawidłowy program dla robota i casePacker'a.
+01071 Błąd: Nieprawidłowy program dla casePacker'a and caseMagazine.
+01098 Error: CardBoardShuttle tripped
+01099 Error: Palletshuttle tripped
+01100 Błąd: Przenośnik produktów przeciążony.
+01101 Błąd: Popychacz przeciążony.
+01102 Error: CasePacker buffer tripped
+01103 Błąd: Podnośnik skrzynek przeciążony. Wyciągnij skrzynkę.
+01104 Błąd: Przenośnik skrzynek wewnątrz casePacker'a przeciążony.
+01105 Błąd: Przenośnik na podnośniku skrzynek przeciążony.
+01106 Błąd: Wibrator przeciążony.
+01107 Error: Turningstation conveyor tripped
+01108 Error: Turningstation rotation tripped
+01109 Error: Turningstation2 conveyor tripped
+01110 Error: Turningstation2 rotation tripped
+01111 Error: Curved conveyor1 tripped
+01112 Error: Curved conveyor2 tripped
+01113 Error: Flippingstation conveyor tripped
+01114 Error: Thermo relay for motor on Conveyor(In) har tripped. 
+01115 Error: Thermo relay for motor on pallettransporter9 has tripped.
+01116 Error: Pallet transporter tripped
+01117 Error: Pressure on air supply is too low.
+01118 Error: Case-conveyor tripped (in)
+01119 Error: Case-conveyor tripped (out)
+01120 Error: Waste-product conveyor tripped
+01121 Error: Receive-time on conveyor exeeded. Check conveyor for misplaced case.
+01122 Error: Receive-time on conveyor 1 exeeded. Check conveyor for misplaced case.
+01123 Error: Receive-time on conveyor 2 exeeded. Check conveyor for misplaced case.
+01124 Error: Receive-time on conveyor 3 exeeded. Check conveyor for misplaced case.
+01125 Error: Receive-time on conveyor 4 exeeded. Check conveyor for misplaced case.
+01126 Error: Receive-time on conveyor 5 exeeded. Check conveyor for misplaced case.
+01127 Error: Receive-time on conveyor 6 exeeded. Check conveyor for misplaced case.
+01128 Error: Receive-time on conveyor 7 exeeded. Check conveyor for misplaced case.
+01129 Error: Receive-time on conveyor 8 exeeded. Check conveyor for misplaced case.
+01130 Error: Thermo relay for hydraulic pump has tripped.
+01131 Error: Thermo relay for vacuum pump has tripped.
+01132 Error: Case-stop tripped.
+01150 Error: Tooltype and programtype doesn't match.
+02000 Info: No products on conveyor.
+02001 Info: Printer-stop. Put in new role of labels.
+02002 Info: Flowpacker stopped due to excessive buildup of punnets.
+02003 Info: Flowpakker stopped. Wait for robot to fetch more empty cases.
+02004 Error: Photocells blocked for too long on checkWeigher.
+02050 Info: Missing network-connection to other parts of the plant.
+02051 Info: Missing network-connection to robot.
+02052 Info: Missing network-connection to caseMagazine.
+02053 Info: Missing network-connection to checkWeighers.
+02054 Info: Missing network-connection to other casePacker.
+02055 Info: Missing network-connection to casePacker 1.
+02056 Info: Missing network-connection to casePacker 2.
+02057 Info: Missing network-connection to casePacker 3.
+02100 Info: Setting zero. Please wait. S1.
+02101 Error: Outside range. Remove punnet and press go.
+02102 Info: CheckWeigher has stopped. Too many products outside allowed weight. S1
+02103 Info: Weighing time(in) exceeded on checkWeigher S1.
+02104 Info: Weighing time(free) exceeded on checkWeigher S1.
+02105 Info: Weighing time(weighing) exceeded on checkWeigher S1.
+02106 Info: Printer-stop. Put in new role of labels, S1.
+02107 Info: External stop, S1.
+02108 Error: Floating zero too far away from original zero. Press zero on S1.
+02109 Info: Photocell on checkWeigher S1 activated for too long.
+02110 Info: Setting zero. Please wait. S2.
+02112 Info: CheckWeigher has stopped. Too many products outside allowed weight. S2
+02113 Info: Weighing time(in) exceeded on checkWeigher S2.
+02114 Info: Weighing time(free) exceeded on checkWeigher S2.
+02115 Info: Weighing time(weighing) exceeded on checkWeigher S2.
+02116 Info: Printer-stop. Put in new role of labels, S2.
+02117 Info: External stop, S2.
+02118 Error: Floating zero too far away from original zero. Press zero on S2.
+02119 Info: Photocell on checkWeigher S2 activated for too long.
+02120 Info: Setting zero. Please wait. S3.
+02122 Info: CheckWeigher has stopped. Too many products outside allowed weight. S3
+02123 Info: Weighing time(in) exceeded on checkWeigher S3.
+02124 Info: Weighing time(free) exceeded on checkWeigher S3.
+02125 Info: Weighing time(weighing) exceeded on checkWeigher S3.
+02126 Info: Printer-stop. Put in new role of labels, S3.
+02127 Info: External stop, S3.
+02128 Error: Floating zero too far away from original zero. Press zero on S3.
+02129 Info: Photocell on checkWeigher S3 activated for too long.
+02200 Error: Photocells on tower is out of order.
+02201 Error: Encoder on tower is out of order.
+02207 Info: External stop from wrapper.
+03011 Error: Photocelle activated on conveyor (in). Test photocells.
+03012 Error: The robot has dropped/misplaced empty cases. Test photocells.
+03013 Error: Pallet-place isn't empty. Test photocells.
+03014 Error: Pallet is stuck. Test photocells.
+03015 Error: The robot has dropped/misplaced empty cases. Test photocells.
+03016 Error: Cases are standing askew at the palletstacker. Fix it.
+03017 Error: Sendtime exceeded on palletstacker.
+03018 Error: Receivetime exceeded on palletstacker.
+03019 Error: Sensorerror on palletstacked.
+03020 Error: Palletstacker has moved too far up in respect to case check.
+03021 Error: Palletstacker is not free on the way down.
+03500 03500-03699 Palletshuttle
+03501 Info: Palletshuttle is homing.
+03601 Error: Palletshuttle has been in position but has moved passed the photocells.
+03602 Error: Photocells on palletshuttle have not been activated at the desired position.
+04000 04000-04199 CaseMagazine
+04001 Info: The gate on pallet-station is opening.
+04002 Info: The gate can't be opened. Press stop or "Go to homeposition".
+04003 Info: The gate on pallet-station is closing.
+04004 Info: 
+04005 Info: The gate couldn't close. Remove blocking objects or test gateswitches.
+04006 Info: Waiting for gate to close.
+04007 Info: Securityzone activated. Press the R-button.
+04101 Error: Delivery-time exceeded on conveyor-station.
+04102 Error: Pallet-station: Test photocells.
+04103 Error: Receive-time exceeded on conveyor-station
+04104 Error: Conveyor-station: Test photocells.
+04105 Error: Go-forward time exceeded on conveyor-station.
+04106 Error: Lift in case-tower tripped.
+04107 Error: Conveyor in case-tower tripped.
+04108 Error: Puller in pallet-station tripped.
+04109 Error: Drum in pallet-station tripped.
+04110 Error: Conveyor in conveyor-station tripped.
+04111 Error: Receive-time exceeded for case-tower.
+04112 Error: Puller on pallet-station can't go back while there is cases left.
+04113 Error: Case-tower isn't aware of case-kind.
+04114 Error: Delivery-time exceeded on case-tower.
+04115 Error: A box didn't come down for delivery.
+04116 Error: Sending or receiving time exceeded on CHN400.
+04117 Error: Sending or receiving time exceeded on CHN600.
+04118 Error: Motor on CHN400 tripped
+04119 Error: Motor on CHN600 tripped
+04120 Error: There is no space after the pull.
+04121 Error: Post-pusher on pallet-station can't go down.
+04122 Error: Delivery photocell on case-tower is blocked.
+04123 Error: The pull can't be executed. Photocells on blue conveyor blocked too early.
+04124 Error: Follow error on lift. Case/lift stuck.
+04125 Error: Motor on drum rollers is tripped.
+04126 Error: Motor on Conveyor1600 is tripped.
+04201 Error: CardBoardShuttle can't hold onto next layer of cardboard.
+04202 Error: CardBoardShuttle has crashed.
+05009 Info: Pos5_9 pallet(cardboard) is full. Please remove pallet from Pos5_9.
+05010 Info: Palletmagazine is full. Please remove some pallets.
+05011 Error: Pallet not received in time. Please remove pallet manually.
+30002 Info: Finding start position
+30003 Info: Seeking object
+30004 Info: Lifting object
+30005 Info: Moving object
+30006 Info: Back to start position

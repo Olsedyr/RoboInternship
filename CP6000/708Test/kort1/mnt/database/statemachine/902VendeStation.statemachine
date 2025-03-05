@@ -1,0 +1,48 @@
+STATEMACHINEVERSION 3
+Name=VendeStation
+Delaystop=10000000
+Output=Motor "Conv9 Motor"
+Link=Conveyors ProductConveyors
+Link=Vender
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET Motor 0
+	TEST Conveyors = ST_RUN
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_STOP
+END
+
+State=ST_STOP
+	SET Motor 0
+	TEST Conveyors = ST_RUN
+		SETSTATE ST_RUN
+	ENDTEST
+	TEST Conveyors = ST_IDLE
+		TEST Vender = ST_EMPTY1
+		OR Vender = ST_EMPTY2
+		OR Vender = ST_IDLE
+			SETSTATE ST_IDLE
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_RUN
+	SET Motor 1
+	TEST Conveyors != ST_RUN
+		TEST Vender = ST_EMPTY1
+		OR Vender = ST_EMPTY2
+		OR Vender = ST_IDLE
+			SETSTATE ST_STOP
+		ENDTEST
+	ENDTEST
+END

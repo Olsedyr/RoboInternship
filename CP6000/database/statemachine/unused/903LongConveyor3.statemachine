@@ -1,0 +1,14 @@
+STATEMACHINEVERSION 3
+Include=903LongConveyor1.statemachine
+Name=LongConveyor3
+;** Input **
+;** Output **
+;** Link **
+Link=foto LongConveyorFoto3
+Link=syncConv SyncConveyor3
+Link=syncConvFoto SyncConveyor3Foto
+;** linkValue **
+linkValue=fototest test foto
+;** Const **
+;** Value **
+;** Timeout **

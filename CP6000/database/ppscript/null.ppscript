@@ -1,0 +1,6 @@
+PPSCRIPTVERSION 2
+null
+type=20
+itemsPrLayer=2
+layers=1
+*move C11 from palletA0(idx=17,0) to conveyorA 

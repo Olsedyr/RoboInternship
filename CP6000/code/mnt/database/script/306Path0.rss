@@ -1,0 +1,33 @@
+VERSION 2
+PATH pick-palletA0-0 id=0,type=20,time=2292,loadgroup=0,runbopt=0
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,13,0,90,90,0,10 case
+POINT home 0,50,0,90,90,0,10 case
+POINT home 0,105,0,90,90,0,10 case
+POINT home 0,170,0,90,90,0,10 case
+POINT home 0,255,0,90,90,0,10 case
+POINT home 0,340,0,90,90,0,10 case
+POINT home 0,425,0,90,90,0,10 case
+POINT home 4,490,13,90,90,0,10 case
+POINT home 14,545,48,90,90,0,10 case
+POINT palletA0 -260,1692,-888,90,90,0,10 case
+POINT palletA0 -242,1705,-825,90,90,0,10 case
+POINT palletA0 -218,1705,-742,90,90,0,10 case
+POINT palletA0 -193,1705,-660,90,90,0,10 case
+POINT palletA0 -169,1705,-578,90,90,0,10 case
+POINT palletA0 -145,1705,-495,90,90,0,10 case
+POINT palletA0 -121,1705,-412,90,90,0,10 case
+POINT palletA0 -97,1705,-330,90,90,0,10 case
+POINT palletA0 -72,1705,-248,90,90,0,10 case
+POINT palletA0 -48,1705,-165,90,90,0,10 case
+POINT palletA0 -30,1697,-102,90,90,0,10 case
+POINT palletA0 -14,1673,-48,90,90,0,10 case
+POINT palletA0 -4,1637,-13,90,90,0,10 case
+POINT palletA0 0,1595,0,90,90,0,10 case
+POINT palletA0 0,1553,0,90,90,0,10 case
+POINT palletA0 0,1517,0,90,90,0,10 case
+POINT palletA0 0,1493,0,90,90,0,10 case
+POINT palletA0 0,1485,0,90,90,0,10 case
+POINT palletA0 0,1485,0,90,90,0,10 case
+END

@@ -1,0 +1,27 @@
+; INLINE 310inlineLoadHome.statemachine
+TEST pap = 0
+	CALC temp = cAItem % 2
+	TEST temp = 0
+		SETFRAME toFrame1 palletA1
+		CALC ftemp = item.sy * cAStackleft
+		SET leftrightA 0
+	ELSE
+		SETFRAME toFrame1 palletA0
+		CALC ftemp = item.sy * cAStackright
+		SET leftrightA 1
+	ENDTEST
+	CALC toFrame1.y = toFrame1.y + ftemp
+	CALC toFrame1.y = toFrame1.y + item.gy
+	LOAD home_palletA home toFrame1
+	SETFRAME toFrame2 conveyorB
+	CALC toFrame2.y = toFrame2.y + item.gy
+	CALC toFrame2.x = toFrame2.x - item.gx
+	SET home_conveyorB.mode normalmode
+	LOAD home_conveyorB home toFrame2
+ELSE
+	SETFRAME toFrame2 conveyorBP
+	CALC toFrame2.y = toFrame2.y + item.gy
+	CALC toFrame2.x = toFrame2.x - item.gx
+	SET home_conveyorB.mode papmode
+	LOAD home_conveyorB homeP toFrame2
+ENDTEST

@@ -1,0 +1,256 @@
+STATEMACHINEVERSION 3
+Name=PIDSkub
+;** Input **
+Input=raw "LangBufferSkub Encoder"
+Input=homesensor "LangBufferSkub HomeSensor"
+Input=powerok "LangBufferSkub HZOK"
+;** Output **
+Output=Motor "LangBufferSkub Setpoint"
+Output=encoderenable "LangBufferSkub Input Validation"
+Output=encoderreset "LangBufferSkub Direct"
+Output=motorenable "LangBufferSkub Motor Enable"
+;** Link **
+Link=CamGen CamGenSkub
+Link=parent Parent
+;** linkValue **
+linkValue=firstRun WorkCell
+linkValue=setpoint CamGen
+linkValue=setspeed CamGen
+;** Table **
+Table=pehistory 600
+;** Const **
+;set homeSensorPol to home sensor polarity in home position.
+Const=homeSensorPol 0
+Const=home 15000
+Const=speedinhoming 4.0000
+Const=Kp 3.5000
+Const=Kd 12.0000
+Const=Ki 0.0200
+Const=Ks 0.4000
+Const=intdecay 0.93
+Const=minintegral -100000.0000
+Const=maxintegral 100000.0000
+Const=minoutval -60.0
+Const=maxoutval 60.0
+Const=factor 295.45
+Const=maxposerr 1500
+Const=maxnegposerr -1500
+;** Value **
+Value=errorCode 0
+Value=ticksround 20000
+Value=ticksroundh 8000
+Value=homevalone 0
+Value=homevaltwo 0
+Value=homevalthree 0
+Value=dir 1
+Value=encoder 0
+Value=outval 0.0
+Value=poserr 0
+Value=oldposerr 0
+Value=integral 0.0
+Value=diff 0
+Value=temp 0
+Value=Kpart 0.0
+Value=Dpart 0.0
+Value=Ipart 0.0
+Value=Spart 0.0
+Value=curpos 0.0
+Value=homed 0
+;** Timeout **
+Timeout=TimeHome 20000000
+Timeout=TimeStartup 800000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Motor 0.0
+  SET encoderreset 2
+  SET motorenable 0
+  ; don't SET encoderenable to 0
+	TEST CamGen = ST_RESET
+  OR CamGen = ST_NOCHOOSETRACK
+		SETSTATE ST_RESET
+	ENDTEST
+  TEST parent = ST_RESET
+    SET errorCode 0
+  ENDTEST
+END
+
+State=ST_RESET
+	TEST firstRun = 1
+		SET homed 0
+	ENDTEST
+  TEST homed = 1
+		TIMEOUT TimeStartup ST_STARTUP
+		SETSTATE ST_STARTUP
+  ELSE
+		SET motorenable 1
+    SET encoderenable 1
+    SETSTATE ST_STARTHOME
+  ENDTEST
+END
+
+State=ST_STARTUP
+	SET motorenable 1
+  SET Motor 0.0
+	TEST TimeStartup = 1
+	  ; make absolute encoder
+	  TEST raw < home
+      CALC encoder = ticksround - home 
+      CALC encoder = encoder + raw
+    ELSE
+      CALC encoder = raw - home
+      CALC encoder = encoder % ticksround
+    ENDTEST
+		SETSTATE ST_RUN
+	ENDTEST
+END
+
+State=ST_RUN
+	; should we reset counter?
+  TEST homesensor = homeSensorPol
+		SET encoderreset 6
+	ELSE
+		SET encoderreset 2
+	ENDTEST
+	; make absolute encoder
+	TEST raw < home
+    CALC encoder = ticksround - home 
+    CALC encoder = encoder + raw
+  ELSE
+    CALC encoder = raw - home
+    CALC encoder = encoder % ticksround
+  ENDTEST
+  SET curpos encoder
+  SET oldposerr poserr
+  CALC poserr = setpoint - curpos
+  TEST poserr > ticksroundh
+    CALC poserr = poserr - ticksround
+  ELSE
+    CALC temp = poserr * -1
+    TEST temp > ticksroundh
+      CALC poserr = poserr + ticksround
+    ENDTEST
+  ENDTEST
+	SET pehistory poserr
+  CALC diff = poserr - oldposerr
+  CALC integral = poserr + integral
+  CALC integral = integral * intdecay
+  TEST integral < minintegral
+    SET integral minintegral
+  ELSE
+    TEST integral > maxintegral
+      SET integral maxintegral
+    ENDTEST
+  ENDTEST
+  CALC Kpart = Kp * poserr
+  CALC Dpart = Kd * diff
+  CALC Ipart = Ki * integral
+  CALC Spart = Ks * setspeed
+  CALC outval = Dpart + Kpart
+  CALC outval = Ipart + outval
+  CALC outval = Spart + outval
+  CALC outval = dir * outval
+	CALC outval = outval / factor
+  TEST outval < minoutval
+    SET outval minoutval
+  ELSE
+    TEST outval > maxoutval
+      SET outval maxoutval
+    ENDTEST
+  ENDTEST
+  TEST poserr > maxposerr
+  OR poserr < maxnegposerr
+    ;01020 Fejl: Følgefejl på skubber.
+    SET errorCode 1020
+    SET Motor 0.0
+    SET motorenable 0
+    SET homed 0
+    SETSTATE ST_WAIT_CAMGEN_IDLE
+  ENDTEST
+  TEST powerok = 0
+    SET Motor 0.0
+    SET motorenable 0
+    SET homed 0
+    SETSTATE ST_WAIT_CAMGEN_IDLE
+  ELSE
+    SET Motor outval
+	ENDTEST
+  TEST CamGen = ST_IDLE
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_CAMGEN_IDLE
+  TEST CamGen = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STARTHOME
+  SET encoderreset 2
+  TIMEOUT TimeHome ST_HOME
+  SETSTATE ST_HOME
+END
+
+State=ST_HOME
+  TEST homesensor = homeSensorPol
+    SET encoderreset 6
+    SET homevalone home
+    SET Motor speedinhoming
+		TIMEOUT TimeHome ST_HOME2
+    SETSTATE ST_HOME2
+  ELSE
+    SET Motor speedinhoming
+  ENDTEST
+  TEST TimeHome = 1
+    SET errorCode 1050
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_HOME2
+  TEST homesensor != homeSensorPol
+    SET encoderreset 2
+    SET homevaltwo raw
+    SET Motor speedinhoming
+    SETSTATE ST_HOME3
+  ELSE
+    SET Motor speedinhoming
+  ENDTEST
+  TEST TimeHome = 1
+    SET errorCode 1050
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_HOME3
+  TEST homesensor = homeSensorPol
+    SET encoderreset 6
+    SET homevalthree raw
+    SET homed 1
+    SET Motor 0.0
+    SET dir 1
+    CALC ticksround = homevalthree - homevalone
+    TEST ticksround < 0
+      CALC ticksround = ticksround * -1
+      SET dir -1
+    ENDTEST
+    CALC ticksroundh = ticksround / 3
+	  ; make absolute encoder
+	  TEST raw < home
+      CALC encoder = ticksround - home 
+      CALC encoder = encoder + raw
+    ELSE
+      CALC encoder = raw - home
+      CALC encoder = encoder % ticksround
+    ENDTEST
+    SETSTATE ST_RUN
+  ELSE
+    SET Motor speedinhoming
+  ENDTEST
+END

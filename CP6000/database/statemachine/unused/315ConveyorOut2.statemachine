@@ -1,0 +1,100 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut2
+Output=motor "ConveyorOut2 Motor"
+linkValue=foto test ConveyorOut2Foto1
+Link=parent Parent
+Link=prev KasseLift
+Link=next ConveyorOut
+Value=simulate 0
+Value=errorCode 0
+Timeout=TimeStartup 4000000
+Timeout=maxReceiveTime 10000000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motor 0
+  TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+	  SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	TEST foto = 1
+		TIMEOUT TimeStartup ST_STARTUP
+		SETSTATE ST_STARTUP
+	ELSE
+		SETSTATE ST_READY
+	ENDTEST
+END
+
+State=ST_STARTUP
+	SET motor 1
+	TEST foto = 0
+		SETSTATE ST_READY
+	ELSE
+		TEST TimeStartup = 1
+			SETSTATE ST_EMPTY
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_EMPTY
+  TEST prev = ST_SEND
+  OR simulate = 1
+    TIMEOUT maxReceiveTime ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSE
+    SET motor 0
+  ENDTEST
+	TEST foto = 0
+		SETSTATE ST_READY
+	ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+	TEST foto = 0
+		SETSTATE ST_READY
+	ENDTEST
+  TEST maxReceiveTime = 1
+		SET errorCode 1121
+		SETSTATE ST_IDLE
+  ELSE
+    SET motor 1
+  ENDTEST
+END
+
+State=ST_READY
+  TEST next = ST_GET
+    SETSTATE ST_SEND
+  ELSE
+    SET motor 0
+  ENDTEST
+	TEST foto = 1
+		SETSTATE ST_EMPTY
+	ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST next = ST_RECEIVE
+    SET motor 1
+  ELSE
+    TEST foto = 1
+		  SETSTATE ST_EMPTY
+    ENDTEST
+  ENDTEST
+END

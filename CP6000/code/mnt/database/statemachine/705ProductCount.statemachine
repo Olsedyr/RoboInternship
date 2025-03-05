@@ -1,0 +1,11 @@
+STATEMACHINEVERSION 3
+Include=cpproductcount.statemachine
+Name=ProductCount
+Link=rfoto1 Product1Foto1
+Link=rfoto2 Product1Foto2
+Link=1foto2 Product2Foto2
+Link=1foto1 Product2Foto1
+linkValue=lfoto1test test lfoto1
+linkValue=lfoto2test test lfoto2
+linkValue=rfoto1test test rfoto1
+linkValue=rfoto2test test rfoto2

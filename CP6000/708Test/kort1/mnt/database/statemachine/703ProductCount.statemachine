@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=cpproductcount.statemachine
+Name=ProductCount2
+Link=KasseLift KasseLift2
+Link=Conveyors ProductConveyors2
+Value=gotLeft 0
+;** User section **

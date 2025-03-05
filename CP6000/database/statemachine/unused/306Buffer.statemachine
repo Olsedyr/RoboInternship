@@ -1,0 +1,158 @@
+STATEMACHINEVERSION 2
+Name=Buffer
+Input=0,Foto1 "Buffer Foto1"
+Input=1,Foto2 "Buffer Foto2"
+Input=2,Foto3 "Buffer Foto3"
+Input=3,Foto4 "Buffer Foto4"
+Input=4,Foto6 "Buffer Foto6"
+Input=5,Cyl1- "Buffer Cyl1-"
+Input=6,Cyl1+ "Buffer Cyl1+"
+Input=7,Cyl2+ "Buffer Cyl2+"
+Input=8,Cyl2- "Buffer Cyl2-"
+Output=0,Cylinder2 "Buffer Cylinder2"
+Output=1,Cylinder1 "Buffer Cylinder1"
+Timeout=0,pushOverDelay 400000
+Timeout=1,TimeFoto4on 15000
+Timeout=2,TimeFoto3on 40000
+Timeout=3,TimeFoto2on 40000
+Value=0,errorCode 0
+Value=1,numOfProducts 0
+Value=2,reboot 1
+Value=3,one 1
+Value=4,two 2
+Value=5,three 3
+Value=6,four 4
+Link=0,BakkeDispenser
+ 
+State=0,ST_TIMER
+  END
+
+State=0,ST_HALT
+  END
+
+State=0,ST_IDLE
+  SET Cylinder1 0
+  SET Cylinder2 0
+  END
+
+State=0,ST_TEST_FULL
+  SET numOfProducts 0
+  TEST Foto6 = 1
+     SETSTATE ST_READY
+  ELSE
+    SETSTATE ST_MOVE_BACK
+  ENDTEST
+  END
+ 
+State=0,ST_READY
+  END
+
+State=0,ST_MOVE_BACK
+  TEST Cyl1- = 1
+  AND Cyl2- = 1
+   SETSTATE ST_GET  
+  ELSE
+    SET Cylinder1 0
+    SET Cylinder2 1
+  ENDTEST
+END
+State=0,ST_GET
+  TEST Cyl1- = 1
+  AND Cyl2- = 1
+    TEST BakkeDispenser = ST_BAKKE_SENDT
+      ADD numOfProducts one numOfProducts
+      TEST numOfProducts > three
+        SETSTATE ST_GET_4  
+      ENDTEST
+    ENDTEST
+  ELSE
+    SET Cylinder1 0
+    SET Cylinder2 1
+  ENDTEST
+  END
+
+State=0,ST_GET_1
+  TEST Cyl1- = 1
+  AND Cyl2- = 1
+    TEST Foto1 = 1
+      SETSTATE ST_GET_2
+    ENDTEST
+  ELSE
+    SET Cylinder1 0
+    SET Cylinder2 1
+  ENDTEST
+  END
+
+State=0,ST_GET_2
+  TEST Foto2 = 1
+    TIMEOUT TimeFoto2on ST_GET_2_TEST
+    SETSTATE ST_GET_2_TEST
+  ENDTEST
+  END
+
+State=0,ST_GET_2_TEST
+  TEST Foto2 = 0
+    SETSTATE ST_GET_2
+  ELSE
+    TEST TimeFoto2on = 1
+      SETSTATE ST_GET_3
+    ENDTEST
+  ENDTEST
+  END
+
+State=0,ST_GET_3
+  TEST Foto3 = 1
+    TIMEOUT TimeFoto3on ST_GET_3_TEST
+    SETSTATE ST_GET_3_TEST
+  ENDTEST
+  END
+
+State=0,ST_GET_3_TEST
+  TEST Foto3 = 0
+    SETSTATE ST_GET_3
+  ELSE
+    TEST TimeFoto3on = 1
+      SETSTATE ST_GET_4  
+    ENDTEST
+  ENDTEST
+  END
+    
+State=0,ST_GET_4
+  TEST Foto4 = 1
+    TIMEOUT TimeFoto4on ST_GET_4_TEST
+    SETSTATE ST_GET_4_TEST
+  ENDTEST
+  END
+
+State=0,ST_GET_4_TEST
+  TEST Foto4 = 0
+    SETSTATE ST_GET_4
+  ELSE
+    TEST TimeFoto4on = 1
+      TIMEOUT pushOverDelay ST_PUSH_OVER
+      SETSTATE ST_TIMER
+    ENDTEST
+  ENDTEST
+  END
+
+State=0,ST_PUSH_OVER
+  TEST Cyl2+ = 1
+    SETSTATE ST_PUSH_UP
+  ELSE
+    SET Cylinder2 0
+  ENDTEST
+  END 
+
+State=0,ST_PUSH_UP
+	TEST Cyl1+ = 1
+		SETSTATE ST_TEST_FULL      
+	ELSE
+		SET Cylinder1 1
+  ENDTEST
+  END 
+ 
+State=3,ST_RESET
+  SETSTATE ST_PUSH_OVER
+  END
+
+

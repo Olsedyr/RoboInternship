@@ -1,0 +1,73 @@
+STATEMACHINEVERSION 2
+Name=Sektor21
+Delaystop=10000000
+Input=0,Foto1 "Sektor21 Foto1"
+Input=1,Foto2 "Sektor22 Input0"
+Output=0,Motor "Sektor21 Motor"
+Link=0,Sektor20
+Link=1,Sektor22
+
+;Type=STM_RB_END
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_IDLE
+  SET Motor 0
+  END
+
+State=1,ST_READY
+  TEST Foto1 = 0
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST Sektor22 = ST_EMPTY
+    AND Foto2 = 0
+      SETSTATE ST_SEND
+    ELSE
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST Sektor20 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=2,ST_EMPTY
+  TEST Sektor20 = ST_READY
+    SET Motor 1
+    SETSTATE ST_RECIEVE
+  ELSE
+    SET Motor 0
+  ENDTEST
+  TEST Sektor20 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=3,ST_RECIEVE
+  TEST Foto1 = 1
+    SET Motor 0
+    SETSTATE ST_READY
+  ENDTEST
+  END
+
+State=4,ST_RESET
+  TEST Foto1 = 1 1 3
+    SETSTATE ST_READY
+  ELSE 5
+    SETSTATE ST_EMPTY
+  ENDTEST
+  END
+
+State=5,ST_SEND
+  TEST Sektor22 = ST_TEST 1 3
+    SETSTATE ST_EMPTY
+  ELSE 5
+    SET Motor 1
+  ENDTEST
+  END
+
+

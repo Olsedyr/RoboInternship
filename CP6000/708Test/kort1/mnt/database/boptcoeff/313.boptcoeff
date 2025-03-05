@@ -1,0 +1,279 @@
+BOPTCOEFFVERSION 1
+313
+
+mode 21 pathtype 23 :
+pathName home_conveyorB
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.3000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 samplerate=25.0000 timefactor=1.0000
+
+mode 21 pathtype 24 :
+pathName conveyorB_palletB0
+viatype BOTH
+via1pos.y c=50.0000 g=400.0000 gg=300.0000 ggg=750.0000 ffff=200.0000
+via1pos.z c=-30.0000 ppp=10.0000 g=-30.0000 ggg=20.00
+via1vel.y c=50.0000 g=160.0000 gg=70.0000 ggg=100.0000 ffff=110.0000
+via1vel.z c=-15.0000 ppp=-40.0000 g=-45.0000 gggg=20.0000
+via2pos.y c=150.0000 pppp=150.0000 ppppp=180.0000 ggg=100.0000 gggg=-150.0000
+via2pos.z c=50.0000 gg=80.0000 ggg=200.0000 
+via2vel.y c=-80.0000 pppp=-60.0000 ggg=160.0000
+via2vel.z c=-45.0000 pppp=-45.0000 g=-65.0000 gg=-50.0000 ggg=-220.00
+macro1 type=UPLINE positionhint=1 length=80.0000 time=0.4000
+macro2 type=SPIRAL length=12.0000 time=1.4500 amplitude=12.0000 frequency=2.000 offsz=-1.5
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.5000 b=1.7000 c=3.0000 d=4.0000 e=4.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 22 pathtype 24 :
+pathName conveyorB_palletB1
+viatype BOTH
+via1pos.y c=50.0000 g=450.0000 gg=200.0000 ggg=750.0000 ffff=100.0000
+via1pos.z c=-10.0000 ppp=-30.0000 g=-10.0000
+via1vel.y c=25.0000 g=145.0000 gg=130.0000 ggg=60.0000 ffff=50.0000
+via1vel.z c=-10.0000 ppp=-40.0000 g=-5.0000 gggg=20.0000
+via2pos.y c=150.0000 pppp=150.0000 ppppp=80.0000 ggg=100.0000 gggg=-150.0000
+via2pos.z c=50.0000 gg=80.0000 ggg=50.0000
+via2vel.y c=-80.0000 ppppp=-60.0000 ggg=40.0000
+via2vel.z c=-25.0000 pppppp=-20.0000 g=-45.0000 gg=-100.0000 ggg=-60.000
+macro1 type=UPLINE positionhint=1 length=80.0000 time=0.4000
+macro2 type=SPIRAL length=12.0000 time=1.4500 amplitude=12.0000 frequency=2.000 offsz=1.5
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.5000 b=1.7000 c=3.0000 d=4.0000 e=4.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 23 pathtype 24 :
+pathName conveyorB_palletB1_first
+viatype BOTH
+via1pos.y c=100.0000 g=400.0000 gg=200.0000 ggg=900.0000 ffff=100.0000
+via1pos.z c=-10.0000 ppp=-30.0000 g=-10.0000
+via1vel.y c=50.0000 g=180.0000 gg=150.0000 ggg=100.0000 ffff=50.0000
+via1vel.z c=-10.0000 ppp=-60.0000 g=-5.0000 gggg=20.0000
+via2pos.y c=150.0000 pppp=150.0000 ppppp=80.0000 ggg=100.0000 gggg=-150.0000
+via2pos.z c=50.0000 gg=80.0000 ggg=50.0000
+via2vel.y c=-80.0000 ppppp=-60.0000 ggg=40.0000
+via2vel.z c=-20.0000 pppp=-60.0000 g=-65.0000 gg=-90.0000
+macro1 type=UPLINE positionhint=1 length=80.0000 time=0.4000
+macro2 type=DOWNLINE length=12.0000 time=0.4500
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.5000 b=1.7000 c=3.0000 d=4.0000 e=4.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 31 pathtype 24 :
+pathName NettoconveyorB_palletB0
+viatype BOTH
+via1pos.y c=100.0000 g=400.0000 gg=200.0000 ggg=750.0000 ffff=200.0000
+via1pos.z c=-10.0000 ppp=-10.0000 g=-30.0000
+via1vel.y c=50.0000 g=180.0000 gg=20.0000 ggg=100.0000 ffff=110.0000
+via1vel.z c=-10.0000 ppp=-40.0000 g=-25.0000 gggg=20.0000
+via2pos.y c=150.0000 pppp=150.0000 ppppp=180.0000 ggg=100.0000 gggg=-150.0000
+via2pos.z c=50.0000 gg=80.0000 ggg=80.0000
+via2vel.y c=-80.0000 pppp=-60.0000 ggg=100.0000
+via2vel.z c=-45.0000 pppp=-45.0000 g=-65.0000 gg=-60.0000 ggg=-80.00
+macro1 type=UPLINE positionhint=1 length=80.0000 time=0.4000
+macro2 type=DOWNLINE length=12.0000 time=0.4500
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.5000 b=1.7000 c=3.0000 d=4.0000 e=4.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 32 pathtype 24 :
+pathName NettoconveyorB_palletB1
+viatype BOTH
+via1pos.y c=100.0000 g=400.0000 gg=200.0000 ggg=750.0000 ffff=100.0000
+via1pos.z c=-10.0000 pp=-50.00 ppp=-30.0000 g=-10.0000
+via1vel.y c=50.0000 g=120.0000 gg=150.0000 ggg=60.0000 ffff=50.0000
+via1vel.z c=-10.0000 pp=-30.00 ppp=-40.0000 g=-10.0000
+via2pos.y c=150.0000 pppp=150.0000 ppppp=80.0000 ggg=100.0000 gggg=-150.0000
+via2pos.z c=50.0000 gg=80.0000 ggg=50.0000
+via2vel.y c=-80.0000 ppppp=-60.0000 ggg=40.0000
+via2vel.z c=-20.0000 pppppp=-20.0000 g=-65.0000 gg=-90.0000 ggg=-60.000
+macro1 type=UPLINE positionhint=1 length=80.0000 time=0.4000
+macro2 type=DOWNLINE length=12.0000 time=0.4500
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.5000 b=1.7000 c=3.0000 d=4.0000 e=4.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 21 pathtype 25 :
+pathName palletB0_home
+viatype START
+via1pos.y c=120.0000 ffff=30.0000 fffff=50.0000 b=20.000 bb=-10.0000 bbbb=-150.0000
+via1pos.z c=20.0000 ffff=70.0 b=400.00 bb=400.00 bbb=50.0000
+via1vel.y c=60.0000 ffff=20.0000 bbb=-50.0000 bbbb=-150.00
+via1vel.z c=20.0000 ffff=100.0 b=400.00 bb=400.00 bbbb=-250.0000 bbbbb=-400.00
+macro1 type=UPLINE length=120.0000 time=0.4200
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 22 pathtype 25 :
+pathName palletB1_home
+viatype START
+via1pos.y c=120.0000 ffff=30.0000 fffff=50.0000 b=20.000 bb=-50.0000 bbbb=-50.0000
+via1pos.z c=20.0000 b=200.00 bb=250.00 bbb=50.0000
+via1vel.y c=60.0000 ffff=20.0000 bbb=-30.0000 bbbbb=-50.0000
+via1vel.z c=20.0000 b=250.00 bb=150.00 bbbb=-50.0000
+macro1 type=UPLINE length=120.0000 time=0.4200
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 21 pathtype 44 :
+pathName palletB0_conveyorB
+viatype BOTH
+via1pos.y c=150.0000 ffff=150.0000 fffff=180.0000 bbb=100.0000 bbbb=-150.0000
+via1pos.z c=50.0000 ff=80.00 bb=80.0000 bbb=100.0000
+via1vel.y c=80.0000 bbb=-120.0000 bbbb=60.000
+via1vel.z c=45.0000 fff=60.00 ffff=25.0000 b=65.0000 bb=80.0000 bbb=60.00 
+via2pos.y c=50.0000 b=400.0000 bb=200.0000 bbb=600.0000 pppp=200.0000
+via2pos.z c=-10.0000 fff=-10.0000 b=-30.0000
+via2vel.y c=-50.0000 b=-180.0000 bb=-20.0000 bbb=-90.0000 pppp=-110.0000
+via2vel.z c=10.0000 fff=40.0000 b=25.0000 bbbb=-20.0000
+macro1 type=UPLINE length=80.0000 time=0.4000
+macro2 type=DOWNLINE length=90.0000 time=0.4000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 22 pathtype 44 :
+pathName palletB1_conveyorB
+viatype BOTH
+via1pos.y c=150.0000 ffff=150.0000 fffff=80.0000 bbb=100.0000 bbbb=-150.0000
+via1pos.z c=50.0000 bb=80.0000 bbb=50.0000
+via1vel.y c=80.0000 fffff=60.0000 bbb=-40.0000
+via1vel.z c=20.0000 ffffff=20.0000 b=65.0000 bb=100.0000 bbb=60.000
+via2pos.y c=50.0000 b=400.0000 bb=200.0000 bbb=750.0000 pppp=90.0000
+via2pos.z c=-10.0000 fff=-30.0000 b=-10.0000
+via2vel.y c=-25.0000 b=-120.0000 bb=-140.0000 bbb=-60.0000 pppp=-50.0000
+via2vel.z c=10.0000 fff=40.0000 b=5.0000 bbbb=-20.0000
+macro1 type=UPLINE length=80.0000 time=0.4000
+macro2 type=DOWNLINE length=90.0000 time=0.4000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 21 pathtype 16 :
+pathName home_home
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 timefactor=1.2000
+
+mode 21 pathtype 43 :
+pathName conveyorB_home
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 timefactor=1.0000
+
+mode 51 pathtype 24 :
+pathName KKA_conveyorB_palletB0
+viatype BOTH
+via1pos.y c=50.0000 g=400.0000 gg=300.0000 ggg=750.0000 ffff=200.0000
+via1pos.z c=-30.0000 ppp=10.0000 g=-30.0000 ggg=20.00
+via1vel.y c=50.0000 g=160.0000 gg=70.0000 ggg=100.0000 ffff=110.0000
+via1vel.z c=-15.0000 ppp=-40.0000 g=-45.0000 gggg=20.0000
+via2pos.y c=150.0000 pppp=150.0000 ppppp=180.0000 ggg=100.0000 gggg=-150.0000
+via2pos.z c=50.0000 gg=80.0000 ggg=200.0000 
+via2vel.y c=-80.0000 pppp=-60.0000 ggg=160.0000
+via2vel.z c=-45.0000 pppp=-45.0000 g=-65.0000 gg=-50.0000 ggg=-220.00
+macro1 type=FASTUPLINE positionhint=1 length=80.0000 time=0.5000
+macro2 type=FASTDOWNLINE length=50.00 time=0.300
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.5000 b=1.7000 c=3.0000 d=4.0000 e=4.0000
+params tcpidx=1 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 52 pathtype 24 :
+pathName KKA_conveyorB_palletB1
+viatype BOTH
+via1pos.y c=50.0000 g=450.0000 gg=200.0000 ggg=750.0000 ffff=100.0000
+via1pos.z c=-10.0000 ppp=-30.0000 g=-10.0000
+via1vel.y c=25.0000 g=145.0000 gg=130.0000 ggg=60.0000 ffff=50.0000
+via1vel.z c=-10.0000 ppp=-40.0000 g=-5.0000 gggg=20.0000
+via2pos.y c=150.0000 pppp=150.0000 ppppp=80.0000 ggg=100.0000 gggg=-150.0000
+via2pos.z c=150.0000 gg=80.0000 ggg=50.0000
+via2vel.y c=-130.0000 ppppp=-60.0000 ggg=40.0000
+via2vel.z c=-25.0000 pppppp=-20.0000 g=-45.0000 gg=-100.0000 ggg=-60.000
+macro1 type=FASTUPLINE positionhint=1 length=80.0000 time=0.5000
+macro2 type=FASTDOWNLINE length=30.0000 time=0.300
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.5000 b=1.7000 c=3.0000 d=4.0000 e=4.0000
+params tcpidx=1 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 51 pathtype 25 :
+pathName KKA_palletB0_home
+viatype START
+via1pos.y c=170.0000 ffff=30.0000 fffff=50.0000 b=20.000 bb=-10.0000 bbbb=-150.0000
+via1pos.z c=20.0000 ffff=70.0 b=400.00 bb=400.00 bbb=50.0000
+via1vel.y c=60.0000 ffff=20.0000 bbb=-50.0000 bbbb=-150.00
+via1vel.z c=20.0000 ffff=100.0 b=400.00 bb=400.00 bbbb=-250.0000 bbbbb=-400.00
+macro1 type=FASTUPLINE length=180.0000 time=0.60
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=1 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 52 pathtype 25 :
+pathName KKA_palletB1_home
+viatype START
+via1pos.y c=170.0000 ffff=30.0000 fffff=30.0000 b=20.000 bb=0.0000 bbbb=-50.0000
+via1pos.z c=20.0000 b=250.00 bb=200.00 bbb=50.0000
+via1vel.y c=60.0000 ffff=20.0000 bbb=-30.0000 bbbbb=-50.0000
+via1vel.z c=20.0000 b=290.00 bb=170.00 bbbb=-50.0000
+macro1 type=FASTUPLINE length=180.0000 time=0.60
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=1 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 51 pathtype 44 :
+pathName KKA_palletB0_conveyorB
+viatype BOTH
+via1pos.y c=150.0000 ffff=150.0000 fffff=180.0000 bbb=140.0000 bbbb=-130.0000
+via1pos.z c=50.0000 ff=80.00 bb=80.0000 bbb=100.0000
+via1vel.y c=60.0000 bbb=-120.0000 bbbb=60.000
+via1vel.z c=45.0000 fff=60.00 ffff=25.0000 b=55.0000 bb=80.0000 bbb=60.00 
+via2pos.y c=80.0000 b=400.0000 bb=200.0000 bbb=600.0000 pppp=200.0000
+via2pos.z c=-10.0000 fff=-10.0000 b=-30.0000
+via2vel.y c=-40.0000 b=-180.0000 bb=-20.0000 bbb=-90.0000 pppp=-110.0000
+via2vel.z c=10.0000 fff=30.0000 b=25.0000 bbbb=-20.0000
+macro1 type=FASTUPLINE length=170.0000 time=0.5000
+macro2 type=FASTDOWNLINE length=170.0000 time=0.6000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=1 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 52 pathtype 44 :
+pathName KKA_palletB1_conveyorB
+viatype BOTH
+via1pos.y c=150.0000 ffff=150.0000 fffff=80.0000 b=20.00 bb=50.00 bbb=80.0000 bbbb=-110.0000
+via1pos.z c=50.0000 b=80.00 bb=130.0000 bbb=70.0000
+via1vel.y c=40.0000 fffff=60.0000 bb=30.00 bbb=-40.0000
+via1vel.z c=20.0000 ffffff=20.0000 b=65.0000 bb=160.0000 bbb=40.000
+via2pos.y c=100.0000 ffff=20.00 b=400.0000 bb=200.0000 bbb=750.0000 pppp=90.0000
+via2pos.z c=-10.0000 fff=-30.0000 b=-10.0000
+via2vel.y c=-20.0000 b=-150.0000 bb=-120.0000 bbb=0.0000 pppp=-50.0000
+via2vel.z c=10.0000 fff=30.0000 b=5.0000 bbbb=-20.0000
+macro1 type=FASTUPLINE length=170.0000 time=0.5000
+macro2 type=FASTDOWNLINE length=170.0000 time=0.6000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=1 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 51 pathtype 23 :
+pathName KKA_home_conveyorB
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.3000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=1 blendtype=0 samplerate=25.0000 timefactor=1.0000
+
+mode 51 pathtype 16 :
+pathName KKA_home_home
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=1 blendtype=0 timefactor=1.2000
+
+mode 51 pathtype 43 :
+pathName KKA_conveyorB_home
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=1 blendtype=0 timefactor=1.0000

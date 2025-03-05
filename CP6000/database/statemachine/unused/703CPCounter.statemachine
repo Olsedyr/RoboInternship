@@ -1,0 +1,18 @@
+STATEMACHINEVERSION 3
+Include=cpcounter.statemachine
+Name=CPCounter
+Link=foto1 Product1Foto1
+Link=foto2 Product2Foto1
+Link=parent Parent
+linkValue=firstRun WorkCell
+linkValue=productsfromleft Program
+linkValue=productsfromright Program
+Table=avgtime 20.0 AVG
+Value=curt 0
+Value=temp 0.0
+Value=temp2 0.0
+Value=now 0.0
+Value=avg 0.0
+Value=avgtimetol 0.0
+Value=prodpermin 0.0
+Timeout=MinTime 30000000

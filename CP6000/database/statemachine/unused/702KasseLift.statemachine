@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=cpkasselift.statemachine
+Name=KasseLift
+Output=Kassestop "KasseStop Long"
+Output=Kassestop1 "KasseStop Short"
+Link=next KasseUd5
+linkValue=canSend recv1 next
+;** User section **

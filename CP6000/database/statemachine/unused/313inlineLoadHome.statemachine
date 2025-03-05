@@ -1,0 +1,13 @@
+; INLINE 313inlineLoadHome.statemachine
+TEST papmode = 1
+	SETFRAME toFrame papconveyorB
+	SETFRAME fromFrame paphome
+	SET home_conveyorB.mode 51
+ELSE
+	SETFRAME toFrame conveyorB
+	SETFRAME fromFrame home
+	SET home_conveyorB.mode 21
+ENDTEST
+CALC toFrame.y = toFrame.y + item.gy
+CALC toFrame.x = toFrame.x - item.gx
+LOAD home_conveyorB fromFrame toFrame

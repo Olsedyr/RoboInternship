@@ -1,0 +1,34 @@
+STATEMACHINEVERSION 3
+Name=dRemoteControl
+Input=button1 "Remote Control Button 1"
+Input=button2 "Remote Control Button 2"
+Input=button3 "Remote Control Button 3"
+Output=testRelay "Test Relay"
+Link=parent Parent
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_RESET
+END
+
+State=ST_IDLE
+  TEST parent = ST_RUN
+    SETSTATE ST_RUN
+  ENDTEST
+END
+
+State=ST_RUN
+	TEST button1 = 1
+		SET testRelay 1
+	ENDTEST
+	TEST button2 = 1
+		SET testRelay 0
+	ENDTEST
+  TEST parent != ST_RUN
+    SETSTATE ST_IDLE
+  ENDTEST
+END

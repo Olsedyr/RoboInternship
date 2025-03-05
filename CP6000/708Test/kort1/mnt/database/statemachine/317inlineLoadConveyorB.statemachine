@@ -1,0 +1,106 @@
+; INLINE 317inlineLoadConveyorB.statemachine
+SET SpecialMode 0
+TEST palletkind = 0
+	CALC temp = cBItem % 4
+	TEST temp = 0
+		SET BStackIdx 2
+		SET CurrentMode B2B6mode
+		SET CurrentBStack cBStack2
+		SETFRAME toFrame palletB2
+	ELSETEST temp = 1
+		SET BStackIdx 3
+		SET CurrentMode B3B8mode
+		SET CurrentBStack cBStack3
+		SETFRAME toFrame palletB3
+	ELSETEST temp = 2
+		SET BStackIdx 0
+		SET CurrentMode B0B4mode
+		SET CurrentBStack cBStack0
+		SETFRAME toFrame palletB0
+	ELSE
+		SET BStackIdx 1
+		SET CurrentMode B1B5mode
+		SET CurrentBStack cBStack1
+		SETFRAME toFrame palletB1
+	ENDTEST
+ELSE
+	CALC temp = cBItem % 5
+	TEST cBItem >= 100
+		; last layer is special
+		TEST temp = 0
+			SET BStackIdx 8
+			SET CurrentMode B3B8mode
+			SET CurrentBStack cBStack8
+			SETFRAME toFrame palletB8
+		ELSETEST temp = 1
+			SET BStackIdx 7
+			SET CurrentMode B7mode
+			SET SpecialMode B7revmode
+			SET CurrentBStack cBStack7
+			SETFRAME toFrame palletB7
+			CALC toFrame.w = toFrame.w - 180.0
+		ELSETEST temp = 2
+			SET BStackIdx 6
+			SET CurrentMode B2B6mode
+			SET SpecialMode B6revmode
+			SET CurrentBStack cBStack6
+			SETFRAME toFrame palletB6
+			CALC toFrame.w = toFrame.w - 180.0
+		ELSETEST temp = 3
+			SET BStackIdx 4
+			SET CurrentMode B0B4mode
+			SET CurrentBStack cBStack4
+			SETFRAME toFrame palletB4
+		ELSE
+			SET BStackIdx 5
+			SET CurrentMode B1B5mode
+			SET CurrentBStack cBStack5
+			SETFRAME toFrame palletB5
+		ENDTEST
+	ELSE
+		TEST temp = 0
+			SET BStackIdx 6
+			SET CurrentMode B2B6mode
+			SET CurrentBStack cBStack6
+			SETFRAME toFrame palletB6
+		ELSETEST temp = 1
+			SET BStackIdx 7
+			SET CurrentMode B7mode
+			SET CurrentBStack cBStack7
+			SETFRAME toFrame palletB7
+		ELSETEST temp = 2
+			SET BStackIdx 4
+			SET CurrentMode B0B4mode
+			SET CurrentBStack cBStack4
+			SETFRAME toFrame palletB4
+		ELSETEST temp = 3
+			SET BStackIdx 8
+			SET CurrentMode B3B8mode
+			SET CurrentBStack cBStack8
+			SETFRAME toFrame palletB8
+		ELSE
+			SET BStackIdx 5
+			SET CurrentMode B1B5mode
+			SET CurrentBStack cBStack5
+			SETFRAME toFrame palletB5
+		ENDTEST
+	ENDTEST
+ENDTEST
+SETFRAME fromFrame conveyorB
+CALC fromFrame.y = fromFrame.y + item.gy
+CALC fromFrame.x = fromFrame.x - item.gx
+;*******************************************
+CALC ftemp = item.sy * CurrentBStack
+CALC toFrame.y = toFrame.y + ftemp
+CALC toFrame.y = toFrame.y + item.my
+TEST palletkind = 1
+AND cBItem < 5
+	CALC toFrame.z = toFrame.z + firstlayeroffset
+ENDTEST
+TEST SpecialMode != 0
+	SET conveyorB_palletB.mode SpecialMode
+ELSE
+	SET conveyorB_palletB.mode CurrentMode
+ENDTEST
+LOAD conveyorB_palletB fromFrame toFrame
+LOAD conveyorB_home fromFrame home

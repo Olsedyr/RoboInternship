@@ -1,0 +1,24 @@
+STATEMACHINEVERSION 3
+Include=conveyorsimple.statemachine
+Name=Conv13
+linkValue=fototest test Conv13Foto1
+Output=Motor "Conv13 Motor"
+Link=prev Conv12
+Link=next Conv14
+Link=parent Parent
+;Time for case/product to leave conveyor after foto has gone free
+Timeout=freeWaitTime 1000000
+linkValue=firstRun WorkCell
+Timeout=startupTime 5000000
+Timeout=maxReceiveTime 10000000
+Timeout=StopDelay 0
+Timeout=EmptyDelay 0
+Timeout=ReadyDelay 0
+Const=autoDetectItem 1
+Const=lengthMM 1600.0
+Const=speedMS 0.6
+Value=simulate 0
+Value=errorCode 0
+Value=timelength 0.0
+Timeout=maxSendTime 800000
+Timeout=timeBeforeReset 0

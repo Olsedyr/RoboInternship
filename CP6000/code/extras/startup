@@ -1,0 +1,10 @@
+#!/bin/sh
+RSRET="9"
+export SDL_MOUSEDEV="/dev/null"
+export SDL_NOMOUSE="1"
+cd /mnt/
+while [ $RSRET -eq "9" ] ; do
+		/mnt/robostacker > /dev/null 2> /dev/null
+		RSRET=$?
+		sleep 3
+done

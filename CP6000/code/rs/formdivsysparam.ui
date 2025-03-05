@@ -1,0 +1,145 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>formSysParam</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>formSysParam</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>799</width>
+            <height>599</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="baseSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="paletteBackgroundColor">
+        <color>
+            <red>0</red>
+            <green>85</green>
+            <blue>255</blue>
+        </color>
+    </property>
+    <property name="caption">
+        <string>Adjust system parameters</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>220</x>
+                <y>250</y>
+                <width>250</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>Old ethernet version</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>checkEthernetVersion</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>500</x>
+                <y>240</y>
+                <width>50</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdReturn</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>520</x>
+                <y>480</y>
+                <width>130</width>
+                <height>100</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Ok</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdCancel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>660</x>
+                <y>480</y>
+                <width>130</width>
+                <height>100</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

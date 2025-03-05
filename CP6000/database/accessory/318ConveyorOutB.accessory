@@ -1,0 +1,8 @@
+VERSION 1
+318ConveyorOutB
+dimention x=2000.0,y=-100.0,z=270.0
+transformation x=400.0,y=989.0,z=-110.0
+material diffuse r=0.2,g=0.8,b=0.2,a=1.0
+material ambient r=0.2,g=0.8,b=0.2,a=1.0
+material specular r=0.2,g=0.8,b=0.2,a=1.0
+shininess=1.0

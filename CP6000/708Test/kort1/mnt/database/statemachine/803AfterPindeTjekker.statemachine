@@ -1,0 +1,170 @@
+STATEMACHINEVERSION 3
+Name=AfterPindeTjekker
+linkValue=fototest test FotoCorner
+Input=syncIn "PindeTjekker600 Extern Sync 1"
+Output=Motor1 "Conveyor700 Motor"
+Output=Motor2Frem "ReverseringsConveyor Frem"
+Output=Motor2Tilbage "ReverseringsConveyor Tilbage"
+Output=LiftUp "Corner Lift Ventil"
+Link=prev PindeTjekker600
+Link=parent Parent
+;Time for case/product to leave conveyor after foto has gone free
+Timeout=freeWaitTime 4500000
+linkValue=firstRun WorkCell
+linkValue=caseOk PindeTjekker600
+Timeout=startupTime 5000000
+Timeout=maxReceiveTime 8000000
+Timeout=StopDelay 0
+Timeout=EmptyDelay 0
+Timeout=ReadyDelay 0
+Timeout=maxSendTime 10000000
+Timeout=DiscardTime 4000000
+Timeout=TimeLiftDown 800000
+Const=autoDetectItem 1
+Value=localCaseOk 0
+Value=sendAndWait 0
+Value=temp 0
+Value=simulate 0
+Value=errorCode 0
+Value=timelength 0.0
+
+;en transportør går automatisk fra ready til empty hvis fotocelle slukker
+;og fra empty til ready hvis fotocelle tænder
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Motor1 0
+  SET Motor2Frem 0
+  SET Motor2Tilbage 0
+	SET LiftUp 0
+	TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_READY
+  TEST fototest = 0 
+  AND autoDetectItem = 1
+    TIMEOUT EmptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ELSE
+		TEST localCaseOk = 0
+			TIMEOUT DiscardTime ST_DISCARD
+			SETSTATE ST_DISCARD
+		ELSE
+      TEST syncIn = 1
+      OR simulate = 1
+        TIMEOUT maxSendTime ST_SEND
+        SETSTATE ST_SEND
+      ELSE 
+				SET Motor1 0
+				SET Motor2Frem 0
+				SET Motor2Tilbage 0
+				SET LiftUp 0
+			ENDTEST
+		ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_DISCARD
+	SET Motor1 1
+	SET Motor2Frem 0
+	SET Motor2Tilbage 1
+	SET LiftUp 1
+	TEST fototest = 0
+	AND DiscardTime = 1
+		SET LiftUp 0
+		TIMEOUT TimeLiftDown ST_EMPTY
+    SETSTATE ST_TIMER
+	ENDTEST
+END
+
+State=ST_SEND
+	SET Motor1 1
+	SET Motor2Frem 1
+	SET Motor2Tilbage 0
+	SET LiftUp 1
+;  TEST syncIn = 0
+;  AND simulate = 0
+;    SETSTATE ST_EMPTY
+;  ELSE
+    TEST sendAndWait = 1
+      TEST freeWaitTime = 1
+        SET sendAndWait 0
+				SET LiftUp 0
+				TIMEOUT TimeLiftDown ST_EMPTY
+        SETSTATE ST_TIMER
+      ENDTEST
+    ELSE
+      TEST maxSendTime = 1
+        SETSTATE ST_RESET
+      ELSE
+	      TEST fototest = 0
+          SET sendAndWait 1
+          TIMEOUT freeWaitTime ST_SEND
+          SETSTATE ST_SEND
+	      ENDTEST
+	    ENDTEST
+	  ENDTEST
+;  ENDTEST
+END
+
+State=ST_EMPTY
+	SET LiftUp 0
+  TEST fototest = 1
+  AND autoDetectItem = 1
+    TIMEOUT ReadyDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST prev = ST_SEND
+      TIMEOUT maxReceiveTime ST_RECEIVE
+      SETSTATE ST_RECEIVE
+    ELSE 
+      SET Motor1 0
+			SET Motor2Frem 0
+			SET Motor2Tilbage 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST fototest = 1
+		SET localCaseOk caseOk
+    TIMEOUT StopDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    SET Motor1 0
+		SET Motor2Frem 0
+		SET Motor2Tilbage 0
+		SET LiftUp 0
+		TEST maxReceiveTime = 1
+			SETSTATE ST_RESET
+		ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+	TEST firstRun = 1
+		SET localCaseOk 0
+	ENDTEST
+  TEST fototest = 1
+		SETSTATE ST_READY
+	ELSE
+		SETSTATE ST_EMPTY
+	ENDTEST
+END

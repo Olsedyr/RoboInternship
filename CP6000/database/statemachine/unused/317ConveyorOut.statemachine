@@ -1,0 +1,178 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut
+linkValue=Foto3 test ConveyorOutFoto1
+linkValue=Foto2 test ConveyorOutFoto2
+linkValue=Foto1 test ConveyorOutFoto3
+linkValue=Foto4 test ConveyorOutFoto4
+Output=Motor "ConveyorOut Motor"
+linkValue=pathtype pathtype Robot
+linkValue=axis_t axis_t Robot
+Link=parent Parent
+Link=prev ConveyorOut2 
+Link=Robot Robot
+linkValue=firstRun WorkCell
+Timeout=TimeOutDelay 5000000
+Timeout=maxWaitNext 60000000
+Value=errorCode 0
+Value=simulate 0
+Value=casecount 0
+Value=maxfoto 1
+Value=fotopercase 1
+Value=getCase 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET Motor 0
+	SET getCase 0
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_ERROR
+  SET Motor 0
+	SET getCase 0
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_MOVEFORWARD
+  SET Motor 1
+	SET getCase 0
+	TEST Foto1 = 1
+    SETSTATE ST_READY_ROBOT
+	ENDTEST
+	TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_GET
+	SET getCase 1
+  TEST prev = ST_SEND
+    TIMEOUT maxWaitNext ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSE
+    SET Motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_RECEIVE
+	SET getCase 1
+  TEST Foto1 = 1
+  OR Foto2 = 1
+  OR Foto3 = 1
+    SETSTATE ST_MOVEFORWARD
+	ENDTEST
+  TEST maxWaitNext = 1
+		SET errorCode 1007
+		SETSTATE ST_ERROR
+  ELSE
+    SET Motor 1
+  ENDTEST
+END
+
+State=ST_READY_ROBOT
+  TEST Foto1 = 0
+	AND simulate = 0
+		SET errorCode 1007
+    SETSTATE ST_ERROR
+  ELSE
+    TEST pathtype = 24
+	  AND axis_t <= 400000
+			SET Motor 0
+			SET getCase 0
+      SETSTATE ST_WAIT_ROBOT_GONE
+		ELSE			
+			TEST Foto3 = 1
+			AND Foto2 = 1
+			AND Foto1 = 1
+				SET getCase 0
+			ELSE
+				SET getCase 1
+			ENDTEST
+			TEST prev = ST_SEND
+				SET Motor 1
+			ELSE
+				SET Motor 0
+			ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_ROBOT_GONE
+  TEST pathtype = 24
+	  TEST axis_t > 400000
+      TEST simulate = 0
+        TEST Foto1 = 0
+					TEST Foto3 = 1
+					OR Foto2 = 1
+						SETSTATE ST_MOVEFORWARD
+					ELSE
+						SET getCase 1
+						SETSTATE ST_GET
+					ENDTEST
+        ELSE
+          SET errorCode 1007
+          SETSTATE ST_ERROR
+        ENDTEST
+      ELSE
+        SETSTATE ST_READY_ROBOT
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST Robot != ST_RUNNING 
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST simulate = 1
+    SETSTATE ST_READY_ROBOT
+  ELSE
+    TIMEOUT TimeOutDelay ST_STARTUP
+    SETSTATE ST_STARTUP
+  ENDTEST
+END
+
+State=ST_SELECT
+	TEST Foto1 = 1
+		SETSTATE ST_READY_ROBOT
+	ELSE
+		TEST Foto2 = 0
+		AND Foto3 = 0
+			SETSTATE ST_GET
+		ELSE
+			SET errorCode 1007
+      SETSTATE ST_ERROR
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_STARTUP
+  TEST Foto1 = 1
+    SETSTATE ST_READY_ROBOT
+  ELSE
+    TEST TimeOutDelay = 1
+			SET getCase 0
+      SETSTATE ST_SELECT
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+END

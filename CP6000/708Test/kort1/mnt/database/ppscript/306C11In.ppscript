@@ -1,0 +1,52 @@
+PPSCRIPTVERSION 1
+306C11In
+type=6
+itemsPrLayer=4
+move C11 from palletA0(idx=11,0,wcp=0,1485,0,90,90,0) to tipper
+move C11 from palletA1(idx=11,1,wcp=0,1485,0,90,90,0) to tipper
+move C11 from palletA2(idx=11,2,wcp=0,1485,0,90,90,0) to tipper
+move C11 from palletA3(idx=11,3,wcp=0,1485,0,90,90,0) to tipper
+move C11 from palletA0(idx=10,4,wcp=0,1360,0,90,90,0) to tipper
+move C11 from palletA1(idx=10,5,wcp=0,1360,0,90,90,0) to tipper
+move C11 from palletA2(idx=10,6,wcp=0,1360,0,90,90,0) to tipper
+move C11 from palletA3(idx=10,7,wcp=0,1360,0,90,90,0) to tipper
+move C11 from palletA0(idx=9,8,wcp=0,1235,0,90,90,0) to tipper
+move C11 from palletA1(idx=9,9,wcp=0,1235,0,90,90,0) to tipper
+move C11 from palletA2(idx=9,10,wcp=0,1235,0,90,90,0) to tipper
+move C11 from palletA3(idx=9,11,wcp=0,1235,0,90,90,0) to tipper
+move C11 from palletA0(idx=8,12,wcp=0,1110,0,90,90,0) to tipper
+move C11 from palletA1(idx=8,13,wcp=0,1110,0,90,90,0) to tipper
+move C11 from palletA2(idx=8,14,wcp=0,1110,0,90,90,0) to tipper
+move C11 from palletA3(idx=8,15,wcp=0,1110,0,90,90,0) to tipper
+move C11 from palletA0(idx=7,16,wcp=0,985,0,90,90,0) to tipper
+move C11 from palletA1(idx=7,17,wcp=0,985,0,90,90,0) to tipper
+move C11 from palletA2(idx=7,18,wcp=0,985,0,90,90,0) to tipper
+move C11 from palletA3(idx=7,19,wcp=0,985,0,90,90,0) to tipper
+move C11 from palletA0(idx=6,20,wcp=0,860,0,90,90,0) to tipper
+move C11 from palletA1(idx=6,21,wcp=0,860,0,90,90,0) to tipper
+move C11 from palletA2(idx=6,22,wcp=0,860,0,90,90,0) to tipper
+move C11 from palletA3(idx=6,23,wcp=0,860,0,90,90,0) to tipper
+move C11 from palletA0(idx=5,24,wcp=0,735,0,90,90,0) to tipper
+move C11 from palletA1(idx=5,25,wcp=0,735,0,90,90,0) to tipper
+move C11 from palletA2(idx=5,26,wcp=0,735,0,90,90,0) to tipper
+move C11 from palletA3(idx=5,27,wcp=0,735,0,90,90,0) to tipper
+move C11 from palletA0(idx=4,28,wcp=0,610,0,90,90,0) to tipper
+move C11 from palletA1(idx=4,29,wcp=0,610,0,90,90,0) to tipper
+move C11 from palletA2(idx=4,30,wcp=0,610,0,90,90,0) to tipper
+move C11 from palletA3(idx=4,31,wcp=0,610,0,90,90,0) to tipper
+move C11 from palletA0(idx=3,32,wcp=0,485,0,90,90,0) to tipper
+move C11 from palletA1(idx=3,33,wcp=0,485,0,90,90,0) to tipper
+move C11 from palletA2(idx=3,34,wcp=0,485,0,90,90,0) to tipper
+move C11 from palletA3(idx=3,35,wcp=0,485,0,90,90,0) to tipper
+move C11 from palletA0(idx=2,36,wcp=0,360,0,90,90,0) to tipper
+move C11 from palletA1(idx=2,37,wcp=0,360,0,90,90,0) to tipper
+move C11 from palletA2(idx=2,38,wcp=0,360,0,90,90,0) to tipper
+move C11 from palletA3(idx=2,39,wcp=0,360,0,90,90,0) to tipper
+move C11 from palletA0(idx=1,40,wcp=0,235,0,90,90,0) to tipper
+move C11 from palletA1(idx=1,41,wcp=0,235,0,90,90,0) to tipper
+move C11 from palletA2(idx=1,42,wcp=0,235,0,90,90,0) to tipper
+move C11 from palletA3(idx=1,43,wcp=0,235,0,90,90,0) to tipper
+move C11 from palletA0(idx=0,44,wcp=0,110,0,90,90,0) to tipper
+move C11 from palletA1(idx=0,45,wcp=0,110,0,90,90,0) to tipper
+move C11 from palletA2(idx=0,46,wcp=0,110,0,90,90,0) to tipper
+move C11 from palletA3(idx=0,47,wcp=0,110,0,90,90,0) to tipper

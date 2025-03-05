@@ -1,0 +1,488 @@
+STATEMACHINEVERSION 3
+Include=randomvalues.statemachine
+Name=ProgramB2
+;*******************************************
+;* LINK's                 
+;*******************************************
+Link=program Program319
+Link=parent Parent
+Link=robot Robot
+Link=Tool
+Link=ConveyorIn
+Link=ScissorDepalletizer2_3
+;*******************************************
+;* VALUE's                
+;*******************************************
+linkValue=wBItemsPerLayer Program319
+linkValue=timeInPlace Program319
+linkValue=WorkCellFirstRun firstRun WorkCell
+linkValue=nextcardboardlayer CardBoardShuttle
+;when roboError > 0 and restart = 1 the workcell can be restarted 
+linkValue=restart RoboError
+linkValue=resetpreload Loader
+;when 2 or more path's must run as one - set delaystop = 1
+;before start off first path and = 0 after last
+;executer will test this value before pausing execution
+linkValue=delaystop Robot
+linkValue=axis_t Robot
+linkValue=pathtype Robot
+;linkValue=casekind Program319
+;Value=casekind_CanLayer1 20
+;Value=casekind_JarLayer1 21
+;Value=casekind_CanLayer2 23
+;Value=casekind_JarLayer2 24
+linkValue=roboMessageCached RoboError
+linkValue=mposreq Robot
+linkValue=mpostcpidx Robot
+linkValue=moveIsSafe ServoCardBoard
+Value=errorCode 0
+Const=sBItem 0
+Value=loaded 0
+Value=temp 0
+Value=ftemp 0.0
+Value=oneshot 0
+Const=xvarimin -2.0000
+Const=xvarimax 2.0000
+Const=zvarimin -2.0000
+Const=zvarimax 2.0000
+Const=thisSeed 30
+Value=simulate 0
+Value=tester 0
+;*******************************************
+;* FRAME LINKVALUE's                
+;*******************************************
+linkValue=base Frames 
+linkValue=home Frames
+linkValue=homeHigh Frames
+linkValue=palletB0 Frames
+linkValue=conveyorB Frames
+linkValue=mpos Robot
+;*******************************************
+;* ALL EXISTING PATH TYPES
+;*******************************************
+Path=home_palletB                   21 23
+Path=palletB_conveyorB              21 24
+Path=conveyorB_home                 21 25
+Path=conveyorB_palletB              21 44
+Path=home_home                      21 16
+Path=palletB_home                   21 43
+;*******************************************
+;* ITEM's                    
+;*******************************************
+;Item=item CanLayer1
+linkValue=item Program319
+;Item=itemCan1 CanLayer1
+;Item=itemCan2 CanLayer2
+;Item=itemJar1 JarLayer1
+;Item=itemJar2 JarLayer2
+;*******************************************
+;* PATTERN's     
+;*******************************************
+;Pattern=patternB 30410Kg_80
+;*******************************************
+;* FRAME's
+;*******************************************
+Frame=fromFrame x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+Frame=toFrame x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+;*******************************************
+;* TIMEOUT's                    
+;*******************************************
+Timeout=TimeInPlace 300000
+;*******************************************
+;* STATES                    
+;*******************************************
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_ERROR
+	TEST parent != ST_RUN
+	OR simulate = 1
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_IDLE
+  SET delaystop 0
+	SET moveIsSafe 0
+  TEST parent = ST_RUN
+	OR simulate = 1
+		SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	SET TimeInPlace timeInPlace
+	SET loaded 0
+	SET errorCode 0
+	;set state = ST_IDLE for alle path's and set maxidx = 0 in pathTable
+	;stafet value
+  TEST resetpreload = 0
+    SET resetpreload 1
+  ENDTEST
+  TEST resetpreload = 3
+    SET resetpreload 0
+    TEST WorkCellFirstRun = 1
+    OR restart = 0
+	    SETSTATE ST_START
+    ELSE
+      SETSTATE ST_RESTART
+    ENDTEST
+  ENDTEST
+END
+;*******************************************
+;* RESTART FROM SOMEWHERE
+;*******************************************
+State=ST_RESTART
+	;  kun een bopt fil for hver robot
+	;  en ppscripttype for hver konfiguration(tool)
+  SET delaystop 0
+	TEST mposreq = 0
+		SET mpostcpidx 0
+		SET mposreq 1
+	ENDTEST 
+  TEST home_home.state < ST_INACTIVE
+	AND mposreq = 2
+		SET mposreq 0
+    LOAD home_home mpos home
+		SETSTATE ST_WAIT_HOME_HOME_LOADED
+  ENDTEST
+END
+;*******************************************
+;* START FROM SCRATCH
+;*******************************************
+State=ST_START
+	;  kun een bopt fil for hver robot
+	;  en ppscripttype for hver konfiguration(tool)
+	SET delaystop 0
+	SET randseed thisSeed
+	INLINE inlineSeedRandom.statemachine
+	TEST mposreq = 0
+		SET mpostcpidx 0
+		SET mposreq 1
+	ENDTEST
+	TEST home_home.state < ST_INACTIVE
+	AND mposreq = 2
+;		TEST casekind = casekind_CanLayer1
+;			SETITEM item itemCan1
+;		ELSETEST casekind = casekind_CanLayer2
+;			SETITEM item itemCan2
+;		ELSETEST casekind = casekind_JarLayer1
+;			SETITEM item itemJar1
+;		ELSETEST casekind = casekind_JarLayer2
+;			SETITEM item itemJar2
+;		ENDTEST
+    SET restart 1
+		SET mposreq 0
+		LOAD home_home mpos home 
+	  SETSTATE ST_WAIT_HOME_HOME_LOADED
+  ENDTEST
+END
+;*******************************************
+;* ST_WAIT_HOME_HOME_LOADED
+;*******************************************
+State=ST_WAIT_HOME_HOME_LOADED
+  TEST home_home.state = ST_LOADED
+	  TEST home_palletB.state < ST_INACTIVE
+			SETFRAME toFrame palletB0
+			CALC toFrame.y = toFrame.y + item.gy
+			SET randmin xvarimin
+			SET randmax xvarimax
+			INLINE inlineComputeRandom.statemachine
+			CALC toFrame.x = toFrame.x + randres
+			SET randmin zvarimin
+			SET randmax zvarimax
+			INLINE inlineComputeRandom.statemachine
+			CALC toFrame.z = toFrame.z + randres 
+			LOAD home_palletB home toFrame
+      SET delaystop 0
+      EXEC home_home
+      SETSTATE ST_HOME_HOME
+    ENDTEST
+  ENDTEST
+END
+;*******************************************
+;*
+;*       F R A M E - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME
+;*******************************************
+State=ST_HOME
+	TEST parent = ST_RUN
+	AND roboMessageCached = 0
+	OR simulate = 1
+    TEST home_palletB.state = ST_LOADED
+			TEST loaded = 0
+      AND palletB_conveyorB.state < ST_INACTIVE
+      AND palletB_home.state < ST_INACTIVE
+				;*******************************************
+				SETFRAME fromFrame toFrame
+				SETFRAME toFrame conveyorB
+				CALC toFrame.y = toFrame.y + item.gy
+				LOAD palletB_conveyorB fromFrame toFrame
+				LOAD palletB_home fromFrame home
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND ConveyorIn = ST_READY_ROBOT
+			AND ScissorDepalletizer2_3 = ST_READY_ROBOT
+;			AND Tool = ST_GO
+			AND nextcardboardlayer = 0
+				SET delaystop 1
+				EXEC home_palletB 
+				SETSTATE ST_HOME_PALLETB
+			ENDTEST
+    ENDTEST
+  ELSETEST roboMessageCached = 333
+		SET errorCode 333
+		SETSTATE ST_ERROR
+	ELSE
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+;*******************************************
+;* ST_PALLETB_ABORT
+;*******************************************
+State=ST_PALLETB_ABORT
+	TEST palletB_home.state = ST_LOADED
+		TEST home_palletB.state < ST_INACTIVE 
+		AND loaded != 3 
+			;*******************************************
+			SETFRAME toFrame palletB0
+			CALC toFrame.y = toFrame.y + item.gy
+			SET randmin xvarimin
+			SET randmax xvarimax
+			INLINE inlineComputeRandom.statemachine
+			CALC toFrame.x = toFrame.x + randres
+			SET randmin zvarimin
+			SET randmax zvarimax
+			INLINE inlineComputeRandom.statemachine
+		 	CALC toFrame.z = toFrame.z + randres
+	  	LOAD home_palletB home toFrame
+  		SET loaded 3
+	  ENDTEST
+    TEST loaded = 3
+	  AND Tool = ST_GO
+		  EXEC palletB_home
+		  SETSTATE ST_PALLETB_HOME
+		ENDTEST
+	ENDTEST
+END
+;*******************************************
+;* ST_PALLETB
+;*******************************************
+State=ST_PALLETB
+	TEST parent = ST_RUN
+	AND ConveyorIn = ST_READY_ROBOT
+	AND ScissorDepalletizer2_3 = ST_READY_ROBOT
+	OR simulate = 1
+		TEST palletB_conveyorB.state = ST_LOADED
+			TEST loaded = 0
+			AND conveyorB_home.state < ST_INACTIVE
+			AND conveyorB_palletB.state < ST_INACTIVE
+				SETFRAME fromFrame toFrame
+				;*****************************************
+				SETFRAME toFrame palletB0
+				CALC toFrame.y = toFrame.y + item.gy
+				SET randmin xvarimin
+				SET randmax xvarimax
+				INLINE inlineComputeRandom.statemachine
+				CALC toFrame.x = toFrame.x + randres
+				SET randmin zvarimin
+				SET randmax zvarimax
+				INLINE inlineComputeRandom.statemachine
+				CALC toFrame.z = toFrame.z + randres 
+				LOAD conveyorB_palletB fromFrame toFrame
+				;*****************************************
+				LOAD conveyorB_home fromFrame home
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND Tool = ST_GO
+			OR simulate = 1
+				SET oneshot 0
+				SET delaystop 1
+				EXEC palletB_conveyorB
+				SETSTATE ST_PALLETB_CONVEYORB
+			ENDTEST
+		ENDTEST
+	ELSETEST palletB_home.state = ST_LOADED
+		TEST home_palletB.state < ST_INACTIVE
+			SETSTATE ST_PALLETB_ABORT
+		ENDTEST
+	ENDTEST
+END
+;*******************************************
+;* ST_CONVEYORB
+;*******************************************
+State=ST_CONVEYORB
+	TEST parent = ST_RUN
+	AND ConveyorIn = ST_READY_ROBOT
+	AND ScissorDepalletizer2_3 = ST_READY_ROBOT
+	AND roboMessageCached = 0
+	OR simulate = 1
+		TEST conveyorB_palletB.state = ST_LOADED
+			TEST loaded != 1
+		  AND palletB_conveyorB.state < ST_INACTIVE
+			AND palletB_home.state < ST_INACTIVE 
+				SETFRAME fromFrame toFrame
+				SETFRAME toFrame conveyorB
+				CALC toFrame.y = toFrame.y + item.gy
+				LOAD palletB_conveyorB fromFrame toFrame
+				LOAD palletB_home fromFrame home
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND Tool = ST_GO
+			AND nextcardboardlayer = 0
+				SET delaystop 1
+		    EXEC conveyorB_palletB
+				SETSTATE ST_CONVEYORB_PALLETB
+		  ENDTEST
+		ENDTEST
+	ELSETEST TimeInPlace = 1
+	OR parent != ST_RUN
+	OR roboMessageCached != 0
+		TEST conveyorB_home.state = ST_LOADED
+			TEST loaded != 2
+			AND home_palletB.state < ST_INACTIVE
+				SETFRAME toFrame palletB0
+				CALC toFrame.y = toFrame.y + item.gy
+				SET randmin xvarimin
+				SET randmax xvarimax
+				INLINE inlineComputeRandom.statemachine
+				CALC toFrame.x = toFrame.x + randres
+				SET randmin zvarimin
+				SET randmax zvarimax
+				INLINE inlineComputeRandom.statemachine
+				CALC toFrame.z = toFrame.z + randres 
+				LOAD home_palletB home toFrame
+				SET loaded 2
+			ENDTEST
+			TEST loaded = 2
+			AND Tool = ST_GO
+				EXEC conveyorB_home
+				SETSTATE ST_CONVEYORB_HOME
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+;*******************************************
+;*
+;*       P A T H - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME_HOME
+;*******************************************
+State=ST_HOME_HOME
+  TEST home_home.state = ST_EXECUTING
+    ;
+  ELSETEST home_home.state = ST_FINISHED
+		SET loaded 0
+		SET moveIsSafe 1
+	  SETSTATE ST_HOME
+  ELSETEST home_home.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_HOME_PALLETB
+;*******************************************
+State=ST_HOME_PALLETB
+  TEST home_palletB.state = ST_EXECUTING
+		;
+  ELSETEST home_palletB.state = ST_FINISHED
+		SET loaded 0
+	  TEST parent = ST_RUN
+	  AND ConveyorIn = ST_READY_ROBOT
+	  AND ScissorDepalletizer2_3 = ST_READY_ROBOT
+	  OR simulate = 1
+  	  SETSTATE ST_PALLETB
+    ELSE
+      SETSTATE ST_PALLETB_ABORT
+    ENDTEST
+  ELSETEST home_palletB.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_PALLETB_HOME
+;*******************************************
+State=ST_PALLETB_HOME
+  TEST palletB_home.state = ST_EXECUTING
+		SET delaystop 0
+	ELSETEST palletB_home.state = ST_FINISHED
+		SET loaded 0
+		SETSTATE ST_HOME
+	ELSETEST palletB_home.state = ST_ERROR
+	AND parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST 
+END
+;*******************************************
+;* ST_PALLETB_CONVEYORB
+;*******************************************
+State=ST_PALLETB_CONVEYORB
+  TEST palletB_conveyorB.state = ST_EXECUTING
+		TEST oneshot = 0
+		AND pathtype = 24
+		AND axis_t > 550000
+		AND axis_t < 990000
+			SET oneshot 1
+			SET nextcardboardlayer 1
+		ENDTEST
+  ELSETEST palletB_conveyorB.state = ST_FINISHED
+    SET loaded 0
+		TEST oneshot = 0
+			SET nextcardboardlayer 1
+		ENDTEST
+		TIMEOUT TimeInPlace ST_CONVEYORB
+    SETSTATE ST_CONVEYORB
+  ELSETEST palletB_conveyorB.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+;*******************************************
+;* ST_CONVEYORB_PALLETB
+;*******************************************
+State=ST_CONVEYORB_PALLETB
+  TEST conveyorB_palletB.state = ST_EXECUTING
+		;
+  ELSETEST conveyorB_palletB.state = ST_FINISHED
+		SET loaded 0
+	  TEST parent = ST_RUN
+	  AND ConveyorIn = ST_READY_ROBOT
+	  AND ScissorDepalletizer2_3 = ST_READY_ROBOT
+	  OR simulate = 1
+  	  SETSTATE ST_PALLETB
+    ELSE
+      SETSTATE ST_PALLETB_ABORT
+    ENDTEST
+  ELSETEST conveyorB_palletB.state = ST_ERROR
+  AND parent = ST_IDLE
+		SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_CONVEYORB_HOME
+;*******************************************
+State=ST_CONVEYORB_HOME
+  TEST conveyorB_home.state = ST_EXECUTING
+		SET delaystop 0
+  ELSETEST conveyorB_home.state = ST_FINISHED
+		SET loaded 0
+		SETSTATE ST_HOME
+  ELSETEST conveyorB_home.state = ST_ERROR
+  AND parent = ST_IDLE
+		SETSTATE ST_IDLE
+  ENDTEST 
+END

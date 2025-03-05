@@ -1,0 +1,201 @@
+STATEMACHINEVERSION 3
+Name=PushPattern
+Link=Program
+Link=ProductCount
+Link=Skubber LangBufferSkub
+Link=parent Parent
+linkValue=firstRun WorkCell
+linkValue=numpush Skubber
+linkValue=layers bufferlayers BufferPlads
+linkValue=pattern Program
+Const=gettimePunnets650 0
+Const=testtime1 400000
+Const=testtime2 0
+Value=curppp 0
+Value=numincycle 0
+Value=ppp1 0
+Value=ppp2 0
+Value=ppp3 0
+Value=ppp4 0
+Value=ppp5 0
+Value=ppp6 0
+Value=ppp7 0
+Value=ppp8 0
+Value=ppp9 0
+Value=ppp10 0
+Value=ppp11 0
+Value=ppp12 0
+Value=ppp13 0
+Value=ppp14 0
+Value=ppp15 0
+Value=ppp16 0
+Value=pushshortleft1 0
+Value=pushshortleft2 0
+Value=pushshortleft3 0
+Value=pushshortright1 0
+Value=pushshortright2 0
+Value=pushshortright3 0
+Value=pushshortleft 0
+Value=pushshortright 0
+Value=maxpushlayer1 2
+Value=maxpushlayer2 2
+Value=maxpushlayer3 2
+Value=gettime1 350000
+Value=gettime2 350000
+Value=gettime3 350000
+Value=gettime 350000
+Value=maxpush 2
+Value=maxlayers 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST ProductCount = ST_RESET
+	  SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  ;override ST_RESET in specific statemachine
+  SETSTATE ST_OVERRIDE_ST_RESET
+END
+
+State=ST_OVERRIDE_ST_RESET
+END
+
+State=ST_GO
+  TEST layers = 0
+		SET numincycle 0
+		SET maxpush maxpushlayer1
+		SET gettime gettime1
+    SET pushshortleft pushshortleft1
+    SET pushshortright pushshortright1
+	ELSE
+		TEST layers = 1
+			SET numincycle maxpushlayer1
+			SET maxpush maxpushlayer2
+			SET gettime gettime2
+      SET pushshortleft pushshortleft2
+      SET pushshortright pushshortright2
+		ELSE
+			TEST layers = 2
+				CALC numincycle = maxpushlayer1 + maxpushlayer2
+				SET maxpush maxpushlayer3
+				SET gettime gettime3
+        SET pushshortleft pushshortleft3
+        SET pushshortright pushshortright3
+		  ENDTEST
+	  ENDTEST
+  ENDTEST
+	CALC numincycle = numincycle + numpush
+	TEST numincycle = 0
+		SET curppp ppp1
+	ELSE
+		TEST numincycle = 1
+			SET curppp ppp2
+		ELSE
+			TEST numincycle = 2
+				SET curppp ppp3
+			ELSE
+				TEST numincycle = 3
+					SET curppp ppp4
+				ELSE
+					TEST numincycle = 4
+						SET curppp ppp5
+					ELSE
+						TEST numincycle = 5
+							SET curppp ppp6
+						ELSE
+							TEST numincycle = 6
+								SET curppp ppp7
+							ELSE
+								TEST numincycle = 7
+									SET curppp ppp8
+								ELSE
+									TEST numincycle = 8
+										SET curppp ppp9
+									ELSE
+										TEST numincycle = 9
+											SET curppp ppp10
+										ELSE
+											TEST numincycle = 10
+												SET curppp ppp11
+											ELSE
+												TEST numincycle = 11
+													SET curppp ppp12
+												ELSE
+													TEST numincycle = 12
+														SET curppp ppp13
+													ELSE
+														TEST numincycle = 13
+															SET curppp ppp14
+														ELSE
+															TEST numincycle = 14
+																SET curppp ppp15
+															ELSE
+																TEST numincycle = 15
+																	SET curppp ppp16
+																ENDTEST
+															ENDTEST
+														ENDTEST
+													ENDTEST
+												ENDTEST
+											ENDTEST
+										ENDTEST
+									ENDTEST
+								ENDTEST
+							ENDTEST
+						ENDTEST
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+  TEST firstRun = 1
+	AND parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+;create patterns in specific statemachine
+
+;example:
+State=ST_START_XXX
+	SET maxlayers 3
+	SET curppp 2
+	SET maxpush 3
+	SET maxpushlayer1 3
+	SET maxpushlayer2 3
+	SET maxpushlayer3 2
+	SET gettime1 0
+	SET gettime2 0
+	SET gettime3 0
+  SET pushshortleft1 0
+  SET pushshortleft2 0
+  SET pushshortleft3 0
+  SET pushshortright1 0
+  SET pushshortright2 0
+  SET pushshortright3 0
+	SET ppp1 2
+	SET ppp2 2
+	SET ppp3 2
+	SET ppp4 2
+	SET ppp5 2
+	SET ppp6 2
+	SET ppp7 2
+	SET ppp8 1
+	;default rest
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SETSTATE ST_GO
+END

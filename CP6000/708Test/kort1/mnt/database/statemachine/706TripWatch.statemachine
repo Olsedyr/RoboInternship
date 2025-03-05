@@ -1,0 +1,6 @@
+STATEMACHINEVERSION 3
+Include=cptripwatch.statemachine
+Name=TripWatch
+Input=prodconv1 "ProduktConveyor_1 HZOK"
+Input=prodconv2 "ProduktConveyor_2 HZOK"
+;** User section **

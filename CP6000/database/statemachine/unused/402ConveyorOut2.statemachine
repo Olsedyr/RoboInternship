@@ -1,0 +1,122 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut2
+Link=foto1 ConveyorOut2Foto1
+Output=Motor "Conveyor1 Motor Enable"
+Output=MotorSetpoint "Conveyor1 Setpoint"
+Output=Motor2 "Conveyor4 Motor Enable"
+Output=syncout "Sync Out 1"
+Link=next ConveyorOut
+Link=parent Parent
+linkValue=manuelt manuelt Program402
+;Time for case/product to leave conveyor after foto has gone free
+Timeout=freeWaitTime 500000
+Timeout=startupTime 5000000
+Timeout=StopDelay 0
+Timeout=EmptyDelay 0
+Timeout=maxSendTime 2000000
+Timeout=timeBeforeReset 1000000
+Value=simulate 0
+Value=timelength 0.0
+Timeout=motorFirstEnableTime 1000000
+Const=motorSpeedFwd 70.0000
+Const=motorSpeedRev -70.0000
+
+
+;en transportør går automatisk fra ready til empty hvis fotocelle slukker
+;og fra empty til ready hvis fotocelle tænder
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Motor 0
+  SET Motor2 0
+  SET syncout 0
+	TEST parent = ST_RESET
+	OR simulate = 1
+    SET MotorSetpoint 0.0
+    SET Motor2 1
+		TIMEOUT motorFirstEnableTime ST_RESET
+    SETSTATE ST_TIMER
+	ENDTEST
+END
+
+State=ST_RESET
+  SET Motor 0
+  TEST manuelt = 0
+    SET MotorSetpoint motorSpeedFwd
+    TEST foto1 = ST_BLOCKED
+    OR simulate = 1
+		  SETSTATE ST_READY
+	  ELSE
+      SETSTATE ST_EMPTY
+	  ENDTEST
+  ELSE
+    SET MotorSetpoint motorSpeedRev
+    SETSTATE ST_MANUELT
+  ENDTEST
+END
+
+State=ST_MANUELT
+  SET Motor 1
+  SET syncout 1
+  TEST manuelt = 0
+    TEST simulate = 0
+    AND parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_READY
+  TEST foto1 = ST_FREE
+  AND simulate = 0
+    TIMEOUT EmptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST next = ST_GET
+      SET syncout 1
+      SET Motor 1
+			SET Motor2 1
+      TIMEOUT maxSendTime ST_SEND
+      SETSTATE ST_SEND
+    ELSE 
+      SET syncout 0
+      SET Motor 0
+			SET Motor2 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST maxSendTime = 1
+    TIMEOUT timeBeforeReset ST_RESET
+    SETSTATE ST_TIMER
+  ELSE
+    TEST foto1 = ST_FREE
+    OR simulate = 1
+      SETSTATE ST_EMPTY
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST foto1 = ST_BLOCKED
+  OR simulate = 1
+    TIMEOUT StopDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    SET syncout 1
+    SET Motor 1
+		SET Motor2 1
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

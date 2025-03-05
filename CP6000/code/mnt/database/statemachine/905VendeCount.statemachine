@@ -1,0 +1,55 @@
+STATEMACHINEVERSION 3
+Name=VendeCount
+Link=VendeStation2
+Link=VendePattern
+Link=foto2 Vende2Foto1
+Link=parent Parent
+linkValue=firstRun WorkCell
+linkValue=numpercycle VendePattern
+linkValue=productsfromleft Program
+linkValue=totcount ProductCount
+Value=numofproducts 0
+Timeout=TimeGoIdle 500000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	TEST firstRun = 1
+		SET numofproducts 0
+	ENDTEST
+	TEST VendeStation2 = ST_RUN
+	AND productsfromleft = 1
+		SETSTATE ST_RUN2
+	ENDTEST
+END
+
+State=ST_RUN2
+	TEST foto2 = ST_LOW
+		CALC numofproducts = numofproducts % numpercycle
+		CALC numofproducts = numofproducts + 1
+	ENDTEST
+	TEST VendeStation2 = ST_IDLE
+		TIMEOUT TimeGoIdle ST_GOIDLE2
+		SETSTATE ST_GOIDLE2
+	ENDTEST
+END
+
+State=ST_GOIDLE2
+	TEST foto2 = ST_LOW
+		CALC numofproducts = numofproducts % numpercycle
+		CALC numofproducts = numofproducts + 1
+	ENDTEST
+	TEST TimeGoIdle = 1
+		SETSTATE ST_IDLE
+	ENDTEST
+END

@@ -1,0 +1,95 @@
+STATEMACHINEVERSION 3
+Name=AccumulatingConveyor
+;** Input **
+Input=powerok "Accumulating Conveyor HZOK"
+;** Output **
+Output=motorEnable "Accumulating Conveyor Enable"
+Output=motor "Accumulating Conveyor Setpoint"
+Output=clap "Accumulating Conveyor Clap"
+Output=startulma "Sync Out 1"
+;** Link **
+Link=queFoto AccumulatingConveyorQueFullFoto
+Link=master ProductConveyors
+;** linkValue **
+;** Const **
+Const=motorSpeed 45.0000
+;** Value **
+Value=queFotoOn 0
+;** Timeout **
+Timeout=queFullStopTime 1000000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motorEnable 0
+	SET startulma 0
+  SET motor 0.0
+  TEST master = ST_RUN
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_RUN
+END
+
+State=ST_RUN
+  TEST master = ST_RUN
+    SET motorEnable 1
+		SET startulma 1 
+    SET motor motorSpeed
+    SET clap 0
+  ELSE
+    SETSTATE ST_ACCUMULATE
+  ENDTEST
+  TEST master = ST_IDLE
+  OR powerok = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_ACCUMULATE
+  TEST master = ST_RUN
+    SETSTATE ST_RUN
+  ELSE
+    SET clap 1
+    TEST queFoto = ST_ON
+      TEST queFotoOn = 0
+        SET queFotoOn 1
+        TIMEOUT queFullStopTime ST_ACCUMULATE
+        SETSTATE ST_ACCUMULATE
+      ELSE
+        TEST queFullStopTime = 1
+          SET queFotoOn 0
+          SETSTATE ST_STOP
+        ENDTEST
+      ENDTEST
+    ELSE
+      SET queFotoOn 0
+    ENDTEST
+  ENDTEST
+  TEST master = ST_IDLE
+  OR powerok = 0
+    SET queFotoOn 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STOP
+  TEST master = ST_RUN
+    SETSTATE ST_RUN
+  ELSE
+    SET motorEnable 0
+		SET startulma 0
+    SET motor 0.0
+    SET clap 1
+  ENDTEST
+  TEST master = ST_IDLE
+  OR powerok = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END

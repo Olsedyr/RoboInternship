@@ -1,0 +1,20 @@
+STATEMACHINEVERSION 3
+Include=checkweighercalc.statemachine
+Name=checkWeigherCalcS1
+Input=celldata "S1 LoadCell data"
+Value=weight 0.0 
+Table=fweight 100.0 AVG
+Table=ffweight 100.0 AVG
+Table=sampling 600.0
+Value=samplingmaxidx 0
+Value=raw 0.0
+Value=wa 0.0
+Const=scale 1.0030
+Const=capture 0
+Const=sampleType 2
+linkValue=newprogram ProgramS1
+linkValue=fweightSize ProgramS1
+linkValue=ffweightSize ProgramS1
+linkValue=dynmodeoffset ProgramS1
+linkValue=offset calibOffsetInit checkWeigherS1
+linkValue=staticmode staticmode checkWeigherS1

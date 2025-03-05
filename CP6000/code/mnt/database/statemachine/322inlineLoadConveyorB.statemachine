@@ -1,0 +1,42 @@
+; INLINE 310inlineLoadConveyorB.statemachine
+SETFRAME fromFrame toFrame2
+CALC temp = cBItem % 2
+CALC temp2 = wBItem - cBItem
+TEST temp2 <= 2
+AND pap = 1
+	SETFRAME toFrame2 palletB1P
+	CALC ftemp = item.sy * cBStackleft
+	SET leftrightB 0
+ELSETEST temp = 0
+OR pap = 1
+AND cBItem < 2
+	TEST pap = 0
+		SETFRAME toFrame2 palletB0
+	ELSETEST cBItem = 0
+		SETFRAME toFrame2 palletB0PH
+	ELSE
+		SETFRAME toFrame2 palletB0P
+	ENDTEST
+	CALC ftemp = item.sy * cBStackright
+	SET leftrightB 1
+ELSE
+	TEST pap = 0
+		SETFRAME toFrame2 palletB1
+	ELSE
+		SETFRAME toFrame2 palletB1P
+	ENDTEST
+	CALC ftemp = item.sy * cBStackleft
+	SET leftrightB 0
+ENDTEST
+CALC toFrame2.y = toFrame2.y + ftemp
+CALC toFrame2.y = toFrame2.y + item.my
+TEST pap = 0
+	SET conveyorB_palletB.mode normalmode
+	SET conveyorB_home.mode normalmode
+	LOAD conveyorB_home fromFrame home
+ELSE
+	SET conveyorB_palletB.mode papmode
+	SET conveyorB_home.mode papmode
+	LOAD conveyorB_home fromFrame homeP
+ENDTEST
+LOAD conveyorB_palletB fromFrame toFrame2

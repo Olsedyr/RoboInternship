@@ -1,0 +1,8 @@
+VERSION 1
+401ChikaneLow
+dimention x=800.0,y=1130.0,z=10.0
+transformation x=85.0,y=0.0,z=1040.0
+material diffuse r=0.8,g=0.2,b=0.3,a=0.6
+material ambient r=0.8,g=0.2,b=0.3,a=0.6
+material specular r=0.8,g=0.2,b=0.3,a=0.6
+shininess=1.0

@@ -1,0 +1,178 @@
+STATEMACHINEVERSION 3
+Name=LangBufferSkub
+Delaystop=10000000
+Input=klapinde "LangBufferSkub Klap-"
+Output=klap "LangBufferSkub Klap"
+Link=CamGen CamGenSkub
+Link=pstate ProductState
+Link=Counter ProductCount
+Link=PushPattern
+Link=bplads BufferPlads
+Link=parent Parent
+linkValue=firstRun WorkCell
+linkValue=curpm CamGen
+linkValue=maxpush PushPattern
+linkValue=timeKlapDown Program
+linkValue=bufferstartingup startingup bplads
+Value=numpush 0
+Value=remaining 0
+Const=klapindpm 410
+Const=klapudpm 900
+Value=startingup 0
+Value=forwardstay 0
+Timeout=TimeWaitBack 200000
+Timeout=TimeKlapDown 300000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET klap 0
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET TimeKlapDown timeKlapDown
+	TEST firstRun = 1
+		SET forwardstay 0
+		SET numpush 0
+	ENDTEST
+	SET startingup 1
+	TEST forwardstay = 0
+		SET klap 0
+		SETSTATE ST_BEGINBACK
+	ELSE
+		SET klap 1
+		SET numpush 0
+		TIMEOUT TimeKlapDown ST_STAY_FINISH
+		SETSTATE ST_STAY_FINISH
+	ENDTEST
+END
+
+State=ST_STARTUP
+	SET startingup 0
+	TEST Counter = ST_RUN1
+	OR Counter = ST_RUN2
+		SETSTATE ST_WAIT
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_WAIT
+	SET klap 1
+	TEST pstate = ST_READY
+		TEST bplads = ST_WAITPUSH
+    AND PushPattern = ST_GO
+			CALC remaining = maxpush - numpush
+			TEST remaining <= 1
+				SETSTATE ST_BEGINFORWARDSTAY
+			ELSE
+				SETSTATE ST_BEGINFORWARD
+			ENDTEST
+		ELSE
+			TEST bufferstartingup = 0
+			AND bplads = ST_GOCLOSE
+      AND PushPattern = ST_GO
+				CALC remaining = maxpush - numpush
+				TEST remaining <= 1
+					SETSTATE ST_BEGINFORWARDSTAY
+				ELSE
+					SETSTATE ST_BEGINFORWARD
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_BEGINFORWARD
+  TEST CamGen = ST_START
+		CALC numpush = numpush + 1
+    SETSTATE ST_FORWARD
+  ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_BEGINFORWARDSTAY
+  TEST CamGen = ST_START
+		;CALC numpush = numpush + 1
+		SET numpush 0
+    SETSTATE ST_FORWARDSTAY
+  ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_FORWARD
+	TEST curpm > klapindpm
+	AND curpm < klapudpm
+		SET klap 0
+	ELSE
+		SET klap 1
+	ENDTEST
+	TEST CamGen = ST_STOP
+		SETSTATE ST_WAIT
+	ENDTEST
+END
+
+State=ST_FORWARDSTAY
+	SET klap 1
+	TEST CamGen = ST_STOP
+		TIMEOUT TimeKlapDown ST_STAY_FINISH
+		SETSTATE ST_STAY_FINISH
+	ENDTEST
+END
+
+;TimeKlapDown should be < time to open shutters of BufferPlads (which is roughly 350000 us)
+
+State=ST_STAY_FINISH
+	SET forwardstay 1
+	SET numpush 0
+	TEST bplads = ST_OPEN
+	OR TimeKlapDown = 1
+		SET forwardstay 0
+		SET klap 0
+		TIMEOUT TimeWaitBack ST_BEGINBACK
+		SETSTATE ST_TIMER
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_BEGINBACK
+  SET klap 0
+  TEST CamGen = ST_START
+    SETSTATE ST_GOBACK
+  ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_GOBACK
+	SET klap 0
+	TEST startingup = 0
+	AND curpm > klapudpm
+		SET klap 1
+	ENDTEST
+  TEST CamGen = ST_STOP
+  	TEST startingup = 1
+			SETSTATE ST_STARTUP
+		ELSE
+			SETSTATE ST_WAIT
+		ENDTEST
+  ENDTEST
+END

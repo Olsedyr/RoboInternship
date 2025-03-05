@@ -1,0 +1,6 @@
+STATEMACHINEVERSION 3
+Include=cplangbufferskub.statemachine
+Name=LangBufferSkub
+;** User section **
+Const=klapindpm 420
+Const=klapudpm 900

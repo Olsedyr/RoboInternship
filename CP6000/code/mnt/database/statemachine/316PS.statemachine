@@ -1,0 +1,190 @@
+STATEMACHINEVERSION 3
+Name=PS
+Delaystop=5000000
+Input=fotoFri "PS foto"
+Input=switchTop "PS switchTop"
+Input=fotoBottom "PS switchBottom"
+;TODO
+Output=enable "PS Motor Enable"
+Output=motor "PS Setpoint"
+Output=brake "PS Brake Release"
+Link=WorkCell
+Link=program Program316
+Link=parent PallebanePS
+Link=robotprg ProgramNS
+;same as decelerate HZ
+Timeout=timeoutForSoft 200000
+Timeout=timeMotorEnable 1000000
+Value=errorCode 0
+Value=lastFotoFreeMM 450
+linkValue=counterMM PScounter
+linkValue=activeProgram activeProgram program
+Const=mmFotoFree 0
+Const=bottomMM 690
+Const=slowDist 200
+Const=upSpeed -50.0000
+Const=downSpeed 50.0000
+Const=downSlowSpeed 5.0000
+Value=layer 0
+Value=freeMM 0
+;signals from other stm
+Value=moveBottom 0
+Value=moveUp 0
+Value=moveTop 0
+Value=simulate 0
+Value=temp 0.0
+
+State=ST_TIMER
+ END
+
+State=ST_HALT
+ END
+
+State=ST_IDLE
+  SET enable 0
+  SET brake 0
+  SET motor 0
+  TEST parent = ST_RESET
+  OR simulate = 2
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	;TEST that robot is gone
+	TEST robotprg = ST_HOME
+	OR simulate = 2
+		SET enable 1
+		TIMEOUT timeMotorEnable ST_RESET_WAIT_UNTIL_TOP
+		SETSTATE ST_RESET_WAIT_UNTIL_TOP
+	ENDTEST
+ END
+
+State=ST_RESET_WAIT_UNTIL_TOP
+  TEST timeMotorEnable = 1
+    TEST switchTop = 0
+    OR simulate = 1
+      SET brake 0
+      SET motor 0
+      SET moveTop 0
+      SET moveBottom 0
+      SET moveUp 0
+      TIMEOUT timeoutForSoft ST_TOP
+      SETSTATE ST_TIMER
+    ELSE
+      SET brake 1
+      SET motor upSpeed
+    ENDTEST
+  ENDTEST
+ END
+
+State=ST_TOP
+  TEST moveBottom = 1
+    SETSTATE ST_MOVE_TO_BOTTOM
+  ENDTEST
+END
+
+State=ST_MOVE_TO_BOTTOM
+  SET brake 1
+  SET motor downSpeed
+  TEST activeProgram = 0
+  	SETSTATE ST_WAIT_UNTIL_BOTTOM
+  ENDTEST
+ END
+
+State=ST_WAIT_UNTIL_BOTTOM
+  CALC temp = bottomMM + slowDist
+  TEST counterMM <= temp
+    SET motor downSlowSpeed
+  ENDTEST
+  TEST counterMM <= bottomMM
+  OR fotoBottom = 0 
+    SET motor 0
+    SET brake 0
+    TIMEOUT timeoutForSoft ST_CALG_BOTTOM
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+
+State=ST_CALG_BOTTOM
+  TEST simulate = 1
+    CALC lastFotoFreeMM = lastFotoFreeMM + 1
+  ELSE
+    SET lastFotoFreeMM counterMM
+  ENDTEST
+  SET layer 0
+  SET moveTop 0
+  SET moveBottom 0
+  SET moveUp 0
+  SETSTATE ST_FOTO_FRI
+END
+
+State=ST_MOVE_FOTO_FRI
+  TEST fotoFri = 1
+  OR simulate = 1
+    SET moveTop 0
+    SET moveBottom 0
+    SET moveUp 0
+    TIMEOUT timeoutForSoft ST_CALC_FOTO_FRI
+    SETSTATE ST_TIMER
+  ELSE
+  	SET brake 1
+	  SET motor upSpeed
+	  SETSTATE ST_WAIT_UNTIL_FOTO_FRI
+  ENDTEST
+ END
+
+State=ST_WAIT_UNTIL_FOTO_FRI
+  TEST switchTop = 0
+  AND simulate = 0 
+    SET brake 0
+    SET motor 0
+    SET errorCode 2200
+    SETSTATE ST_IDLE
+  ELSE
+    TEST fotoFri = 1
+    OR simulate = 1
+      CALC freeMM = counterMM + mmFotoFree
+      SETSTATE ST_WAIT_UNTIL_FOTO_FRI_TICKS
+    ENDTEST
+  ENDTEST
+ END
+
+State=ST_WAIT_UNTIL_FOTO_FRI_TICKS
+  TEST switchTop = 0
+  AND simulate = 0 
+  	SET brake 0
+	  SET motor 0
+    SET errorCode 2201
+    SETSTATE ST_IDLE
+  ELSE
+    TEST counterMM >= freeMM 
+    OR simulate = 1 
+  	  SET brake 0
+  	  SET motor 0
+      TIMEOUT timeoutForSoft ST_CALC_FOTO_FRI
+      SETSTATE ST_TIMER
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_CALC_FOTO_FRI
+  TEST simulate = 1
+    CALC lastFotoFreeMM = lastFotoFreeMM + 1
+  ELSE
+    SET lastFotoFreeMM counterMM
+  ENDTEST
+  CALC layer = layer + 1
+  SETSTATE ST_FOTO_FRI
+ END
+
+State=ST_FOTO_FRI
+  TEST moveUp = 1
+    SETSTATE ST_MOVE_FOTO_FRI
+  ENDTEST
+  TEST moveTop = 1
+    SETSTATE ST_RESET
+  ENDTEST
+ END
+

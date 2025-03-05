@@ -1,0 +1,194 @@
+STATEMACHINEVERSION 3
+Name=CollectConveyor
+;** Input **
+;** Output **
+Output=motor "Collect Conveyor Motor"
+;** Link **
+Link=foto CollectConveyorFoto1
+Link=productChecker CollectProductChecker
+Link=sync1 SyncConveyor1
+Link=sync2 SyncConveyor2
+Link=sync3 SyncConveyor3
+Link=sync1foto SyncConveyor1Foto
+Link=sync2foto SyncConveyor2Foto
+Link=sync3foto SyncConveyor3Foto
+Link=master checkWeigherMotorS1
+Link=parent ParentS1
+;** linkValue **
+linkValue=cwStopPrev stopPrev checkWeigherMotorS1
+linkValue=long1eta ETA LongConveyor1
+linkValue=long2eta ETA LongConveyor2
+linkValue=long3eta ETA LongConveyor3
+;** Const **
+Const=sync1SendTime 650000
+Const=sync2SendTime 550000
+Const=sync3SendTime 650000
+;** Value **
+Value=errorCode 0
+Value=simulate 0
+Value=goSync 0
+Value=minETA 999999999
+Value=waitStop 0
+Value=receiving 0
+;** Timeout **
+Timeout=receiveTime 1000000
+Timeout=waitStopTime 5000000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motor 0
+  SET goSync 0
+  TEST master = ST_RUN
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_STARTUP
+END
+
+State=ST_STARTUP
+  TEST cwStopPrev = 0
+  OR simulate = 1
+    SETSTATE ST_RUN
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RUN
+  TEST sync1 = ST_EMPTY
+  AND sync2 = ST_EMPTY
+  AND sync3 = ST_EMPTY
+  AND long1eta = 999999999
+  AND long2eta = 999999999
+  AND long3eta = 999999999
+  AND goSync = 0
+    TEST waitStop = 0
+      SET waitStop 1
+      TIMEOUT waitStopTime ST_RUN
+      SETSTATE ST_RUN
+    ELSE
+      TEST waitStopTime = 1
+        SET waitStop 0
+        SET motor 0
+      ENDTEST
+    ENDTEST
+  ELSE
+    SET waitStop 0
+    SET motor 1
+  ENDTEST
+  TEST goSync = 0
+    ;find sender
+    SET minETA 999999999
+    TEST sync1 = ST_READY
+      SET minETA long1eta
+      SET goSync 1
+    ENDTEST
+    TEST sync3 = ST_READY
+      TEST long3eta <= minETA
+        SET minETA long3eta
+        SET goSync 3
+      ENDTEST
+    ENDTEST
+    TEST sync2 = ST_READY
+      TEST long2eta <= minETA
+        SET minETA long2eta
+        SET goSync 2
+      ENDTEST
+    ENDTEST
+;    TEST goSync = 0
+;      TEST sync1 = ST_RECEIVE
+;        SET minETA long1eta
+;        SET goSync 1
+;      ENDTEST
+;      TEST sync3 = ST_RECEIVE
+;        TEST long3eta <= minETA
+;          SET minETA long3eta
+;          SET goSync 3
+;        ENDTEST
+;      ENDTEST
+;      TEST sync2 = ST_RECEIVE
+;        TEST long2eta <= minETA
+;          SET minETA long2eta
+;          SET goSync 2
+;        ENDTEST
+;      ENDTEST
+;    ENDTEST
+    SET receiving 0
+  ELSE
+    ;receive
+    TEST receiving = 0
+      TEST goSync = 1
+        TEST sync1foto = ST_LOW
+          SET receiving 1
+          SET goSync 4
+          SET receiveTime sync1SendTime
+          TIMEOUT receiveTime ST_RUN
+          SETSTATE ST_RUN
+        ENDTEST
+      ENDTEST
+      TEST goSync = 2
+        TEST sync2foto = ST_LOW
+          SET receiving 1
+          SET goSync 4
+          SET receiveTime sync2SendTime
+          TIMEOUT receiveTime ST_RUN
+          SETSTATE ST_RUN
+        ENDTEST
+      ENDTEST
+      TEST goSync = 3
+        TEST sync3foto = ST_LOW
+          SET receiving 1
+          SET goSync 4
+          SET receiveTime sync3SendTime
+          TIMEOUT receiveTime ST_RUN
+          SETSTATE ST_RUN
+        ENDTEST
+      ENDTEST
+    ELSE
+      TEST receiveTime = 1
+        SET goSync 0
+        SET receiving 0
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST cwStopPrev = 1
+  AND simulate = 0
+    SETSTATE ST_STOP
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+  TEST productChecker = ST_ERROR
+    SETSTATE ST_ERROR
+  ENDTEST
+END
+
+State=ST_ERROR
+  SET motor 0
+  SET goSync 0
+  TEST productChecker != ST_ERROR
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+    
+State=ST_STOP
+  SET motor 0
+  SET goSync 0
+  TEST cwStopPrev = 0
+  OR simulate = 1
+    SETSTATE ST_RUN
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

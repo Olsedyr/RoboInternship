@@ -1,0 +1,19 @@
+#!/bin/sh
+
+ROBOTS="305 306 307 308 309 310 311 312 313 314 315 602 701"
+
+for n in $ROBOTS ; do
+  RETVAL=`echo "" | nc -w3 localhost 1$n`
+  if [ "$RETVAL" != "" ] ; then
+      STATUSFILE=`ssh -p1$n localhost "[ -f /mnt/extras/getStatus.sh ] && echo yes && usleep 200000"`
+      if [ "$STATUSFILE" == "yes" ] ; then
+	  STATE=`ssh -p1$n localhost "/mnt/extras/getStatus.sh && usleep 200000" | grep WorkCell | awk '{print $3}'`
+	  echo -e "\e[32m $n is online! WorkCell State: $STATE"
+      else
+	  echo -e "\e[32m $n is online!"	  
+      fi
+  else
+    echo -e "\e[31m $n is offline!"
+  fi
+done
+echo -en "\e[0m"

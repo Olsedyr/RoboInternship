@@ -1,0 +1,77 @@
+BOPTCOEFFVERSION 1
+603
+
+mode 21 pathtype 23 :
+pathName home_floor
+def.fromFrame home
+def.toFrame placeA
+def.toItem FervaTest
+viatype END
+via2pos.y c=300.0000
+via2vel.y c=-300.0000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.3000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 samplerate=25.0000 timefactor=1.0000
+
+mode 21 pathtype 24 :
+pathName floor_place
+def.fromFrame placeA
+def.toFrame placeB
+def.fromItem FervaTest
+def.toItem FervaTest
+viatype BOTH
+via1pos.y c=300.0000
+via1vel.y c=170.0000
+via1pos.w r=20.00
+via1vel.w r=30.00
+via2pos.y c=300.0000
+via2vel.y c=-170.0000
+via2pos.w r=-20.00
+via2vel.w r=30.00
+macro1 type=FASTUPLINE positionhint=1 length=200.0000 time=0.600
+macro2 type=FASTDOWNLINE length=200.0000 time=0.600
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.0000 b=2.2000 c=3.5000 d=4.0000 e=4.5000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 21 pathtype 44 :
+pathName floor_pick
+def.fromFrame placeB
+def.toFrame placeA
+def.fromItem FervaTest
+def.toItem FervaTest
+viatype BOTH
+via1pos.y c=300.0000
+via1vel.y c=170.0000
+via1pos.w r=20.00
+via1vel.w r=30.00
+via2pos.y c=300.0000
+via2vel.y c=-170.0000
+via2pos.w r=-20.00
+via2vel.w r=30.00
+macro1 type=FASTUPLINE positionhint=1 length=200.0000 time=0.600
+macro2 type=FASTDOWNLINE length=200.0000 time=0.600
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.0000 b=2.2000 c=3.5000 d=4.0000 e=4.5000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 21 pathtype 43 :
+pathName floor_home
+def.fromFrame placeA
+def.toFrame home
+def.fromItem FervaTest
+viatype START
+via1pos.y c=300.0000
+via1vel.y c=300.0000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.5000 b=2.5000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=25.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 21 pathtype 16 :
+pathName home_home
+def.fromFrame homeHigh
+def.toFrame home
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 timefactor=1.2000

@@ -1,0 +1,56 @@
+STATEMACHINEVERSION 3
+Name=BendConveyor
+;** Input **
+Input=tripped "Bend Conveyor Motor Tripped"
+;** Output **
+Output=motor "Bend Conveyor Motor"
+;** Link **
+Link=master AccumulatingConveyor
+;** linkValue **
+;** Const **
+;** Value **
+;** Timeout **
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motor 0
+  TEST master = ST_RUN
+  OR master = ST_ACCUMULATE
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_RUN
+END
+
+State=ST_RUN
+  TEST master = ST_RUN
+  OR master = ST_ACCUMULATE
+    SET motor 1
+  ELSE
+    SETSTATE ST_STOP
+  ENDTEST
+  TEST master = ST_IDLE
+  OR tripped = 1
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STOP
+  TEST master = ST_RUN
+  OR master = ST_ACCUMULATE
+    SETSTATE ST_RUN
+  ELSE
+    SET motor 0
+  ENDTEST
+  TEST master = ST_IDLE
+  OR tripped = 1
+    SETSTATE ST_IDLE
+  ENDTEST
+END

@@ -1,0 +1,249 @@
+STATEMACHINEVERSION 3
+Name=Program313
+;signal to WorkCell that a new program has been selected
+Value=usersection 0
+Value=newprogram 1
+Value=programidx 1
+Value=casekind 0
+Link=workcell WorkCell
+Value=usersection 0
+Value=casekind 0
+Value=wALayer 0
+Value=wBLayer 0
+Value=wAItemsPerLayer 0
+Value=wBItemsPerLayer 0
+Value=timeInPalletB 0
+
+; casekind = 0  -> none
+; casekind = 1  -> C11
+; casekind = 2  -> C14
+; casekind = 3  -> C18
+; casekind = 4  -> hybschA
+; casekind = 5  -> hybschB
+; casekind = 6  -> Netto
+; casekind = 7  -> EPS610
+; casekind = 8  -> IFCO16
+; casekind = 9  -> IFCO18
+; casekind = 10 -> IFCO20
+; casekind = 11 -> FervaA
+; casekind = 12 -> FervaTest
+; casekind = 13 -> KKA
+
+; Put programstates in top
+
+; also edit 'subPrograms' for example VendePattern and PushPattern for particular program
+
+State=PROGRAM_C11
+	SET usersection 0
+	SET newprogram 1
+	SET casekind 1
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET wALayer 0
+	SET wBLayer 11
+	SET timeInPalletB 0
+	SETSTATE ST_RUNNING_C11
+END
+
+State=PROGRAM_C18
+	SET usersection 0
+	SET newprogram 1
+	SET casekind 3
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET wALayer 0
+	SET wBLayer 9
+	SET timeInPalletB 0
+	SETSTATE ST_RUNNING_C18
+END
+
+State=PROGRAM_NETTO
+	SET usersection 0
+	SET newprogram 1
+	SET casekind 6
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET wALayer 0
+	SET wBLayer 9
+	SET timeInPalletB 300000
+	SETSTATE ST_RUNNING_NETTO
+END
+
+State=PROGRAM_IFCO16
+	SET usersection 0
+	SET newprogram 1
+	SET casekind 8
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET wALayer 0
+	SET wBLayer 10
+	SET timeInPalletB 300000
+	SETSTATE ST_RUNNING_IFCO16
+END
+
+State=PROGRAM_IFCO18
+	SET usersection 0
+	SET newprogram 1
+	SET casekind 9
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET wALayer 0
+	SET wBLayer 9
+	SET timeInPalletB 300000
+	SETSTATE ST_RUNNING_IFCO18
+END
+
+State=PROGRAM_IFCO20
+	SET usersection 0
+	SET newprogram 1
+	SET casekind 10
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET wALayer 0
+	SET wBLayer 9
+	SET timeInPalletB 300000
+	SETSTATE ST_RUNNING_IFCO20
+END
+
+State=PROGRAM_KKA
+	SET usersection 0
+	SET newprogram 1
+	SET casekind 13
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+	SET wALayer 0
+	SET wBLayer 5
+	SET timeInPalletB 500000
+	SETSTATE ST_RUNNING_KKA
+END
+
+State=PROGRAM_B1
+	SET usersection 0
+	SET newprogram 1
+	SET wBItemsPerLayer 2
+	SET usersection 1 ; user editable below
+  SET casekind 5
+	SET wALayer 0
+	SET wBLayer 9
+	SET timeInPalletB 300000
+	SETSTATE ST_RUNNING_B1
+END
+
+; RUNNING STATES
+
+State=ST_RUNNING_C11
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 0
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_C18
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 1
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_NETTO
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 2
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_IFCO16
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 3
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_IFCO18
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 4
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_IFCO20
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 5
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_KKA
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 6
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_B1
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 7
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_C11
+  ENDTEST
+  TEST programidx = 1
+    SETSTATE PROGRAM_C18
+  ENDTEST
+  TEST programidx = 2
+    SETSTATE PROGRAM_NETTO
+  ENDTEST
+  TEST programidx = 3
+    SETSTATE PROGRAM_IFCO16
+  ENDTEST
+  TEST programidx = 4
+    SETSTATE PROGRAM_IFCO18
+  ENDTEST
+  TEST programidx = 5
+    SETSTATE PROGRAM_IFCO20
+  ENDTEST
+  TEST programidx = 6
+    SETSTATE PROGRAM_KKA
+	ENDTEST
+  TEST programidx = 7
+    SETSTATE PROGRAM_B1
+	ENDTEST
+END

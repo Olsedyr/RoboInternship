@@ -1,0 +1,194 @@
+STATEMACHINEVERSION 2
+Name=Sektor22
+Delaystop=10000000
+Input=0,Input0 "Sektor22 Input0" 
+Input=1,Input1 "Sektor23 Foto2"
+Input=2,Input2 "Sektor22 Input2"
+Input=3,Input3 "Sektor22 Input3"
+Input=4,Input4 "Sektor22 Input4"
+Input=5,Input5 "Sektor22 Input5"
+Input=6,Input6 "Sektor22 Input6"
+Input=7,Input7 "Sektor22 Input7"
+Output=0,Output0 "Sektor22 Output0"
+Output=1,Output1 "Sektor22 Output1"
+Output=2,Output2 "Sektor22 Output2"
+Output=3,Output3 "Sektor22 Output3"
+Output=4,Output4 "Sektor22 Output4"
+Link=0,Sektor23
+Link=3,Sektor21
+Link=1,Sektor35a
+Link=4,Sektor34
+Link=2,Sektor40
+Timeout=0,StopDelay 60000
+Timeout=1,PushTimeout 2500000
+Timeout=2,TimeInTest 1000000
+Timeout=3,EmptyDelay 500000
+
+;Type=STM_RB_DBSHIFT
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+
+State=0,ST_IDLE
+  SET Output0 0
+  SET Output1 0
+  SET Output2 0
+  SET Output3 0
+  SET Output4 0
+  END
+
+State=1,ST_READY
+  TEST Input0 = 0
+    SETSTATE ST_EMPTY
+  ELSE
+    TIMEOUT TimeInTest ST_TEST
+    SETSTATE ST_TEST
+  ENDTEST
+  TEST Sektor21 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=2,ST_SEND
+  TEST Sektor23 = ST_READY
+  OR Input1 = 1
+    TIMEOUT EmptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ELSE 
+    SET Output0 1
+  ENDTEST
+  END
+
+State=3,ST_SHIFT_RIGHT
+  TEST Sektor35a = ST_EMPTY_SHIFT
+    SETSTATE ST_DOWN_SHIFT_RIGHT
+    SET Output2 1
+  ENDTEST
+  END
+
+State=4,ST_SHIFT_LEFT
+  TEST Sektor40 = ST_EMPTY_SHIFT
+    SETSTATE ST_DOWN_SHIFT_LEFT
+    SET Output1 1
+  ENDTEST
+  END
+
+State=5,ST_DOWN_SHIFT_RIGHT
+  TEST Input5 = 1
+    TIMEOUT PushTimeout ST_PUSH_SHIFT_RIGHT
+    SETSTATE ST_TIMER
+    SET Output4 1
+  ENDTEST
+  END
+
+State=6,ST_DOWN_SHIFT_LEFT
+  TEST Input7 = 1
+    TIMEOUT PushTimeout ST_PUSH_SHIFT_LEFT
+    SETSTATE ST_TIMER
+    SET Output3 1
+  ENDTEST
+  END
+
+State=7,ST_PUSH_SHIFT_RIGHT
+  SET Output4 0
+  SETSTATE ST_EMPTY_SHIFT
+  END
+
+State=8,ST_PUSH_SHIFT_LEFT
+  SET Output3 0
+  SETSTATE ST_EMPTY_SHIFT
+  END
+
+State=9,ST_EMPTY_SHIFT
+  TEST Input4 = 1
+  AND Input6 = 1
+    SET Output1 0
+    SET Output2 0
+    TIMEOUT EmptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ENDTEST
+  END
+
+State=10,ST_EMPTY
+  TEST Input0 = 1
+    SETSTATE ST_READY
+  ENDTEST
+  TEST Sektor21 = ST_READY
+  OR Sektor21 = ST_SEND
+    SETSTATE ST_RECIEVE
+  ELSE
+    SET Output0 0
+  ENDTEST
+  TEST Sektor21 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=11,ST_STOP
+  TEST Input0 = 1
+    SET Output0 0
+    TIMEOUT TimeInTest ST_TEST
+    SETSTATE ST_TEST
+  ENDTEST
+  TEST Sektor21 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=12,ST_TEST
+  TEST Input0 = 0  
+    SETSTATE ST_EMPTY
+  ELSE 
+    TEST TimeInTest = 1
+      SETSTATE ST_FORDEL
+    ELSE
+      TEST Input2 = 1
+        TEST Input3 = 1
+          SETSTATE ST_FORDEL
+        ELSE
+          SETSTATE ST_SHORTCUT
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=15,ST_SHORTCUT
+  TEST Sektor35a = ST_EMPTY
+    SETSTATE ST_SHIFT_RIGHT
+  ENDTEST
+END
+
+State=14,ST_FORDEL
+  TEST Sektor23 = ST_EMPTY
+    SETSTATE ST_SEND
+  ELSE
+    TEST Sektor40 = ST_EMPTY
+      SETSTATE ST_SHIFT_LEFT
+    ENDTEST
+  ENDTEST
+  TEST Sektor21 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=13,ST_RECIEVE
+  TEST Input0 = 1
+    TIMEOUT StopDelay ST_STOP
+    SETSTATE ST_TIMER
+  ELSE
+    SET Output0 1
+  ENDTEST
+ END
+
+State=14,ST_RESET
+  TEST Input0 = 0
+    SETSTATE ST_EMPTY
+  ELSE
+    SETSTATE ST_READY
+  ENDTEST
+  END

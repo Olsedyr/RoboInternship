@@ -1,0 +1,60 @@
+STATEMACHINEVERSION 3
+Name=ProgramS1
+Link=workcell WorkCellS1
+Value=usersection 0
+Value=programidx 0
+Value=lowerWeight 0
+Value=upperWeight 0
+Const=startOffset 15
+Value=fweightSize 30 
+Value=ffweightSize 20 
+Value=productType 1
+Value=dynmodeoffset 0.0
+Value=newprogram 1
+Value=tMaxProductLength 2000000
+
+; productType = 0 -> bakker
+; productType = 1 -> poser
+
+; Put programstates in top
+
+State=PROGRAM_500_GRAMO
+	SET usersection 0
+	SET newprogram 1
+	SET productType 0
+	SET usersection 1 ; user editable below
+  SET fweightSize 30
+  SET startOffset 30
+  SET ffweightSize 20
+	SET dynmodeoffset 20.0000
+  SET tMaxProductLength 240000
+  SET lowerWeight 475
+  SET upperWeight 600
+	SETSTATE ST_RUNNING_500_GRAMO
+END
+
+State=ST_RUNNING_500_GRAMO
+	SET newprogram 0
+	TEST workcell = ST_IDLE
+	OR workcell = ST_PAUSED
+		TEST programidx != 0
+			SETSTATE ST_RESET
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+	TEST programidx = 0
+		SETSTATE PROGRAM_500_GRAMO 
+	ENDTEST
+END

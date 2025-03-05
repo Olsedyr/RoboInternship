@@ -1,0 +1,112 @@
+STATEMACHINEVERSION 3
+Include=servocardboard.statemachine
+Name=ServoCardBoard
+Link=Master CardBoardShuttle
+Link=parent Parent
+Output=home_vel "CardBoardShuttle Homevel"
+Output=home_tq "CardBoardShuttle Hometorque"
+Output=Mode "CardBoardShuttle Mode"
+Output=setpoint "CardBoardShuttle MacSetpoint"
+Output=vsoll "CardBoardShuttle Maxvel"
+Output=asoll "CardBoardShuttle Maxacc"
+Output=set_curpos "CardBoardShuttle Curpos"
+Output=kvout "CardBoardShuttle Load Factor"
+Output=set_status "CardBoardShuttle Status"
+Input=temperature "CardBoardShuttle Temperature"
+Input=Inpos "CardBoardShuttle IN_POS"
+Input=curpos "CardBoardShuttle Curpos"
+Input=curtorque "CardBoardShuttle Curtorque"
+Input=homedone "CardBoardShuttle HOME_DONE"
+Input=status "CardBoardShuttle Status"
+Input=ShuttleUp "CardBoardShuttle ReadUp"
+Value=errorCode 0
+Value=simulate 0
+Value=curpm 0.0
+Value=homed 0
+Value=temp 0
+Const=loadfactor 3.6000
+Const=home_speed 500.0000
+Const=home_torque 100.0000
+Const=acceleration 7000.0000
+Const=cruise_speed 3000.0000
+Const=testmode 0
+Value=teststate 0
+Value=distance 0.0
+Value=startpos 0.0
+Value=goIdle 0
+Value=moveIsSafe 0
+Const=overrideSafe 0
+; tickspermotorround*gearudveksling/(eff_rad*2*pi)
+; eks: 8000*10.9/(27.5*2*pi)
+Const=tickspermm 504.6658559132
+; All posXX in mm.
+Const=posHome -3000.0000
+Const=posPick -4500.0000
+Const=posPlace -3150.0000
+Const=posPick2 -1750.0000
+Const=posPlace2 -117.0000
+Const=posDiscard -4740.0000
+Const=posTestBegin -200.0000
+Const=posTestEnd -1000.0000
+Timeout=TimeTest 5000000
+Timeout=TimeCmdDelay 500000
+Timeout=TimeStartMax 1000000
+Timeout=TimeHome 60000000
+
+State=ST_CHOOSETRACK
+	TEST Master = ST_IDLE
+  AND testmode = 0
+    SET goIdle 1
+		CALC setpoint = tickspermm * posHome
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+	ELSETEST Master = ST_BEGINHOME
+  AND ShuttleUp = 1
+		CALC setpoint = tickspermm * posHome
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+  ELSETEST Master = ST_BEGINPICK1
+  AND ShuttleUp = 1
+		CALC setpoint = tickspermm * posPick
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+  ELSETEST Master = ST_BEGINPLACE1
+  AND ShuttleUp = 1
+		CALC setpoint = tickspermm * posPlace
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+	ELSETEST Master = ST_BEGINPICK2
+  AND ShuttleUp = 1
+		CALC setpoint = tickspermm * posPick2
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+	ELSETEST Master = ST_BEGINPLACE2
+  AND ShuttleUp = 1
+		CALC setpoint = tickspermm * posPlace2
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+	ELSETEST Master = ST_BEGINDISCARD
+	AND ShuttleUp = 1
+		CALC setpoint = tickspermm * posDiscard
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+	ELSETEST testmode = 1
+  AND ShuttleUp = 1
+		TIMEOUT TimeTest ST_TEST
+		SETSTATE ST_TEST
+	ENDTEST
+END

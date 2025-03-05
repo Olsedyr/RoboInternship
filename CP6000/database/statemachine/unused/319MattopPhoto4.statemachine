@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=MattopPhoto4
+Input=input "Mattop In4"
+Timeout=TimeOn 100000
+Timeout=TimeOff 500000
+Value=test 0
+Const=active 0

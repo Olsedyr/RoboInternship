@@ -1,0 +1,105 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut
+Input=RollerInPlace "Ruller Reed"
+Output=Roller "Ruller Cyl"
+Link=parent Parent
+Link=prev Rotator
+Link=Robot Robot
+linkValue=pathtype pathtype Robot
+linkValue=axis_t axis_t Robot
+Value=simulate 0
+Value=gotProd 0
+Timeout=TimeRec 100000
+Timeout=TimeGoBack 1150000
+Timeout=TimePreReadyRobot 400000
+Const=RobotAway 200000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST gotProd = 0
+		SET Roller 0
+	ELSE
+		SET Roller 1
+	ENDTEST
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	TEST gotProd = 0
+		SET Roller 0
+		SETSTATE ST_FIND_ITEM
+	ELSE
+		SET Roller 1
+		SETSTATE ST_READY_ROBOT
+	ENDTEST
+END
+
+State=ST_FIND_ITEM
+	SET Roller 0
+	TEST prev = ST_RUN
+		TIMEOUT TimeRec ST_RECEIVE
+		SETSTATE ST_RECEIVE
+	ENDTEST
+	TEST parent = ST_IDLE
+		SET gotProd 0
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_RECEIVE
+	TEST TimeRec = 1
+		SET Roller 1
+		TIMEOUT TimePreReadyRobot ST_WAITROLLER
+		SETSTATE ST_WAITROLLER
+	ENDTEST
+END
+
+State=ST_WAITROLLER
+	TEST RollerInPlace = 1
+	OR TimePreReadyRobot = 1
+		SET gotProd 1
+	  TEST axis_t > 900000
+		   SETSTATE ST_READY_ROBOT
+    ENDTEST
+	ENDTEST
+END
+
+State=ST_READY_ROBOT
+	TEST pathtype = 24
+	AND axis_t <= 900000
+		SET gotProd 1
+		SETSTATE ST_WAIT_ROBOT_GONE
+  ENDTEST
+  TEST parent = ST_IDLE
+		SET gotProd 1
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_ROBOT_GONE
+  TEST pathtype = 24
+	AND axis_t > RobotAway
+    TEST simulate = 0
+			SET Roller 0
+			SET gotProd 0
+      TIMEOUT TimeGoBack ST_FIND_ITEM
+			SETSTATE ST_TIMER
+		ELSE
+			SET gotProd 1
+      SETSTATE ST_READY_ROBOT
+    ENDTEST
+  ENDTEST
+  TEST Robot != ST_RUNNING
+    TEST parent = ST_IDLE
+			SET gotProd 1
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END

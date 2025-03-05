@@ -1,0 +1,282 @@
+STATEMACHINEVERSION 3
+Name=PindeTjekker400
+;Input=ex1 "PindeTjekker400 Extern Sync 1"
+;Input=ex2 "PindeTjekker400 Extern Sync 2"
+Output=motor "PindeTjekker400 Motor"
+Output=motor1 "Kasse Ud 6 Motor"
+;Output=motor1 "PindeTjekker400 Motor"
+Output=pushup "PindeTjekker400 Push Up Ventil"
+Output=pushin "PindeTjekker400 Push In Ventil"
+Output=pushout "PindeTjekker400 Push Out Ventil"
+Output=squeezer "PindeTjekker400 Squeezer Ventil"
+Output=stopper "PindeTjekker400 Case Stopper Ventil"
+Link=foto PindeTjekker400Foto
+Link=prev KasseUd5
+Link=next ConveyorOut
+linkValue=casekind Program
+Value=recv1 1
+Timeout=squeezeTime 600000
+Timeout=pushupTime 1300000
+Timeout=pushinTime 800000
+Timeout=stopperTime 500000
+Timeout=motorStopTime 200000
+Timeout=maxSendTime 15000000
+Timeout=freeTime 10000
+Timeout=maxReceiveTime 15000000
+Value=errorCode 0
+Link=parent Parent
+Const=simulate 0
+Const=maxPushIn 2
+Const=maxPushUp 2
+Value=pushInNum 0
+Value=pushUpNum 0
+
+;casekind = 6  -> Netto
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET motor 0
+  SET motor1 0
+  SET pushup 0
+  SET pushin 0
+  SET pushout 0
+  SET squeezer 0
+  SET stopper 0
+  TEST parent = ST_RESET
+;  OR simulate = 1
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST foto = ST_BLOCKED
+    SETSTATE ST_STARTUP
+  ELSE
+    SETSTATE ST_EMPTY
+  ENDTEST
+END
+
+State=ST_STARTUP
+  TEST casekind = 6
+    SET stopper 1
+    TIMEOUT stopperTime ST_STARTUP2
+    SETSTATE ST_STARTUP2
+  ELSE
+    SETSTATE ST_WAIT_SEND
+  ENDTEST
+END
+
+State=ST_STARTUP2
+  TEST stopperTime = 1
+    TEST casekind = 6
+      SET motor 1
+      SET motor1 1
+      SET pushout 1
+      SET squeezer 1
+      TIMEOUT squeezeTime ST_SQUEEZING
+      SETSTATE ST_SQUEEZING
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST prev = ST_SEND
+  ;OR ex1 = 1
+;  OR simulate = 1
+    SET motor 1
+    SET motor1 1
+    TIMEOUT maxReceiveTime ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSE
+    SET motor 0
+    SET motor1 0
+  ENDTEST
+;  TEST foto = ST_BLOCKED
+;    SET motor 1
+;    SET motor1 1
+;    TIMEOUT maxReceiveTime ST_RECEIVE
+;    SETSTATE ST_RECEIVE    
+;  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST casekind = 6
+    SET stopper 1
+  ELSE
+    SET stopper 0
+  ENDTEST
+  TEST foto = ST_BLOCKED
+    TEST casekind = 6
+;    OR simulate = 1
+      SET motor 1
+      SET motor1 1
+      SET pushout 1
+      TIMEOUT stopperTime ST_STOPPING_CASE
+      SETSTATE ST_STOPPING_CASE
+    ELSE
+      SET motor 0
+      SET motor1 0
+      SETSTATE ST_WAIT_SEND
+    ENDTEST
+  ENDTEST
+  TEST maxReceiveTime = 1
+    SET errorCode 4116
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STOPPING_CASE
+  TEST stopperTime = 1
+    SET squeezer 1
+    TIMEOUT squeezeTime ST_SQUEEZING
+    SETSTATE ST_SQUEEZING
+  ENDTEST
+END
+
+State=ST_SQUEEZING
+  TEST squeezeTime = 1
+    SET motor 0
+    SET motor1 0
+    TIMEOUT motorStopTime ST_STOPPING_MOTOR
+    SETSTATE ST_STOPPING_MOTOR
+  ENDTEST
+END
+
+State=ST_STOPPING_MOTOR
+  TEST motorStopTime = 1
+    SET pushup 1
+    TIMEOUT pushupTime ST_PUSHING_UP
+    SETSTATE ST_PUSHING_UP
+  ENDTEST
+END
+
+State=ST_PUSHING_UP
+  TEST pushupTime = 1
+    CALC pushUpNum = pushUpNum + 1
+    TEST pushUpNum >= maxPushUp
+      SET pushout 0
+      SET pushin 1
+      SET pushUpNum 0
+      TIMEOUT pushinTime ST_PUSHING_IN
+      SETSTATE ST_PUSHING_IN
+    ELSE
+      SET pushup 0
+      TIMEOUT pushupTime ST_PUSH_UP_BACK_EXTRA
+      SETSTATE ST_PUSH_UP_BACK_EXTRA
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_PUSH_UP_BACK_EXTRA
+  TEST pushupTime = 1
+    SET pushup 1
+    TIMEOUT pushupTime ST_PUSHING_UP
+    SETSTATE ST_PUSHING_UP
+  ENDTEST
+END
+
+State=ST_PUSHING_IN
+  TEST pushinTime = 1
+    CALC pushInNum = pushInNum + 1
+    SET pushout 1
+    SET pushin 0
+    TIMEOUT pushinTime ST_PUSH_IN_BACK
+    SETSTATE ST_PUSH_IN_BACK
+  ENDTEST
+END
+
+State=ST_PUSH_IN_BACK
+  TEST pushinTime = 1
+    TEST pushInNum >= maxPushIn
+      SET pushup 0
+      SET pushInNum 0
+      TIMEOUT pushupTime ST_PUSH_UP_BACK
+      SETSTATE ST_PUSH_UP_BACK
+    ELSE
+      SET pushout 0
+      SET pushin 1
+      TIMEOUT pushinTime ST_PUSHING_IN
+      SETSTATE ST_PUSHING_IN
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_PUSH_UP_BACK
+  TEST pushupTime = 1
+    SET squeezer 0
+    TIMEOUT squeezeTime ST_UNSQUEEZE
+    SETSTATE ST_UNSQUEEZE
+  ENDTEST
+END
+
+State=ST_UNSQUEEZE
+  TEST squeezeTime = 1
+    SET stopper 0
+    TIMEOUT stopperTime ST_OPEN_STOPPER
+    SETSTATE ST_OPEN_STOPPER
+  ENDTEST
+END
+
+State=ST_OPEN_STOPPER
+  TEST stopperTime = 1
+    SETSTATE ST_WAIT_SEND
+  ENDTEST
+END
+
+State=ST_WAIT_SEND
+  TEST next = ST_GET
+  ;OR ex2 = 1
+    TIMEOUT maxSendTime ST_SEND
+    SETSTATE ST_SEND
+  ELSE
+    SET motor 0
+    SET motor1 0
+  ENDTEST
+  TEST foto = ST_FREE
+    SETSTATE ST_EMPTY
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST next = ST_RECEIVE
+;  OR next = ST_GET
+    SET motor 1
+    SET motor1 1
+  ENDTEST
+  TEST next != ST_RECEIVE
+  AND next != ST_GET
+    SETSTATE ST_EMPTY
+  ENDTEST
+;  TEST foto = ST_FREE
+;    TIMEOUT freeTime ST_WAIT_FREE
+;    SETSTATE ST_WAIT_FREE
+;  ENDTEST
+  TEST maxSendTime = 1
+    SET errorCode 4116
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_FREE
+  TEST freeTime = 1
+    SETSTATE ST_EMPTY
+  ENDTEST
+  TEST parent != ST_RUN
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END

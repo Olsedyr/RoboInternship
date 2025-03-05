@@ -1,0 +1,8 @@
+VERSION 1
+310ConveyorB
+dimention x=2500.0,y=-100.0,z=510.0
+transformation x=-250.0,y=500.0,z=800.0
+material diffuse r=0.2,g=0.8,b=0.2,a=1.0
+material ambient r=0.2,g=0.8,b=0.2,a=1.0
+material specular r=0.2,g=0.8,b=0.2,a=1.0
+shininess=1.0

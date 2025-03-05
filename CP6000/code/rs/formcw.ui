@@ -1,0 +1,617 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>formCW</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>formCW</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>799</width>
+            <height>599</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="baseSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="paletteBackgroundColor">
+        <color>
+            <red>0</red>
+            <green>85</green>
+            <blue>255</blue>
+        </color>
+    </property>
+    <property name="caption">
+        <string>Standard Run</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>660</x>
+                <y>10</y>
+                <width>129</width>
+                <height>45</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="pixmap">
+            <pixmap>image0</pixmap>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdMenu</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>670</x>
+                <y>490</y>
+                <width>120</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Menu</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdStop</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>520</x>
+                <y>490</y>
+                <width>120</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Stop</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdRun</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>390</x>
+                <y>490</y>
+                <width>120</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Kør</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>250</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>checkWeigher CW5000</string>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter</set>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>Lower</cstring>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>520</y>
+                <width>170</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>440</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>Upper</cstring>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>180</x>
+                <y>520</y>
+                <width>170</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>550</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2_2_3</cstring>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>480</y>
+                <width>340</width>
+                <height>36</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>Nedre &lt; Vægt &lt; Øvre</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox1_2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>60</y>
+                <width>780</width>
+                <height>420</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Information</string>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>labTime</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>620</x>
+                    <y>370</y>
+                    <width>140</width>
+                    <height>40</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShape">
+                <enum>Box</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>00:00:00</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>labWeight</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>60</y>
+                    <width>740</width>
+                    <height>180</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>00:00:00</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>laberror1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>240</y>
+                    <width>740</width>
+                    <height>36</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>ERROR</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>labworkcellstate</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>20</y>
+                    <width>740</width>
+                    <height>35</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>Information type</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>labinfo</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>320</y>
+                    <width>740</width>
+                    <height>35</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>message</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>laberror2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>280</y>
+                    <width>740</width>
+                    <height>36</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>ERROR</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>labWeight_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>370</y>
+                    <width>500</width>
+                    <height>38</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShape">
+                <enum>Box</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>00:00:00</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>lab1_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>530</x>
+                    <y>370</y>
+                    <width>80</width>
+                    <height>40</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Urw]</family>
+                    <pointsize>18</pointsize>
+                </font>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>Tid:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+    </widget>
+</widget>
+<images>
+    <image name="image0">
+        <data format="XPM.GZ" length="13327">789ced98db52db481040dff90a17fd96daea20d992addada0793907b02242121d9da87d1c5773b608c016fedbf6f6bba35c848328a319badb2e82accd1f4dc8e6646c24f9fd44e8fded79e3cddb998a9593fa8053d35ad3d092fc7e39b3ffffae3ef9d5dcbf66a0da7e6d56bf6ee6f3bbbc7b35a50833dfd13334e995b61106a5e686e7996f0fb98ad3dc32f841de16709878ee6b79a5b86af843de1f398ed3dc333e150f846b367d8675696701473dd32fc4138e9afa7d9337c22acc248f361cc0dcb705f3812569a55c2a0c7e7d8ce9ea3fdc199b0c38c1366df967c3d5f47399ea374f980d977a5fc2266d7762d97eb7f63f693f1bc4e387275be1e9fab5ccfd5edc1a570c88c2f99fd48f2f5fc9bf5a6d5ac6bee0a3bccf88939c9c70be6c096fa63cd7ed36bfa9acf8543661c3227f9f85dd895fad731b7ea2dabc5fd0f841d660c9983647e3f34fb2dafc5fd8d844366fcc89ce4e367c3ec4bea0791f051cc5ec3b0a339f0422fd07ccc1cda5c0e7abdab86b25443735bd861c61173e84abe5e9f2a504ae9f660281c31e33be630199f1db3dff06d9fdb9f08bbccf88ad9e43f178e3aec67ae39f495aff71b4c8523663c654ef2f12b73644b7dbd9e0327b003de0f2d6157789f39c9c740d895facc61a064bf378423e13673928f67c24ad88d3974429bf723f8c2aeeccf31b3c9bf144ee663698e42d91f80c2c97e9d33537e477387b9633303c41cb951b25eebc2b25eb1cb9ce4e3176157b8a9398ae4fe40249cacaf6b6693bf27aca47fbdde3b71fbecb3239cf83a10967c7c23dc11f634774c39084bf9f16cdb832d206c7354162a0b9585ca4265a1b25059a82cac6141a15f2282548db0447e841dcaec966a9ba3877d1ce0104738be33eac9bd757f2ce59f1564adb2708ed3127191aa312b55e39232e7a532b3714536ae4d7f37f7e62fb09d1adf7e41d6c32d4426bf5d72260fb110c7337c5edac294eef4c17f60614aab9bf3871bb2c0abf4c58a8c05adedb216a6f8f2112c5c65ae8c24dfcf8c75b196055ef107f82aa7af24263f61616ad6cee62c64eff840678f33d75f17cca29c853846853957f8e6272c5c499b9bb3b08f6f337d1ce8e74336f3a116de15e6bcd77d96b590dca9cd5968d353e1eeb578977eb8732da2713eccc2011e16e69cafd811f957471bb6905dfb61ceac8ea885f52c1cd38847f83173cea4e3d30a0b9fe94d277bf519bda76cd202d07bccf2b5137a3b59beb2c02f6b5bb83f6e64bde45b38a2a7d6dd5d1bc7217edda885e3cc9cefde373ec31fc78232cfe6220b404f85bc92c9462d5cd3e9b47aa4a78f606141efa6af97ded88b2d00bd25946f793d0b80df56b63ad3cfb1752d8ce8d9b01ccf692d8f53cf8e32160ee87c7e6c0b45e70cc77769e1a14fcafb629585f80d26ffad6d7316563fabe7ff0b0bd9f36bf3163e16b679685af8d516a0f03cdc94856ee17a1b99167ebd85eb52ff13aeb270422d64e3f69b8e416e7994fa4fb697533ed3fba59b5b9763afb485c3dcfaa3a59c7deab1b82f8e5516b630b6d4828536d6b7de42031d744b5a68622b95eb01626c719975d08f4a950095b4c02f2a4d070494191aa6de20826c9e17d787884694ed3b04754b5807f35d2074d2a388c74e65ba267dbad466090be04397c67f3b97087af4bb0f9dc411744dd980fa1b82399f600c93dbb9c080c639841fd93ea8ec8c4acc390553caeddfce23957741b31d27ab98c762fa768c1d4007a6a93a08432a4db80f3d9ad179b6f51516a630a28f59e28c46d18f5b360e972d58b1b59485e1eddda799f954decdf6416533f295faa69dcc07b979015ca62ca72cd0dd9dc723cbb170456375c13c81e19246d1fb390bdac30d2c523c2756863a30377f2b68d379e3a532dbc5a54be1509ba9554bb9392b4132cdce59ea3ba0d65b26cb4ded0e8bda6e9bb50b30a131b4609a6d7b4b4fc7ca4265a1b25059a82c54162a0b9585352d6c7becfef3fbcebf0b10757f</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

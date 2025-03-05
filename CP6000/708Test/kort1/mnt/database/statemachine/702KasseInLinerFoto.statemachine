@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=KasseInLinerFoto
+Input=input "KasseInLiner Foto"
+Timeout=TimeOn 800000
+Timeout=TimeOff 700000
+Value=test 0
+Link=parent Parent

@@ -1,0 +1,81 @@
+STATEMACHINEVERSION 3
+Name=Wrapper
+Input=nextIsEmpty "Sync In 2"
+Output=palletIsReady "Sync Out 2"
+Const=nextIsEmptyPol 1
+Const=palletIsReadyPol 1
+Link=prev Pallebane9
+Link=parent Parent 
+Timeout=maxReceiveTime 10000000
+Value=message 0
+Value=temp 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST parent = ST_RESET
+    SETSTATE ST_READY
+  ENDTEST
+END
+
+;wrapper is full
+State=ST_READY
+  TEST prev = ST_READY
+    SET palletIsReady palletIsReadyPol
+  ELSE
+    CALC temp = 1 - palletIsReadyPol 
+    SET palletIsReady temp
+  ENDTEST
+  TEST nextIsEmpty = nextIsEmptyPol
+    SET message 0
+    SETSTATE ST_EMPTY
+  ELSE
+    SET message 2207
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+;wrapper is empty
+State=ST_EMPTY
+  TEST prev = ST_READY
+    SET palletIsReady palletIsReadyPol
+  ELSE
+    CALC temp = 1 - palletIsReadyPol 
+    SET palletIsReady temp
+  ENDTEST
+  TEST nextIsEmpty != nextIsEmptyPol
+    SET message 2207
+    SETSTATE ST_READY
+  ELSE
+    SET message 0
+    TEST prev = ST_SEND
+      TIMEOUT maxReceiveTime ST_RECEIVE
+      SETSTATE ST_RECEIVE
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST nextIsEmpty != nextIsEmptyPol
+    SET message 2207
+  ELSE
+    SET message 0
+  ENDTEST
+  TEST nextIsEmpty != nextIsEmptyPol 
+  OR maxReceiveTime = 1
+    SETSTATE ST_READY
+  ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_READY
+END

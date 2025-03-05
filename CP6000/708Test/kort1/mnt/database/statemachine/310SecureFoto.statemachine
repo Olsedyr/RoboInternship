@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=SecureFoto
+Input=input "Pallebane3 FotoSecure"
+Timeout=TimeOn 600000
+Timeout=TimeOff 100000
+Value=test 0

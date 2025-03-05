@@ -1,0 +1,124 @@
+STATEMACHINEVERSION 3
+Name=WorkCell
+Link=Emergency
+Link=ContinueKnap
+Link=ErrorCode
+; Statemachines with output, that should be tested for ST_IDLE
+; find them with 'grep -l "Output=" 7XX*.statemachine'
+Link=BufferPlads
+Link=KasseInLiner
+Link=KasseLift
+Link=LangBufferSkub
+Link=PIDBuffer
+Link=PIDLift
+Link=PIDSkub
+Link=ProductConveyors
+Link=extra1 ProductConveyors
+linkValue=newprogram Program
+Value=errorCode 0
+Value=firstRun 0
+Value=doFakeProducts 0
+Timeout=timeBeforeRunning 3000000
+Timeout=timeBeforePausing 2000000
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET errorCode 0
+  TEST ContinueKnap = ST_HIGH
+    TIMEOUT timeBeforeRunning ST_STARTING
+    SETSTATE ST_STARTING
+  ENDTEST
+END
+
+State=ST_STARTING
+  SET firstRun 1
+	TEST timeBeforeRunning = 1
+		SETSTATE ST_RUNNING
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_RESTARTING
+  SET firstRun 0
+	TEST timeBeforeRunning = 1
+		SETSTATE ST_RUNNING
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_RUNNING
+  TEST ContinueKnap = ST_HIGH
+    TIMEOUT timeBeforePausing ST_PAUSING
+    SETSTATE ST_PAUSING
+  ENDTEST
+	TEST ErrorCode = ST_ERROR
+		TIMEOUT timeBeforePausing ST_PAUSING
+    SETSTATE ST_PAUSING
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_STOPPING
+  SETSTATE ST_IDLE
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_PAUSING
+	; dont test for trafficlight :-)
+	TEST timeBeforePausing = 1
+	AND BufferPlads = ST_IDLE
+	AND KasseInLiner = ST_IDLE
+  AND KasseLift = ST_IDLE
+	AND LangBufferSkub = ST_IDLE
+	AND PIDBuffer = ST_IDLE
+	AND PIDLift = ST_IDLE
+	AND PIDSkub = ST_IDLE
+	AND ProductConveyors = ST_IDLE
+  AND extra1 = ST_IDLE
+		SETSTATE ST_PAUSED
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SET errorCode 203
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_PAUSED
+	TEST newprogram = 1
+		SETSTATE ST_IDLE
+	ELSE
+		TEST ContinueKnap = ST_HIGH
+      SET firstRun 0
+			TIMEOUT timeBeforeRunning ST_RESTARTING
+			SETSTATE ST_RESTARTING
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_ERROR
+  TEST ContinueKnap = ST_HIGH
+		SET errorCode 0
+    TIMEOUT timeBeforeRunning ST_STARTING
+    SETSTATE ST_STARTING
+  ENDTEST
+END
+
+State=ST_RESET
+END
+
+State=ST_TIMER
+END

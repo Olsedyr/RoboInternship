@@ -1,0 +1,2 @@
+/home/luz/Desktop/CP6000/database
+708system.ini

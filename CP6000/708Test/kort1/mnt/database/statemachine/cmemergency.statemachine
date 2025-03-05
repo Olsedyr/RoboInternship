@@ -1,0 +1,4 @@
+STATEMACHINEVERSION 3
+Include=emergency.statemachine
+Name=Emergency
+Const=errorCode101 107

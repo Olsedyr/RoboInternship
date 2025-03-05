@@ -1,0 +1,6 @@
+STATEMACHINEVERSION 3
+Include=cpworkcell.statemachine
+Name=WorkCell
+Link=KasseInLiner KasseInLiner3
+Link=ProductConveyors ProductConveyors3
+;** User section **

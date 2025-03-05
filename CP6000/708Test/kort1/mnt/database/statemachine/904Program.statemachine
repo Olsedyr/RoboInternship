@@ -1,0 +1,45 @@
+STATEMACHINEVERSION 3
+Name=Program904
+;signal to WorkCell that a new program has been selected
+Value=usersection 0
+Value=newprogram 1
+Value=programidx 0
+Link=workcell WorkCell
+Value=usersection 0
+; Put programstates in top
+
+; also edit 'subPrograms' for example VendePattern and PushPattern for particular program
+
+State=PROGRAM_SHUTTLE
+  SET usersection 0
+  SET newprogram 1
+  SET usersection 1 ; user editable below
+  SETSTATE ST_RUNNING_SHUTTLE
+END
+; RUNNING STATES
+
+State=ST_RUNNING_SHUTTLE
+  SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 0
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_SHUTTLE
+  ENDTEST
+END

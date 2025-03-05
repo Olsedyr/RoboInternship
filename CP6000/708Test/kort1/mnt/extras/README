@@ -1,0 +1,7 @@
+This directory contain extra libs and scripts for the panelpc.
+
+mountmil: a script to nfsmount /home/mil/sandbox on 192.168.0.11 (Mads' host).
+mountmillaptop: a script to nfsmount /home/mil/sandbox on 192.168.0.7 (Laptop).
+connect2mpn.sh: Phone home to mpnrobotics.dyndns.org
+
+

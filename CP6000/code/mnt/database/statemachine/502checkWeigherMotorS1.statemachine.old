@@ -1,0 +1,67 @@
+STATEMACHINEVERSION 3
+Name=checkWeigherMotorS1
+Input=syncIn "S1 Extern Sync In"
+Output=motor "S1 Motor"
+Output=syncOut "S1 Extern Sync Out"
+Const=stopType 0
+Const=one 1
+Link=checkWeigher checkWeigherS1
+Link=parent ParentS1
+Value=message 0
+Const=extSyncInPol 1
+Const=extSyncOutPol 1
+Value=temp 0
+Timeout=TimeStartSync 8000000
+Timeout=stopDelay 1000000
+Const=m2106 2106
+Const=m2109 2109
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_PAUSED
+  SET motor 0
+  SET syncOut extSyncOutPol
+  TEST parent = ST_RESET
+  OR checkWeigher != ST_PAUSED
+		TIMEOUT TimeStartSync ST_RUN
+    SETSTATE ST_RUN
+  ENDTEST
+END
+
+State=ST_IDLE
+  SET motor 0 
+  SET syncOut extSyncOutPol
+  TEST parent = ST_RUN
+		TIMEOUT TimeStartSync ST_RUN
+    SETSTATE ST_RUN
+  ENDTEST
+END
+
+State=ST_RUN
+  TEST checkWeigher = ST_PAUSED
+    SETSTATE ST_PAUSED
+  ELSE
+		SET motor 1
+    TEST syncIn = extSyncInPol
+;			PRINT message
+			SET message m2106
+      SET syncOut extSyncOutPol
+    ELSE
+			SET message 0
+      TEST checkWeigher = ST_WAIT_FOR_PRODUCT
+				TEST TimeStartSync = 1
+					CALC temp = 1 - extSyncOutPol
+					SET syncOut temp
+				ENDTEST 
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+

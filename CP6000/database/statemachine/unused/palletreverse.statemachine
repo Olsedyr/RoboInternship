@@ -1,0 +1,93 @@
+STATEMACHINEVERSION 3
+Name=palletreverse
+Input=palletInPlace1 "dummyOff"
+Input=palletInPlace2 "dummyOff"
+Input=palletInPlace3 "dummyOff"
+Output=MotorRev1 "dummyOut"
+Output=MotorRev2 "dummyOut"
+Output=MotorRev3 "dummyOut"
+Link=parent Parent
+Link=emergency Emergency
+Link=scissor ScissorDepalletizer3_3
+Link=pc1 PalletConveyor1
+Link=pc2 PalletConveyor2
+linkValue=reverseCommand reverseCommand scissor
+Timeout=timeReverse21 6100000
+Timeout=timeReverse32 7000000
+Value=reverseButton 0
+
+State=ST_HALT
+  SETSTATE ST_IDLE
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST reverseButton = 1
+    TEST parent = ST_IDLE
+    AND emergency = ST_POWERON
+			TEST pc1 = ST_IDLE
+			AND pc2 = ST_IDLE
+			AND palletInPlace1 = 1
+			AND palletInPlace2 = 0
+				TIMEOUT timeReverse21 ST_REVERSE2
+				SETSTATE ST_REVERSE2
+			ELSETEST scissor = ST_IDLE
+			AND palletInPlace2 = 1
+				SETSTATE ST_REVERSE3
+			ELSE
+				SET reverseButton 0
+			ENDTEST
+    ELSE
+			SET reverseButton 0
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_REVERSE3
+  TEST reverseCommand = 0
+    SET reverseCommand 1
+  ENDTEST
+  TEST reverseCommand = 2
+    TEST palletInPlace3 = 0
+    AND palletInPlace2 = 1
+      SET reverseCommand 3
+      TIMEOUT timeReverse32 ST_REVERSE3B
+      SETSTATE ST_REVERSE3B
+		ELSE
+			SET reverseButton 0
+      SET reverseCommand 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_REVERSE3B
+  TEST timeReverse32 = 1
+    SET MotorRev1 0
+    SET MotorRev2 0
+    SET MotorRev3 0
+    SET reverseButton 0
+    SET reverseCommand 0
+    SETSTATE ST_IDLE
+  ELSE
+    SET MotorRev1 0
+    SET MotorRev2 1
+		SET MotorRev3 1
+  ENDTEST
+END
+
+State=ST_REVERSE2
+  TEST timeReverse21 = 1
+    SET MotorRev1 0
+    SET MotorRev2 0
+    SET MotorRev3 0
+    SET reverseButton 0
+    SETSTATE ST_IDLE
+  ELSE
+    SET MotorRev1 1
+    SET MotorRev2 1
+    SET MotorRev3 0
+  ENDTEST
+END

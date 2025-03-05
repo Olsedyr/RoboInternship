@@ -1,0 +1,92 @@
+STATETEKSTVERSION 1
+310
+00001 Info: Kontrollierten die Hardware.
+00002 Info: Notstop eindrücken.
+00003 Info: Lösen Sie den Notstop und drücken Reset.
+00004 Info: Starten Achsen.
+00005 Info: Setzen der Anfangswert.
+00006 Info: Setzen die einheiten.
+00007 Info: Reset Achsen.
+00008 Info: Finden der Nullpunkten.
+00100 Fehler: Folgefehler.
+00101 Notstop aktiviert am KistenFüller.
+00102 Notstop aktiviert am Roboter.
+00103 Notstop aktiviert am checkWaage S1.
+00104 Notstop aktiviert am checkWaage S2.
+00105	Notstop aktiviert am checkWaage S3.
+00106 Notstop aktiviert am checkWaage S4.
+00202 Ein Fehler ist entstanden - Der Roboter ist GESTOPPED.
+00202 Durchfüren Sie bitte ein vollständiger start von die maschine.
+00203 Notstop ist während betrieb aktiviert geworden.
+00203 Durchfüren Sie bitte ein vollständiger start von die maschine.
+00204 Ein Vakuumfehler ist entstanden.
+00204 Richtigstellen der produkt und entfernen die Kiste, drück Fortsetz oder Stop.
+00214 Der Roboter hat eine Kiste verloren.
+00214 Fehler korigieren, Fortsetz oder Stop drücken.
+00215 Der Roboter ist in pause gesetz.
+00216 Ein Fehler ist entstanden - Der Roboter ist Gestopped.
+00231 Der Roboter hat die leeren Kisten verloren.
+00232 Der Roboter hat die volle Kisten verloren.
+00233 Der Roboter hat die volle Kisten nicht richtig placiert.
+01000 Fehler: Entleeren Sie bitte den KistenFüller vom produkten. 
+01001 Fehler: Es fehlen ein Palleten. Neue einlegen bitte.
+01002 Fehler: Die produkten steht seitwärts am die Schiebplatz. Richtigstellen.
+01003 Fehler: Kisten sitzen fest (Aus). Kiste raus nehmen und auf dem band stellen.
+01004 Fehler: Produkten sitzen fest in bufferplatz. Produkten entfernen.
+01005 Fehler: Produkten sitzen fest beim Schiebplatz. Produkten entfernen.
+01006 Fehler: Kisten sitzen fest (Ein). Schieb die Kiste im Kistefüller.
+01007 Fehler: Kisten steht nicht richtig am Transportband (Aus). Richtigstellen.
+01008 Fehler: Kisten steht nicht richtig am Transportband (Ein). Richtigstellen.
+01009 Fehler: Palleten (ein) steht zu dicht an ein Andere. Zurück ziehen.
+01010 Fehler: Falscher Kistentype für gewähltes program.
+01011 Fehler: Abstand zwischen Produkten sind zu klein. (KistenFüller)
+01012 Fehler: Kisten sitzt fest in dem Kistenfüller.
+01013 Fehler: Abstand zwischen Produkten sind zu klein. (Dreher)
+01014 Fehler: Kisten sitzt fest (Aus). Kiste raus nehmen bitte.
+01015 Fehler: Kisten steht nicht richtig beim KistenFüller (Aus). Richtigstellen.
+01050 Fehler: Homing-rutinen kunne ikke finde en sensor. (Schieber)
+01051 Fehler: Homing-rutinen kunne ikke finde en sensor. (Buffer)
+01052 Fehler: Homing-rutinen kunne ikke finde en sensor. (Lift)
+01053 Fehler: Homing-rutinen kunne ikke finde en sensor. (Dreher1)
+01054 Fehler: Homing-rutinen kunne ikke finde en sensor. (Dreher2)
+01055 Fehler: Entfernen Sie bitte die Produkten vor der Start.
+01070 Fehler: Inkompatible programmen für der Roboter und der KistenFüller.
+01100 Fehler: Produktband tripped
+01101 Fehler: Schieber tripped
+01102 Fehler: BufferPlatz tripped
+01103 Fehler: KistenLift tripped
+01104 Fehler: KistenInLiner tripped
+01105 Fehler: KistenLift Band tripped
+01106 Fehler: Vibrierer tripped
+01107 Fehler: Dreher1 band tripped
+01108 Fehler: Dreher1 tripped
+01109 Fehler: Dreher2 band tripped
+01110 Fehler: Dreher2 tripped
+01111 Fehler: Kurveband tripped
+01112 Fehler: Kurveband2 tripped
+01113 Fehler: Flipperband tripped
+01150 Fehler: Werkzeugtype og Programtype stimme nicht übereins.
+02000 Info: Keine Produkten aus band.
+02001 Info: Printerstop. Einsetzen vielleicht neue Rolle von Etiketten.
+02002 Info: Flowpackmaschine wird gestopped weil produkten steht zu nahe aus dem band.
+02003 Info: Flowpackmaschine wird gestopped. Keine Kisten. Warte aus der Robotter.
+02004 Fehler: Die FotoSensor auf dem checkWage wird zu lange gesperrt geworden.
+02050 Info: Datanetzverbindung felht zum anderen teile der anlage.
+02101 Fehler: Unerreichbar gewicht. Entfernen der produkt und druck kør.
+02103 Info: Waagezeit (ein) überscritten. (S1)
+02104 Info: Waagezeit (frei) überscritten. (S1)
+02105 Info: Waagezeit(wiegen) überscritten. (S1)
+02106 Info: Waagezeit(ein) overskredet. (S2)
+02107 Info: Waagezeit(frei) overskredet. (S2)
+02108 Info: Waagezeit(wiegen) overskredet. (S2)
+02109 Info: Fotosensor aus checkwaage ist zu lange aktiveirt geworden.
+03011 Fehler: Fotosensor auf TransportBand (aus) sind zu lange aktiveirt geworden. Testen vielleicht der Fotosensor.
+03012 Fehler: Der Roboter hat die leeren Kisten verloren.  Austesten vielleicht der Fotosensor.
+03013 Fehler: Palletenplatz sind leer. Austesten Fotosensoren.
+03014 Fehler: Der Pallette sitz fest. Austesten Fotosensoren.
+03015 Fehler: Robotten har tabt/fejlplaceret tomme kasser. Austesten Fotosensoren.
+30002 Findet Startposition
+30003 Sucht Kiste
+30004 Hebt Kiste
+30005 Bewegt Kiste
+30006 Zurück zum Startposition

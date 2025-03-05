@@ -1,0 +1,78 @@
+STATEMACHINEVERSION 3
+; Include
+Name=checkWeigherCalc
+Input=celldata "S1 LoadCell data"
+Input=cell1data "S1 LoadCell data"
+Input=cell1status "S1 LoadCell data"
+Value=weight 0.0 
+Table=fweight 100.0 AVG
+Table=ffweight 100.0 AVG
+Table=sampling 600.0
+Value=samplingmaxidx 0
+Value=raw 0.0
+Value=wa 0.0
+Const=scale 1.0
+Const=capture 0
+Const=sampleType 2
+Const=digital 1
+linkValue=newprogram ProgramS1
+linkValue=fweightSize ProgramS1
+linkValue=ffweightSize ProgramS1
+linkValue=dynmodeoffset ProgramS1
+linkValue=offset calibOffsetInit checkWeigherS1
+linkValue=staticmode staticmode checkWeigherS1
+; used to calculate analog input (Harndrup)
+Value=rawVolt1a 0
+Value=rawVolt1b 0
+Const=offsetVolt1 32
+Const=maxVolt1 31920 
+Value=weight1gram 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+ TEST newprogram = 1
+   SET fweight.newtablesize fweightSize
+   SET ffweight.newtablesize ffweightSize
+ ENDTEST
+ SET raw celldata
+ TEST digital = 0
+   SET rawVolt1a cell1data
+   CALC rawVolt1b = rawVolt1a - offsetVolt1
+   CALC rawVolt1b = rawVolt1b * 1000
+   CALC weight1gram = rawVolt1b / maxVolt1
+   SET raw weight1gram
+ ENDTEST
+ CALC wa = raw - offset
+ CALC weight = wa * scale
+ SET fweight weight
+ SET ffweight fweight
+ TEST sampleType = 0
+   TEST staticmode = 0
+		 CALC sampling = weight + dynmodeoffset
+	 ELSE
+		SET sampling weight
+	 ENDTEST
+   SET samplingmaxidx sampling.maxidx
+ ELSE
+   TEST sampleType = 1
+		 TEST staticmode = 0
+			 CALC sampling = fweight + dynmodeoffset
+		 ELSE
+			 SET sampling fweight
+		 ENDTEST
+     SET samplingmaxidx sampling.maxidx
+   ELSE
+		 TEST staticmode = 0
+			 CALC sampling = ffweight + dynmodeoffset
+		 ELSE
+			 SET sampling ffweight
+		 ENDTEST
+     SET samplingmaxidx sampling.maxidx
+   ENDTEST
+ ENDTEST
+END

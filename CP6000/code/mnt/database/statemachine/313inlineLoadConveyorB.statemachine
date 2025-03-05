@@ -1,0 +1,68 @@
+; INLINE 313inlineLoadConveyorB.statemachine
+TEST papmode = 1
+	CALC temp = cBItem % 2
+	TEST temp = 0
+		SET leftright 1
+	ELSE
+		SET leftright 0
+	ENDTEST
+	SETFRAME fromFrame papconveyorB
+ELSE
+	CALC temp = cBItem % 2 
+	TEST cBItem = 0
+		SET leftright 0
+	ELSE
+		TEST cBItem = 1
+		OR temp = 0
+			SET leftright 1
+		ELSE
+			SET leftright 0
+		ENDTEST
+	ENDTEST
+	SETFRAME fromFrame conveyorB
+ENDTEST
+CALC fromFrame.y = fromFrame.y + item.gy
+CALC fromFrame.x = fromFrame.x - item.gx
+TEST leftright = 1
+	;*******************************************
+	TEST papmode = 1
+		SETFRAME toFrame pappalletB0
+		SET conveyorB_palletB0.mode 51
+	ELSE
+		SETFRAME toFrame palletB0
+		SET conveyorB_palletB0.mode B0normalmode
+	ENDTEST
+	CALC ftemp = item.sy * cBStackright
+	CALC toFrame.y = toFrame.y + ftemp
+	CALC toFrame.y = toFrame.y + item.my
+	LOAD conveyorB_palletB0 fromFrame toFrame
+ELSE
+	;*******************************************
+	TEST papmode = 1
+		SETFRAME toFrame pappalletB1
+		SET conveyorB_palletB1.mode 52
+	ELSE
+		SETFRAME toFrame palletB1
+		TEST cBItem = 0
+			SET conveyorB_palletB1.mode B1firstmode
+		ELSE
+			SET conveyorB_palletB1.mode B1normalmode
+		ENDTEST
+	ENDTEST
+	CALC ftemp = item.sy * cBStackleft
+	CALC toFrame.y = toFrame.y + ftemp
+	CALC toFrame.y = toFrame.y + item.my
+	TEST papmode = 1
+	AND cBItem = 1
+		CALC toFrame.y = toFrame.y + pap_yoffset_1stlayer
+	ENDTEST
+	LOAD conveyorB_palletB1 fromFrame toFrame
+ENDTEST
+TEST papmode = 1
+	SET conveyorB_home.mode 51
+	LOAD conveyorB_home fromFrame paphome
+ELSE
+	SET conveyorB_home.mode 21
+	LOAD conveyorB_home fromFrame home
+ENDTEST
+;*******************************************

@@ -1,0 +1,105 @@
+//Copyright (C) 2005 by MPN A/S - Guided by vision(R)
+// formAxisParm.h
+#if !defined(FORMAXISPARM_H)
+#define FORMAXISPARM_H
+#include "Bx.h"
+#include "formAxisParmUser.h"
+#define FORMAXISPARM_TEXTLABEL2_2 1
+#define FORMAXISPARM_TEXTLABEL_9 2
+#define FORMAXISPARM_TEXTLABEL_16 3
+#define FORMAXISPARM_CMDPARAM_9 4
+extern BX_BOOL formAxisParm_cmdParam_9_Click(HBOX hBox);
+#define FORMAXISPARM_CMDPARAM_16 5
+extern BX_BOOL formAxisParm_cmdParam_16_Click(HBOX hBox);
+#define FORMAXISPARM_CMDPARAM_17 6
+extern BX_BOOL formAxisParm_cmdParam_17_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_10 7
+#define FORMAXISPARM_TEXTLABEL_17 8
+#define FORMAXISPARM_CMDPARAM_10 9
+extern BX_BOOL formAxisParm_cmdParam_10_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_2 10
+#define FORMAXISPARM_CMDPARAM_2 11
+extern BX_BOOL formAxisParm_cmdParam_2_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_18 12
+#define FORMAXISPARM_TEXTLABEL_11 13
+#define FORMAXISPARM_TEXTLABEL_3 14
+#define FORMAXISPARM_CMDPARAM_18 15
+extern BX_BOOL formAxisParm_cmdParam_18_Click(HBOX hBox);
+#define FORMAXISPARM_CMDPARAM_3 16
+extern BX_BOOL formAxisParm_cmdParam_3_Click(HBOX hBox);
+#define FORMAXISPARM_CMDPARAM_11 17
+extern BX_BOOL formAxisParm_cmdParam_11_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_12 18
+#define FORMAXISPARM_CMDPARAM_4 19
+extern BX_BOOL formAxisParm_cmdParam_4_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_19 20
+#define FORMAXISPARM_TEXTLABEL_4 21
+#define FORMAXISPARM_CMDPARAM_19 22
+extern BX_BOOL formAxisParm_cmdParam_19_Click(HBOX hBox);
+#define FORMAXISPARM_CMDPARAM_12 23
+extern BX_BOOL formAxisParm_cmdParam_12_Click(HBOX hBox);
+#define FORMAXISPARM_CMDPARAM_13 24
+extern BX_BOOL formAxisParm_cmdParam_13_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_5 25
+#define FORMAXISPARM_CMDPARAM_20 26
+extern BX_BOOL formAxisParm_cmdParam_20_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_13 27
+#define FORMAXISPARM_CMDPARAM_5 28
+extern BX_BOOL formAxisParm_cmdParam_5_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_20 29
+#define FORMAXISPARM_TEXTLABEL_14 30
+#define FORMAXISPARM_CMDPARAM_14 31
+extern BX_BOOL formAxisParm_cmdParam_14_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_6 32
+#define FORMAXISPARM_TEXTLABEL_21 33
+#define FORMAXISPARM_CMDPARAM_21 34
+extern BX_BOOL formAxisParm_cmdParam_21_Click(HBOX hBox);
+#define FORMAXISPARM_CMDPARAM_6 35
+extern BX_BOOL formAxisParm_cmdParam_6_Click(HBOX hBox);
+#define FORMAXISPARM_CMDPARAM_22 36
+extern BX_BOOL formAxisParm_cmdParam_22_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_15 37
+#define FORMAXISPARM_CMDPARAM_15 38
+extern BX_BOOL formAxisParm_cmdParam_15_Click(HBOX hBox);
+#define FORMAXISPARM_CMDPARAM_7 39
+extern BX_BOOL formAxisParm_cmdParam_7_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_7 40
+#define FORMAXISPARM_CMDPARAM_8 41
+extern BX_BOOL formAxisParm_cmdParam_8_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL_8 42
+#define FORMAXISPARM_GROUPBOX1 43
+#define FORMAXISPARM_TEXTBANK1_2 44
+#define FORMAXISPARM_TEXTBANK1_3 45
+#define FORMAXISPARM_TEXTBANK1_4 46
+#define FORMAXISPARM_TEXTBANK1_1 47
+#define FORMAXISPARM_TEXTBANK1_5__DOCTYPE_UI_SELECTION__UI_SELECTION___WIDGET_CLASS__QLABEL________PROPERTY_NAME__NAME____________CSTRING_TEXTBANK1_1__CSTRING________PROPERTY_______PROPERTY_NAME__GEOMETRY____________RECT_______________X_10__X_______________Y_19__Y_______________WIDTH_83__WIDTH_______________HEIGHT_35__HEIGHT____________RECT________PROPERTY_______PROPERTY_NAME__PALETTEFOREGROUNDCOLOR____________COLOR_______________RED_255__RED_______________GREEN_255__GREEN_______________BLUE_255__BLUE____________COLOR________PROPERTY_______PROPERTY_NAME__FONT____________FONT_______________FAMILY_HELVETICA__URW___FAMILY_______________POINTSIZE_18__POINTSIZE____________FONT________PROPERTY_______PROPERTY_NAME__FRAMESHAPE____________ENUM_NOFRAME__ENUM________PROPERTY_______PROPERTY_NAME__FRAMESHADOW____________ENUM_PLAIN__ENUM________PROPERTY_______PROPERTY_NAME__TEXT____________STRING_MTYPE__STRING________PROPERTY_______PROPERTY_NAME__ALIGNMENT____________SET_ALIGNVCENTER__SET________PROPERTY____WIDGET____UI_SELECTION__ 48
+#define FORMAXISPARM_TEXTBANKV_2 49
+#define FORMAXISPARM_TEXTBANKV_3 50
+#define FORMAXISPARM_TEXTBANKV_4 51
+#define FORMAXISPARM_TEXTBANKV_7 52
+#define FORMAXISPARM_TEXTBANKV_6 53
+#define FORMAXISPARM_TEXTBANKV_5 54
+#define FORMAXISPARM_TEXTBANK1_7 55
+#define FORMAXISPARM_TEXTBANK1_6 56
+#define FORMAXISPARM_TEXTBANKV_1 57
+#define FORMAXISPARM_TEXTLABEL_22 58
+#define FORMAXISPARM_TEXTLABEL_1 59
+#define FORMAXISPARM_CMDPARAM_1 60
+extern BX_BOOL formAxisParm_cmdParam_1_Click(HBOX hBox);
+#define FORMAXISPARM_CMDRETURN 61
+extern BX_BOOL formAxisParm_cmdReturn_Click(HBOX hBox);
+#define FORMAXISPARM_CMDSAVE 62
+extern BX_BOOL formAxisParm_cmdSave_Click(HBOX hBox);
+#define FORMAXISPARM_TEXTLABEL2_2_2 63
+#define FORMAXISPARM_CMDAXISNUM 64
+extern BX_BOOL formAxisParm_cmdAxisNum_Click(HBOX hBox);
+#define FORMAXISPARM_CMDAXISNUMMINUS 65
+extern BX_BOOL formAxisParm_cmdAxisNumMinus_Click(HBOX hBox);
+#define FORMAXISPARM_CMDAXISNUMPLUS 66
+extern BX_BOOL formAxisParm_cmdAxisNumPlus_Click(HBOX hBox);
+extern BX_CHAR formAxisParmText[][MAXLANGUAGE][255];
+extern BOXSTRUCT formAxisParm[];
+extern BX_BOOL formAxisParmProc(HBOX hBox, BX_UINT uMsg ,BX_WPARAM wParam, BX_LPARAM lParam);
+extern BX_VOID formAxisParmUpdate(HBOX hBox);
+extern BX_VOID formAxisParmInit(HBOX hBox);
+#endif // FORMAXISPARM_H

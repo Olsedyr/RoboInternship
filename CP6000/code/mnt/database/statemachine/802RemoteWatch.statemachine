@@ -1,0 +1,80 @@
+STATEMACHINEVERSION 3
+Name=RemoteWatch
+Link=parent Parent
+Link=RobotProgram Program312
+;Link=LilleRobotProgram Program401
+Link=CP KasseLift
+Link=myProgram Program802
+Value=errorCode 0
+Value=message 0
+Value=tester 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SET message 0
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST RobotProgram = UNKNOWN
+;  OR LilleRobotProgram = UNKNOWN
+  OR CP = UNKNOWN
+    SET message 2050
+    TEST CP = UNKNOWN
+      SET message 2055
+    ENDTEST
+	  TEST RobotProgram = UNKNOWN
+		  SET message 2051
+    ENDTEST
+;	  TEST LilleRobotProgram = UNKNOWN
+;		  SET message 2051
+;    ENDTEST
+  ELSE
+    SET message 0
+  ENDTEST
+	TEST myProgram != ST_IDLE
+	AND myProgram != ST_HALT
+	AND myProgram != ST_RESET
+    TEST RobotProgram = ST_RUNNING_C18
+      TEST myProgram != ST_RUNNING_C18
+				SET errorCode 1072
+				SETSTATE ST_IDLE
+      ENDTEST 
+    ELSE
+      TEST RobotProgram = ST_RUNNING_NETTO
+        TEST myProgram != ST_RUNNING_NETTO
+					SET errorCode 1072
+					SETSTATE ST_IDLE
+        ENDTEST 
+      ENDTEST
+    ENDTEST
+    TEST CP = ST_RUNNING_C18
+      TEST myProgram != ST_RUNNING_C18
+				SET errorCode 1071
+				SETSTATE ST_IDLE
+      ENDTEST 
+    ELSE
+      TEST CP = ST_RUNNING_NETTO
+        TEST myProgram != ST_RUNNING_NETTO
+					SET errorCode 1071
+					SETSTATE ST_IDLE
+        ENDTEST 
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

@@ -1,0 +1,58 @@
+STATEMACHINEVERSION 3
+Name=Emergency
+Input=EmergencyOK "dummyOn"
+Output=PowerOK "dummyOut"
+Value=errorCode 0
+Const=errorCode101 101
+Timeout=delayOn 1000000
+Value=simulate 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+  TEST EmergencyOK = 0
+  AND simulate = 0
+		SETSTATE ST_POWEROFF
+  ELSE
+    SETSTATE ST_POWERON
+  ENDTEST
+END
+
+State=ST_IDLE
+  TEST EmergencyOK = 0
+  AND simulate = 0
+		SETSTATE ST_POWEROFF
+  ELSE
+    SETSTATE ST_POWERON
+  ENDTEST
+END
+
+State=ST_POWEROFF
+	SET errorCode errorCode101
+	SET PowerOK 0
+  TEST EmergencyOK = 1
+  OR simulate = 1
+    TIMEOUT delayOn ST_WAIT_ON
+		SETSTATE ST_WAIT_ON
+	ENDTEST
+END
+
+State=ST_WAIT_ON
+  TEST delayOn = 1
+    SETSTATE ST_POWERON
+  ENDTEST
+END
+
+State=ST_POWERON
+	SET errorCode 0
+	SET PowerOK 1
+	TEST EmergencyOK = 0
+  AND simulate = 0
+		SETSTATE ST_POWEROFF
+	ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_IDLE
+END

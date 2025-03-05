@@ -1,0 +1,60 @@
+VERSION 1
+317
+Robots 1
+317.robot
+Tools 1
+317.tool
+Items 5
+FervaA.item
+FervaB.item
+FervaTest.item
+Euro1000.item
+Europalle.item
+Patterns 0
+Accessories 2
+317ConveyorOut.accessory
+317RollerOut.accessory
+PPScripts 0
+Dio 1
+317.io
+ComSKs 0
+LoadCell 0
+Macs 0
+Statemachines 29
+317ContinueKnap.statemachine
+317MC.statemachine
+317Frames.statemachine
+317Loader.statemachine
+317ErrorCode.statemachine
+317WorkCell.statemachine
+317Parent.statemachine
+317Program.statemachine
+317ProgramB2.statemachine
+317Emergency.statemachine
+317Manometer.statemachine
+317TripWatch.statemachine
+317IOError.statemachine
+317TrafficLight.statemachine
+317Robot.statemachine
+317Tool.statemachine
+317RoboError.statemachine
+317ConveyorOutFoto1.statemachine
+317ConveyorOutFoto1Quick.statemachine
+317ConveyorOutFoto2.statemachine
+317ConveyorOutFoto3.statemachine
+317ConveyorOutFoto4.statemachine
+317ConveyorOut.statemachine
+317ConveyorOut2Foto1.statemachine
+317ConveyorOut2.statemachine
+317PB6.statemachine
+317PB7.statemachine
+317PB9.statemachine
+317PM.statemachine
+STATETEKST spanish.statetekst
+STATETEKST english.statetekst
+STATETEKST danish.statetekst
+REMOTEHOST 192.168.0.152
+BOPTCOEFF 317.boptcoeff
+LANGUAGE spanish.language
+LANGUAGE english.language
+LANGUAGE danish.language

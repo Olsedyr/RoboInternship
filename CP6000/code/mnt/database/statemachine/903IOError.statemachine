@@ -1,0 +1,10 @@
+STATEMACHINEVERSION 3
+Include=ioerror.statemachine
+Name=ConveyorsIOError
+Link=parent ParentS1
+Value=errorCode 0
+Value=advantyserror 0
+Value=comskerror 0
+Value=trioerror 0
+Value=loadcellerror 0
+Const=ioerrorcode 500

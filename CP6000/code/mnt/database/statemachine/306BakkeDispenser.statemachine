@@ -1,0 +1,73 @@
+STATEMACHINEVERSION 2
+Name=BakkeDispenser
+Input=0,Foto5 "Buffer Foto5"
+Output=0,HoldBakke "BakkeDispenser HoldBakke"
+Output=1,Motor "Buffer Motor"
+Timeout=0,TimeFoto5on 16000
+Timeout=1,TimeFoto5off 150000
+Link=0,Buffer
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_HALT
+  END
+
+State=0,ST_IDLE
+  SET Motor 0
+  SET HoldBakke 0
+  END
+
+State=0,ST_READY
+  TEST Buffer = ST_GET
+    SET HoldBakke 1
+    SETSTATE ST_FOTO5_OFF
+  ENDTEST 
+  END
+
+State=0,ST_FOTO5_ON
+  SET HoldBakke 0
+  TEST Foto5 = 1
+    TIMEOUT TimeFoto5on ST_FOTO5_ON_TEST
+    SETSTATE ST_FOTO5_ON_TEST
+  ENDTEST
+  END
+
+State=0,ST_FOTO5_ON_TEST
+  TEST Foto5 = 0
+    SETSTATE ST_FOTO5_ON
+  ELSE
+    TEST TimeFoto5on = 1
+      SETSTATE ST_READY
+    ENDTEST
+  ENDTEST
+  END
+
+State=0,ST_FOTO5_OFF_TEST
+  TEST Foto5 = 1
+    SETSTATE ST_FOTO5_OFF
+  ELSE
+    TEST TimeFoto5off = 1
+      SETSTATE ST_BAKKE_SENDT
+    ENDTEST
+  ENDTEST
+  END
+
+State=0,ST_BAKKE_SENDT
+  SETSTATE ST_FOTO5_ON
+  END
+
+State=0,ST_FOTO5_OFF
+  TEST Foto5 = 0
+    TIMEOUT TimeFoto5off ST_FOTO5_OFF_TEST
+    SETSTATE ST_FOTO5_OFF_TEST
+  ENDTEST
+  END
+
+State=3,ST_RESET
+  SET Motor 1
+  SET HoldBakke 0
+  SETSTATE ST_FOTO5_ON
+  END
+
+

@@ -1,0 +1,299 @@
+STATEMACHINEVERSION 3
+Name=CamGenLift
+Link=PID PIDLift
+Link=Master KasseLift
+Link=parent Parent
+linkValue=encoder PID
+linkValue=maxheight PID
+linkValue=minheight PID
+linkValue=poserr PID 
+linkValue=inShake Master
+linkValue=casekind Program
+linkValue=liftMilliTime Program
+linkValue=firstRun WorkCell
+linkValue=pidstaticmode staticmode PID
+Value=errorCode 0
+; 1024*gearudveksling/(eff_rad*2*pi)
+; eks: 1024*30/(25*2*pi)
+;Const=tickspermm 195.56959407
+; eks: 1024*6.5/(25*2*pi)
+Const=tickspermm 42.373412
+; All posXX in mm.
+Const=posHome 13.0000
+;posShake > posFree
+Const=posShake 70.0000
+Const=posFree 60.0000
+Const=posTop 363.0000
+Const=posTestBegin 100.0000
+Const=posTestEnd 180.0000
+Item=item Netto
+Item=itemC11 C11
+Item=itemC18 C18
+Item=itemNetto Netto
+Item=itemIFCO16 IFCO16
+Item=itemIFCO18 IFCO18
+Item=itemIFCO20 IFCO20
+Const=testmode 0
+Value=teststate 0
+Timeout=TimeTest 3000000
+Value=tMilli 4000
+Value=liftFree 1
+Value=posf 0.0
+Value=beginpos 0.0
+Value=endpos 0.0
+Value=beginspeed 0.0
+Value=endspeed 0.0
+Value=tTime 2000000
+Value=setpoint 0
+Value=setspeed 0
+Value=ticksroundhalf 0
+Value=ticksroundquart 0
+Value=xtot 0.0
+Value=curpm 0.0
+Value=curpos 0.0
+Value=curt 0
+Value=temp 0
+Value=ga 0.0
+Value=gb 0.0
+Value=gc 0.0
+Value=gd 0.0
+Value=tcpm 0.0
+Value=millitot 0.0
+Value=goIdle 0
+Value=beginning 0
+Timeout=ttot 5000000
+Timeout=TimeWaitIdle 1000000
+
+; casekind = 0  -> none
+; casekind = 1  -> C11
+; casekind = 2  -> C14
+; casekind = 3  -> C18
+; casekind = 4  -> hybschA
+; casekind = 5  -> hybschB
+; casekind = 6  -> Netto
+; casekind = 7  -> EPS610
+; casekind = 8  -> IFCO16
+; casekind = 9  -> IFCO18
+; casekind = 10 -> IFCO20
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  SET goIdle 0
+	TEST testmode != 1
+		SET tMilli liftMilliTime
+	ENDTEST
+	TEST firstRun = 1
+		TEST casekind = 1
+			SETITEM item itemC11
+		ELSE
+			TEST casekind = 3
+				SETITEM item itemC18
+			ELSE
+				TEST casekind = 6
+					SETITEM item itemNetto
+				ELSE
+					TEST casekind = 8
+						SETITEM item itemIFCO16
+					ELSE
+						TEST casekind = 9
+							SETITEM item itemIFCO18
+						ELSE
+							TEST casekind = 10
+								SETITEM item itemIFCO20
+							ENDTEST
+						ENDTEST
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+	SET setpoint posHome
+	CALC posf = posTop - item.dy
+	CALC posf = posf - posFree
+	CALC posf = posf * tickspermm
+  SETSTATE ST_NOCHOOSETRACK
+END
+
+State=ST_NOCHOOSETRACK
+	TEST PID = ST_RUN
+  OR PID = ST_BRAKERELEASE_WAIT
+		SET setpoint encoder
+		SETSTATE ST_CHOOSETRACK
+	ENDTEST
+END
+
+State=ST_CHOOSETRACK
+	SET beginspeed 0
+	SET endspeed 0
+  TEST PID = ST_RUN
+  OR PID = ST_BRAKERELEASE_WAIT
+    TEST Master = ST_BEGINHOME
+			SET beginpos setpoint
+      SET endpos posHome
+			CALC endpos = endpos * tickspermm
+			SETSTATE ST_PRESTART
+    ELSE
+      TEST Master = ST_BEGINHIGH
+				SET beginpos setpoint
+				CALC endpos = posTop - item.dy
+				CALC posf = endpos - posFree
+				CALC posf = posf * tickspermm
+				TEST inShake = 1
+					CALC endpos = endpos - posShake
+				ENDTEST
+				CALC endpos = endpos * tickspermm
+				SETSTATE ST_PRESTART
+      ELSE
+        TEST testmode = 1
+          SET beginpos setpoint
+					TEST teststate = 0
+						SET teststate 1
+						SET endpos posTestBegin
+						CALC endpos = endpos * tickspermm
+						TIMEOUT TimeTest ST_PRESTART
+						SETSTATE ST_TIMER
+					ELSE
+						TEST teststate = 1
+							SET teststate 0
+						  ;SET endpos posTestEnd
+							CALC endpos = posTop - itemC18.dy
+							CALC endpos = endpos * tickspermm
+							TIMEOUT TimeTest ST_PRESTART
+							SETSTATE ST_TIMER
+						ENDTEST
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ELSE
+		SET setspeed 0
+		SETSTATE ST_NOCHOOSETRACK
+  ENDTEST
+  TEST Master = ST_IDLE
+  AND testmode = 0
+		SET beginpos setpoint
+		SET endpos posHome
+		CALC endpos = endpos * tickspermm
+    SET goIdle 1
+		SETSTATE ST_PRESTART
+  ENDTEST
+	CALC tTime = endpos - beginpos
+	TEST tTime < 0
+		CALC tTime = tTime * -1
+	ENDTEST
+	CALC tTime = tTime * 1000
+	CALC temp = maxheight - minheight
+	CALC tTime = tTime / temp
+	; tMilli = 2500 -> 2.5 s for hele bevægelsen
+	CALC tTime = tTime * tMilli
+	SET ttot tTime
+	TEST encoder < posf
+		SET liftFree 1
+	ELSE
+		SET liftFree 0
+	ENDTEST
+END
+
+State=ST_STOP
+  SET curpm 1000.0
+  SET setpoint endpos
+	SET setspeed 0
+  SETSTATE ST_CHOOSETRACK
+	TEST Master = ST_IDLE
+	AND goIdle = 1
+    SET goIdle 0
+		TIMEOUT TimeWaitIdle ST_IDLE
+		SETSTATE ST_TIMER
+  ENDTEST
+	TEST encoder < posf
+		SET liftFree 1
+	ELSE
+		SET liftFree 0
+	ENDTEST
+END
+
+State=ST_PRESTART
+  TEST pidstaticmode = 1
+    SET beginning 1
+    SETSTATE ST_START_WAIT
+  ELSE
+    SETSTATE ST_START
+  ENDTEST
+END
+
+State=ST_START_WAIT
+  TEST PID = ST_BRAKERELEASE_WAIT
+    SETSTATE ST_START_WAIT2
+  ENDTEST
+END
+
+State=ST_START_WAIT2
+  TEST PID = ST_RUN
+    SET beginning 0
+    SETSTATE ST_START
+  ENDTEST
+END
+
+State=ST_START
+  SET beginpos encoder
+  SET setpoint beginpos
+	SET setspeed 0
+  CALC xtot = endpos - beginpos
+  SET curpm 0.0
+  TEST xtot < 100.0
+  AND xtot > -100.0
+		SET setpoint endpos
+	  SETSTATE ST_STOP
+  ELSE
+		TIMEOUT ttot ST_RUN
+		SETSTATE ST_RUN
+  ENDTEST
+END
+
+; Profile that accelerates more in beginning
+State=ST_RUN
+  SET curt ttot
+  CALC curt = ttot - curt
+	CALC millitot = ttot / 1000.0
+	CALC curpm = curt / millitot
+	CALC curpos = 2000.0 * beginpos
+	CALC tcpm = curpm - 1000.0
+	CALC ga = tcpm * tcpm
+	CALC gb = 500.0 + curpm
+	CALC ga = ga * gb
+	CALC curpos = curpos * ga
+	CALC ga = curpm - 1500.0
+  CALC ga = ga * curpm
+	CALC ga = ga * endpos
+	CALC ga = ga * -2000.0
+	CALC gb = tcpm * millitot
+	CALC gc = tcpm * beginspeed
+	CALC gd = curpm * endspeed
+	CALC gc = gc + gd
+	CALC gb = gb * gc
+	CALC ga = ga + gb
+	CALC ga = ga * curpm
+	CALC curpos = curpos + ga
+	CALC curpos = curpos / 1000000000000.0
+	SET setpoint curpos
+	; ved samplerate på ca. 126 Hz
+  TEST ttot < 3800
+    SETSTATE ST_STOP
+  ENDTEST
+	TEST encoder < posf
+		SET liftFree 1
+	ELSE
+		SET liftFree 0
+	ENDTEST
+END

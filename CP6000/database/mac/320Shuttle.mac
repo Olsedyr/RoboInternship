@@ -1,0 +1,57 @@
+MACVERSION 1
+ipaddr=192.168.0.203
+port=4001
+simulate=0
+NumOfMotors=1
+Name=CardBoardShuttleMotor
+Address=1
+Init37=0 "START_MODE" "Passive startmode" longint
+Init36=0x20 "CNTRL_BITS" "Resync position" longint
+Init2=0 "MODE_REG" "Passive mode" longint
+Init3=0 "P_SOLL" "Commanded position" longint
+Init10=0 "P_IST" "Actual motor position set to zero" longint
+Init22=2000 "FLWERRMAX" "Maximum Followerror" longint
+Init26=1000 "FNCERRMAX" "Maximum Funtionerror" longint
+Init23=0x01 "UV_HANDLE" "Set errorbit when UV" longint
+Init28=-10000000 "MIN_P_IST" "Neg Software Limit" longint
+Init30=10000000 "MAX_P_IST" "Pos Software Limit" longint
+Init33=300 "INPOSWIN" "In position window" longint
+Init38=0 "P_HOME" "Zero search Position" longint
+Init42=0x00 "HOME_MODE" "Set Home_Done=0" longint
+Init35=0x00 "ERR_STAT" "Clear errors" longint
+InBits35="CardBoardShuttle Status" "ERR_STAT" longint
+Bit0="CardBoardShuttle I2T_ERR" "I2t error"
+Bit1="CardBoardShuttle FLW_ERR" "Follow error"
+Bit2="CardBoardShuttle FNC_ERR" "Function error"
+Bit3="CardBoardShuttle UIT_ERR" "Regenerative error"
+Bit4="CardBoardShuttle IN_POS"  "In position"
+Bit5="CardBoardShuttle ACC_FLAG" "Accelerating"
+Bit6="CardBoardShuttle DEC_FLAG" "Decelerating"
+Bit7="CardBoardShuttle PLIM_ERR" "Position limits error"
+Bit8="CardBoardShuttle DEGC_ERR" "Temperature error"
+Bit9="CardBoardShuttle UV_ERR"  "Undervoltage error"
+Bit10="CardBoardShuttle UV_DETECT" "Low voltage at high volt bus"
+Bit11="CardBoardShuttle OV_ERR" "Overvoltage error"
+Bit12="CardBoardShuttle IPEAK_ERR" "Motor over current"
+Bit13="CardBoardShuttle SPEED_ERR" "Over speed error"
+Bit14="CardBoardShuttle DIS_P_LIM" "SW limits disabled"
+Bit15="CardBoardShuttle INDEX_ERR" "internal encoder error"
+Bit16="CardBoardShuttle OLD_FILT_ERR" "Filter setting not valid"
+Bit17="CardBoardShuttle U24V_ERR" "Control supply has been too low"
+EndBits
+InBits42="CardBoardShuttle Home Mode" "HOME_MODE" longint
+Bit16="CardBoardShuttle HOME_DONE" "Home Done" 
+EndBits
+In29="CardBoardShuttle Temperature" "DEGC" longint factor=0.12207
+In169="CardBoardShuttle Curtorque" "VF_OUT" longint factor=0.293255
+InOut10="CardBoardShuttle Curpos" "P_IST" longint
+In20="CardBoardShuttle Follow Error" "FLWERR" longint
+In24="CardBoardShuttle Function Error" "FNCERR" longint
+Out2="CardBoardShuttle Mode" "MODE_REG" longint
+Out13="CardBoardShuttle Load Factor" "KVOUT" fixed16
+Out3="CardBoardShuttle MacSetpoint" "P_SOLL" longint
+Out5="CardBoardShuttle Maxvel" "V_SOLL" longint factor=0.36093786
+Out6="CardBoardShuttle Maxacc" "A_SOLL" longint factor=277.921911
+Out35="CardBoardShuttle Status" "ERR_STAT" longint
+Out40="CardBoardShuttle Homevel" "V_HOME" longint factor=0.36093786
+Out41="CardBoardShuttle Hometorque" "T_HOME" longint factor=0.293255

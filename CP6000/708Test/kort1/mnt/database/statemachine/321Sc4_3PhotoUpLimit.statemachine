@@ -1,0 +1,10 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=Sc4_3PhotoUpLimit
+Input=input "ScissorTable Limit Up POS.4.3"
+;how long must input be active before it is recognised as on
+Timeout=TimeOn 100000
+;how long must input be not active before it is recognised as off
+Timeout=TimeOff 100000
+Value=test 0
+Const=active 0

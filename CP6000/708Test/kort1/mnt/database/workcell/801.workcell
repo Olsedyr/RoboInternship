@@ -1,0 +1,100 @@
+VERSION 1
+801
+Robots 0
+Tools 0
+Items 2
+C18.item
+Netto.item
+Patterns 0
+Accessories 0
+PPScripts 0
+Dio 2
+801.io
+901.io
+ComSKs 1
+801.comsk
+LoadCell 0
+Macs 0
+Statemachines 75
+801WorkCell.statemachine
+801Parent.statemachine
+801Program.statemachine
+801ContinueKnap.statemachine
+801TrafficLight.statemachine
+801ConveyorControl.statemachine
+801ErrorCode.statemachine
+801IOError.statemachine
+801Emergency.statemachine
+801TripWatch.statemachine
+801RemoteWatch.statemachine
+801zone2.statemachine
+801PalleStationFotoStabel1.statemachine
+801PalleStationFotoStabel2.statemachine
+801PalleStationFotoMellemrum.statemachine
+801PalleStationLampe.statemachine
+801PalleStationPort.statemachine
+801PalleStationPortLukketKontakt.statemachine
+801PalleStation.statemachine
+801ConveyorStation.statemachine
+801ConveyorStationFotoStabel1.statemachine
+801ConveyorStationFotoStabel2.statemachine
+801ConveyorStationFotoFremme.statemachine
+801KasseStativ.statemachine
+801KasseStativFotoModtaget.statemachine
+801KasseStativFotoTom.statemachine
+801KasseStativFotoAfleveret.statemachine
+801CamGenLift.statemachine
+801PIDLift.statemachine
+801CMCounter.statemachine
+801CaseCount.statemachine
+801PindeTjekker600.statemachine
+801PindeTjekker600FotoIn.statemachine
+801PindeTjekker600Foto1Pind1.statemachine
+801PindeTjekker600Foto1Pind2.statemachine
+901Parent.statemachine
+901TrafficLight.statemachine
+901ErrorCode.statemachine
+901Emergency.statemachine
+901TripWatch.statemachine
+901IOError.statemachine
+901KasseInd1.statemachine
+901KasseInd1Foto.statemachine
+901KasseInd2.statemachine
+901KasseInd2Foto.statemachine
+901KasseLoader1.statemachine
+901KasseLoader1Foto.statemachine
+901KasseLoader2.statemachine
+901KasseLoader2Foto.statemachine
+901KasseLoader3.statemachine
+901KasseLoader3Foto.statemachine
+901KasseUd3.statemachine
+901KasseUd3Foto.statemachine
+901KasseUd4.statemachine
+901KasseUd4Foto.statemachine
+901KasseUd5.statemachine
+901KasseUd5Foto.statemachine
+901PreCW1.statemachine
+901Sving1Foto.statemachine
+901Sving1.statemachine
+901PostCW1.statemachine
+901PreCW2.statemachine
+901Sving2Foto.statemachine
+901Sving2.statemachine
+901PostCW2.statemachine
+901PreCW2b.statemachine
+901PreCW3.statemachine
+901Sving3Foto.statemachine
+901Sving3.statemachine
+901PostCW3.statemachine
+901AffaldsWatch.statemachine
+901Affald1.statemachine
+901Affald2.statemachine
+901PindeTjekker400Foto.statemachine
+901PindeTjekker400.statemachine
+REMOTEHOST 192.168.0.150
+REMOTEHOST 192.168.0.151
+REMOTEHOST 192.168.0.152
+REMOTEHOST 192.168.0.153
+REMOTEHOST 192.168.0.156
+LANGUAGE danish.language
+STATETEKST danish.statetekst

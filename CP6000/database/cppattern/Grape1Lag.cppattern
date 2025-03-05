@@ -1,0 +1,7 @@
+VERSION 1
+Grape1Lag user=1
+layer=0 maxpush=4 gettime=200000
+ppp=2 pacc=25 pspeed=20
+ppp=2 pacc=25 pspeed=20
+ppp=2 pacc=25 pspeed=20
+ppp=2 pacc=25 pspeed=20

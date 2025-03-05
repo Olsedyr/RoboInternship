@@ -1,0 +1,9 @@
+STATEMACHINEVERSION 3
+Include=fotoinput.statemachine
+Name=ConveyorStationFotoStabel2
+Input=input "ConveyorStation Foto Stabel 2"
+Timeout=blockTime 100000
+Timeout=freeTime 100000
+Value=test 0
+Const=free 0
+Const=blocked 1

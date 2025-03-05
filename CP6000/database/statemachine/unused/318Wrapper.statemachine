@@ -1,0 +1,120 @@
+STATEMACHINEVERSION 3
+Name=Wrapper
+Input=wrapperReadyToReceive "Sync In1 Ready to Receive"
+Input=wrapperEndOfTransfer "Sync In2 End of Transfer"
+Input=wrapperPalletReady "Sync In3 Pallet Ready"
+Output=prevPalletReady "Sync Out1 Pallet Ready"
+Output=nextReadyToReceive "Sync Out2 Ready to Receive"
+Output=nextEndOfTransfer "Sync Out3 End of Transfer"
+Link=prev PalletConveyor7
+Link=next PalletConveyor9
+Link=parent Parent
+Const=wrapperReadyToReceivePol 1
+Const=wrapperEndOfTransferPol 1
+Const=wrapperPalletReadyPol 1
+Const=prevPalletReadyPol 1
+Const=nextReadyToReceivePol 1
+Const=nextEndOfTransferPol 1
+Timeout=maxReceiveTime 15000000
+Timeout=maxSendTime 15000000
+Timeout=cmdTime 500000
+Value=message 0
+Value=temp 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  CALC temp = 1 - prevPalletReadyPol
+  SET prevPalletReady temp
+  CALC temp = 1 - nextReadyToReceivePol
+  SET nextReadyToReceive temp
+  CALC temp = 1 - nextEndOfTransferPol
+  SET nextEndOfTransfer temp
+  TEST parent = ST_RESET
+    SETSTATE ST_READY
+  ENDTEST
+END
+
+State=ST_RESET
+  SET nextEndOfTransfer nextEndOfTransferPol
+  TIMEOUT cmdTime ST_STARTUP
+  SETSTATE ST_TIMER
+END
+
+State=ST_STARTUP
+  CALC temp = 1 - nextEndOfTransferPol
+  SET nextEndOfTransfer temp
+  SETSTATE ST_READY
+END
+
+;wrapper is busy
+State=ST_READY
+  TEST wrapperReadyToReceive = wrapperReadyToReceivePol
+    SET message 0
+    SETSTATE ST_EMPTY
+  ELSE
+    SET message 2207
+    TEST wrapperPalletReady = wrapperPalletReadyPol
+    AND next = ST_EMPTY
+      TIMEOUT maxSendTime ST_SEND
+      SETSTATE ST_SEND
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+;wrapper is empty
+State=ST_EMPTY
+  TEST wrapperReadyToReceive != wrapperReadyToReceivePol
+    SET message 2207
+    SETSTATE ST_READY
+  ELSE
+    SET message 0
+    TEST prev = ST_SEND
+      TIMEOUT maxReceiveTime ST_RECEIVE
+      SETSTATE ST_RECEIVE
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST wrapperEndOfTransfer = wrapperEndOfTransferPol
+  OR maxReceiveTime = 1
+    CALC temp = 1 - prevPalletReadyPol
+    SET prevPalletReady temp
+    SETSTATE ST_READY
+  ELSE
+    SET prevPalletReady prevPalletReadyPol
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST next = ST_RECEIVE
+    SET nextReadyToReceive nextReadyToReceivePol
+  ELSETEST next = ST_READY
+    CALC temp = 1 - nextReadyToReceivePol
+    SET nextReadyToReceive temp
+    SET nextEndOfTransfer nextEndOfTransferPol
+    TIMEOUT cmdTime ST_CMD_EMPTY
+    SETSTATE ST_TIMER
+  ELSETEST maxSendTime = 1
+    CALC temp = 1 - nextReadyToReceivePol
+    SET nextReadyToReceive temp
+    SETSTATE ST_READY
+  ENDTEST
+END
+
+State=ST_CMD_EMPTY
+  CALC temp = 1 - nextEndOfTransferPol
+  SET nextEndOfTransfer temp
+  SETSTATE ST_EMPTY
+END

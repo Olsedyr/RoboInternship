@@ -1,0 +1,32 @@
+STATEMACHINEVERSION 3
+Include=conveyorkasseloader.statemachine
+Name=KasseLoader
+Output=motor "KasseLoader Motor"
+Output=skubber "KasseSkubber2"
+;minihack: if Kasseloader doesn't have a stopper set it to any or empty output and set hasStopper = 0, the output will then not be set
+Output=stopper "Red Light"
+Link=prev ExternalSyncWrapper
+Link=skubberReceiver KasseInLiner
+;conveyorReceiver only used if hasStopper = 1
+Link=conveyorReceiver KasseLoader
+Link=foto KasseLoaderFoto
+Const=hasStopper 0
+;whether or not prev sends from side or back of KasseLoader
+Const=sideReceive 0
+Timeout=skubberTime 200000
+Timeout=motorStopTime 600000
+Timeout=maxReceiveTime 999999999
+Link=parent Parent
+
+State=ST_GOBACK
+	SET skubber 0
+	TEST foto = ST_FREE
+		SETSTATE ST_EMPTY
+	ENDTEST
+END
+							ENDTEST
+						ENDTEST
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST

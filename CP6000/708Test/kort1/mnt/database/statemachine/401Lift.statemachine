@@ -1,0 +1,194 @@
+STATEMACHINEVERSION 3
+Name=Lift
+;** Input **
+;** Output **
+Output=Centrer "Lift Centrering"
+Output=Kassestop "Lift Endestop"
+Output=Motor "Lift Conveyor"
+;** Link **
+Link=parent Parent
+Link=ProgramB1
+Link=next Conv12
+Link=prev Conv8
+Link=Photo LiftPhoto
+;** linkValue **
+linkValue=Phototest test Photo
+;** Table **
+;** Item **
+;** Const **
+;** Value **
+Value=errorCode 0
+Value=simulate 0
+Value=sending 0
+Value=nextcase 0
+;** Timeout **
+Timeout=KStopDelay 2000000
+Timeout=TimeStartUp 3000000
+Timeout=TimeSend 10000000
+Timeout=timeMaxReceive 10000000
+Timeout=minSendTime 500000
+Timeout=TimeCenter 1100000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Centrer 0
+  SET Kassestop 0
+  SET Motor 0
+  TEST parent = ST_RESET
+		SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+  TEST simulate = 1
+		SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SET Motor 0
+	SETSTATE ST_STARTUP
+	TEST parent = ST_IDLE
+  AND simulate = 0
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_STARTUP
+	TEST simulate = 1
+		TIMEOUT TimeCenter ST_READY_ROBOT
+		SETSTATE ST_READY_ROBOT
+	ELSETEST Phototest = 1
+		TEST nextcase = 1
+			SETSTATE ST_READY
+		ELSE
+			TIMEOUT KStopDelay ST_PREPARE_SEARCHBOX
+			SETSTATE ST_PREPARE_SEARCHBOX
+		ENDTEST
+	ELSE
+		SETSTATE ST_EMPTY
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_PREPARE_SEARCHBOX
+	SET Centrer 0
+	SET Kassestop 1
+	TEST KStopDelay = 1
+		TIMEOUT TimeStartUp ST_SEARCHBOX
+		SETSTATE ST_SEARCHBOX
+  ENDTEST
+END
+
+State=ST_SEARCHBOX
+	SET Motor 1
+	TEST TimeStartUp = 1
+		TEST Phototest = 1
+			SET Centrer 1
+			SET Motor 0
+			TIMEOUT TimeCenter ST_READY_ROBOT
+			SETSTATE ST_READY_ROBOT
+		ELSE
+			SETSTATE ST_EMPTY
+		ENDTEST
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_EMPTY
+	SET Centrer 0
+  SET Kassestop 1
+	TEST prev = ST_SEND
+		SET Motor 1
+		TIMEOUT timeMaxReceive ST_RECEIVE
+		SETSTATE ST_RECEIVE
+	ELSE
+		SET Motor 0
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+	SET Motor 1
+	SET Kassestop 1
+	TEST Phototest = 1
+		SET Centrer 1
+		SET Motor 0
+		SET nextcase 0
+		TIMEOUT TimeCenter ST_READY_ROBOT
+		SETSTATE ST_READY_ROBOT
+  ELSETEST timeMaxReceive = 1
+		SET errorCode 1007
+		SETSTATE ST_IDLE
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_READY_ROBOT
+	TEST nextcase = 1
+		SET Centrer 0
+		SET Kassestop 0
+		SETSTATE ST_READY
+	ELSETEST TimeCenter = 1
+		SET Kassestop 0
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_READY
+	SET Kassestop 0
+	SET Centrer 0
+  TEST next = ST_EMPTY
+		SETSTATE ST_SEND
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+	TEST sending = 0
+		TEST next = ST_RECEIVE
+			SET Motor 1
+			SET sending 1
+			TIMEOUT minSendTime ST_SEND
+			SETSTATE ST_SEND
+		ENDTEST
+	ELSETEST sending = 1
+		TEST minSendTime = 1
+			SET sending 2
+			TIMEOUT TimeSend ST_SEND
+			SETSTATE ST_SEND
+		ENDTEST
+  ELSETEST sending = 2
+    TEST Phototest = 0
+			SET nextcase 0
+			SET sending 0
+		  SETSTATE ST_EMPTY
+	  ELSETEST TimeSend = 1
+      SET sending 0
+		  SET errorCode 1014
+		  SETSTATE ST_IDLE
+	  ENDTEST
+  ENDTEST
+END

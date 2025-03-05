@@ -1,0 +1,167 @@
+STATEMACHINEVERSION 3
+Name=Conv7
+linkValue=fototest test Conv7Foto1
+Output=Motor "Conv7 Motor"
+Output=skubber "Overskubber conveyor7"
+Output=stopper "Kassestop conveyor7"
+Link=prev Conv6
+Link=next Conv10
+Link=parent Parent
+;Time for case/product to leave conveyor after foto has gone free
+Timeout=freeWaitTime 1000000
+linkValue=firstRun WorkCell
+Timeout=startupTime 5000000
+Timeout=maxReceiveTime 10000000
+Timeout=maxSendTime 10000000
+Timeout=StopDelay 0
+Timeout=EmptyDelay 0
+Timeout=ReadyDelay 0
+Timeout=skubberTime 2500000
+Const=autoDetectItem 1
+Const=lengthMM 1600.0
+Const=speedMS 0.6
+Value=simulate 0
+Value=errorCode 0
+Value=timelength 0.0
+Value=inPush 0
+Value=caseOk 0
+linkValue=caseOkPrev caseOk prev
+linkValue=receiver receiver prev
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Motor 0
+ 	SET skubber 0
+	TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_READY
+  TEST fototest = 0 
+  AND autoDetectItem = 1
+    TIMEOUT EmptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST next = ST_EMPTY
+      TIMEOUT maxSendTime ST_SEND
+      SETSTATE ST_SEND
+    ELSE 
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST inPush = 0
+	  TEST next = ST_RECEIVE
+		  SET skubber 1
+      SET inPush 1
+      TIMEOUT skubberTime ST_SEND
+      SETSTATE ST_SEND
+    ELSE
+      SET skubber 0
+    ENDTEST
+    TEST maxSendTime = 1
+      SET skubber 0
+      SETSTATE ST_RESET
+    ENDTEST
+  ELSE
+    TEST next != ST_RECEIVE
+    OR skubberTime = 1
+      SET inPush 0
+      SET skubber 0
+		  SETSTATE ST_EMPTY
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST fototest = 1
+  AND autoDetectItem = 1
+    TIMEOUT ReadyDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST prev = ST_SEND
+		AND receiver = 1
+      SET caseOk caseOkPrev
+      TIMEOUT maxReceiveTime ST_RECEIVE
+      SETSTATE ST_RECEIVE
+    ELSE 
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST caseOk = 1
+    SET stopper 1
+  ELSE
+    SET stopper 0
+  ENDTEST
+  TEST fototest = 1
+    TEST caseOk = 1
+      TIMEOUT StopDelay ST_READY
+      SETSTATE ST_TIMER
+    ELSE
+      SETSTATE ST_REJECT_CASE
+    ENDTEST
+  ELSE
+    TEST maxReceiveTime = 1
+      SETSTATE ST_RESET
+    ELSE
+      TEST prev = ST_SEND
+			AND receiver = 1
+        SET Motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_REJECT_CASE
+  TEST fototest = 0
+    TIMEOUT EmptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST fototest = 1
+		SETSTATE ST_READY
+	ELSE
+    SET stopper 1
+    CALC timelength = lengthMM / speedMS 
+    ;*1500 = kør bånd 1.5 gang igennem for at finde produkt
+    CALC timelength = timelength * 1500
+    SET startupTime timelength
+    TIMEOUT startupTime ST_STARTUP
+    SETSTATE ST_STARTUP
+	ENDTEST
+END
+
+State=ST_STARTUP
+  TEST fototest = 1
+    SETSTATE ST_READY
+  ELSE
+    TEST startupTime = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+END

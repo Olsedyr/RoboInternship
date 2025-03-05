@@ -1,0 +1,187 @@
+STATEMACHINEVERSION 3
+Name=Mattop
+Output=MotorFwd "Mattop POS.2.6 Motor"
+Output=MotorRev "Mattop POS.2.6 MotorRev"
+linkValue=B01 test MattopPhoto1
+linkValue=B02 test MattopPhoto2
+linkValue=B03 test MattopPhoto3
+linkValue=B04 test MattopPhoto4
+Link=parent Parent
+Link=emergency Emergency
+Value=simulate 0
+Value=cmd 0
+Value=oneshot 0
+Timeout=TimeFwd 900000
+Timeout=TimeRev 0
+Timeout=TimeStartup 0
+Timeout=TimeMaxFindB03 10000000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	SET MotorFwd 0
+	SET MotorRev 0
+  ;TEST parent = ST_RESET
+  TEST emergency = ST_POWERON
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  TIMEOUT TimeStartup ST_STARTUP
+  SETSTATE ST_STARTUP
+END
+
+State=ST_STARTUP
+  TEST TimeStartup = 1
+    TEST cmd = 1
+		  SETSTATE ST_STOP
+    ELSETEST B04 = 1
+			TIMEOUT TimeRev ST_REV
+			SETSTATE ST_REV
+	  ELSE
+		  TIMEOUT TimeFwd ST_FORWARD
+		  SETSTATE ST_FORWARD
+	  ENDTEST
+  ELSE
+	  SET MotorFwd 1
+	  SET MotorRev 0
+	ENDTEST
+END
+
+State=ST_FORWARD
+	SET MotorFwd 1
+	SET MotorRev 0
+	TEST TimeFwd = 1
+    TEST cmd = 1
+      SETSTATE ST_STOP
+		ELSETEST B03 = 1
+			TIMEOUT TimeRev ST_REV
+			SETSTATE ST_REV
+    ELSE
+      TIMEOUT TimeMaxFindB03 ST_FIND_B03
+      SETSTATE ST_FIND_B03
+		ENDTEST
+	ENDTEST
+  ;TEST parent = ST_IDLE
+  TEST emergency = ST_POWEROFF
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_REV
+	SET MotorFwd 0
+	SET MotorRev 1
+	TEST TimeRev = 1
+		TEST cmd = 1
+			SETSTATE ST_STOP
+		ELSE
+			SETSTATE ST_WAIT_B04_FREE
+		ENDTEST
+	ENDTEST
+  ;TEST parent = ST_IDLE
+  TEST emergency = ST_POWEROFF
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_FIND_B03
+	TEST cmd = 1
+		SETSTATE ST_STOP
+  ELSETEST B04 = 1
+  AND B03 = 1
+    SETSTATE ST_WAIT_B04_FREE
+	ELSETEST B03 = 1
+    TIMEOUT TimeFwd ST_FORWARD
+		SETSTATE ST_FORWARD
+  ELSETEST TimeMaxFindB03 = 1
+    SETSTATE ST_WAIT_CMD
+  ELSE
+    SET MotorFwd 1
+	  SET MotorRev 0
+  ENDTEST
+  ;TEST parent = ST_IDLE
+  TEST emergency = ST_POWEROFF
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_WAIT_B04_FREE
+  TEST cmd = 1
+		SETSTATE ST_STOP
+	ELSETEST B04 = 0
+  OR B03 = 0
+    TIMEOUT TimeMaxFindB03 ST_FIND_B03
+	  SETSTATE ST_FIND_B03
+  ELSE
+	  SET MotorFwd 0
+	  SET MotorRev 0
+  ENDTEST
+  ;TEST parent = ST_IDLE
+  TEST emergency = ST_POWEROFF
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_CMD
+	SET MotorFwd 0
+	SET MotorRev 0
+	TEST cmd = 1
+		SETSTATE ST_STOP
+  ELSETEST B01 = 1
+  OR B02 = 1
+    TIMEOUT TimeMaxFindB03 ST_FIND_B03
+	  SETSTATE ST_FIND_B03
+  ENDTEST
+  ;TEST parent = ST_IDLE
+  TEST emergency = ST_POWEROFF
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STOP
+  ;just in case ST_REV has reactivated B01 or B02
+  TEST B01 = 1
+  AND oneshot = 0
+  OR B02 = 1
+  AND oneshot = 0
+    SETSTATE ST_FREE_B01_B02
+;    TIMEOUT TimeFwd ST_FORWARD
+;		SETSTATE ST_FORWARD
+  ELSE
+    SET oneshot 1
+	  SET MotorFwd 0
+	  SET MotorRev 0
+  ENDTEST
+	TEST cmd = 0
+    SET oneshot 0
+    TIMEOUT TimeMaxFindB03 ST_FIND_B03
+		SETSTATE ST_FIND_B03
+	ENDTEST
+  ;TEST parent = ST_IDLE
+  TEST emergency = ST_POWEROFF
+  AND simulate = 0
+    SET oneshot 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_FREE_B01_B02
+  SET oneshot 1
+  TEST B01 = 0
+  AND B02 = 0
+    SETSTATE ST_STOP
+  ELSE
+	  SET MotorFwd 1
+	  SET MotorRev 0
+  ENDTEST
+END

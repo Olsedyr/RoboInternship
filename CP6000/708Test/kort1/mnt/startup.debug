@@ -1,0 +1,8 @@
+#!/bin/sh
+RSRET="9"
+export SDL_NOMOUSE="0"
+while [ $RSRET -eq "9" ] ; do
+		./robostacker -su -s mouse
+		RSRET=$?
+		sleep 3
+done

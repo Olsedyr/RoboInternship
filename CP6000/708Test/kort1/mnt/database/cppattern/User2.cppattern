@@ -1,0 +1,12 @@
+VERSION 1
+User2 user=1
+layer=0 maxpush=4 gettime=200000
+ppp=2
+ppp=2
+ppp=2
+ppp=2
+layer=1 maxpush=4 gettime=200000
+ppp=2
+ppp=2
+ppp=2
+ppp=2

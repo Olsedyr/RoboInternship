@@ -1,0 +1,44 @@
+STATEMACHINEVERSION 3
+Name=fotoInPuls
+Timeout=Time 10000000
+Table=hartbeat 10 AVG
+Link=fotoIn
+Value=prevtime 0
+Value=currtime 0
+Value=difftime 0
+
+State=ST_HALT
+  SETSTATE ST_IDLE
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TIMEOUT Time ST_NOPULSE
+  SETSTATE ST_NOPULSE
+END
+
+State=ST_PULSE
+  TEST fotoIn = ST_HIGH 
+    SET currtime Time
+    CALC difftime = prevtime - currtime 
+    SET hartbeat difftime
+    TIMEOUT Time ST_PULSE
+    SET prevtime Time
+    SETSTATE ST_PULSE
+  ELSE
+    TEST Time = 1
+      SETSTATE ST_NOPULSE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_NOPULSE
+  TEST fotoIn = ST_HIGH 
+    TIMEOUT Time ST_PULSE
+    SET prevtime Time
+    SETSTATE ST_PULSE
+  ENDTEST
+END
+

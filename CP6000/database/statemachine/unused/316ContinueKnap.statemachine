@@ -1,0 +1,15 @@
+STATEMACHINEVERSION 3
+Include=continueknap.statemachine
+Name=ContinueKnap
+Input=Knap ""
+Timeout=TimeoutDelay 2000000
+Timeout=startDelay 0
+Value=knap 0
+
+State=ST_IDLE
+  TEST Knap = 1
+  OR knap = 1
+    TIMEOUT startDelay ST_HIGH
+    SETSTATE ST_TIMER
+  ENDTEST
+END

@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=Product1Foto1
+Input=input "ProduktConveyor1 Foto1"
+Timeout=TimeOn 100000
+Timeout=TimeOff 40000
+Value=test 0
+Link=parent Parent

@@ -1,0 +1,20 @@
+ICPCONVERSION 1
+ipaddr=192.168.0.200
+port=4002
+simulate=0
+NumOfModules=1
+Type=7063BD
+Name=Mod1
+Address=1
+DoSetup=0
+In1="Hz OK"
+In2="Foto Product In"
+In3="Extern Sync In"
+In4="disp1"
+In5="disp2"
+In6="disp3"
+In7="disp4"
+In8="disp5"
+Out1="Motor"
+Out2="Product reject"
+Out3="Extern Sync Out"

@@ -1,0 +1,98 @@
+STATEMACHINEVERSION 3
+Name=RemoteWatch
+Link=parent Parent
+Link=RobotProgram Program310
+Link=CPProgram Program
+Value=errorCode 0
+Value=message 0
+Value=tester 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SET message 0
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST RobotProgram = UNKNOWN
+		SET message 2050
+	ELSE
+		SET message 0
+		TEST CPProgram != ST_IDLE
+		AND CPProgram != ST_HALT
+		AND CPProgram != ST_RESET
+			TEST RobotProgram = ST_RUNNING_310C11
+			OR RobotProgram = ST_RUNNING_310C11Low
+				TEST CPProgram != ST_RUNNING_C11SMALL8
+				AND CPProgram != ST_RUNNING_C11LARGE6
+				AND CPProgram != PROGRAM_C11SMALL8
+				AND CPProgram != PROGRAM_C11LARGE6
+					SET errorCode 1070
+					SET tester 1
+					SETSTATE ST_IDLE
+				ENDTEST
+			ELSE
+				TEST RobotProgram = ST_RUNNING_310C18
+					TEST CPProgram != ST_RUNNING_C18BAGS8
+					AND CPProgram != ST_RUNNING_C18BAGS6
+					AND CPProgram != ST_RUNNING_C18BAGS6_ALT
+					AND CPProgram != ST_RUNNING_C18BAGS3
+					AND CPProgram != PROGRAM_C18BAGS8
+					AND CPProgram != PROGRAM_C18BAGS6
+					AND CPProgram != PROGRAM_C18BAGS6_ALT
+					AND CPProgram != PROGRAM_C18BAGS3
+						SET errorCode 1070
+						SET tester 2
+						SETSTATE ST_IDLE
+					ENDTEST
+				ELSE
+					TEST RobotProgram = ST_RUNNING_310HybschA
+					OR RobotProgram = ST_RUNNING_310HybschA6
+					OR RobotProgram = ST_RUNNING_310HybschA7
+						TEST CPProgram != ST_RUNNING_PAPSMALL8
+						AND CPProgram != PROGRAM_PAPSMALL8
+						AND CPProgram != ST_RUNNING_PAPSMALL8_TURN
+						AND CPProgram != PROGRAM_PAPSMALL8_TURN
+							SET errorCode 1070
+							SET tester 3
+							SETSTATE ST_IDLE
+						ENDTEST
+					ELSE 
+						TEST RobotProgram = ST_RUNNING_310EPS610
+							TEST CPProgram != ST_RUNNING_EPS610SMALL7
+							AND CPProgram != PROGRAM_EPS610SMALL7
+								SET errorCode 1070
+								SET tester 4
+								SETSTATE ST_IDLE
+							ENDTEST
+						ELSE
+  						TEST RobotProgram = ST_RUNNING_310C14
+							  TEST CPProgram != ST_RUNNING_C14BAGS6
+							  AND CPProgram != PROGRAM_C14BAGS6
+								  SET errorCode 1070
+								  SET tester 4
+								  SETSTATE ST_IDLE
+							  ENDTEST
+							ENDTEST
+						ENDTEST
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

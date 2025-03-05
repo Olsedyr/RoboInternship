@@ -1,0 +1,11 @@
+VERSION 1
+Test user=1
+layer=0 maxpush=3 gettime=100000
+ppp=1
+ppp=2
+ppp=3
+layer=1 maxpush=2 gettime=200000
+ppp=4
+ppp=5
+layer=2 maxpush=1 gettime=300000
+ppp=3

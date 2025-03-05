@@ -1,0 +1,10 @@
+STATEMACHINEVERSION 3
+Include=cpservolift.statemachine
+Name=ServoLift
+;** User section **
+Const=testmode 0
+Timeout=TimeTest 2000000
+Const=posTop 415.0000
+Const=posHome 55.0000
+Const=posShake 100.0000
+Const=posFree 90.0000

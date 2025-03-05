@@ -1,0 +1,9 @@
+STATEMACHINEVERSION 3
+Include=901PreCW1.statemachine
+Name=PreCW2
+Output=motor "PreCW 2 Motor"
+Link=master checkWeigherPrevS2
+;medbringerbånd. Oplysningsvalue :)
+Value=detteErMedbringerConv 1
+Timeout=timeRunAgain 0
+Timeout=timeStop 0

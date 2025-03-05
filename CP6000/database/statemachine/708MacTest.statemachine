@@ -1,0 +1,49 @@
+STATEMACHINEVERSION 3
+Name=MacTest
+Output=Mode "LangBufferSkub Mode"
+Output=setpoint "LangBufferSkub MacSetpoint"
+Output=vsoll "LangBufferSkub Maxvel"
+Output=set_curpos "LangBufferSkub Curpos"
+Input=temp "LangBufferSkub Temperature"
+Input=Inpos "LangBufferSkub IN_POS"
+Input=curpos "LangBufferSkub Curpos"
+Input=curvel "LangBufferSkub Curvel"
+Value=count 0
+Timeout=TimeRun 2000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+END
+
+State=ST_RESET
+	SET Mode 2
+	SET count 0
+	TIMEOUT TimeRun ST_RUN
+	SETSTATE ST_RUN
+END
+
+State=ST_RUN
+	TEST TimeRun = 1
+		CALC setpoint = setpoint + 10000
+		TIMEOUT TimeRun ST_RUN
+		SETSTATE ST_RUN
+		CALC count = count + 1
+	ENDTEST
+	TEST count >= 10
+		TEST Inpos = 0
+			SETSTATE ST_GOIDLE
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_GOIDLE
+	TEST Inpos = 1
+		SET Mode 0
+		SETSTATE ST_IDLE
+	ENDTEST
+END

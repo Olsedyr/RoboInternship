@@ -1,0 +1,46 @@
+MACVERSION 1
+ipaddr=192.168.0.202
+port=4001
+simulate=0
+NumOfMotors=1
+Name=LangBufferSkubMotor
+Address=254
+;SoftWareReset
+Init37=0 "START_MODE" "Passive startmode" longint
+Init36=0x20 "CNTRL_BITS" "Resync position" longint
+Init2=0 "MODE_REG" "Passive mode" longint
+Init3=0 "P_SOLL" "Commanded position" longint
+Init10=0 "P_IST" "Actual motor position set to zero" longint
+Init23=0x01 "UV_HANDLE" "Set errorbit when UV" longint
+Init28=-10000000 "MIN_P_IST" "Neg Software Limit" longint
+Init30=10000000 "MAX_P_IST" "Pos Software Limit" longint
+Init35=0x00 "ERR_STAT" "Clear errors" longint
+InBits35="LangBufferSkub Status" "ERR_STAT" longint
+Bit0="LangBufferSkub I2T_ERR" "I2t error"
+Bit1="LangBufferSkub FLW_ERR" "Follow error"
+Bit2="LangBufferSkub FNC_ERR" "Function error"
+Bit3="LangBufferSkub UIT_ERR" "Regenerative error"
+Bit4="LangBufferSkub IN_POS"  "In position"
+Bit5="LangBufferSkub ACC_FLAG" "Accelerating"
+Bit6="LangBufferSkub DEC_FLAG" "Decelerating"
+Bit7="LangBufferSkub PLIM_ERR" "Position limits error"
+Bit8="LangBufferSkub DEGC_ERR" "Temperature error"
+Bit9="LangBufferSkub UV_ERR"  "Undervoltage error"
+Bit10="LangBufferSkub UV_DETECT" "Low voltage at high volt bus"
+Bit11="LangBufferSkub OV_ERR" "Overvoltage error"
+Bit12="LangBufferSkub IPEAK_ERR" "Motor over current"
+Bit13="LangBufferSkub SPEED_ERR" "Over speed error"
+Bit14="LangBufferSkub DIS_P_LIM" "SW limits disabled"
+Bit15="LangBufferSkub INDEX_ERR" "internal encoder error"
+Bit16="LangBufferSkub OLD_FILT_ERR" "Filter setting not valid"
+Bit17="LangBufferSkub U24V_ERR" "Control supply has been too low"
+EndBits
+InOut10="LangBufferSkub Curpos" "P_IST" longint
+Out13="LangBufferSkub Load Factor" "KVOUT" fixed16
+In29="LangBufferSkub Temperature" "DEGC" longint factor=0.12207
+Out2="LangBufferSkub Mode" "MODE_REG" longint
+Out3="LangBufferSkub MacSetpoint" "P_SOLL" longint
+Out5="LangBufferSkub Maxvel" "V_SOLL" longint factor=0.36093786
+Out6="LangBufferSkub Maxacc" "A_SOLL" longint factor=277.921911
+Out35="LangBufferSkub Status" "ERR_STAT" longint
+In11="LangBufferSkub Curvel" "V_IST_16" longint factor=0.36093786

@@ -1,0 +1,44 @@
+STATEMACHINEVERSION 2
+Name=FlowStop
+Input=0,Foto1 "Flow Foto1"
+Output=0,Flow "Flow Signal"
+Timeout=0,TimeFoto1on 8000000
+Timeout=1,TimeFoto1off 3000000
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_IDLE
+  TIMEOUT TimeFoto1off ST_FOTO1_OFF
+  SETSTATE ST_FOTO1_OFF
+  END
+
+State=0,ST_FOTO1_OFF
+  TEST Foto1 = 1
+    TIMEOUT TimeFoto1on ST_FOTO1_ON
+    SETSTATE ST_FOTO1_ON
+  ELSE
+    TEST TimeFoto1off = 1
+      SET Flow 1
+    ENDTEST
+  ENDTEST
+  END
+
+State=0,ST_FOTO1_ON
+  TEST Foto1 = 0
+    TIMEOUT TimeFoto1off ST_FOTO1_OFF
+    SETSTATE ST_FOTO1_OFF
+  ELSE
+    TEST TimeFoto1on = 1
+      SET Flow 0
+    ENDTEST
+  ENDTEST
+  END
+
+State=0,ST_RESET
+  SET Flow 0
+	SETSTATE ST_IDLE
+END

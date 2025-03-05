@@ -1,0 +1,10 @@
+; INLINE 310inlineLoadPalletA.statemachine
+TEST pap = 0
+	SETFRAME fromFrame toFrame1
+	;*******************************************
+	SETFRAME toFrame1 conveyorA
+	CALC toFrame1.y = toFrame1.y + item.my
+	LOAD palletA_conveyorA fromFrame toFrame1
+	;*******************************************
+	LOAD palletA_home fromFrame home
+ENDTEST

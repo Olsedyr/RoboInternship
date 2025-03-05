@@ -1,0 +1,26 @@
+STATEMACHINEVERSION 2
+Name=Flip
+Value=0,flip 0
+Value=1,one 1
+ 
+State=0,ST_HALT
+END
+
+State=0,ST_IDLE
+END
+
+State=0,ST_TIMER
+END
+
+State=0,ST_READY
+  SET flip 0
+END
+
+State=0,ST_BEGINFLIP
+END
+
+State=0,ST_RESET
+  TEST flip = one
+    SETSTATE ST_BEGINFLIP
+  ENDTEST
+END

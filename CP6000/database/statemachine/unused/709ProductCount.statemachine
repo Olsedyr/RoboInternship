@@ -1,0 +1,18 @@
+STATEMACHINEVERSION 3
+Include=cpproductcount.statemachine
+Name=ProductCount
+Link=CamGenSkub ServoSkub
+Link=rfoto1 Product1Foto1
+Link=rfoto2 Product1Foto2
+Link=lfoto1 Product2Foto1
+Link=lfoto2 Product2Foto2
+;** User section **
+Value=superhack_AdjustProdConv1Foto2AndEdit709ProductCount
+Value=rfoto2test 1
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+    PRINT superhack_AdjustProdConv1Foto2AndEdit709ProductCount
+		SETSTATE ST_RESET
+	ENDTEST
+END

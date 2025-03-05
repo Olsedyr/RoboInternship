@@ -1,0 +1,44 @@
+STATEMACHINEVERSION 3
+Name=ConveyorsTripWatch
+Input=Sync1 "Sync Conveyor 1 HZOK"
+Input=Sync2 "Sync Conveyor 2 HZOK"
+Input=Sync3 "Sync Conveyor 3 HZOK"
+Input=Accum "Accumulating Conveyor HZOK"
+Input=Long "Long Conveyor Motor Tripped"
+Input=Collect "Collect Conveyor Motor Tripped"
+Input=Bend "Bend Conveyor Motor Tripped"
+Link=parent ParentS1
+Value=errorCode 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST Sync1 = 0
+  OR Sync2 = 0
+  OR Sync3 = 0
+  OR Accum = 0
+  OR Long = 1
+  OR Collect = 1
+  OR Bend = 1
+		SET errorCode 1100
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

@@ -1,0 +1,267 @@
+STATEMACHINEVERSION 3
+Name=Conveyor
+Output=motor "Kasse Ind 1 Motor"
+;will only be set when softsend = 1:
+Output=softStarter "Kasse Ind 1 Motor"
+Link=prev PrevConveyor
+Link=prev2 PrevConveyor2
+Link=next NextConveyor
+Link=foto Foto
+Link=parent Parent
+Value=errorCode 0
+Value=softwait 0
+Value=sendAndWait 0
+Value=gotCase 0
+Value=m1121 1121
+;Time for conveyor to stop and wait before sending soft. Only valid when softstarter is present:
+Timeout=softwaitTime 1000000
+;Time for case/product to leave conveyor after foto has gone free
+Timeout=freeWaitTime 1000000
+Timeout=extraReceiveTime 100000
+;conveyor options:
+;conveyor has softstarter and should send soft:
+Const=softSend 0
+;conveyor has 2 prev:
+Const=doubleReceive 0
+;conveyor has one or two prev that softsends and should receive extraReceiveTime longer to get case around corner:
+;prev -> softReceive1 and prev2 -> softReceive2
+Const=softReceive1 0
+Const=softReceive2 0
+Const=resetOnError 1
+;value used by doubleReceiving conveyors, indicates which prev that can send, when doubleReceive = 0 recv1 and recv2 is not changed from initial value (1 & 0).
+;prev should use recv1 and prev2 should use recv2 (flipped in ST_EMPTY)
+Value=recv1 1
+Value=recv2 0
+;value used for sending conveyors where next is doubleReceiver to indicate if sending is allowed, set to self if receiver is not doubleReceiver or doesn't have recv1 and 2 - should then always be 1 for sending to be possible
+linkValue=canSend recv1 next
+linkValue=firstRun WorkCell
+Timeout=startupTime 5000000
+Timeout=maxReceiveTime 10000000
+Value=simulate 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET motor 0
+  TEST softSend = 1
+    SET softStarter 0
+  ENDTEST
+	TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  TEST foto = ST_BLOCKED
+		SETSTATE ST_READY
+	ELSE
+    TEST foto = ST_FREE
+      TIMEOUT startupTime ST_STARTUP
+	    SETSTATE ST_STARTUP
+    ENDTEST
+	ENDTEST
+END
+
+State=ST_STARTUP
+  TEST firstRun = 1
+  OR gotCase = 1
+    TEST startupTime = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      TEST foto = ST_BLOCKED
+		    SETSTATE ST_READY
+      ELSE
+        SET motor 1
+      ENDTEST
+	  ENDTEST
+  ELSE
+    SETSTATE ST_EMPTY
+  ENDTEST
+END
+
+State=ST_PREMPTY
+  SET gotCase 0
+  TEST doubleReceive = 1
+    TEST recv1 = 1
+      SET recv1 0
+      SET recv2 1
+    ELSE
+      SET recv1 1
+      SET recv2 0
+    ENDTEST
+  ENDTEST
+  SETSTATE ST_EMPTY
+END
+
+State=ST_EMPTY
+  SET gotCase 0
+  TEST softSend = 1
+    SET softStarter 0
+  ENDTEST
+	TEST foto = ST_BLOCKED
+		SETSTATE ST_READY
+	ENDTEST
+	TEST prev = ST_SEND
+    SET recv1 1
+    SET recv2 0
+    TIMEOUT maxReceiveTime ST_RECEIVE
+		SETSTATE ST_RECEIVE
+  ELSE
+    TEST prev2 = ST_SEND
+      SET recv1 0
+      SET recv2 1  
+      TIMEOUT maxReceiveTime ST_RECEIVE
+		  SETSTATE ST_RECEIVE
+    ELSE
+      SET motor 0
+      TEST doubleReceive = 1
+        TEST prev = ST_READY
+        AND prev2 != ST_READY
+        AND prev2 != ST_SEND
+          SET recv1 1
+          SET recv2 0
+        ENDTEST
+        TEST prev != ST_READY
+        AND prev != ST_SEND
+        AND prev2 = ST_READY
+          SET recv1 0
+          SET recv2 1
+        ENDTEST
+        ;if both are in ST_READY values set in ST_PREMPTY are used
+      ENDTEST
+	  ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    TEST simulate = 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  SET motor 1
+  TEST softSend = 1
+    SET softStarter 1
+  ENDTEST
+  TEST prev != ST_SEND
+  AND prev2 != ST_SEND
+    SET gotCase 1
+  ENDTEST
+  TEST foto = ST_BLOCKED
+    SET gotCase 1
+    TEST softReceive1 = 1
+    AND recv1 = 1
+      TIMEOUT extraReceiveTime ST_RECEIVE2
+      SETSTATE ST_RECEIVE2
+    ELSE
+      TEST softReceive2 = 1
+      AND recv2 = 1
+        TIMEOUT extraReceiveTime ST_RECEIVE2
+        SETSTATE ST_RECEIVE2
+      ELSE
+        TEST next = ST_EMPTY
+        AND canSend = 1
+          SETSTATE ST_SEND
+        ELSE
+          SETSTATE ST_READY
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST maxReceiveTime = 1
+    TEST resetOnError = 1
+      SETSTATE ST_RESET
+    ELSE
+      SET errorCode m1121
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RECEIVE2
+  TEST extraReceiveTime = 1
+    TEST next = ST_EMPTY
+    AND canSend = 1
+      SETSTATE ST_SEND
+    ELSE
+      SETSTATE ST_READY
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_READY
+  SET gotCase 1
+  TEST softSend = 1
+    SET softStarter 0
+  ENDTEST
+  TEST next = ST_EMPTY
+  AND canSend = 1
+    SETSTATE ST_SEND
+  ELSE
+	  SET motor 0
+  ENDTEST
+  TEST foto = ST_FREE
+    SETSTATE ST_PREMPTY
+  ENDTEST
+  TEST parent = ST_IDLE
+    TEST simulate = 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST sendAndWait = 1
+    TEST freeWaitTime = 1
+      SET sendAndWait 0
+      SETSTATE ST_PREMPTY
+    ENDTEST
+  ELSE
+    TEST softSend = 1
+      TEST softwait = 0
+        SET motor 0
+        SET softStarter 0
+        SET softwait 1
+        TIMEOUT softwaitTime ST_SEND
+        SETSTATE ST_SEND
+      ELSE
+        TEST softwaitTime = 1
+          TEST next = ST_RECEIVE
+            SET motor 1
+            SET softStarter 1
+          ENDTEST
+          TEST next != ST_RECEIVE
+          AND next != ST_EMPTY
+            SETSTATE ST_PREMPTY
+          ENDTEST
+          TEST foto = ST_FREE
+            SET softwait 0
+            SET sendAndWait 1
+            TIMEOUT freeWaitTime ST_SEND
+            SETSTATE ST_SEND
+          ENDTEST
+        ENDTEST
+      ENDTEST
+    ELSE
+      ;no softStarter
+      TEST next = ST_RECEIVE
+		    SET motor 1
+	    ENDTEST
+      TEST next != ST_RECEIVE
+      AND next != ST_EMPTY
+        SETSTATE ST_PREMPTY
+      ENDTEST
+	    TEST foto = ST_FREE
+        SET sendAndWait 1
+        TIMEOUT freeWaitTime ST_SEND
+        SETSTATE ST_SEND
+	    ENDTEST
+    ENDTEST
+  ENDTEST
+END

@@ -1,0 +1,56 @@
+VERSION 1
+804
+Robots 0
+Tools 0
+Items 6
+C18.item
+C11.item
+IFCO16.item
+IFCO18.item
+IFCO20.item
+Netto.item
+Patterns 0
+Accessories 0
+PPScripts 0
+Dio 1
+804.io
+ComSKs 1
+804.comsk
+LoadCell 0
+Macs 0
+Statemachines 33
+804WorkCell.statemachine
+804Parent.statemachine
+804Program.statemachine
+804ContinueKnap.statemachine
+804TrafficLight.statemachine
+804ErrorCode.statemachine
+804IOError.statemachine
+804Emergency.statemachine
+804TripWatch.statemachine
+804PalleStationFotoStabel1.statemachine
+804PalleStationFotoStabel2.statemachine
+804PalleStationFotoMellemrum.statemachine
+804PalleStationLampe.statemachine
+804PalleStationPort.statemachine
+804PalleStationPortLukketKontakt.statemachine
+804PalleStation.statemachine
+804ConveyorStation.statemachine
+804ConveyorStationFotoStabel1.statemachine
+804ConveyorStationFotoStabel2.statemachine
+804ConveyorStationFotoFremme.statemachine
+804KasseStativ.statemachine
+804KasseStativFotoModtaget.statemachine
+804KasseStativFotoTom.statemachine
+804KasseStativFotoAfleveret.statemachine
+804CamGenLift.statemachine
+804PIDLift.statemachine
+804CMCounter.statemachine
+804CaseCount.statemachine
+804CaseCountFoto.statemachine
+804Foto1600.statemachine
+804Conveyor1600.statemachine
+804PindeTjekker600.statemachine
+804PindeTjekker600FotoIn.statemachine
+STATETEKST danish.statetekst
+LANGUAGE danish.language

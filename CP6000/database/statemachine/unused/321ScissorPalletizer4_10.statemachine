@@ -1,0 +1,57 @@
+STATEMACHINEVERSION 3
+Include=scissorpalletizer.statemachine
+Name=ScissorPalletizer4_10
+Output=rollerfwd "PC7 POS.4.10 Motor"
+Output=rollerrev "PC7 POS.4.10 MotorRev"
+Output=pump "ScissorTable POS.4.10 Pump"
+Output=yv1 "ScissorTable POS.4.10 YV1"
+Output=yv2 "ScissorTable POS.4.10 YV2"
+Output=centre "CentreValve POS.4.10"
+Output=scissorSecureReset "Scissor Secure Reset"
+linkValue=palletInPlace test Sc4_10PalletInPlace
+Input=palletInPlacePrev "PC7 POS.4.9 Photo"
+Input=photoup "ScissorTable POS.4.10 PhotoUp"
+linkValue=limitdown test Sc4_10PhotoDownLimit
+linkValue=limitup test Sc4_10PhotoUpLimit
+linkValue=nextcardboardlayer nextcardboardlayer2 CardBoardShuttle
+linkValue=palletizingEnable Program321
+Link=prev Pos4_9
+Link=next Pos4_11
+Link=next2 Pos4_12
+Link=parent Parent
+Value=finito 0
+Value=inBottomPos 0
+Value=simulate 0
+Value=message 0
+Value=downstep 0
+Const=ON 0
+Const=prevON 0
+Const=scUpON 0
+Value=cPallet 0
+Value=reverseCommand 0
+Timeout=maxDelayStop 10000000
+Timeout=StopDelay 100000
+Timeout=TimeCentrePos 1000000
+Timeout=TimeCentre 3000000
+Timeout=TimeRevCentre 2000000
+Timeout=MinTimeSearchEdge 500000
+
+; a scissorpalletizer is fast up / std down
+; a scissordepalletizer is std up / fast down
+Timeout=TimeOpenCentering 1000000
+
+State=ST_IDLE
+  SET rollerfwd 0
+	SET rollerrev 0
+  SET pump 0
+  SET yv1 0
+	SET yv2 0
+  SET centre 0
+  TEST parent = ST_RESET
+  OR simulate = 1
+    TEST palletizingEnable = 1
+      SET errorCode 0
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END

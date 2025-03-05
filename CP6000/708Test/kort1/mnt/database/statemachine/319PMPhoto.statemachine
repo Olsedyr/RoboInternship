@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=PalletMagazinePhoto
+Input=input "PM POS.2.5 Photo"
+Timeout=TimeOn 500000
+Timeout=TimeOff 200000
+Value=test 0
+Const=active 0

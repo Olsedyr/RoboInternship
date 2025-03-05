@@ -1,0 +1,457 @@
+STATEMACHINEVERSION 3
+Name=KasseLift
+;** Input **
+;** Output **
+Output=Centrer "KasseCentrer"
+Output=Kassestop "dummyOut"
+Output=Kassestop1 "dummyOut"
+Output=Motor "KasseLift Conveyor Motor" 
+;** Link **
+Link=CamGen CamGenLift
+Link=parent Parent
+Link=KasseInLiner
+Link=BufferPlads
+Link=next KasseLiftNext
+Link=Foto KasseLiftFoto
+Link=vibrator Vibrator
+;** linkValue **
+linkValue=firstRun WorkCell
+linkValue=Fototest test Foto
+linkValue=maxlayers PushPattern 
+linkValue=timeMotorInGoDown Program
+linkValue=noShakeOnLast Program
+linkValue=waitInR3 Program
+linkValue=kasseStopType Program
+linkValue=full BufferPlads
+linkValue=emptyflag BufferPlads
+linkValue=manuelt Program
+linkValue=canSend recv1 next
+;** Table **
+;** Item **
+;** Const **
+Const=centerOutInShake 0
+;** Value **
+Value=errorCode 0
+Value=layers 0
+Value=curshake 0
+Value=reboot 0
+Value=startingup 0
+Value=inShake 0
+Value=temp 0.0
+Value=sending 0
+Value=centered 0
+Value=testmode 0
+Value=simulate 0
+;** Timeout **
+Timeout=KStopDelay 2000000
+Timeout=TimeStartUp 4000000
+Timeout=TimeWaitShake 300000
+Timeout=TimeSend 10000000
+Timeout=TimePapMotor 0
+Timeout=TimeW3 3000000
+Timeout=testTime 3000000
+Timeout=minSendTime 500000
+Timeout=TimeCenter 1100000
+Timeout=TimeInCenter 1000000
+Timeout=timeCentrerOut 300000
+
+; reboot = 0 -> ren rÃ¸v
+; reboot = 1 -> starter med tom kasse
+; reboot = 2 -> starter med fyldt kasse
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Centrer 0
+  SET Kassestop 0
+  SET Kassestop1 0
+  SET Motor 0
+  TEST parent = ST_RESET
+  AND manuelt = 0
+    SETSTATE ST_RESET
+  ENDTEST
+  TEST simulate = 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	TEST firstRun = 1
+		SET reboot 0
+		SET layers 0
+	ENDTEST
+	SET curshake 0
+	SET inShake 0
+	SET startingup 1
+	SET Motor 0
+	TEST CamGen = ST_CHOOSETRACK
+		SETSTATE ST_BEGINHOME
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_STARTUP
+	SET startingup 0
+	TEST Foto = ST_OFF
+		TEST reboot = 1
+			SETSTATE ST_READY1
+		ELSE
+			TEST reboot = 2
+				TIMEOUT TimeW3 ST_READY
+				SETSTATE ST_READY
+			ELSE
+				TEST reboot = 0
+					TIMEOUT KStopDelay ST_PREPARE_SEARCHBOX
+					SETSTATE ST_PREPARE_SEARCHBOX
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ELSE
+		TEST Foto = ST_ON
+			TEST reboot = 0
+				SETSTATE ST_EMPTY
+			ELSE
+				TIMEOUT KStopDelay ST_PREPARE_SEARCHBOX
+				SETSTATE ST_PREPARE_SEARCHBOX
+			ENDTEST
+	  ENDTEST
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_PREPARE_SEARCHBOX
+	SET Centrer 0
+  TEST kasseStopType = 1
+	  SET Kassestop 1
+	  SET Kassestop1 0
+  ELSETEST kasseStopType = 2
+	  SET Kassestop 1
+    SET Kassestop1 1
+  ENDTEST
+	TEST KStopDelay = 1
+		TIMEOUT TimeStartUp ST_SEARCHBOX
+		SETSTATE ST_SEARCHBOX
+  ENDTEST
+END
+
+State=ST_SEARCHBOX
+	SET Motor 1
+	TEST TimeStartUp = 1
+		SET reboot 0
+		SETSTATE ST_STARTUP
+  ENDTEST
+	TEST Fototest = 0
+    TEST simulate = 1
+      SETSTATE ST_SEND
+    ELSE    
+		  SET reboot 1
+		  SETSTATE ST_STARTUP
+	  ENDTEST
+  ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_EMPTY
+	SET Centrer 0
+  TEST kasseStopType = 1
+	  SET Kassestop 1
+	  SET Kassestop1 0
+  ELSETEST kasseStopType = 2
+	  SET Kassestop 1
+    SET Kassestop1 1
+  ENDTEST
+  TEST KasseInLiner = ST_SEND
+		SET Motor 1
+		SET centered 0
+		TIMEOUT TimeCenter ST_RECEIVE
+		SETSTATE ST_RECEIVE
+	ELSE
+		SET Motor 0
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+	SET Motor 1
+	TEST centered = 0
+		TEST TimeCenter = 1
+			SET Centrer 1
+			SET centered 1
+			TIMEOUT TimeInCenter ST_RECEIVE
+			SETSTATE ST_RECEIVE
+		ENDTEST
+	ELSE
+		TEST TimeInCenter = 1
+		AND centered = 1
+			SET Centrer 0
+			SET centered 2
+		ENDTEST
+	ENDTEST
+	TEST Fototest = 0
+		SET Centrer 1
+		SET Motor 0
+		SET reboot 1
+    TEST simulate = 1
+      SETSTATE ST_SEND
+    ELSE
+		  SETSTATE ST_READY1
+    ENDTEST
+	ENDTEST
+	TEST KasseInLiner = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_READY1
+	SET Motor 0
+	SET Centrer 1
+	TEST CamGen = ST_CHOOSETRACK
+		SETSTATE ST_BEGINHIGH
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_READY2
+	SET Kassestop 0
+	SET Kassestop1 0
+	TEST BufferPlads = ST_OPEN
+		CALC layers = layers + 1
+		TEST layers >= maxlayers
+			SET layers 0
+		ENDTEST
+		SETSTATE ST_SHAKE1
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SHAKE1
+	TEST layers = 0
+	AND noShakeOnLast = 1
+		SETSTATE ST_SHAKEDONE
+	ELSE
+		TEST CamGen = ST_CHOOSETRACK
+			SET inShake 1
+      TEST centerOutInShake = 1
+        SET Centrer 0
+      ENDTEST
+			SETSTATE ST_BEGINHIGH
+    ELSE
+      TEST CamGen = ST_NOCHOOSETRACK
+      OR CamGen = ST_IDLE
+        SETSTATE ST_IDLE
+      ENDTEST
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_SHAKE2
+  TEST emptyflag = 1
+		TIMEOUT TimeWaitShake ST_SHAKE3
+		SETSTATE ST_SHAKE3
+	ENDTEST
+END
+
+State=ST_SHAKE3
+	TEST TimeWaitShake = 1
+		SET inShake 2
+		TEST CamGen = ST_CHOOSETRACK
+			SETSTATE ST_BEGINHIGH
+    ELSE
+      TEST CamGen = ST_NOCHOOSETRACK
+      OR CamGen = ST_IDLE
+        SETSTATE ST_IDLE
+      ENDTEST
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_SHAKEDONE
+	SET inShake 0
+  TEST centerOutInShake = 1
+    SET Centrer 1
+  ENDTEST
+	TEST layers = 0
+		SET reboot 2
+		SETSTATE ST_GODOWN
+	ELSE
+		SETSTATE ST_READY2
+  ENDTEST
+END
+
+State=ST_GODOWN
+	TEST timeMotorInGoDown != 0
+		SET Centrer 0
+	ENDTEST
+	TEST CamGen = ST_CHOOSETRACK
+		SET TimePapMotor timeMotorInGoDown
+		TIMEOUT TimePapMotor ST_BEGINHOME
+		SETSTATE ST_BEGINHOME
+  ELSE
+    TEST CamGen = ST_NOCHOOSETRACK
+    OR CamGen = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+	ENDTEST
+END
+
+State=ST_READY
+	SET Kassestop 0
+	SET Kassestop1 0
+  TEST vibrator = ST_GO
+	  SET Centrer 1
+  ELSE
+	  SET Centrer 0
+  ENDTEST
+  TEST waitInR3 = 0
+  OR TimeW3 = 1
+    TEST next = ST_EMPTY
+    AND canSend = 1
+			SET Centrer 0
+      TIMEOUT timeCentrerOut ST_SEND
+			SETSTATE ST_SEND
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST sending = 0
+	  SET Centrer 0
+	  TEST timeCentrerOut = 1
+    TEST next = ST_RECEIVE
+    OR simulate = 1
+      SET sending 1
+      SET Motor 1
+      TIMEOUT minSendTime ST_SEND
+      SETSTATE ST_SEND
+	  ENDTEST
+    ENDTEST
+  ELSE
+    TEST sending = 1
+      TEST minSendTime = 1
+        SET sending 2
+		    TIMEOUT TimeSend ST_SEND
+		    SETSTATE ST_SEND
+      ENDTEST
+    ELSE
+      TEST sending = 2
+        TEST Fototest = 1
+          SET sending 0
+		      SET reboot 0
+		      SETSTATE ST_EMPTY
+	      ENDTEST
+	      TEST TimeSend = 1
+          SET sending 0
+		      SET errorCode 1014
+		      SETSTATE ST_IDLE
+	      ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_BEGINHOME
+  TEST CamGen = ST_START
+    SETSTATE ST_GO
+  ELSE
+    TEST CamGen = ST_NOCHOOSETRACK
+    OR CamGen = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TESTMODE
+  TEST testTime = 1
+  AND CamGen = ST_CHOOSETRACK
+    SET startingup 0
+    SET inShake 0
+    SET reboot 2
+    SETSTATE ST_BEGINHOME
+  ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_BEGINHIGH
+  TEST CamGen = ST_START
+    TEST testmode = 1
+      TIMEOUT testTime ST_TESTMODE
+      SETSTATE ST_TESTMODE
+    ELSE
+      SETSTATE ST_GO
+    ENDTEST
+  ELSE
+    TEST CamGen = ST_NOCHOOSETRACK
+    OR CamGen = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GO
+	TEST reboot = 2
+		CALC temp = timeMotorInGoDown * 0.8
+		TEST TimePapMotor < temp
+			SET Motor 1
+		ENDTEST
+		TEST TimePapMotor = 1
+			SET Motor 0
+		ENDTEST
+	ENDTEST
+  TEST CamGen = ST_STOP
+		TEST startingup = 1
+			SETSTATE ST_STARTUP
+		ELSE
+			TEST inShake = 1
+				SETSTATE ST_SHAKE2
+			ELSE
+				TEST inShake = 2
+					SETSTATE ST_SHAKEDONE
+				ELSE
+					TEST reboot = 1
+						SETSTATE ST_READY2
+					ELSE
+						TEST reboot = 2
+							SET Motor 0
+							TIMEOUT TimeW3 ST_READY
+							SETSTATE ST_READY
+						ENDTEST
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+	TEST CamGen = ST_NOCHOOSETRACK
+  OR CamGen = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

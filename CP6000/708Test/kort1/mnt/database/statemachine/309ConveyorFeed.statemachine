@@ -1,0 +1,71 @@
+STATEMACHINEVERSION 2
+Name=ConveyorFeed
+Delaystop=1000000
+Input=0,Foto "ConveyorFeed foto"
+Input=1,Endestop "ConveyorIn endestop"
+Output=0,Motor "ConveyorFeed Motor"
+Link=0,KassePakkerBottom
+Link=1,KassePakkerTop
+Timeout=0,ReadyTime 20000
+
+State=0,ST_TIMER
+END
+
+State=0,ST_HALT
+END
+
+State=0,ST_IDLE
+  SET Motor 0 
+END
+
+State=1,ST_READY
+  TEST KassePakkerBottom = ST_EMPTYMANUEL
+    TIMEOUT ReadyTime ST_SEND
+    SETSTATE ST_SEND
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=1,ST_SEND
+  TEST ReadyTime = 1
+    SET Motor 1
+  ENDTEST
+  TEST Foto = 0
+  AND KassePakkerBottom = ST_READYMANUEL
+    SET Motor 0
+    SETSTATE ST_EMPTY
+  ENDTEST
+END
+
+State=2,ST_EMPTY
+  TEST Foto = 1
+    SETSTATE ST_READY
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=5,ST_RESET
+  SET Motor 0
+  TEST Endestop = 0
+    SETSTATE ST_AUTO
+  ELSE
+    TEST Foto = 1
+      SETSTATE ST_READY
+    ELSE
+      SETSTATE ST_EMPTY
+    ENDTEST
+  ENDTEST
+END
+
+State=5,ST_AUTO
+  TEST Endestop = 1
+    SETSTATE ST_RESET
+  ENDTEST
+  TEST KassePakkerTop = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

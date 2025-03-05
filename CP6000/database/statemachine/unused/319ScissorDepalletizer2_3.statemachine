@@ -1,0 +1,51 @@
+STATEMACHINEVERSION 3
+Include=scissordepalletizer.statemachine
+Name=ScissorDepalletizer2_3
+Output=rollerfwd "PC3 POS.2.3 Motor"
+Output=rollerrev "PC3 POS.2.3 MotorRev"
+Output=pump "ScissorTable POS.2.3 Pump"
+Output=yv1 "ScissorTable POS.2.3 YV1"
+Output=yv2 "ScissorTable POS.2.3 YV2"
+Output=yv3 "ScissorTable POS.2.3 YV3"
+Output=centre "CentreValve 1 POS.2.3"
+Output=scissorSecureReset "Scissor Secure Reset"
+linkValue=palletInPlace test Sc2_3PalletInPlace
+Input=palletInPlacePrev "PC2 POS.2.2 Photo"
+Input=photoup1 "ScissorTable POS.2.3 PhotoUp1"
+Input=photoup2 "ScissorTable POS.2.3 PhotoUp2"
+Input=photoup3 "ScissorTable POS.2.3 PhotoUp3"
+Input=photoup4 "ScissorTable POS.2.3 PhotoUp4"
+linkValue=limitdown test Sc2_3PhotoDownLimit
+linkValue=limitup test Sc2_3PhotoUpLimit
+;linkValue=casekind casekind Program319
+linkValue=usePhotoUp Program319
+Link=next PalletConveyor7
+Link=prev PalletConveyor2
+Link=parent Parent
+Value=finito 0
+Value=inTopPos 0
+Value=simulate 0
+Value=message 0
+Value=moveIsSafe 0
+Const=ON 0
+Const=prevON 0
+Const=scUpON 0
+Value=cPallet 0
+Value=upstep 0
+; keep following up to date with casekind.statemachine
+;Value=casekind_CanLayer1 20
+;Value=casekind_JarLayer1 21
+;Value=casekind_CanLayer2 23
+;Value=casekind_JarLayer2 24
+Timeout=maxDelayStop 10000000
+Timeout=StopDelay 100000
+Timeout=TimeCentrePos 3500000
+Timeout=TimeCentre 4000000
+Timeout=MinTimeSearchEdge 500000
+Timeout=TimeRevAfterRec 1000000
+Value=reverseCommand 0
+
+; a scissorpalletizer is fast up / std down
+; a scissordepalletizer is std up / fast down
+Timeout=TimeFwdCentre 2000000
+Timeout=TimeYV3 15000000

@@ -1,0 +1,58 @@
+STATEMACHINEVERSION 2
+Name=checkWeigherMotor
+Input=0,externalStart "Start/stop vejebånd"
+Output=0,motor "Start vejebånd"
+Output=1,getProduct "Skaf produkt"
+Const=0,stopType 0
+Const=1,one 1
+Link=0,checkWeigher
+Link=1,fotoInBlocked
+Timeout=0,timeStopDelay 500000
+Timeout=1,timeStartDelay 1000000
+
+State=0,ST_HALT
+END
+
+State=0,ST_ERROR
+ SET motor 0 
+ SET getProduct 0
+END
+
+State=0,ST_TIMER
+END
+
+State=0,ST_IDLE
+  SET motor 0 
+  SET getProduct 0
+END
+
+State=5,ST_RESET
+  TEST checkWeigher = ST_WAIT_FOR_PRODUCT
+    SETSTATE ST_READY 
+  ENDTEST
+END
+
+State=5,ST_READY
+  SET motor 1
+  TEST externalStart = 0
+    TEST checkWeigher = ST_WAIT_FOR_PRODUCT
+      SET getProduct 1
+    ENDTEST
+  ELSE
+    SET getProduct 0
+  ENDTEST
+  TEST stopType = one  
+    TEST checkWeigher = ST_ERROR
+    OR checkWeigher = ST_PRODUCT_OUTSIDE
+      SETSTATE ST_ERROR
+    ENDTEST
+  ELSE    
+    TEST checkWeigher = ST_ERROR
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+  TEST checkWeigher = ST_DO_CALIBRATE
+  OR fotoInBlocked = ST_BLOCKED
+    SET getProduct 0
+  ENDTEST
+END

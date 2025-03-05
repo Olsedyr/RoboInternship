@@ -1,0 +1,478 @@
+STATEMACHINEVERSION 3
+Include=rclpattern.statemachine
+Name=ProgramB1
+;*******************************************
+;* LINK's                 
+;*******************************************
+Link=program Program401
+Link=parent Parent
+Link=robot Robot
+Link=Tool
+Link=ConveyorOut
+Link=Lift
+;*******************************************
+;* VALUE's                
+;*******************************************
+linkValue=wBItems program
+linkValue=timeInCrate program
+linkValue=robotspeedpct program
+linkValue=autorobotspeed program
+linkValue=pattern program
+linkValue=caseProg program
+linkValue=WorkCellFirstRun firstRun WorkCell
+;when roboError > 0 and restart = 1 the workcell can be restarted 
+linkValue=restart RoboError 
+linkValue=resetpreload Loader 
+;when 2 or more path's must run as one - set delaystop = 1
+;before start off first path and = 0 after last
+;executer will test this value before pausing execution
+linkValue=delaystop Robot
+linkValue=axis_t Robot
+linkValue=pathtype Robot
+linkValue=nextcase Lift 
+linkValue=userPalletOut Frames
+linkValue=cBItem Frames
+linkValue=wBItem Frames
+linkValue=roboMessageCached RoboError
+linkValue=mposreq Robot
+linkValue=mpostcpidx Robot
+linkValue=manuelt manuelt Program401
+Value=errorCode 0
+Const=sBItem 0
+Value=loaded 0
+Value=ftemp 0.0
+Value=temp 0
+Value=rbspeed 0.0
+Value=simulate 0
+Const=posspstep 5.0
+Const=negspstep 1.0
+;*******************************************
+;* TOOL OUTPUT                      
+;*******************************************
+;Output=griber "Tool Griber"
+;*******************************************
+;* FRAME LINKVALUE's               
+;*******************************************
+linkValue=base Frames
+linkValue=home Frames
+linkValue=homeHigh Frames
+linkValue=case Frames
+linkValue=conveyorB Frames
+linkValue=mpos Robot
+;*******************************************
+;* ALL EXISTING PATH TYPES
+;*******************************************
+Path=home_home                 21 16
+Path=home_conveyorB            21 23
+Path=case_home                 22 25
+Path=conveyorB_case            22 24
+Path=case_conveyorB            22 44
+Path=conveyorB_home            21 43
+
+;*******************************************
+;* ITEM's                    
+;*******************************************
+;*******************************************
+;* PATTERN's                 
+;*******************************************
+Pattern=patternB TestNetto
+Pattern=pTestNetto TestNetto
+Pattern=pNetto_3Kg_6 Netto_3Kg_6
+Pattern=pNetto_2Kg5_6 Netto_2Kg5_6
+Pattern=pNetto_5Kg_3 Netto_5Kg_3
+Pattern=pNetto_2Kg_8 Netto_2Kg_8
+Pattern=pNetto_1Kg5_10 Netto_1Kg5_10
+;*******************************************
+;* FRAME's
+;*******************************************
+Frame=fromFrame x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+Frame=toFrame x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+;*******************************************
+;* TIMEOUT's         
+;*******************************************
+Timeout=TimeInCase 2500000
+;*******************************************
+;* STATES                    
+;*******************************************
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_ERROR
+	TEST parent != ST_RUN
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_IDLE
+	SET delaystop 0
+  TEST parent = ST_RUN
+	AND manuelt = 0
+	AND caseProg = 1
+		SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	SET TimeInCase timeInCrate
+	SET loaded 0
+	SET errorCode 0
+  TEST WorkCellFirstRun = 1
+    SET restart 0
+  ENDTEST
+	;set state = ST_IDLE for alle path's and set maxidx = 0 in pathTable
+	;stafet value
+  TEST resetpreload = 0
+    SET resetpreload 1
+  ENDTEST
+  TEST resetpreload = 3
+    SET resetpreload 0
+    TEST restart = 0
+	    SETSTATE ST_START
+    ELSE
+			SETSTATE ST_RESTART
+		ENDTEST
+  ENDTEST
+END
+
+;*******************************************
+;* RESTART FROM SOMEWHERE
+;*******************************************
+State=ST_RESTART
+	;  kun een bopt fil for hver robot
+	;  en ppscripttype for hver konfiguration(tool)
+  SET delaystop 0
+  TEST home_home.state < ST_INACTIVE
+    LOAD home_home homeHigh home 
+    SETSTATE ST_WAIT_HOME_HOME_LOADED
+  ENDTEST
+END
+
+;*******************************************
+;* START FROM SCRATCH
+;*******************************************
+State=ST_START
+	SET rbspeed robotspeedpct
+	INLINE inlineRobotSpeed.statemachine
+  SET delaystop 0
+	TEST home_home.state < ST_INACTIVE
+	AND case_home.state < ST_INACTIVE
+		TEST pattern = rclpattern_TestNetto
+			SETPATTERN patternB pTestNetto
+		ELSETEST pattern = rclpattern_Netto_3Kg_6
+			SETPATTERN patternB pNetto_3Kg_6
+		ELSETEST pattern = rclpattern_Netto_2Kg5_6
+			SETPATTERN patternB pNetto_2Kg5_6
+		ELSETEST pattern = rclpattern_Netto_5Kg_3
+			SETPATTERN patternB pNetto_5Kg_3
+		ELSETEST pattern = rclpattern_Netto_2Kg_8
+			SETPATTERN patternB pNetto_2Kg_8
+		ELSETEST pattern = rclpattern_Netto_1Kg5_10
+			SETPATTERN patternB pNetto_1Kg5_10
+		ENDTEST
+		SET wBItem wBItems
+    SET cBItem sBItem
+		SET userPalletOut 1
+		LOAD home_home homeHigh home
+		SETSTATE ST_WAIT_HOME_HOME_LOADED
+	ENDTEST
+END
+
+;*******************************************
+;* ST_WAIT_HOME_HOME_LOADED
+;*******************************************
+State=ST_WAIT_MPOS_HOME_LOADED
+  TEST case_home.state = ST_LOADED
+	  TEST home_conveyorB.state < ST_INACTIVE
+      SETFRAME toFrame conveyorB
+      LOAD home_conveyorB home toFrame
+			SET delaystop 1
+      PRINT case_home
+      EXEC case_home
+			TEST cBItem >= wBItem
+				SET cBItem sBItem
+				SET nextcase 1
+			ENDTEST
+      SETSTATE ST_CASE_HOME
+    ENDTEST
+  ENDTEST
+END
+
+;*******************************************
+;* ST_WAIT_HOME_HOME_LOADED
+;*******************************************
+State=ST_WAIT_HOME_HOME_LOADED
+  TEST home_home.state = ST_LOADED
+	  TEST home_conveyorB.state < ST_INACTIVE
+      SETFRAME toFrame conveyorB
+      LOAD home_conveyorB home toFrame 
+			SET delaystop 1
+      PRINT home_home
+      EXEC home_home
+      SETSTATE ST_HOME_HOME
+    ENDTEST
+  ENDTEST
+END
+;*******************************************
+;*
+;*       F R A M E - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME
+;*******************************************
+State=ST_HOME
+  TEST parent = ST_RUN
+	AND roboMessageCached = 0
+    TEST home_conveyorB.state = ST_LOADED
+			TEST loaded = 0
+      AND conveyorB_case.state < ST_INACTIVE
+      AND conveyorB_home.state < ST_INACTIVE
+        TEST userPalletOut = 1
+        OR cBItem >= wBItem
+					SET nextcase 1
+          SET userPalletOut 0
+          SET cBItem sBItem
+	      ENDTEST
+			  INLINE 401inlineLoadConveyorBc.statemachine
+				SET loaded 1
+      ENDTEST
+			TEST loaded = 1
+			AND Lift = ST_READY_ROBOT
+			AND ConveyorOut = ST_READY_ROBOT
+			AND nextcase = 0
+				SET delaystop 1
+				SET restart 1
+				PRINT home_conveyorB
+				EXEC home_conveyorB
+				SETSTATE ST_HOME_CONVEYORB
+			ENDTEST
+    ENDTEST
+  ELSE
+		TEST roboMessageCached = 333
+			SET errorCode 333
+			SETSTATE ST_ERROR
+		ELSE
+			SETSTATE ST_IDLE
+		ENDTEST
+  ENDTEST
+END
+
+;*******************************************
+;* ST_CONVEYORB
+;*******************************************
+State=ST_CONVEYORB
+	TEST parent = ST_RUN
+	AND Lift = ST_READY_ROBOT
+	AND ConveyorOut = ST_READY_ROBOT
+	AND userPalletOut = 0
+		TEST conveyorB_case.state = ST_LOADED
+			TEST loaded = 0
+			AND case_home.state < ST_INACTIVE
+			AND case_conveyorB.state < ST_INACTIVE
+    		SETFRAME fromFrame toFrame
+  	  	SETFRAME toFrame conveyorB
+				SET case_conveyorB.mode conveyorB_case.mode
+				LOAD case_conveyorB fromFrame toFrame
+				;*******************************************
+				LOAD case_home fromFrame home
+				SET loaded 1
+		  ENDTEST
+			TEST loaded = 1
+				SET delaystop 1
+				PRINT conveyorB_case
+				EXEC conveyorB_case
+				SETSTATE ST_CONVEYORB_CASE
+			ENDTEST
+		ENDTEST
+	ELSE
+		TEST userPalletOut = 1
+		OR parent != ST_RUN
+		OR Lift != ST_READY_ROBOT
+		OR ConveyorOut != ST_READY_ROBOT
+			TEST conveyorB_home.state = ST_LOADED
+				TEST home_conveyorB.state < ST_INACTIVE 
+					;*******************************************
+  				SETFRAME toFrame conveyorB
+			  	LOAD home_conveyorB home toFrame 
+					;*******************************************
+					; tool doesn't have to be ST_GO before exec because
+					; opendelay is hardcoded=1s for path 43 in trio.
+					SET delaystop 1
+					PRINT conveyorB_home 
+					EXEC conveyorB_home 
+					SETSTATE ST_CONVEYORB_HOME
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+
+;*******************************************
+;* ST_CASE
+;*******************************************
+State=ST_CASE
+  TEST parent = ST_RUN
+	AND Lift = ST_READY_ROBOT
+	AND ConveyorOut = ST_READY_ROBOT
+	AND cBItem < wBItem 
+	AND userPalletOut = 0
+	AND roboMessageCached = 0
+		TEST case_conveyorB.state = ST_LOADED
+			TEST loaded != 1
+		  AND conveyorB_case.state < ST_INACTIVE
+			AND conveyorB_home.state < ST_INACTIVE 
+				INLINE 401inlineLoadConveyorBc.statemachine
+				SET loaded 1
+				;*******************************************
+			ENDTEST
+			TEST loaded = 1
+				SET delaystop 1
+				TEST autorobotspeed = 1 
+				AND ConveyorOut = ST_READY_ROBOT
+					CALC rbspeed = rbspeed + posspstep
+					INLINE inlineRobotSpeed.statemachine
+				ENDTEST
+				PRINT case_conveyorB
+				EXEC case_conveyorB
+		    SETSTATE ST_CASE_CONVEYORB
+		  ENDTEST
+		ENDTEST
+	ELSE
+		;conditions that send us HOME
+		TEST TimeInCase = 1
+		OR parent != ST_RUN
+		OR cBItem >= wBItem 
+		OR userPalletOut = 1
+		OR roboMessageCached != 0
+			TEST case_home.state = ST_LOADED
+				TEST loaded != 2
+				AND home_conveyorB.state < ST_INACTIVE
+					;*******************************************
+					SETFRAME toFrame conveyorB
+					LOAD home_conveyorB home toFrame 
+					;*******************************************
+					SET loaded 2
+				ENDTEST
+				TEST loaded = 2
+				  SET delaystop 1
+          PRINT case_home 
+          EXEC case_home 
+					TEST cBItem >= wBItem
+						SET cBItem sBItem
+						SET nextcase 1
+					ENDTEST
+					SETSTATE ST_CASE_HOME
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+;*******************************************
+;*
+;*       P A T H - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME_HOME
+;*******************************************
+State=ST_HOME_HOME
+  TEST home_home.state = ST_EXECUTING
+	;  SET griber 0
+  ELSETEST home_home.state = ST_FINISHED
+		SET loaded 0
+    SET delaystop 0
+    SETSTATE ST_HOME
+  ELSETEST home_home.state = ST_ERROR
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST 
+  ENDTEST
+END
+;*******************************************
+;* ST_HOME_CONVEYORB
+;*******************************************
+State=ST_HOME_CONVEYORB
+  TEST home_conveyorB.state = ST_EXECUTING
+		; SET griber 0
+  ELSETEST home_conveyorB.state = ST_FINISHED
+		SET loaded 0
+    SETSTATE ST_CONVEYORB
+  ELSETEST home_conveyorB.state = ST_ERROR
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST 
+  ENDTEST
+END
+;*******************************************
+;* ST_CONVEYORB_HOME
+;*******************************************
+State=ST_CONVEYORB_HOME
+  TEST conveyorB_home.state = ST_EXECUTING
+		; SET griber 0
+  ELSETEST conveyorB_home.state = ST_FINISHED
+		SET delaystop 0
+		SET loaded 0
+		SETSTATE ST_HOME
+	ELSETEST conveyorB_home.state = ST_ERROR
+		TEST parent = ST_IDLE
+			SETSTATE ST_IDLE
+		ENDTEST 
+	ENDTEST
+END
+;*******************************************
+;* ST_CONVEYORB_CASE
+;*******************************************
+State=ST_CONVEYORB_CASE
+  TEST conveyorB_case.state = ST_EXECUTING
+		;
+  ELSETEST conveyorB_case.state = ST_FINISHED
+		CALC cBItem = cBItem + 1
+		SET loaded 0
+		TIMEOUT TimeInCase ST_CASE
+    SETSTATE ST_CASE
+  ELSETEST conveyorB_case.state = ST_ERROR
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST 
+  ENDTEST
+END
+;*******************************************
+;* ST_CASE_CONVEYORB
+;*******************************************
+State=ST_CASE_CONVEYORB
+  TEST case_conveyorB.state = ST_EXECUTING
+		;
+  ELSETEST case_conveyorB.state = ST_FINISHED
+		SET loaded 0
+		TEST autorobotspeed = 1 
+		AND ConveyorOut != ST_READY_ROBOT
+			CALC rbspeed = rbspeed - negspstep
+			INLINE inlineRobotSpeed.statemachine
+		ENDTEST
+    SETSTATE ST_CONVEYORB
+  ELSETEST case_conveyorB.state = ST_ERROR
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST 
+  ENDTEST
+END
+;*******************************************
+;* ST_CASE_HOME
+;*******************************************
+State=ST_CASE_HOME
+  TEST case_home.state = ST_EXECUTING
+		;
+	ELSETEST case_home.state = ST_FINISHED
+		SET delaystop 0
+		SET loaded 0
+    SETSTATE ST_HOME
+  ELSETEST case_home.state = ST_ERROR
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST 
+  ENDTEST
+END

@@ -1,0 +1,13 @@
+STATEMACHINEVERSION 3
+Include=checkweighermotor.statemachine
+Name=checkWeigherMotorS1
+Output=motor "S1 Motor"
+Link=checkWeigher checkWeigherS1
+Link=zerocalib checkWeigherZeroCalibS1
+Link=parent ParentS1
+Link=next null
+Value=temp 0
+Timeout=TimeStartSync 0
+Timeout=stopDelay 4000000
+Value=stopDelayOn 0
+Value=stopPrev 1

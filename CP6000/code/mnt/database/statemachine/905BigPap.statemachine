@@ -1,0 +1,69 @@
+STATEMACHINEVERSION 3
+Name=BigPap
+Input=BigPapInduktiv "BigPap inductive"
+Output=BigPapMotor "BigPap Motor"
+Link=KasseInLiner 
+Timeout=timeReceive 2000000
+Timeout=stopDelayBig 350000
+Timeout=timeMaxSend 3000000
+Value=simulate 0
+Value=timerSet 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET BigPapMotor 0
+  TEST simulate = 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST timeReceive = 1
+    SETSTATE ST_READY
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST BigPapInduktiv = 1
+  AND timerSet = 0
+    TIMEOUT stopDelayBig ST_SEND
+    SETSTATE ST_SEND
+    SET timerSet 1
+  ELSETEST timerSet = 1
+  AND stopDelayBig = 1
+    TIMEOUT timeReceive ST_RECEIVE
+    SETSTATE ST_RECEIVE
+    SET BigPapMotor 0
+  ELSETEST timeMaxSend = 1
+		; induktiv føler fejl
+  ELSE
+    SET BigPapMotor 1
+  ENDTEST
+  TEST simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_READY
+  TEST KasseInLiner = ST_EMPTY
+  OR KasseInLiner = ST_RECEIVE3
+  OR simulate = 1
+    SET BigPapMotor 1
+    SET timerSet 0
+    TIMEOUT timeMaxSend ST_SEND
+    SETSTATE ST_SEND
+  ENDTEST 
+  TEST simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_READY
+END
+

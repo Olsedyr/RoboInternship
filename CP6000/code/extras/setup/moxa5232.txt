@@ -1,0 +1,32 @@
+MAC800 setup:
+
+Default IP address: 192.168.127.254
+
+Network Settings:
+* IP address: 192.168.0.2xx
+* SNMP: Disable
+Serial Settings:
+* Baud rate: 19200
+* Stop bits: 2
+* Flow control: None
+Operating Settings:
+* Operation mode: TCP Server Mode (Disable port 2 hvis der kun er én mac)
+* Local TCP port: 400x
+
+
+Loadcell setup:
+
+Default IP address: 192.168.127.254
+
+Network Settings:
+* IP address: 192.168.0.2xx
+* SNMP: Disable
+Serial Settings:
+* Baud rate: 115200
+* Stop bits: 1
+* Parity: Even
+* Flow control: RTS/CTS
+* FIFO: Enable
+Operating Settings:
+* Operation mode: TCP Server Mode
+* Local TCP port: 400x

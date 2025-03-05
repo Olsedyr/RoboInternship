@@ -1,0 +1,10 @@
+PATTERNVERSION 2
+Netto_2Kg5_6
+width=400
+length=600
+layer=0,wcp=300,0,200,0,90,0
+layer=0,wcp=130,0,180,0,-90,0
+layer=0,wcp=470,0,180,0,90,0
+layer=0,wcp=280,20,180,0,-90,0
+layer=0,wcp=130,20,200,0,-90,0
+layer=0,wcp=470,20,200,0,90,0

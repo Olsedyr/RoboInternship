@@ -1,0 +1,66 @@
+STATEMACHINEVERSION 3
+Name=Tool
+Link=robotprg ProgramB2
+Link=parent Parent
+Const=ticksSensorTest0 50000.0
+Const=ticksSensorTest1 100000.0
+Const=ticksSensorTest2 300000.0
+Const=crashDetect 1.0000
+Const=doubleCaseTest 0.0
+Const=toolUsePressostat 3.0000
+Const=toolSensorSelect 1.0000
+Timeout=msAirDelayClose 800000
+Timeout=msAirDelayOpen 500000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	TEST parent = ST_RUN
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_WAIT
+END
+
+State=ST_WAIT
+	TEST robotprg = ST_HOME
+		SETSTATE ST_GO
+	ELSE
+		TEST robotprg = ST_FLOORPLACE
+			TIMEOUT msAirDelayOpen ST_OPEN
+			SETSTATE ST_OPEN
+		ELSE
+			TEST robotprg = ST_FLOORPICK
+				TIMEOUT msAirDelayClose ST_CLOSE
+				SETSTATE ST_CLOSE
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_GO
+	TEST robotprg = ST_HOME_HOME
+	OR robotprg = ST_HOME_FLOOR
+	OR robotprg = ST_FLOOR_FLOOR
+		SETSTATE ST_WAIT
+	ENDTEST
+END
+
+State=ST_OPEN
+	TEST msAirDelayOpen = 1
+		SETSTATE ST_GO
+	ENDTEST
+END
+
+State=ST_CLOSE
+	TEST msAirDelayClose = 1
+	OR robotprg = ST_FLOOR_HOME
+		SETSTATE ST_GO
+	ENDTEST
+END

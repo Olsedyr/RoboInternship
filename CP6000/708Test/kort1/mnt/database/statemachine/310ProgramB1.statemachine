@@ -1,0 +1,666 @@
+STATEMACHINEVERSION 3
+Name=ProgramB1
+Value=DEBUG 1
+Value=DEBUG 1
+;*******************************************
+;* LINK's                 
+;*******************************************
+Link=program Program310
+Link=parent Parent
+Link=robot Robot
+Link=Tool
+Link=ConveyorOut
+Link=Pallebane6
+Link=PladsLoad
+Link=Pallebane4
+;*******************************************
+;* VALUE's                
+;*******************************************
+linkValue=wALayer program
+linkValue=wBLayer program
+linkValue=wAItemsPerLayer program
+linkValue=wBItemsPerLayer program
+linkValue=timeInPalletB program
+linkValue=timeInConveyorA program
+linkValue=pap program
+linkValue=WorkCellFirstRun firstRun WorkCell
+;when roboError > 0 and restart = 1 the workcell can be restarted 
+linkValue=restart RoboError 
+linkValue=resetpreload Loader 
+;when 2 or more path's must run as one - set delaystop = 1
+;before start off first path and = 0 after last
+;executer will test this value before pausing execution
+linkValue=delaystop Robot 
+linkValue=axis_t Robot 
+linkValue=pathtype Robot
+linkValue=casekind program
+linkValue=nextpala Frames
+linkValue=nextpalb Frames
+linkValue=userPalletOut Frames
+linkValue=cAItem Frames
+linkValue=cBItem Frames
+linkValue=wAItem Frames
+linkValue=wBItem Frames
+linkValue=roboMessageCached RoboError
+Value=errorCode 0
+Const=sBItem 0
+Const=sAItem 0
+Value=leftrightA 0
+Value=leftrightB 0
+Value=loaded 0
+Value=temp 0
+Value=temp2 0
+Value=ftemp 0.0
+Value=cAStackleft 0
+Value=cAStackright 0
+Value=cBStackleft 0
+Value=cBStackright 0
+; left = palletB1
+; right = palletB0
+Value=transferstate 0
+;*******************************************
+;* FRAME LINKVALUE's                
+;*******************************************
+linkValue=base Frames 
+linkValue=home Frames
+linkValue=homeHigh Frames
+linkValue=palletA0 Frames
+linkValue=palletA1 Frames
+linkValue=palletB0 Frames
+linkValue=palletB1 Frames
+linkValue=palletB0P Frames
+linkValue=palletB0PH Frames
+linkValue=palletB1P Frames
+linkValue=conveyorA Frames
+linkValue=conveyorB Frames
+linkValue=conveyorBP Frames
+linkValue=homeP Frames
+;*******************************************
+;* ALL EXISTING PATH TYPES
+;*******************************************
+Path=home_palletA          16 20
+Path=palletA_conveyorA     16 21
+Path=conveyorA_home        16 22
+Path=palletA_home          16 43
+Path=home_conveyorB        17 23
+Path=conveyorB_palletB     17 24
+Path=palletB_home          17 25
+Path=pap_home_conveyorB    19 23
+Path=pap_conveyorB_palletB 19 24
+Path=pap_palletB_home      19 25
+Path=pap_conveyorB_home    19 43
+Path=home_home             17 16
+Path=palletB_palletA       17 20
+Path=conveyorA_conveyorB   17 23
+Path=conveyorB_home        17 43
+
+Value=normalmode 17
+Value=papmode 19
+;*******************************************
+;* ITEM's                    
+;*******************************************
+Item=item C11
+Item=itemC11 C11
+Item=itemC18 C18
+Item=itemHybschA HybschA
+;*******************************************
+;* PATTERN's                 
+;*******************************************
+;Pattern=patternB 30410Kg_80
+;*******************************************
+;* FRAME's                   
+;*******************************************
+Frame=fromFrame x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+Frame=toFrame1 x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+Frame=toFrame2 x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+;*******************************************
+;* TIMEOUT's                    
+;*******************************************
+Timeout=TimeInConveyorA 2000000
+Timeout=TimeInPalletB 2000000
+;*******************************************
+;* STATES                    
+;*******************************************
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_ERROR
+	TEST parent != ST_RUN
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_IDLE
+  SET delaystop 0
+  SET transferstate 0
+  TEST parent = ST_RUN
+		SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	SET TimeInPalletB timeInPalletB
+	SET TimeInConveyorA timeInConveyorA
+	SET loaded 0
+	SET errorCode 0
+  SET transferstate 0
+	;set state = ST_IDLE for alle path's and set maxidx = 0 in pathTable
+	;stafet value
+  TEST resetpreload = 0
+    SET resetpreload 1
+  ENDTEST
+  TEST resetpreload = 3
+    SET resetpreload 0
+    TEST WorkCellFirstRun = 1
+    OR restart = 0
+	    SETSTATE ST_START
+    ELSE
+      SETSTATE ST_RESTART
+    ENDTEST
+  ENDTEST
+END
+
+;*******************************************
+;* RESTART FROM SOMEWHERE
+;*******************************************
+State=ST_RESTART
+	;  kun een bopt fil for hver robot
+	;  en ppscripttype for hver konfiguration(tool)
+  SET delaystop 0 
+  SET transferstate 0
+  TEST home_home.state < ST_INACTIVE
+		TEST pap = 0
+			LOAD home_home homeHigh home
+		ELSE
+			LOAD home_home homeHigh homeP
+		ENDTEST
+    SETSTATE ST_WAIT_HOME_HOME_LOADED
+  ENDTEST
+END
+;*******************************************
+;* START FROM SCRATCH
+;*******************************************
+State=ST_START
+;  kun een bopt fil for hver robot
+;  en ppscripttype for hver konfiguration(tool)
+  SET delaystop 0
+  SET transferstate 0
+  TEST home_home.state < ST_INACTIVE
+		TEST casekind = 1
+			SETITEM item itemC11
+		ELSETEST casekind = 3
+			SETITEM item itemC18
+		ELSETEST casekind = 4
+			SETITEM item itemHybschA
+		ENDTEST
+		CALC wBItem = wBLayer * wBItemsPerLayer
+		CALC wAItem = wALayer * wAItemsPerLayer
+    INLINE 310inlineResetStackA.statemachine
+		INLINE 310inlineResetStackB.statemachine
+		SET restart 1
+    TEST pap = 0
+			LOAD home_home homeHigh home
+		ELSE
+			LOAD home_home homeHigh homeP
+		ENDTEST
+	  SETSTATE ST_WAIT_HOME_HOME_LOADED
+  ENDTEST
+END
+;*******************************************
+;* ST_WAIT_HOME_HOME_LOADED
+;*******************************************
+State=ST_WAIT_HOME_HOME_LOADED
+  TEST home_home.state = ST_LOADED
+	  TEST home_palletA.state < ST_INACTIVE
+	  AND home_conveyorB.state < ST_INACTIVE
+			INLINE 310inlineLoadHome.statemachine
+      SET delaystop 0
+      EXEC home_home
+      SETSTATE ST_HOME_HOME
+    ENDTEST
+  ENDTEST
+END
+;*******************************************
+;*
+;*       F R A M E - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME
+;*******************************************
+State=ST_HOME
+  SET transferstate 0
+  TEST parent = ST_RUN
+	AND roboMessageCached = 0
+    TEST pap = 0
+		AND home_palletA.state = ST_LOADED
+		AND home_conveyorB.state = ST_LOADED
+		OR pap = 1
+		AND home_conveyorB.state = ST_LOADED
+			TEST loaded = 0
+      AND conveyorB_palletB.state < ST_INACTIVE
+      AND conveyorB_home.state < ST_INACTIVE
+      AND palletA_conveyorA.state < ST_INACTIVE
+    		;*******************************************
+				TEST userPalletOut = 1
+					SET userPalletOut 0
+					INLINE 310inlineResetStackB.statemachine
+				ENDTEST
+				;*******************************************
+			  INLINE 310inlineLoadConveyorB.statemachine
+				;*******************************************
+				INLINE 310inlineLoadPalletA.statemachine
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+				TEST ConveyorOut = ST_READY_ROBOT
+				AND Pallebane6 = ST_READY_ROBOT
+				AND Tool = ST_GO
+				AND nextpalb = 0
+					SET delaystop 1
+					EXEC home_conveyorB 
+					SETSTATE ST_HOME_CONVEYORB
+				ELSETEST PladsLoad = ST_EMPTY
+				AND Pallebane4 = ST_READY_ROBOT
+				AND Tool = ST_GO
+				AND nextpala = 0
+					SET delaystop 1
+					EXEC home_palletA
+					SETSTATE ST_HOME_PALLETA
+				ENDTEST
+			ENDTEST
+    ENDTEST
+  ELSETEST roboMessageCached = 333
+		SET errorCode 333
+		SETSTATE ST_ERROR
+	ELSE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+;*******************************************
+;* ST_PALLETA
+;*******************************************
+State=ST_PALLETA
+  SET transferstate 0
+	TEST userPalletOut = 1
+		SET userPalletOut 0
+		INLINE 310inlineResetStackB.statemachine
+	ENDTEST
+	TEST parent = ST_RUN
+	AND PladsLoad = ST_EMPTY
+	AND Pallebane4 = ST_READY_ROBOT
+		TEST palletA_conveyorA.state = ST_LOADED
+			TEST loaded = 0
+			AND conveyorA_home.state < ST_INACTIVE
+			AND conveyorA_conveyorB.state < ST_INACTIVE
+				INLINE 310inlineLoadConveyorA.statemachine
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND Tool = ST_GO
+				SET delaystop 1
+				EXEC palletA_conveyorA
+				SETSTATE ST_PALLETA_CONVEYORA
+			ENDTEST
+		ENDTEST
+	ELSETEST palletA_home.state = ST_LOADED
+		TEST home_palletA.state < ST_INACTIVE 
+		AND home_conveyorB.state < ST_INACTIVE 
+			INLINE 310inlineLoadHome.statemachine
+			;*******************************************
+			; tool doesn't have to be ST_GO before exec because
+			; opendelay is hardcoded=1s for path 43 in trio.
+			EXEC palletA_home
+			SETSTATE ST_PALLETA_HOME
+		ENDTEST
+	ENDTEST
+END
+;*******************************************
+;* ST_CONVEYORB
+;*******************************************
+State=ST_CONVEYORB
+  SET transferstate 0
+	TEST parent = ST_RUN
+	AND ConveyorOut = ST_READY_ROBOT
+	AND Pallebane6 = ST_READY_ROBOT
+	AND userPalletOut = 0
+		TEST conveyorB_palletB.state = ST_LOADED
+			TEST loaded = 0
+			AND palletB_home.state < ST_INACTIVE
+			AND palletB_palletA.state < ST_INACTIVE
+				;*****************************************
+				INLINE 310inlineLoadPalletB.statemachine
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND Tool = ST_GO
+				SET delaystop 1
+				EXEC conveyorB_palletB
+				SETSTATE ST_CONVEYORB_PALLETB
+			ENDTEST
+		ENDTEST
+	ELSETEST conveyorB_home.state = ST_LOADED
+		TEST home_palletA.state < ST_INACTIVE 
+		AND home_conveyorB.state < ST_INACTIVE 
+			INLINE 310inlineLoadHome.statemachine
+			;*******************************************
+			; tool doesn't have to be ST_GO before exec because
+			; opendelay is hardcoded=1s for path 43 in trio.
+			EXEC conveyorB_home 
+			SETSTATE ST_CONVEYORB_HOME
+		ENDTEST
+	ENDTEST
+END
+;*******************************************
+;* ST_CONVEYORA
+;*******************************************
+State=ST_CONVEYORA
+  SET transferstate 0
+	TEST parent = ST_RUN
+	AND ConveyorOut = ST_READY_ROBOT
+	AND Pallebane6 = ST_READY_ROBOT
+	AND cBItem < wBItem 
+	AND userPalletOut = 0
+	AND roboMessageCached = 0
+		TEST conveyorA_conveyorB.state = ST_LOADED
+			TEST loaded != 1
+			AND conveyorB_palletB.state < ST_INACTIVE
+			AND conveyorB_home.state < ST_INACTIVE
+			  INLINE 310inlineLoadConveyorB.statemachine
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND Tool = ST_GO
+				SET delaystop 1
+				EXEC conveyorA_conveyorB
+				SETSTATE ST_CONVEYORA_CONVEYORB
+			ENDTEST
+		ENDTEST
+	ELSETEST TimeInConveyorA = 1
+	OR parent != ST_RUN
+	OR cBItem >= wBItem 
+	OR userPalletOut = 1
+	OR roboMessageCached != 0
+		TEST conveyorA_home.state = ST_LOADED
+			TEST loaded != 2
+			AND home_palletA.state < ST_INACTIVE
+			AND home_conveyorB.state < ST_INACTIVE
+				INLINE 310inlineLoadHome.statemachine
+				;*******************************************
+				SET loaded 2
+			ENDTEST
+			TEST loaded = 2
+			AND Tool = ST_GO
+				EXEC conveyorA_home 
+				SETSTATE ST_CONVEYORA_HOME
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+;*******************************************
+;* ST_PALLETB
+;*******************************************
+State=ST_PALLETB
+  SET transferstate 0
+  TEST parent = ST_RUN
+	AND PladsLoad = ST_EMPTY
+	AND Pallebane4 = ST_READY_ROBOT
+	AND cAItem > 0
+	AND roboMessageCached = 0
+		TEST palletB_palletA.state = ST_LOADED
+			TEST loaded != 1
+		  AND palletA_conveyorA.state < ST_INACTIVE
+		  AND palletA_home.state < ST_INACTIVE 
+				INLINE 310inlineLoadPalletA.statemachine
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND Tool = ST_GO
+				SET delaystop 1
+		    EXEC palletB_palletA
+		    SETSTATE ST_PALLETB_PALLETA
+		  ENDTEST
+		ENDTEST
+	ELSETEST TimeInPalletB = 1
+	OR parent != ST_RUN
+	OR cAItem = 0
+	OR userPalletOut = 1
+	OR roboMessageCached != 0
+		TEST palletB_home.state = ST_LOADED
+			TEST loaded != 2
+			AND home_palletA.state < ST_INACTIVE
+			AND home_conveyorB.state < ST_INACTIVE
+				INLINE 310inlineLoadHome.statemachine
+				SET loaded 2
+			ENDTEST
+			TEST loaded = 2
+			AND Tool = ST_GO
+				EXEC palletB_home 
+				SETSTATE ST_PALLETB_HOME
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+;*******************************************
+;*
+;*       P A T H - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME_HOME
+;*******************************************
+State=ST_HOME_HOME
+  SET transferstate 1
+  TEST home_home.state = ST_EXECUTING
+		;    TEST axis_t > 500000
+		;     SET griber 1
+		;    ENDTEST
+  ELSETEST home_home.state = ST_FINISHED
+		SET loaded 0
+    SETSTATE ST_HOME
+  ELSETEST home_home.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_HOME_PALLETA
+;*******************************************
+State=ST_HOME_PALLETA
+  SET transferstate 1
+  TEST home_palletA.state = ST_EXECUTING
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;    ENDTEST
+  ELSETEST home_palletA.state = ST_FINISHED
+		SET loaded 0
+    SETSTATE ST_PALLETA
+  ELSETEST home_palletA.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_HOME_CONVEYORB
+;*******************************************
+State=ST_HOME_CONVEYORB
+  SET transferstate 1
+  TEST home_conveyorB.state = ST_EXECUTING
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;    ENDTEST
+  ELSETEST home_conveyorB.state = ST_FINISHED
+		SET loaded 0
+    SETSTATE ST_CONVEYORB
+  ELSETEST home_conveyorB.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_PALLETA_HOME
+;*******************************************
+State=ST_PALLETA_HOME
+  SET transferstate 1
+  TEST palletA_home.state = ST_EXECUTING
+		SET delaystop 0
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;    ENDTEST
+  ELSETEST palletA_home.state = ST_FINISHED
+		SET loaded 0
+		SETSTATE ST_HOME
+	ELSETEST palletA_home.state = ST_ERROR
+	AND parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST 
+END
+;*******************************************
+;* ST_CONVEYORB_HOME
+;*******************************************
+State=ST_CONVEYORB_HOME
+  SET transferstate 1
+  TEST conveyorB_home.state = ST_EXECUTING
+		SET delaystop 0
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;    ENDTEST
+  ELSETEST conveyorB_home.state = ST_FINISHED
+		SET loaded 0
+		SETSTATE ST_HOME
+	ELSETEST conveyorB_home.state = ST_ERROR
+	AND parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST 
+END
+;*******************************************
+;* ST_PALLETA_CONVEYORA
+;*******************************************
+State=ST_PALLETA_CONVEYORA
+  SET transferstate 1
+  TEST palletA_conveyorA.state = ST_EXECUTING
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;    ENDTEST
+  ELSETEST palletA_conveyorA.state = ST_FINISHED
+    CALC cAItem = cAItem - 1
+		TEST leftrightA = 1
+			CALC cAStackright = cAStackright - 1
+		ELSE
+			CALC cAStackleft = cAStackleft - 1
+		ENDTEST
+		PRINT cAItem
+		SET loaded 0
+		TIMEOUT TimeInConveyorA ST_CONVEYORA
+    SETSTATE ST_CONVEYORA
+  ELSETEST palletA_conveyorA.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_CONVEYORB_PALLETB
+;*******************************************
+State=ST_CONVEYORB_PALLETB
+  SET transferstate 1
+  TEST conveyorB_palletB.state = ST_EXECUTING
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;    ENDTEST
+  ELSETEST conveyorB_palletB.state = ST_FINISHED
+    CALC cBItem = cBItem + 1
+		TEST leftrightB = 1
+			CALC cBStackright = cBStackright + 1
+		ELSE
+			CALC cBStackleft = cBStackleft + 1
+		ENDTEST
+    PRINT cBItem
+		SET loaded 0
+		TIMEOUT TimeInPalletB ST_PALLETB
+    SETSTATE ST_PALLETB
+  ELSETEST conveyorB_palletB.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+;*******************************************
+;* ST_CONVEYORA_CONVEYORB
+;*******************************************
+State=ST_CONVEYORA_CONVEYORB
+  SET transferstate 1
+  TEST conveyorA_conveyorB.state = ST_EXECUTING
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;    ENDTEST
+  ELSETEST conveyorA_conveyorB.state = ST_FINISHED
+		TEST cAItem <= sAItem
+			INLINE 310inlineResetStackA.statemachine
+		ENDTEST
+		SET loaded 0
+    SETSTATE ST_CONVEYORB
+  ELSETEST conveyorA_conveyorB.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_CONVEYORA_HOME
+;*******************************************
+State=ST_CONVEYORA_HOME
+  SET transferstate 1
+  TEST conveyorA_home.state = ST_EXECUTING
+		SET delaystop 0		
+  ELSETEST conveyorA_home.state = ST_FINISHED
+		TEST cAItem <= sAItem
+			INLINE 310inlineResetStackA.statemachine
+		ENDTEST
+		SET loaded 0
+    SETSTATE ST_HOME
+  ELSETEST conveyorA_home.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_PALLETB_PALLETA
+;*******************************************
+State=ST_PALLETB_PALLETA
+  SET transferstate 1
+  TEST palletB_palletA.state = ST_EXECUTING
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;    ENDTEST
+  ELSETEST palletB_palletA.state = ST_FINISHED
+		TEST cBItem >= wBItem
+			INLINE 310inlineResetStackB.statemachine
+		ENDTEST
+		SET loaded 0
+    SETSTATE ST_PALLETA
+  ELSETEST palletB_palletA.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+;*******************************************
+;* ST_PALLETB_HOME
+;*******************************************
+State=ST_PALLETB_HOME
+  SET transferstate 1
+  TEST palletB_home.state = ST_EXECUTING
+		SET delaystop 0		
+  ELSETEST palletB_home.state = ST_FINISHED
+		TEST cBItem >= wBItem
+			INLINE 310inlineResetStackB.statemachine
+		ENDTEST
+		SET loaded 0
+    SETSTATE ST_HOME
+  ELSETEST palletB_home.state = ST_ERROR
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END

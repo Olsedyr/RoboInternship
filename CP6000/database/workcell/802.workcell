@@ -1,0 +1,62 @@
+VERSION 1
+802
+Robots 0
+Tools 0
+Items 6
+C18.item
+C11.item
+IFCO16.item
+IFCO18.item
+IFCO20.item
+Netto.item
+Patterns 0
+Accessories 0
+PPScripts 0
+Dio 1
+802.io
+ComSKs 1
+802.comsk
+LoadCell 0
+Macs 0
+Statemachines 33
+802WorkCell.statemachine
+802Parent.statemachine
+802Program.statemachine
+802ContinueKnap.statemachine
+802TrafficLight.statemachine
+802ErrorCode.statemachine
+802IOError.statemachine
+802Emergency.statemachine
+802TripWatch.statemachine
+802PalleStationFotoStabel1.statemachine
+802PalleStationFotoStabel2.statemachine
+802PalleStationFotoMellemrum.statemachine
+802PalleStationLampe.statemachine
+802PalleStationPort.statemachine
+802PalleStationPortLukketKontakt.statemachine
+802PalleStation.statemachine
+802ConveyorStation.statemachine
+802ConveyorStationFotoStabel1.statemachine
+802ConveyorStationFotoStabel2.statemachine
+802ConveyorStationFotoFremme.statemachine
+802KasseStativ.statemachine
+802KasseStativFotoModtaget.statemachine
+802KasseStativFotoTom.statemachine
+802KasseStativFotoAfleveret.statemachine
+802CamGenLift.statemachine
+802PIDLift.statemachine
+802CMCounter.statemachine
+802CaseCount.statemachine
+802PindeTjekker600.statemachine
+802PindeTjekker600FotoIn.statemachine
+802PindeTjekker600Foto1Pind1.statemachine
+802PindeTjekker600Foto1Pind2.statemachine
+802zone2.statemachine
+REMOTEHOST 192.168.0.150
+REMOTEHOST 192.168.0.151
+REMOTEHOST 192.168.0.152
+REMOTEHOST 192.168.0.154
+LANGUAGE english.language
+LANGUAGE danish.language
+STATETEKST english.statetekst
+STATETEKST danish.statetekst

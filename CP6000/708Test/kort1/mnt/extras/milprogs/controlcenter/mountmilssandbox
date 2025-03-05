@@ -1,0 +1,2 @@
+#!/bin/sh
+mount -t nfs mads:/home/mil/sandbox sandbox/

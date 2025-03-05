@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=cppidbuffer.statemachine
+Name=PIDBuffer
+;** User section **
+Const=Kp 7.0000
+Const=Kd 16.0000
+Const=Ki 0.1000
+Const=Ks 0.4000

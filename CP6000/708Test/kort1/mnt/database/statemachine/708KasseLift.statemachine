@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=cpkasselift.statemachine
+Name=KasseLift
+Output=Kassestop "KasseStop 1"
+Link=CamGen ServoLift
+;** User section **
+Timeout=TimeInCenter 1000000
+Timeout=TimeCenter 2000000

@@ -1,0 +1,16 @@
+VERSION 1
+502
+Robots 0
+Tools 0
+Items 0
+Patterns 0
+Accessories 0
+PPScripts 0
+Dio 1
+502.io
+Comsks 0
+LoadCells 0
+Macs 0
+Statemachines 0
+SCRIPT 502CW
+m_stateTeksts=502

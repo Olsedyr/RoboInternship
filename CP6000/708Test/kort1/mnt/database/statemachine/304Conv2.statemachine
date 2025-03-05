@@ -1,0 +1,136 @@
+STATEMACHINEVERSION 3
+Name=Conv2
+Link=foto1 Conv2Foto1
+Link=foto2 Conv2Foto2
+Output=Motor "Conveyor2 motor"
+Output=signalNet "Signal net"
+Link=next Conv1
+Link=parent Parent
+linkValue=activeProgram activeProgram Program304
+;Time for case/product to leave conveyor after foto has gone free
+Timeout=freeWaitTime 1000000
+Timeout=startupTime 5000000
+Timeout=StopDelay 0
+Timeout=EmptyDelay 0
+Timeout=maxSendTime 800000
+Timeout=timeBeforeReset 1000000
+Value=sendAndWait 0
+Const=lengthMM 3600.0
+Const=speedMS 0.6
+Value=simulate 0
+Value=errorCode 0
+Value=timelength 0.0
+
+;en transportør går automatisk fra ready til empty hvis fotocelle slukker
+;og fra empty til ready hvis fotocelle tænder
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Motor 0
+  SET signalNet 0
+	TEST parent = ST_RESET
+  OR simulate = 1
+    TEST activeProgram = 0 
+      SET errorCode 0
+	  	SETSTATE ST_RESET
+    ENDTEST
+	ENDTEST
+END
+
+State=ST_READY
+  TEST foto1 = ST_FREE 
+  AND foto2 = ST_FREE 
+    TEST simulate = 0
+      TIMEOUT EmptyDelay ST_EMPTY
+      SETSTATE ST_TIMER
+    ENDTEST
+  ELSE
+    TEST next = ST_EMPTY
+      TIMEOUT maxSendTime ST_SEND
+      SETSTATE ST_SEND
+    ELSE 
+      SET signalNet 0
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST sendAndWait = 1
+    TEST freeWaitTime = 1
+      SET sendAndWait 0
+      SETSTATE ST_EMPTY
+    ENDTEST
+  ELSE
+    TEST maxSendTime = 1
+      TIMEOUT timeBeforeReset ST_RESET
+      SETSTATE ST_TIMER
+    ELSE
+      TEST next = ST_RECEIVE
+        SET Motor 1
+     ENDTEST
+     TEST foto1 = ST_FREE
+     AND foto2 = ST_FREE
+        SET sendAndWait 1
+        TIMEOUT freeWaitTime ST_SEND
+        SETSTATE ST_SEND
+     ENDTEST
+   ENDTEST
+ ENDTEST
+END
+
+State=ST_EMPTY
+  TEST foto1 = ST_BLOCKED
+  OR foto2 = ST_BLOCKED
+    TIMEOUT StopDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    SET signalNet 1
+    SET Motor 1
+  ENDTEST
+  TEST simulate = 1
+    SETSTATE ST_READY
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST foto1 = ST_BLOCKED
+  OR foto2 = ST_BLOCKED
+		SETSTATE ST_READY
+	ELSE
+    CALC timelength = lengthMM / speedMS 
+    ;*1500 = kør bånd 1.5 gang igennem for at finde produkt
+    CALC timelength = timelength * 1500
+    SET startupTime timelength
+    TIMEOUT startupTime ST_STARTUP
+    SETSTATE ST_STARTUP
+	ENDTEST
+END
+
+
+State=ST_STARTUP
+  TEST foto1 = ST_BLOCKED 
+  OR foto2 = ST_BLOCKED 
+    SETSTATE ST_READY
+  ELSE
+    TEST startupTime = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+      SET signalNet 1
+    ENDTEST
+  ENDTEST
+END

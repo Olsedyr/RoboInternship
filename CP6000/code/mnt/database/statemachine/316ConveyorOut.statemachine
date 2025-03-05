@@ -1,0 +1,131 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut
+linkValue=Foto test ConveyorOutFoto2
+Output=Lift "ConveyorOut Cyl"
+linkValue=pathtype pathtype Robot
+linkValue=axis_t axis_t Robot
+Link=parent Parent
+Link=prev ConveyorOut2 
+Link=Robot Robot
+linkValue=firstRun WorkCell
+Timeout=TimeOutDelay 5000000
+Timeout=maxWaitNext 60000000
+Timeout=TimeLiftUp 800000
+Value=errorCode 0
+Value=simulate 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET Lift 0
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_ERROR
+  SET Lift 0
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_EMPTY
+	SET Lift 0
+	TEST prev = ST_SEND
+		TIMEOUT maxWaitNext ST_RECEIVE
+		SETSTATE ST_RECEIVE
+	ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_RECEIVE
+  TEST Foto = 1
+    SET Lift 1
+		TIMEOUT TimeLiftUp ST_LIFTUP
+		SETSTATE ST_LIFTUP
+	ENDTEST
+  TEST maxWaitNext = 1
+		SET errorCode 1007
+		SETSTATE ST_ERROR
+  ELSE
+    SET Lift 0
+  ENDTEST
+END
+
+State=ST_LIFTUP
+	SET Lift 1
+	TEST TimeLiftUp = 1
+		SETSTATE ST_READY_ROBOT
+	ENDTEST
+	TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_READY_ROBOT
+	SET Lift 1
+  TEST Foto = 0
+	AND simulate = 0
+		SET errorCode 1007
+    SETSTATE ST_ERROR
+  ELSE
+    TEST pathtype = 24
+	  AND axis_t <= 400000
+			SET Lift 1
+			SETSTATE ST_WAIT_ROBOT_GONE
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_ROBOT_GONE
+  TEST pathtype = 24
+	  TEST axis_t > 400000
+      TEST simulate = 0
+        TEST Foto = 0
+					SETSTATE ST_EMPTY
+				ELSE
+          SET errorCode 1007
+          SETSTATE ST_ERROR
+        ENDTEST
+      ELSE
+        SETSTATE ST_READY_ROBOT
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST Robot != ST_RUNNING 
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST simulate = 1
+    SETSTATE ST_READY_ROBOT
+  ELSE
+    TIMEOUT TimeOutDelay ST_STARTUP
+    SETSTATE ST_STARTUP
+  ENDTEST
+END
+
+State=ST_STARTUP
+  SET Lift 0
+  TEST Foto = 1
+    SETSTATE ST_READY_ROBOT
+  ELSE
+    TEST TimeOutDelay = 1
+      SETSTATE ST_EMPTY
+    ENDTEST
+  ENDTEST
+END

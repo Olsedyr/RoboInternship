@@ -1,0 +1,82 @@
+STATEMACHINEVERSION 3
+Name=ConveyorsTripWatch
+Input=ind1 "Kasse Ind 1 Motor Tripped"
+Input=ind2 "Kasse Ind 2 Motor Tripped"
+Input=loader1 "Kasse Loader 1 Motor Tripped"
+Input=loader2 "Kasse Loader 2 Motor Tripped"
+Input=loader3 "Kasse Loader 3 Motor Tripped"
+Input=affald1 "Affald 1 Motor Tripped"
+Input=affald2 "Affald 2 Motor Tripped"
+Input=pre2b "PreCW 2b Motor Tripped"
+Input=pre1hz "PreCW 1 HZOK"
+Input=pre2hz "PreCW 2 HZOK"
+Input=pre3hz "PreCW 3 HZOK"
+Input=post1 "PostCW 1 Motor Tripped"
+Input=post2 "PostCW 2 Motor Tripped"
+Input=post3 "PostCW 3 Motor Tripped"
+Input=ud3 "Kasse Ud 3 Motor Tripped"
+Input=ud4 "Kasse Ud 4 Motor Tripped"
+Input=ud5 "Kasse Ud 5 Motor Tripped"
+Input=ud6 "Kasse Ud 6 Motor Tripped"
+Input=sving1 "Sving 1 Motor Tripped"
+Input=sving2 "Sving 2 Motor Tripped"
+Input=sving3 "Sving 3 Motor Tripped"
+Input=pind400 "PindeTjekker400 Motor Tripped"
+Link=parent ConveyorParent
+Value=errorCode 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST ind1 = 1
+  OR ind2 = 1
+  OR loader1 = 1
+  OR loader2 = 1
+  OR loader3 = 1
+		SET errorCode 1118
+	ENDTEST
+  TEST affald1 = 1
+  OR affald2 = 1
+    SET errorCode 1120
+  ENDTEST
+	TEST ud3 = 1
+  OR ud4 = 1
+  OR ud5 = 1
+  OR ud6 = 1
+    SET errorCode 1119
+  ENDTEST  
+  TEST pre1hz = 0
+  OR pre2hz = 0
+  OR pre3hz = 0
+  OR pre2b = 1
+  OR post1 = 1
+  OR post2 = 1
+  OR post3 = 1
+  OR sving1 = 1
+  OR sving2 = 1
+  OR sving3 = 1
+		SET errorCode 1100
+	ENDTEST
+  TEST pind400 = 1
+    SET errorCode 4118
+  ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

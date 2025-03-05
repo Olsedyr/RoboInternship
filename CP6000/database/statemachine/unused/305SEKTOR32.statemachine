@@ -1,0 +1,130 @@
+STATEMACHINEVERSION 2
+Name=Sektor32
+Delaystop=10000000
+Input=0,Foto1 "Sektor32 Foto1"
+Output=0,Motor "Sektor32 Motor"
+Link=0,Sektor33
+Link=1,Sektor47
+Link=2,Sektor31
+Timeout=0,StopDelay 1000000
+Timeout=1,TimeoutDelay 10000000
+
+State=0,ST_HALT
+END
+
+State=0,ST_TIMER
+END
+
+
+State=0,ST_IDLE
+  SET Motor 0
+END
+
+State=1,ST_READY
+  TEST Foto1 = 0 
+    SETSTATE ST_EMPTY
+  ELSE 
+    TEST Sektor33 = ST_EMPTY
+    OR Sektor33 = ST_RECIEVE
+      SETSTATE ST_SEND
+    ELSE 
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST Sektor31 = ST_IDLE
+  AND Sektor47 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=2,ST_SEND
+  TEST Foto1 = 0
+    TEST Sektor47 = ST_READY
+      TIMEOUT StopDelay ST_EMPTY_SHIFT
+    ELSE
+      TIMEOUT StopDelay ST_EMPTY
+    ENDTEST
+    SETSTATE ST_TIMER
+  ELSE 
+    SET Motor 1
+ ENDTEST
+ END
+
+
+State=3,ST_EMPTY
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ELSE 
+    TEST Sektor47 = ST_READY
+      SETSTATE ST_EMPTY_SHIFT
+    ELSE
+      TEST Sektor31 = ST_READY
+      OR Sektor31 = ST_SEND
+        TIMEOUT TimeoutDelay ST_RECIEVE
+        SET Motor 1
+        SETSTATE ST_RECIEVE
+      ELSE
+        TEST TimeoutDelay = 1
+          SET Motor 0
+        ELSE
+          SET Motor 1
+        ENDTEST
+      ENDTEST
+   ENDTEST
+ ENDTEST
+ TEST Sektor31 = ST_IDLE
+ AND Sektor47 = ST_IDLE
+    SETSTATE ST_IDLE
+ ENDTEST
+ END
+
+State=4,ST_EMPTY_SHIFT
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ENDTEST
+  TEST Sektor47 = ST_READY
+      SET Motor 0
+      SETSTATE ST_RECIEVE_SHIFT
+  ENDTEST
+  END
+
+State=5,ST_RECIEVE
+  TEST Foto1 = 1 
+    SETSTATE ST_READY
+  ELSE 
+    TEST TimeoutDelay = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+  END
+
+State=6,ST_RECIEVE_SHIFT
+  TEST Foto1 = 1
+    SETSTATE ST_READY_SHIFT
+  ENDTEST
+  END
+
+State=7,ST_READY_SHIFT
+  TEST Foto1 = 1
+    TEST Sektor47 = ST_EMPTY
+      SETSTATE ST_READY
+    ENDTEST
+  ELSE 
+    SETSTATE ST_RESET
+  ENDTEST
+  END
+
+State=8,ST_RESET
+  TEST Foto1 = 0
+    TEST Sektor47 = ST_READY
+      SETSTATE ST_EMPTY_SHIFT
+    ELSE 
+      TIMEOUT TimeoutDelay ST_RECIEVE
+      SETSTATE ST_RECIEVE
+    ENDTEST
+  ELSE 
+    SETSTATE ST_READY
+  ENDTEST
+  END

@@ -1,0 +1,129 @@
+STATEMACHINEVERSION 3
+Name=ProductConveyors
+Delaystop=10000000
+;If 2 conveyors they use same comsk and conveyor 2 is reversible
+Output=MotorEnable "ProductConveyors Motor Enable"
+Output=MotorSetpoint "ProductConveyor Setpoint"
+Output=conv2forward "ProductConveyor2 Forward"
+Output=conv2reverse "ProductConveyor2 Reverse"
+Link=Skubber LangBufferSkub
+Link=Counter ProductCount
+Link=parent LangBufferSkub
+linkValue=prenumofproducts ProductCount
+linkValue=oldppp Counter
+linkValue=productsfromleft Program
+linkValue=productsfromright Program
+Value=ppp 0
+Const=motorFreqForward -40.0000
+Const=motorFreqReverse 40.0000
+Timeout=TimeStop 10000
+Timeout=TimeRunAgain 140000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET MotorEnable 0
+  SET MotorSetpoint 0.0
+	SET conv2forward 0
+	SET conv2reverse 0
+;	SET Vende 0
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+;	SET Vende 1
+  TEST productsfromleft = 1
+  AND productsfromright = 1
+    ;products from both sides. conv1 forward (setpoint positive), conv2 opposite way:
+		SET conv2forward 0
+		SET conv2reverse 1
+	ELSE
+    TEST productsfromleft = 1
+      ;conv1 forward, conv2 same way:
+		  ;SET conv2forward 1
+		  ;SET conv2reverse 0
+      ;test: no conveyor2
+		  SET conv2forward 0
+		  SET conv2reverse 0
+    ELSE
+		  TEST productsfromright = 1
+        ;conv1 reverse, conv2 same way:
+			  SET conv2forward 1
+			  SET conv2reverse 0
+		  ENDTEST
+	  ENDTEST
+  ENDTEST
+	SETSTATE ST_STARTUP
+END
+
+State=ST_STARTUP
+	TEST Counter = ST_RUN1
+	OR Counter = ST_RUN_MANUELT
+	  CALC ppp = oldppp + 1
+	  TEST prenumofproducts >= ppp
+		  SETSTATE ST_STOP
+    ELSE
+		  SETSTATE ST_RUN
+    ENDTEST 
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_RUN
+	CALC ppp = oldppp + 1
+	TEST prenumofproducts >= ppp
+		TIMEOUT TimeStop ST_GOSTOP
+		SETSTATE ST_GOSTOP
+	ELSE
+		TEST productsfromleft = 1
+    AND productsfromright = 1
+	    SET MotorEnable 1
+      SET MotorSetpoint motorFreqForward
+		ELSE
+      TEST productsfromleft = 1
+	      SET MotorEnable 1
+        SET MotorSetpoint motorFreqForward
+      ELSE
+        TEST productsfromright = 1
+	        SET MotorEnable 1
+          SET MotorSetpoint motorFreqReverse
+        ENDTEST
+      ENDTEST
+		ENDTEST
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_GOSTOP
+	CALC ppp = oldppp + 1
+	TEST TimeStop = 1
+		SETSTATE ST_STOP
+	ENDTEST
+	TEST prenumofproducts < ppp
+		SETSTATE ST_RUN
+	ENDTEST
+END
+
+State=ST_STOP
+	CALC ppp = oldppp + 1
+	TEST prenumofproducts < ppp
+		TIMEOUT TimeRunAgain ST_RUN
+		SETSTATE ST_TIMER
+	ELSE
+	  SET MotorEnable 0
+    SET MotorSetpoint 0.0
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

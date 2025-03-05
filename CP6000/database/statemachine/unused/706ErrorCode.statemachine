@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=cperrorcode.statemachine
+Name=ErrorCode
+linkValue=kasseinliner errorCode KasseInLiner3
+linkValue=kasselift errorCode KasseLift3
+linkValue=productcount errorCode ProductCount3
+;** User section **

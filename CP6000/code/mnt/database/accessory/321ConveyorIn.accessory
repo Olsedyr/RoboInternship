@@ -1,0 +1,8 @@
+VERSION 1
+321ConveyorIn
+dimention x=2100.0,y=-100.0,z=900.0
+transformation x=-400.0,y=2200.0,z=7246.0
+material diffuse r=0.2,g=0.8,b=0.2,a=1.0
+material ambient r=0.2,g=0.8,b=0.2,a=1.0
+material specular r=0.2,g=0.8,b=0.2,a=1.0
+shininess=1.0

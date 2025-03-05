@@ -1,0 +1,225 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut
+linkValue=Foto4 test ConveyorOutFoto1
+linkValue=Foto3 test ConveyorOutFoto2
+linkValue=Foto2 test ConveyorOutFoto3
+linkValue=Foto1 test ConveyorOutFoto4
+Output=Motor "ConveyorOut Motor"
+linkValue=pathtype pathtype Robot
+linkValue=axis_t axis_t Robot
+Link=parent Parent
+Link=prev ConveyorOutCP
+Link=Robot Robot
+Timeout=TimeOutDelay 8000000
+Timeout=maxWaitNext 5000000
+Timeout=resetDelay 2000000
+Value=errorCode 0
+Const=simulate 1
+Const=errorCodeActive 1
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET Motor 0
+  TEST parent = ST_RESET
+    SET errorCode 0
+    TIMEOUT resetDelay ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_ERROR
+  SET errorCode 1007
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_GET1
+  TEST Foto1 = 1
+;  OR Foto2 = 1
+;  OR Foto3 = 1
+;  OR Foto4 = 1
+    PRINT 1
+;    SETSTATE ST_ERROR
+  ELSETEST prev = ST_SEND1
+    TIMEOUT maxWaitNext ST_RECEIVE1 
+    SETSTATE ST_RECEIVE1 
+  ELSE
+    SET Motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_RECEIVE1
+  TEST Foto1 = 1 
+    SETSTATE ST_GET2    
+    TEST Foto2 = 1 
+      SETSTATE ST_GET3
+    ENDTEST
+  ELSETEST maxWaitNext = 1
+    PRINT 2
+    TEST simulate = 1
+      SETSTATE ST_GET3
+    ENDTEST
+		;      SETSTATE ST_ERROR
+  ELSE
+    SET Motor 1
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_GET2
+  TEST prev = ST_SEND2
+    TIMEOUT maxWaitNext ST_RECEIVE2 
+    SETSTATE ST_RECEIVE2 
+  ELSE
+    SET Motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_RECEIVE2
+  TEST Foto2 = 1 
+    SETSTATE ST_GET3    
+  ELSETEST maxWaitNext = 1
+    PRINT 4
+		;      SETSTATE ST_ERROR
+  ELSE
+    SET Motor 1
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_GET3
+  TEST prev = ST_SEND3
+    TIMEOUT maxWaitNext ST_RECEIVE3 
+    SETSTATE ST_RECEIVE3 
+  ELSE
+    SET Motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_RECEIVE3
+  TEST Foto3 = 1
+    SETSTATE ST_GET4  
+    TEST Foto4 = 1
+      SETSTATE ST_READY_ROBOT
+    ENDTEST
+  ELSETEST maxWaitNext = 1
+    PRINT 6
+    TEST simulate = 1
+      SETSTATE ST_READY_ROBOT
+    ENDTEST
+		;      SETSTATE ST_ERROR
+  ELSE
+    SET Motor 1
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_GET4
+  TEST prev = ST_SEND4
+    TIMEOUT maxWaitNext ST_RECEIVE4 
+    SETSTATE ST_RECEIVE4 
+  ELSE
+    SET Motor 0
+  ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_RECEIVE4
+  TEST Foto4 = 1
+    SETSTATE ST_READY_ROBOT 
+  ELSETEST maxWaitNext = 1
+    PRINT 8
+		;      SETSTATE ST_ERROR
+  ELSE
+    SET Motor 1
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_READY_ROBOT
+  TEST pathtype = 24
+	AND axis_t <= 400000
+    SETSTATE ST_WAIT_ROBOT_GONE
+  ENDTEST
+  SET Motor 0
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_WAIT_ROBOT_GONE
+  TEST pathtype = 24
+	  TEST axis_t > 400000
+      TEST Foto1 = 0
+      AND Foto2 = 0
+      AND Foto3 = 0
+      AND Foto4 = 0
+        SETSTATE ST_GET1
+      ELSETEST errorCodeActive = 1
+	      SET errorCode 1007
+        SETSTATE ST_ERROR
+			ELSE
+				SETSTATE ST_GET1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST Robot != ST_RUNNING 
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RESET
+  TIMEOUT TimeOutDelay ST_STARTUP
+  SETSTATE ST_STARTUP
+END
+
+State=ST_SELECT
+  TEST Foto1 = 0
+    SETSTATE ST_GET1  
+  ELSETEST Foto2 = 0
+    SETSTATE ST_GET2
+  ELSETEST Foto3 = 0
+    SETSTATE ST_GET3
+  ELSE 
+    SETSTATE ST_GET4
+  ENDTEST
+END
+
+State=ST_STARTUP
+  TEST Foto1 = 1
+  AND Foto2 = 1
+  AND Foto3 = 1
+  AND Foto4 = 1
+    SETSTATE ST_READY_ROBOT
+  ELSETEST TimeOutDelay = 1
+    SETSTATE ST_SELECT
+  ELSE
+    SET Motor 1
+  ENDTEST
+END

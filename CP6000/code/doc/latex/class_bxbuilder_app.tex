@@ -1,0 +1,288 @@
+\hypertarget{class_bxbuilder_app}{
+\section{BxbuilderApp Class Reference}
+\label{class_bxbuilder_app}\index{BxbuilderApp@{BxbuilderApp}}
+}
+{\tt \#include $<$bxbuilder.h$>$}
+
+\subsection*{Public Slots}
+\begin{CompactItemize}
+\item 
+void \hyperlink{class_bxbuilder_app_0f2e6b7987ce423edbe0a260233353d3}{slotFileNew} ()
+\item 
+void \hyperlink{class_bxbuilder_app_71cdb85b5c6a99f6d2f6a6bd98811f20}{slotFileOpen} ()
+\item 
+void \hyperlink{class_bxbuilder_app_d2d53328b5dabade1838100fc88b5fc4}{slotFileSave} ()
+\item 
+void \hyperlink{class_bxbuilder_app_be410f53109bba66ced967a73e64008c}{slotFileSaveAs} ()
+\item 
+void \hyperlink{class_bxbuilder_app_1a024140268e7d0346f28cc3c569f3ca}{slotFileClose} ()
+\item 
+void \hyperlink{class_bxbuilder_app_2c67ccee0bb45d54f27d059fd9136d64}{slotFileGenerate} ()
+\item 
+void \hyperlink{class_bxbuilder_app_be699f4ab7dbd23a948ba68bd9610c12}{slotFilePrint} ()
+\item 
+void \hyperlink{class_bxbuilder_app_24c154ae07ff22499c8aee9668e377cb}{slotFileQuit} ()
+\item 
+void \hyperlink{class_bxbuilder_app_cbc7ffdff53872039965f218541ad47a}{slotEditCut} ()
+\item 
+void \hyperlink{class_bxbuilder_app_ad899f797245ea9ad0763fcdd2a5d142}{slotEditAdd} ()
+\item 
+void \hyperlink{class_bxbuilder_app_77bb016165058a8b1b40d0379c0d257a}{slotEditPaste} ()
+\item 
+void \hyperlink{class_bxbuilder_app_6461fe165888a2c116c9b2bd7c1240d7}{slotViewToolBar} (bool toggle)
+\item 
+void \hyperlink{class_bxbuilder_app_1334d5fff728f7985952f30001c33913}{slotViewStatusBar} (bool toggle)
+\item 
+void \hyperlink{class_bxbuilder_app_09e4301881ff984163cce5202603e486}{slotHelpAbout} ()
+\end{CompactItemize}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_bxbuilder_app_d965542ad52df92ac3436d51d5779e64}{BxbuilderApp} ()
+\item 
+\hyperlink{class_bxbuilder_app_70adc92630903b6de478681512c81587}{$\sim$BxbuilderApp} ()
+\item 
+void \hyperlink{class_bxbuilder_app_3add754bdd339f64be1dff4546be65f5}{initActions} ()
+\item 
+void \hyperlink{class_bxbuilder_app_0b0e9cd41d19d9cb52443c381a519994}{initMenuBar} ()
+\item 
+void \hyperlink{class_bxbuilder_app_d5414532a5173cf4300aa970df739927}{initToolBar} ()
+\item 
+void \hyperlink{class_bxbuilder_app_c3e521a0308f0922cc977d844a70446d}{initStatusBar} ()
+\item 
+void \hyperlink{class_bxbuilder_app_1b46eee64082444023546bcbda536ef3}{initDoc} ()
+\item 
+void \hyperlink{class_bxbuilder_app_afcf982312922a03e9bb1f072c10b3ca}{initView} ()
+\item 
+bool \hyperlink{class_bxbuilder_app_ebc4099d6b19d2cf5e1426f347023e85}{queryExit} ()
+\item 
+int \hyperlink{class_bxbuilder_app_9a81d6d109d6390aa3e68b61be86aeb0}{GenerateCode} (QString filename, QString path)
+\item 
+int \hyperlink{class_bxbuilder_app_d1ce6732a3a8cf0b96c172e8992529b1}{SaveProject} (QString filename)
+\item 
+int \hyperlink{class_bxbuilder_app_321d70a96fbd3ed6bfd87e78e9a67e3a}{LoadProject} (QString filename)
+\item 
+int \hyperlink{class_bxbuilder_app_1ee74b295c93cc6a2a07cc1a5a0d1c7b}{AddPicture} (const QPixmap $\ast$pix, QString ofile)
+\item 
+int \hyperlink{class_bxbuilder_app_fb78e67f867e469d371276546899c62f}{AddIcon} (const QPixmap $\ast$pix, QString ofile)
+\item 
+int \hyperlink{class_bxbuilder_app_2ba78d3f4aa8b7447c6dfe33e290cf17}{AddString} (QString s, QString ofile)
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+This Class is the base class for your application. It sets up the main window and providing a menubar, toolbar and statusbar. For the main view, an instance of class \hyperlink{class_bxbuilder_view}{BxbuilderView} is created which creates your view. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_bxbuilder_app_d965542ad52df92ac3436d51d5779e64}{
+\index{BxbuilderApp@{BxbuilderApp}!BxbuilderApp@{BxbuilderApp}}
+\index{BxbuilderApp@{BxbuilderApp}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{BxbuilderApp}]{\setlength{\rightskip}{0pt plus 5cm}{\bf BxbuilderApp} ()}}
+\label{class_bxbuilder_app_d965542ad52df92ac3436d51d5779e64}
+
+
+construtor \hypertarget{class_bxbuilder_app_70adc92630903b6de478681512c81587}{
+\index{BxbuilderApp@{BxbuilderApp}!$\sim$BxbuilderApp@{$\sim$BxbuilderApp}}
+\index{$\sim$BxbuilderApp@{$\sim$BxbuilderApp}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{$\sim$BxbuilderApp}]{\setlength{\rightskip}{0pt plus 5cm}$\sim${\bf BxbuilderApp} ()}}
+\label{class_bxbuilder_app_70adc92630903b6de478681512c81587}
+
+
+destructor 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_bxbuilder_app_fb78e67f867e469d371276546899c62f}{
+\index{BxbuilderApp@{BxbuilderApp}!AddIcon@{AddIcon}}
+\index{AddIcon@{AddIcon}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{AddIcon}]{\setlength{\rightskip}{0pt plus 5cm}int AddIcon (const QPixmap $\ast$ {\em pix}, \/  QString {\em ofile})}}
+\label{class_bxbuilder_app_fb78e67f867e469d371276546899c62f}
+
+
+No descriptions \hypertarget{class_bxbuilder_app_1ee74b295c93cc6a2a07cc1a5a0d1c7b}{
+\index{BxbuilderApp@{BxbuilderApp}!AddPicture@{AddPicture}}
+\index{AddPicture@{AddPicture}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{AddPicture}]{\setlength{\rightskip}{0pt plus 5cm}int AddPicture (const QPixmap $\ast$ {\em pix}, \/  QString {\em ofile})}}
+\label{class_bxbuilder_app_1ee74b295c93cc6a2a07cc1a5a0d1c7b}
+
+
+No descriptions \hypertarget{class_bxbuilder_app_2ba78d3f4aa8b7447c6dfe33e290cf17}{
+\index{BxbuilderApp@{BxbuilderApp}!AddString@{AddString}}
+\index{AddString@{AddString}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{AddString}]{\setlength{\rightskip}{0pt plus 5cm}int AddString (QString {\em s}, \/  QString {\em ofile})}}
+\label{class_bxbuilder_app_2ba78d3f4aa8b7447c6dfe33e290cf17}
+
+
+No descriptions \hypertarget{class_bxbuilder_app_9a81d6d109d6390aa3e68b61be86aeb0}{
+\index{BxbuilderApp@{BxbuilderApp}!GenerateCode@{GenerateCode}}
+\index{GenerateCode@{GenerateCode}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{GenerateCode}]{\setlength{\rightskip}{0pt plus 5cm}int GenerateCode (QString {\em filename}, \/  QString {\em path})}}
+\label{class_bxbuilder_app_9a81d6d109d6390aa3e68b61be86aeb0}
+
+
+No descriptions \hypertarget{class_bxbuilder_app_3add754bdd339f64be1dff4546be65f5}{
+\index{BxbuilderApp@{BxbuilderApp}!initActions@{initActions}}
+\index{initActions@{initActions}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{initActions}]{\setlength{\rightskip}{0pt plus 5cm}void initActions ()}}
+\label{class_bxbuilder_app_3add754bdd339f64be1dff4546be65f5}
+
+
+initializes all QActions of the application \hypertarget{class_bxbuilder_app_1b46eee64082444023546bcbda536ef3}{
+\index{BxbuilderApp@{BxbuilderApp}!initDoc@{initDoc}}
+\index{initDoc@{initDoc}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{initDoc}]{\setlength{\rightskip}{0pt plus 5cm}void initDoc ()}}
+\label{class_bxbuilder_app_1b46eee64082444023546bcbda536ef3}
+
+
+setup the document \hypertarget{class_bxbuilder_app_0b0e9cd41d19d9cb52443c381a519994}{
+\index{BxbuilderApp@{BxbuilderApp}!initMenuBar@{initMenuBar}}
+\index{initMenuBar@{initMenuBar}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{initMenuBar}]{\setlength{\rightskip}{0pt plus 5cm}void initMenuBar ()}}
+\label{class_bxbuilder_app_0b0e9cd41d19d9cb52443c381a519994}
+
+
+initMenuBar creates the menu\_\-bar and inserts the menuitems \hypertarget{class_bxbuilder_app_c3e521a0308f0922cc977d844a70446d}{
+\index{BxbuilderApp@{BxbuilderApp}!initStatusBar@{initStatusBar}}
+\index{initStatusBar@{initStatusBar}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{initStatusBar}]{\setlength{\rightskip}{0pt plus 5cm}void initStatusBar ()}}
+\label{class_bxbuilder_app_c3e521a0308f0922cc977d844a70446d}
+
+
+setup the statusbar \hypertarget{class_bxbuilder_app_d5414532a5173cf4300aa970df739927}{
+\index{BxbuilderApp@{BxbuilderApp}!initToolBar@{initToolBar}}
+\index{initToolBar@{initToolBar}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{initToolBar}]{\setlength{\rightskip}{0pt plus 5cm}void initToolBar ()}}
+\label{class_bxbuilder_app_d5414532a5173cf4300aa970df739927}
+
+
+this creates the toolbars. Change the toobar look and add new toolbars in this function \hypertarget{class_bxbuilder_app_afcf982312922a03e9bb1f072c10b3ca}{
+\index{BxbuilderApp@{BxbuilderApp}!initView@{initView}}
+\index{initView@{initView}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{initView}]{\setlength{\rightskip}{0pt plus 5cm}void initView ()}}
+\label{class_bxbuilder_app_afcf982312922a03e9bb1f072c10b3ca}
+
+
+setup the mainview \hypertarget{class_bxbuilder_app_321d70a96fbd3ed6bfd87e78e9a67e3a}{
+\index{BxbuilderApp@{BxbuilderApp}!LoadProject@{LoadProject}}
+\index{LoadProject@{LoadProject}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{LoadProject}]{\setlength{\rightskip}{0pt plus 5cm}int LoadProject (QString {\em filename})}}
+\label{class_bxbuilder_app_321d70a96fbd3ed6bfd87e78e9a67e3a}
+
+
+No descriptions \hypertarget{class_bxbuilder_app_ebc4099d6b19d2cf5e1426f347023e85}{
+\index{BxbuilderApp@{BxbuilderApp}!queryExit@{queryExit}}
+\index{queryExit@{queryExit}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{queryExit}]{\setlength{\rightskip}{0pt plus 5cm}bool queryExit ()}}
+\label{class_bxbuilder_app_ebc4099d6b19d2cf5e1426f347023e85}
+
+
+overloaded for Message box on last window exit \hypertarget{class_bxbuilder_app_d1ce6732a3a8cf0b96c172e8992529b1}{
+\index{BxbuilderApp@{BxbuilderApp}!SaveProject@{SaveProject}}
+\index{SaveProject@{SaveProject}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{SaveProject}]{\setlength{\rightskip}{0pt plus 5cm}int SaveProject (QString {\em filename})}}
+\label{class_bxbuilder_app_d1ce6732a3a8cf0b96c172e8992529b1}
+
+
+No descriptions \hypertarget{class_bxbuilder_app_ad899f797245ea9ad0763fcdd2a5d142}{
+\index{BxbuilderApp@{BxbuilderApp}!slotEditAdd@{slotEditAdd}}
+\index{slotEditAdd@{slotEditAdd}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotEditAdd}]{\setlength{\rightskip}{0pt plus 5cm}void slotEditAdd ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_ad899f797245ea9ad0763fcdd2a5d142}
+
+
+put the marked text/object into the clipboard \hypertarget{class_bxbuilder_app_cbc7ffdff53872039965f218541ad47a}{
+\index{BxbuilderApp@{BxbuilderApp}!slotEditCut@{slotEditCut}}
+\index{slotEditCut@{slotEditCut}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotEditCut}]{\setlength{\rightskip}{0pt plus 5cm}void slotEditCut ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_cbc7ffdff53872039965f218541ad47a}
+
+
+put the marked text/object into the clipboard and remove it from the document \hypertarget{class_bxbuilder_app_77bb016165058a8b1b40d0379c0d257a}{
+\index{BxbuilderApp@{BxbuilderApp}!slotEditPaste@{slotEditPaste}}
+\index{slotEditPaste@{slotEditPaste}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotEditPaste}]{\setlength{\rightskip}{0pt plus 5cm}void slotEditPaste ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_77bb016165058a8b1b40d0379c0d257a}
+
+
+paste the clipboard into the document \hypertarget{class_bxbuilder_app_1a024140268e7d0346f28cc3c569f3ca}{
+\index{BxbuilderApp@{BxbuilderApp}!slotFileClose@{slotFileClose}}
+\index{slotFileClose@{slotFileClose}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotFileClose}]{\setlength{\rightskip}{0pt plus 5cm}void slotFileClose ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_1a024140268e7d0346f28cc3c569f3ca}
+
+
+close the actual file \hypertarget{class_bxbuilder_app_2c67ccee0bb45d54f27d059fd9136d64}{
+\index{BxbuilderApp@{BxbuilderApp}!slotFileGenerate@{slotFileGenerate}}
+\index{slotFileGenerate@{slotFileGenerate}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotFileGenerate}]{\setlength{\rightskip}{0pt plus 5cm}void slotFileGenerate ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_2c67ccee0bb45d54f27d059fd9136d64}
+
+
+print the actual file \hypertarget{class_bxbuilder_app_0f2e6b7987ce423edbe0a260233353d3}{
+\index{BxbuilderApp@{BxbuilderApp}!slotFileNew@{slotFileNew}}
+\index{slotFileNew@{slotFileNew}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotFileNew}]{\setlength{\rightskip}{0pt plus 5cm}void slotFileNew ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_0f2e6b7987ce423edbe0a260233353d3}
+
+
+generate a new document in the actual view \hypertarget{class_bxbuilder_app_71cdb85b5c6a99f6d2f6a6bd98811f20}{
+\index{BxbuilderApp@{BxbuilderApp}!slotFileOpen@{slotFileOpen}}
+\index{slotFileOpen@{slotFileOpen}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotFileOpen}]{\setlength{\rightskip}{0pt plus 5cm}void slotFileOpen ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_71cdb85b5c6a99f6d2f6a6bd98811f20}
+
+
+open a document \hypertarget{class_bxbuilder_app_be699f4ab7dbd23a948ba68bd9610c12}{
+\index{BxbuilderApp@{BxbuilderApp}!slotFilePrint@{slotFilePrint}}
+\index{slotFilePrint@{slotFilePrint}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotFilePrint}]{\setlength{\rightskip}{0pt plus 5cm}void slotFilePrint ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_be699f4ab7dbd23a948ba68bd9610c12}
+
+
+print the actual file \hypertarget{class_bxbuilder_app_24c154ae07ff22499c8aee9668e377cb}{
+\index{BxbuilderApp@{BxbuilderApp}!slotFileQuit@{slotFileQuit}}
+\index{slotFileQuit@{slotFileQuit}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotFileQuit}]{\setlength{\rightskip}{0pt plus 5cm}void slotFileQuit ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_24c154ae07ff22499c8aee9668e377cb}
+
+
+exits the application \hypertarget{class_bxbuilder_app_d2d53328b5dabade1838100fc88b5fc4}{
+\index{BxbuilderApp@{BxbuilderApp}!slotFileSave@{slotFileSave}}
+\index{slotFileSave@{slotFileSave}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotFileSave}]{\setlength{\rightskip}{0pt plus 5cm}void slotFileSave ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_d2d53328b5dabade1838100fc88b5fc4}
+
+
+save a document \hypertarget{class_bxbuilder_app_be410f53109bba66ced967a73e64008c}{
+\index{BxbuilderApp@{BxbuilderApp}!slotFileSaveAs@{slotFileSaveAs}}
+\index{slotFileSaveAs@{slotFileSaveAs}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotFileSaveAs}]{\setlength{\rightskip}{0pt plus 5cm}void slotFileSaveAs ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_be410f53109bba66ced967a73e64008c}
+
+
+save a document under a different filename \hypertarget{class_bxbuilder_app_09e4301881ff984163cce5202603e486}{
+\index{BxbuilderApp@{BxbuilderApp}!slotHelpAbout@{slotHelpAbout}}
+\index{slotHelpAbout@{slotHelpAbout}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotHelpAbout}]{\setlength{\rightskip}{0pt plus 5cm}void slotHelpAbout ()\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_09e4301881ff984163cce5202603e486}
+
+
+shows an about dlg \hypertarget{class_bxbuilder_app_1334d5fff728f7985952f30001c33913}{
+\index{BxbuilderApp@{BxbuilderApp}!slotViewStatusBar@{slotViewStatusBar}}
+\index{slotViewStatusBar@{slotViewStatusBar}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotViewStatusBar}]{\setlength{\rightskip}{0pt plus 5cm}void slotViewStatusBar (bool {\em toggle})\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_1334d5fff728f7985952f30001c33913}
+
+
+toggle the statusbar \hypertarget{class_bxbuilder_app_6461fe165888a2c116c9b2bd7c1240d7}{
+\index{BxbuilderApp@{BxbuilderApp}!slotViewToolBar@{slotViewToolBar}}
+\index{slotViewToolBar@{slotViewToolBar}!BxbuilderApp@{BxbuilderApp}}
+\subsubsection[{slotViewToolBar}]{\setlength{\rightskip}{0pt plus 5cm}void slotViewToolBar (bool {\em toggle})\hspace{0.3cm}{\tt  \mbox{[}slot\mbox{]}}}}
+\label{class_bxbuilder_app_6461fe165888a2c116c9b2bd7c1240d7}
+
+
+toggle the toolbar 
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+C:/sandbox/sandbox/bxbuilder/bxbuilder/bxbuilder.h\item 
+C:/sandbox/sandbox/bxbuilder/bxbuilder/bxbuilder.cpp\end{CompactItemize}

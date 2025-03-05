@@ -1,0 +1,56 @@
+STATEMACHINEVERSION 3
+Name=ConveyorsErrorCode
+Link=parent ConveyorParent
+linkValue=emergency errorCode ConveyorsEmergency
+linkValue=ind2 errorCode KasseInd2
+linkValue=loader1 errorCode KasseLoader1
+linkValue=loader2 errorCode KasseLoader2
+linkValue=loader3 errorCode KasseLoader3
+linkValue=ud3 errorCode KasseUd3
+linkValue=ud4 errorCode KasseUd4
+linkValue=ud5 errorCode KasseUd5
+linkValue=trip errorCode ConveyorsTripWatch
+linkValue=chn400 errorCode PindeTjekker400
+linkValue=ioerror errorCode ConveyorsIOError
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+  OR parent = ST_RUN
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST emergency != 0
+  OR ind2 != 0
+  OR loader1 != 0
+  OR loader2 != 0
+  OR loader3 != 0
+  OR ud3 != 0
+  OR ud4 != 0
+  OR ud5 != 0
+  OR trip != 0
+  OR chn400 != 0
+	OR ioerror != 0
+		SETSTATE ST_ERROR
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_ERROR
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

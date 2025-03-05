@@ -1,0 +1,62 @@
+STATEMACHINEVERSION 3
+Name=ToolTester
+Value=errorCode 0
+Input=ToolType1 "ToolSelect1"
+Input=ToolType2 "ToolSelect2"
+Link=parent Parent
+Link=program Program310
+linkValue=simulate simulateTool Simulate
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_ERROR
+END
+
+State=ST_IDLE
+  TEST parent = ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+  TEST ToolType1 = 0
+	AND ToolType2 = 0
+    TEST simulate = 0
+      SET errorCode 1150
+    ENDTEST
+  ELSETEST ToolType1 = 1
+	AND ToolType2 = 0
+		TEST program = ST_RUNNING_310HybschA
+		OR program = ST_RUNNING_310HybschA6
+		OR program = ST_RUNNING_310HybschA7
+		OR program = ST_RUNNING_310EPS610
+		OR program = PROGRAM_310HybschA
+		OR program = PROGRAM_310HybschA6
+		OR program = PROGRAM_310HybschA7
+		OR program = PROGRAM_310EPS610
+      TEST simulate = 0
+			  SET errorCode 1150
+		  ENDTEST
+		ENDTEST
+	ELSETEST ToolType1 = 0
+	AND ToolType2 = 1
+		TEST program = ST_RUNNING_310C11
+		OR program = ST_RUNNING_310C11Low
+		OR program = ST_RUNNING_310C18
+		OR program = ST_RUNNING_310C14
+		OR program = PROGRAM_310C11	
+		OR program = PROGRAM_310C11Low	
+		OR program = PROGRAM_310C18
+		OR program = PROGRAM_310C14
+      TEST simulate = 0
+			  SET errorCode 1150
+		  ENDTEST
+		ENDTEST
+	ENDTEST
+	SETSTATE ST_IDLE
+END

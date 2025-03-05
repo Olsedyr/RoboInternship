@@ -1,0 +1,65 @@
+[./LINUX.kdevprj]
+dist=true
+install=false
+install_location=
+type=DATA
+
+[./Makefile.am]
+files=./main.c,./upldForm.c,./LINUX.kdevprj,
+sub_dirs=
+type=normal
+
+[./main.c]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[./upldForm.c]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[Config for BinMakefileAm]
+addcxxflags=
+bin_program=LINUX
+cxxflags=
+ldadd=
+ldflags=
+
+[General]
+AMChanged=false
+author=lms
+email=lms@mpn-lms
+kdevprj_version=1.3
+lfv_open_groups=Sources
+makefiles=./Makefile.am,Makefile.am
+project_name=LINUX
+project_type=normal_empty
+sub_dir=
+version=
+version_control=CVS
+workspace=1
+
+[LFV Groups]
+GNU=AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,NEWS,
+Headers=*.h,*.hxx,*.hpp,*.H,
+Others=*,
+Sources=*.cpp,*.c,*.cc,*.C,*.cxx,*.ec,*.ecpp,*.lxx,*.l++,*.ll,*.l,
+Translations=*.ts,*.po,
+User Interface=*.ui,*.kdevdlg,*.rc,
+groups=Headers,Sources,GNU,Translations,User Interface,Others
+
+[Makefile.am]
+files=webmain.c
+sharedlib_LDFLAGS=-version-info 0:0:0
+sharedlib_rootname=.
+sub_dirs=
+type=static_library
+
+[webmain.c]
+dist=true
+install=false
+install_location=
+type=SOURCE

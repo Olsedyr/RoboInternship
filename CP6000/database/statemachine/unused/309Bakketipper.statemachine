@@ -1,0 +1,43 @@
+STATEMACHINEVERSION 2
+Name=BakkeTipper
+Delaystop=10000000
+Output=0,Motor "BakkeTipper Motor"
+Link=0,InLiner
+Timeout=0,TimeRun 2000000
+
+State=0,ST_HALT
+END
+
+State=0,ST_TIMER
+END
+
+State=0,ST_IDLE
+  SET Motor 0
+END
+
+State=5,ST_RESET
+  SETSTATE ST_RUN
+END
+
+State=5,ST_RUN
+  SET Motor 1
+  TEST InLiner != ST_RUN
+  AND InLiner != ST_PAUSE
+  AND InLiner != ST_GORUN
+    SETSTATE ST_STOP
+  ENDTEST
+  TEST InLiner = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=5,ST_STOP
+  SET Motor 0
+  TEST InLiner = ST_RUN
+    TIMEOUT TimeRun ST_RUN
+    SETSTATE ST_TIMER
+  ENDTEST
+  TEST InLiner = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

@@ -1,0 +1,5 @@
+STATEMACHINEVERSION 3
+Include=fotoblocked.statemachine
+Name=fotoInBlockedS2
+Timeout=Time 5000000
+Link=foto fotoInS2

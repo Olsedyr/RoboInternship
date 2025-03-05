@@ -1,0 +1,16 @@
+#!/bin/sh
+if [ -z "$1" ] ; then
+    echo "usage: $0 username"
+else
+    if [ "$1" = "mrr" ] ; then
+        mount -t nfs -o nolock,vers=2 192.168.0.23:/home/mrr/sandbox /tmp
+    elif [ "$1" = "thn" ] ; then
+        mount -t nfs -o nolock,vers=2 192.168.0.12:/home/thn/sandbox /tmp
+    elif [ "$1" = "mvj" ] ; then
+        mount -t nfs -o nolock,vers=2 192.168.0.14:/home/mvj/workspace/sandbox /tmp
+    elif [ "$1" = "mrr" ] ; then
+        mount -t nfs -o nolock,vers=2 192.168.0.23:/home/mrr/sandbox /tmp
+    else
+        echo "no mount command configured for '$1'"
+    fi
+fi

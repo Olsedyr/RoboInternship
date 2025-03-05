@@ -1,0 +1,167 @@
+VERSION 2
+SUB 306C14TomatStart
+COUNTER delaystop = 0
+COUNTER offline = 0
+COUNTER restart = 0
+* eksempler på antal kasser
+* 48 kasser -> COUNTER sAItems = 0 COUNTER sBItems = 0 
+* 24 kasser -> COUNTER sAItems = 24 COUNTER sBItems = 0 
+* 6 kasser -> COUNTER sAItems = 42 COUNTER sBItems = 0 
+COUNTER sAItems = 0 
+COUNTER sBItems = 0 
+COUNTER wAItems = 48
+COUNTER wBItems = 48
+COUNTER cItemsTotal = 0
+COUNTER cItemsTotal = 0
+COUNTER cAItems = 0
+COUNTER cBItems = 0
+COUNTER cAPallet = 0
+COUNTER cBPallet = 0
+COUNTER cALayer = 0
+COUNTER cBLayer = 0
+MACRO clearsavedpath 0 0 0
+MACRO savenextpath 0 0 0
+PATH fromHomeToDispenser0 id=0,type=26,time=2500,loadgroup=2,runbopt=0
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT dispenser0 0,200,0,90,45,0,10 case
+POINT dispenser0 0,200,0,90,0,0,10 case
+POINT dispenser0 0,0,0,90,0,0,10 case
+POINT dispenser0 0,0,0,90,0,0,10 case
+END
+MACRO savenextpath 1 0 0
+PATH fromHomeToDispenser1 id=1,type=26,time=2500,loadgroup=2,runbopt=0
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT dispenser1 0,200,0,90,45,0,10 case
+POINT dispenser1 0,200,0,90,0,0,10 case
+POINT dispenser1 0,0,0,90,0,0,10 case
+POINT dispenser1 0,0,0,90,0,0,10 case
+END
+MACRO savenextpath 2 0 0
+PATH fromDispenser0ToStation id=2,type=26,time=2500,loadgroup=2,runbopt=0
+POINT dispenser0 0,0,0,90,0,0,10 case
+POINT dispenser0 0,0,0,90,0,0,10 case
+POINT dispenser0 0,300,0,90,0,0,10 case
+POINT stationIn 500,200,0,90,0,0,10 case
+POINT stationIn 0,200,0,90,0,0,10 case
+POINT stationIn 0,0,0,90,0,0,10 case
+POINT stationIn 0,0,0,90,0,0,10 case
+END
+MACRO savenextpath 3 0 0
+PATH fromDispenser1ToStation id=3,type=26,time=2500,loadgroup=2,runbopt=0
+POINT dispenser1 0,0,0,90,0,0,10 case
+POINT dispenser1 0,0,0,90,0,0,10 case
+POINT dispenser1 0,200,0,90,0,0,10 case
+POINT stationIn 500,200,0,90,0,0,10 case
+POINT stationIn 0,200,0,90,0,0,10 case
+POINT stationIn 0,0,0,90,0,0,10 case
+POINT stationIn 0,0,0,90,0,0,10 case
+END
+MACRO savenextpath 4 0 0
+PATH fromStationToBuffer id=4,type=26,time=3000,loadgroup=2,runbopt=0
+POINT stationIn 0,0,0,90,0,0,10 case
+POINT stationIn 0,0,0,90,0,0,10 case
+POINT stationIn 0,190,0,100,0,0,10 case
+POINT stationIn -190,360,-100,140,0,0,10 case
+POINT buffer 0,430,660,180,0,0,10 bag
+POINT buffer 0,280,270,180,0,0,10 bag
+POINT buffer 0,100,0,180,0,0,10 bag
+POINT buffer 0,0,0,180,0,0,10 bag
+POINT buffer 0,0,0,180,0,0,10 bag
+END
+MACRO savenextpath 5 0 0
+PATH fromHomeToBuffer id=5,type=26,time=2500,loadgroup=2,runbopt=0
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT buffer 200,600,850,120,45,0,10 case
+POINT buffer 0,370,660,180,0,0,10 bag
+POINT buffer 0,340,350,180,0,0,10 bag
+POINT buffer 0,100,0,180,0,0,10 bag
+POINT buffer 0,0,0,180,0,0,10 bag
+POINT buffer 0,0,0,180,0,0,10 bag
+END
+MACRO savenextpath 6 0 0
+PATH sugBakker id=6,type=26,time=1000,loadgroup=2,runbopt=0
+POINT buffer 0,200,0,180,0,0,10 bag
+POINT buffer 0,200,0,180,0,0,10 bag
+POINT buffer 0,0,0,180,0,0,10 bag
+POINT buffer 0,0,0,180,0,0,10 bag
+END
+MACRO savenextpath 7 0 0
+PATH toVacuumTest id=7,type=26,time=1000,loadgroup=2,runbopt=0
+POINT buffer 0,0,0,180,0,0,10 bag
+POINT buffer 0,0,0,180,0,0,10 bag
+POINT buffer 0,60,0,180,0,0,10 bag
+POINT buffer 0,140,0,180,0,0,10 bag
+POINT buffer 0,200,0,180,0,0,10 bag
+POINT buffer 0,200,0,180,0,0,10 bag
+END
+MACRO savenextpath 8 0 0
+PATH flytBakker id=8,type=26,time=2000,loadgroup=2,runbopt=0
+POINT buffer 0,200,0,180,0,0,10 bag
+POINT buffer 0,200,0,180,0,0,10 bag
+POINT buffer 0,240,50,180,0,0,10 bag
+POINT kasse 30,80,-710,180,0,0,10 bag
+POINT kasse 30,150,-490,180,0,0,10 bag
+POINT kasse 30,210,-240,180,0,0,10 bag
+POINT kasse 10,200,-70,180,0,0,10 bag
+POINT kasse 0,100,0,180,0,0,10 bag
+POINT kasse 0,0,0,180,0,0,10 bag
+POINT kasse 0,0,0,180,0,0,10 bag
+END
+MACRO savenextpath 9 0 0
+PATH pickBox id=9,type=26,time=2500,loadgroup=2,runbopt=0
+POINT kasse 0,0,0,180,0,0,10 bag
+POINT kasse 0,0,0,180,0,0,10 bag
+POINT kasse 0,100,0,180,0,0,10 bag
+POINT kasse 320,220,0,140,0,0,10 bag
+POINT station 0,200,0,90,0,0,10 case
+POINT station 0,0,0,90,0,0,10 case
+POINT station 0,0,0,90,0,0,10 case
+END
+MACRO savenextpath 10 0 0
+PATH fromTipperToHome id=10,type=26,time=2000,loadgroup=2,runbopt=0
+POINT tipper 0,0,0,90,0,0,10 case
+POINT tipper 0,0,0,90,0,0,10 case
+POINT tipper 0,100,0,90,0,0,10 case
+POINT tipper 100,100,-400,90,45,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+END
+MACRO savenextpath 11 0 0
+PATH fromBufferToHome id=11,type=26,time=3500,loadgroup=2,runbopt=0
+POINT buffer 0,200,0,180,0,0,10 bag
+POINT buffer 0,200,0,180,0,0,10 bag
+POINT buffer 0,340,350,180,0,0,10 bag
+POINT buffer 40,370,660,180,0,0,10 bag
+POINT buffer 200,500,850,120,45,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+END
+MACRO savenextpath 12 0 0
+PATH fromStationToHome id=12,type=26,time=2000,loadgroup=2,runbopt=0
+POINT stationIn 0,0,0,90,0,0,10 case
+POINT stationIn 0,0,0,90,0,0,10 case
+POINT stationIn 0,150,0,90,0,0,10 case
+POINT stationIn 100,150,0,90,45,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+END
+MACRO savenextpath 13 0 0
+PATH fromKasseToHome id=13,type=26,time=3000,loadgroup=2,runbopt=0
+POINT kasse 0,0,0,180,0,0,10 bag
+POINT kasse 0,0,0,180,0,0,10 bag
+POINT kasse 0,100,0,180,0,0,10 bag
+POINT kasse 320,220,0,140,0,0,10 bag
+POINT station 0,220,0,90,0,0,10 case
+POINT station 0,220,0,90,30,0,10 case
+POINT station 100,220,0,90,60,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+END
+CALL 306C14TomatReStart -1
+END

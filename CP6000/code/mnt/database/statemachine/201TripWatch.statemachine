@@ -1,0 +1,40 @@
+STATEMACHINEVERSION 3
+Name=TripWatch
+;Input=uniChainMotor "KassePakker UniChainMotor Tripped"
+Input=skubbePladsMotor "KassePakker skubbePladsMotor Tripped"
+Input=motor "KassePakker Motor Tripped"
+;Input=bufferPladsMotor "KassePakker bufferPladsMotor Tripped"
+Const=extra1Pol 1
+Const=extra1ErrorCode 1100
+Link=parent Parent
+Value=errorCode 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+	  SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST skubbePladsMotor = 1
+;	OR bufferPladsMotor = 1
+;	OR uniChainMotor = 1
+  OR motor = 1
+	  SET errorCode 1100
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

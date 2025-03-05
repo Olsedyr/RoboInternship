@@ -1,0 +1,109 @@
+STATEMACHINEVERSION 3
+Name=WorkCellS1
+Link=Emergency EmergencyS1
+Link=ContinueKnap ContinueKnapS1
+;Link=ParentCP TippeStation
+linkValue=newprogram ProgramS1
+linkValue=ErrorCode errorCode checkWeigherS1
+Value=errorCode 0
+Value=firstRun 0
+Value=simulate 0
+Timeout=timeBeforeRunning 3000000
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET errorCode 0
+  TEST ContinueKnap = ST_HIGH
+;	OR ParentCP = ST_RUN
+    TIMEOUT timeBeforeRunning ST_STARTING
+    SETSTATE ST_STARTING
+  ENDTEST
+END
+
+State=ST_STARTING
+  SET firstRun 1
+	TEST timeBeforeRunning = 1
+		SETSTATE ST_RUNNING
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_RESTARTING
+  SET firstRun 0
+	TEST timeBeforeRunning = 1
+		SETSTATE ST_RUNNING
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_RUNNING
+	TEST simulate = 0
+		TEST ContinueKnap = ST_HIGH
+    OR ErrorCode > 0
+;		OR ParentCP = ST_IDLE
+;		OR ParentCP = ST_STOP
+			TIMEOUT timeBeforeRunning ST_PAUSING
+			SETSTATE ST_PAUSING
+		ENDTEST
+	ELSE
+		TEST ContinueKnap = ST_HIGH
+			TIMEOUT timeBeforeRunning ST_PAUSING
+			SETSTATE ST_PAUSING
+		ENDTEST
+	ENDTEST
+	TEST Emergency = ST_POWEROFF
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_STOPPING
+  SETSTATE ST_IDLE
+	TEST Emergency = ST_POWEROFF
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_PAUSING
+  SETSTATE ST_PAUSED
+	TEST Emergency = ST_POWEROFF
+		SETSTATE ST_ERROR
+	ENDTEST
+END
+
+State=ST_PAUSED
+	TEST newprogram = 1
+		SETSTATE ST_IDLE
+	ELSE
+		TEST ContinueKnap = ST_HIGH
+;		OR ParentCP = ST_RUN
+      SET errorCode 0
+			TIMEOUT timeBeforeRunning ST_RESTARTING
+			SETSTATE ST_RESTARTING
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_ERROR
+;  SET errorCode 103
+	TEST Emergency = ST_POWERON
+    SETSTATE ST_IDLE
+;    TEST ContinueKnap = ST_HIGH
+;  		SET errorCode 0
+;      TIMEOUT timeBeforeRunning ST_STARTING
+;      SETSTATE ST_STARTING
+;    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_IDLE
+END
+
+State=ST_TIMER
+END

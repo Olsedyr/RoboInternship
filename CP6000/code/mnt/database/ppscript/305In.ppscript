@@ -1,0 +1,29 @@
+PPSCRIPTVERSION 1
+305In
+type=8
+itemsPrLayer=2
+layers=12
+move C14 from palletA0(idx=11,0,wcp=0,1490.5,0,0,0,0) to conveyorA 
+move C14 from palletA1(idx=11,1,wcp=0,1490.5,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=10,2,wcp=0,1365,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=10,3,wcp=0,1365,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=9,4,wcp=0,1239.5,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=9,5,wcp=0,1239.5,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=8,6,wcp=0,1114,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=8,7,wcp=0,1114,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=7,8,wcp=0,988.5,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=7,9,wcp=0,988.5,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=6,10,wcp=0,863,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=6,11,wcp=0,863,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=5,12,wcp=0,737.5,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=5,13,wcp=0,737.5,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=4,14,wcp=0,612,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=4,15,wcp=0,612,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=3,16,wcp=0,486.5,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=3,17,wcp=0,486.5,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=2,18,wcp=0,361,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=2,19,wcp=0,361,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=1,20,wcp=0,235.5,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=1,21,wcp=0,235.5,0,0,0,0) to conveyorA
+move C14 from palletA0(idx=0,22,wcp=0,110,0,0,0,0) to conveyorA
+move C14 from palletA1(idx=0,23,wcp=0,110,0,0,0,0) to conveyorA

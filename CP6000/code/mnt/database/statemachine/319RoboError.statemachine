@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=roboerror.statemachine
+Name=RoboError
+Value=errorCode 0
+Value=restart 0
+Value=roboError 0
+Value=roboMessage 0
+Link=WorkCell WorkCell

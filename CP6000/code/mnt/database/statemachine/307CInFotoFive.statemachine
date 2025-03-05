@@ -1,0 +1,64 @@
+STATEMACHINEVERSION 2
+Name=CInFotoFive
+Input=0,Foto "ConveyorIn Foto5"
+Timeout=0,TimeOn 500000
+Timeout=1,TimeOff 500000
+Value=0,test 0
+Value=1,low 0
+Value=2,high 1
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_IDLE
+END
+
+State=0,ST_OFF
+  TEST Foto = 1
+    TIMEOUT TimeOn ST_ON
+    SETSTATE ST_ON
+  ELSE
+    TEST TimeOff = 1
+    AND test = low
+      SETSTATE ST_LOW
+    ENDTEST
+  ENDTEST
+END
+
+State=0,ST_ON
+  TEST Foto = 0
+    TIMEOUT TimeOff ST_OFF
+    SETSTATE ST_OFF
+  ELSE
+    TEST TimeOn = 1
+    AND test = high
+      SETSTATE ST_HIGH
+    ENDTEST
+  ENDTEST
+  END
+
+State=0,ST_LOW
+ SET test 1
+  SETSTATE ST_OFF
+ END
+
+State=0,ST_HIGH
+  SET test 0
+  SETSTATE ST_ON
+ END
+
+State=0,ST_RESET
+  TEST Foto = 0
+    SET test 0
+    TIMEOUT TimeOff ST_OFF
+    SETSTATE ST_OFF
+  ELSE
+    SET test 1
+    TIMEOUT TimeOn ST_ON
+    SETSTATE ST_ON
+  ENDTEST
+END
+

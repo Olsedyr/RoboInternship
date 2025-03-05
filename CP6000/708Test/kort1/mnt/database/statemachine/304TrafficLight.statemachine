@@ -1,0 +1,13 @@
+STATEMACHINEVERSION 3
+Include=trafficlight.statemachine
+Name=TrafficLight
+Output=green "Green Light"
+Output=yellow "Yellow Light"
+Output=red "Red Light"
+Timeout=blinkRate 500000
+Link=workcell WorkCell
+Link=emergency Emergency 
+Value=OFF 0
+Value=ON 1
+Value=BLINK 0
+Const=enable 0

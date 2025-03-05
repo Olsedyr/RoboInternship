@@ -1,0 +1,39 @@
+STATEMACHINEVERSION 3
+Include=scissordepalletizer_for_cardboard.statemachine
+Name=ScissorDepalletizer3_3
+Output=rollerfwd "PC3 POS.3.3 Motor"
+Output=rollerrev "PC3 POS.3.3 MotorRev"
+Output=pump "ScissorTable POS.3.3 Pump"
+Output=yv1 "ScissorTable POS.3.3 YV1"
+Output=yv2 "ScissorTable POS.3.3 YV2"
+Output=yv3 "ScissorTable POS.3.3 YV3"
+Output=centre "CentreValve POS.3.3"
+Output=scissorSecureReset "Scissor Secure Reset"
+linkValue=palletInPlace test Sc3_3PalletInPlace
+Input=palletInPlacePrev "PC2 POS.3.2 Photo"
+Input=photoup "ScissorTable POS.3.3 PhotoUp"
+linkValue=limitdown test Sc3_3PhotoDownLimit
+linkValue=limitup test Sc3_3PhotoUpLimit
+Link=next Pos3_4
+Link=prev PalletConveyor2
+Link=parent Parent
+Value=finito 0
+Value=inTopPos 0
+Value=simulate 0
+Value=message 0
+Const=ON 0
+Const=prevON 0
+Const=scUpON 0
+Value=cPallet 0
+Value=upstep 0
+Timeout=maxDelayStop 10000000
+Timeout=StopDelay 0
+Timeout=TimeCentrePos 3500000
+Timeout=TimeCentre 3000000
+Timeout=MinTimeSearchEdge 500000
+Value=reverseCommand 0
+
+; a scissorpalletizer is fast up / std down
+; a scissordepalletizer is std up / fast down
+Const=scissorSecurePol 1
+Timeout=TimeYV3 60000000

@@ -1,0 +1,5 @@
+STATEMACHINEVERSION 3
+Include=cpservostop.statemachine
+Name=ServoStop
+;** User section **
+Const=testmode 1

@@ -1,0 +1,3 @@
+STATEMACHINEVERSION 3
+Include=cpcounter.statemachine
+Name=CPCounter

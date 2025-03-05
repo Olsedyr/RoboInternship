@@ -1,0 +1,9 @@
+STATEMACHINEVERSION 3
+Include=fotoinput.statemachine
+Name=RotatePhoto1
+Input=input "Rotator Photo Start"
+Timeout=blockTime 50000
+Timeout=freeTime 50000
+Value=test 0
+Const=free 1
+Const=blocked 0

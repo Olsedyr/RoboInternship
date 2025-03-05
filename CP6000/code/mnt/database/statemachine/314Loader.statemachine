@@ -1,0 +1,20 @@
+STATEMACHINEVERSION 3
+Name=Loader
+Value=resetpreload 0
+Value=delaystop 0
+; 0 -> STM can signal reset of preloaded path's by setting resetpreload = 1
+; 1 -> EXECUTER responds by setting resetpreload = 2
+; 2 -> LOADER responds by resetting preloaded path's and hereafter sets resetpreload = 3
+; 3 -> STM acknowledeage by setting resetpreload to 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+END
+
+State=ST_RESET
+END

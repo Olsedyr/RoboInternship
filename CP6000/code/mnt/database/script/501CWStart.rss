@@ -1,0 +1,8 @@
+VERSION 2
+SUB 501CWStart
+COUNTER restart = 0
+COUNTER cAItems = 0 
+COUNTER cAItemsTotal = 0
+CALL 501CWReStart -1
+END
+

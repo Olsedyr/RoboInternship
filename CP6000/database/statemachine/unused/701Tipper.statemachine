@@ -1,0 +1,67 @@
+STATEMACHINEVERSION 3
+Name=Tipper
+;Output=Flip "TippeStation Ventil"
+Output=Flip "dummyOut"
+Link=TippeStation
+Link=TippePattern
+Link=Foto TippeFoto
+Link=parent Parent
+linkValue=curflip TippePattern
+linkValue=productsfromleft Program
+Value=errorCode 0
+Timeout=TimeGet 0
+Timeout=TimeFlip 100000
+
+; Note: TimeGet must <= TimeOff+TimeOn in TippeFoto
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET Flip 0
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET Flip 0
+	TEST productsfromleft = 1
+		SETSTATE ST_EMPTY
+	ELSE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_EMPTY
+	TEST Foto = ST_LOW
+		TIMEOUT TimeGet ST_GET
+		SETSTATE ST_GET
+	ENDTEST
+	TEST TippeStation = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_GET
+	TEST TimeGet = 1
+		TEST curflip = 1
+			SET Flip 1
+			TIMEOUT TimeFlip ST_FLIP
+			SETSTATE ST_FLIP
+		ELSE
+			SET Flip 0
+			SETSTATE ST_EMPTY
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_FLIP
+	SET Flip 1
+	TEST TimeFlip = 1
+		SETSTATE ST_EMPTY
+	ENDTEST
+END

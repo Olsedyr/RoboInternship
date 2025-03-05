@@ -1,0 +1,349 @@
+STATEMACHINEVERSION 3
+Name=CardBoardShuttle
+Output=Lower "CardBoardShuttle Lower"
+Output=Suck "CardBoardShuttle Suck"
+Input=Photo "CardBoardShuttle Photo"
+Input=ShuttleUp "CardBoardShuttle ReadUp"
+Input=ShuttleDown "CardBoardShuttle ReadDown"
+Input=PhotoTest "CardBoardShuttle PhotoTest"
+Link=scissorpick1 ScissorDepalletizer4_3
+Link=convplace1 CardBoardConveyor
+Link=scissorpick2 ScissorDepalletizer4_7
+Link=scissorplace2 ScissorPalletizer4_10
+Link=Servo ServoCardBoard
+Link=parent Parent
+Link=robotprg ProgramB2
+linkValue=inTopPos1 inTopPos scissorpick1
+linkValue=inTopPos2 inTopPos scissorpick2
+linkValue=upstep1 upstep scissorpick1
+linkValue=downstep1 newsheet convplace1
+linkValue=upstep2 upstep scissorpick2
+linkValue=downstep2 downstep scissorplace2
+linkValue=pickfinito1 finito scissorpick1
+linkValue=pickfinito2 finito scissorpick2
+linkValue=placefinito finito scissorplace2
+linkValue=nextpalb Frames
+linkValue=moveIsSafeForDePal1 moveIsSafe ScissorDepalletizer4_3
+linkValue=moveIsSafeForDePal2 moveIsSafe ScissorDepalletizer4_7
+linkValue=Sc4_7limitup test Sc4_7PhotoUpLimit
+Value=errorCode 0
+Value=nextcardboardlayer1 0
+Value=nextcardboardlayer2 0
+Value=robotgone 1
+Value=tries 0
+Value=clearNext1 0
+Value=clearNext2 0
+Const=maxtries 3
+Value=side 0
+Value=oneshot 0
+Timeout=TimePickDown 4000000
+Timeout=TimePickUp 4000000
+Timeout=TimePlaceDown 3000000
+Timeout=TimePlaceUp 3000000
+Timeout=TimePlace 300000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET Lower 0
+	SET Suck 0
+	SET moveIsSafeForDePal1 0
+	SET moveIsSafeForDePal2 0
+	TEST parent = ST_RESET
+		SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	TEST nextpalb = 1
+		SET nextpalb 0
+    SET placefinito 1
+	ENDTEST
+	TEST Servo = ST_CHOOSETRACK
+		SET clearNext1 0
+		SET clearNext2 0
+		SETSTATE ST_BEGINHOME
+  ELSETEST Servo = ST_IDLE
+    SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_HOME
+	SET moveIsSafeForDePal1 1
+	SET moveIsSafeForDePal2 1
+	TEST nextcardboardlayer2 = 1
+	AND scissorpick2 = ST_READY_ROBOT
+	AND scissorplace2 = ST_READY_ROBOT
+		SET side 2
+		SET downstep2 1
+		SETSTATE ST_WAIT_SCISSORUP
+	ELSETEST nextpalb = 1
+		SET nextpalb 0
+		SET placefinito 1
+	ELSETEST nextcardboardlayer1 = 1
+		SET side 1
+		SETSTATE ST_WAIT_SCISSORUP
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_WAIT_SCISSORUP
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ELSETEST side = 1
+		TEST nextpalb = 1
+			SET nextpalb 0
+			SET placefinito 1
+		ENDTEST
+		TEST upstep1 = 0
+		AND scissorpick1 = ST_READY_ROBOT
+			SETSTATE ST_BEGINDISCARD
+		ENDTEST
+	ELSE
+		TEST upstep2 = 0
+		AND scissorpick2 = ST_READY_ROBOT
+			SETSTATE ST_BEGINPICK2
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_BEGINHOME
+  TEST Servo = ST_START
+    SETSTATE ST_GOHOME
+	ENDTEST
+END
+
+State=ST_GOHOME
+  TEST Servo = ST_STOP
+		TEST clearNext1 = 1
+			SET clearNext1 0
+			SET nextcardboardlayer1 0
+		ENDTEST
+		TEST clearNext2 = 1
+			SET clearNext2 0
+			SET nextcardboardlayer2 0
+		ENDTEST
+		SETSTATE ST_HOME
+  ELSETEST Servo = ST_IDLE
+    SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_BEGINDISCARD
+  TEST Servo = ST_START
+    SETSTATE ST_GODISCARD
+  ELSETEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_GODISCARD
+  TEST Servo = ST_STOP
+		SETSTATE ST_BEGINPICK1
+  ELSETEST Servo = ST_IDLE
+    SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_BEGINPICK1
+  TEST Servo = ST_START
+    SETSTATE ST_GOPICK
+  ENDTEST
+END
+
+State=ST_BEGINPICK2
+  TEST Servo = ST_START
+    SETSTATE ST_GOPICK
+  ENDTEST
+END
+
+State=ST_GOPICK
+  TEST Servo = ST_STOP
+		SET Lower 1
+		SET Suck 1
+		SET tries 0
+		TIMEOUT TimePickDown ST_PICKDOWN
+		SETSTATE ST_PICKDOWN
+  ELSETEST Servo = ST_IDLE
+    SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_PICKDOWN
+	TEST TimePickDown = 1
+	OR ShuttleDown = 1
+		SET Lower 0
+		TIMEOUT TimePickUp ST_PICKUP
+		SETSTATE ST_PICKUP
+	ENDTEST
+END
+
+State=ST_GOIDLE
+	SET Lower 0
+	SET Suck 0
+	TIMEOUT TimePlaceUp ST_IDLE
+	SETSTATE ST_TIMER
+END
+
+State=ST_PICKUP
+	TEST parent = ST_IDLE
+		SET Lower 1
+		SET Suck 1
+		TIMEOUT TimePlaceDown ST_GOIDLE
+		SETSTATE ST_TIMER
+	ELSETEST TimePickUp = 1
+	OR ShuttleUp = 1
+		TEST Photo = 1
+			TEST side = 1
+				TEST nextpalb = 1
+					SET nextpalb 0
+					SET placefinito 1
+				ENDTEST
+				TEST downstep1 = 0
+          TEST inTopPos1 = 1
+					  SET pickfinito1 1
+          ENDTEST
+					SETSTATE ST_BEGINPLACE1
+				ENDTEST
+			ELSE
+				TEST downstep2 = 0
+				AND scissorplace2 = ST_READY_ROBOT
+				AND robotgone = 1
+					SET upstep2 1
+					SET oneshot 0
+					SETSTATE ST_BEGINPLACE2
+				ENDTEST
+			ENDTEST
+		ELSE
+			CALC tries = tries + 1
+			TEST tries >= maxtries
+				TEST side = 1
+				AND inTopPos1 = 1
+					SET pickfinito1 1
+					SET Lower 0
+					SET Suck 0
+					SET clearNext1 1
+					SETSTATE ST_BEGINHOME
+				ELSETEST side = 2
+				AND inTopPos2 = 1
+					SET pickfinito2 1
+					SET Lower 0
+					SET Suck 0
+					SET clearNext2 0
+					SETSTATE ST_BEGINHOME
+				ELSE
+					SET errorCode 4201
+					SETSTATE ST_IDLE
+				ENDTEST
+			ELSE
+				SET Lower 1
+				SET Suck 1
+				TIMEOUT TimePickDown ST_PICKDOWN
+				SETSTATE ST_PICKDOWN
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_BEGINPLACE1
+  TEST Servo = ST_START
+    SETSTATE ST_GOPLACE
+  ENDTEST
+  TEST Photo = 0
+    SET errorCode 4201
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_BEGINPLACE2
+	TEST oneshot = 0
+	AND PhotoTest = 1
+  AND Sc4_7limitup = 1
+		SET pickfinito2 1
+		SET oneshot 1
+	ENDTEST
+  TEST Servo = ST_START
+    SETSTATE ST_GOPLACE
+  ENDTEST
+  TEST Photo = 0
+    SET errorCode 4201
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_GOPLACE
+	TEST oneshot = 0
+	AND side = 2
+	AND PhotoTest = 1
+  AND Sc4_7limitup = 1
+		SET pickfinito2 1
+		SET oneshot 1
+	ENDTEST
+  TEST Servo = ST_STOP
+		TEST side = 1
+			TEST inTopPos1 = 1
+				SET pickfinito1 1
+			  PRINT pickfinito1
+			ELSE			
+				SET upstep1 1
+			  PRINT upstep1
+			ENDTEST
+		ENDTEST
+		SET Lower 1
+		TIMEOUT TimePlaceDown ST_PLACEDOWN
+		SETSTATE ST_PLACEDOWN
+  ELSETEST Servo = ST_IDLE
+    SETSTATE ST_IDLE
+	ENDTEST
+  TEST Photo = 0
+    SET errorCode 4201
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_PLACEDOWN
+	TEST TimePlaceDown = 1
+	OR ShuttleDown = 1
+		SET Suck 0
+		TIMEOUT TimePlace ST_PLACE
+		SETSTATE ST_PLACE
+	ENDTEST
+  TEST Photo = 0
+    SET errorCode 4201
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_PLACE
+	TEST TimePlace = 1
+		SET Suck 0
+		SET Lower 0
+		TIMEOUT TimePlaceUp ST_PLACEUP
+		SETSTATE ST_PLACEUP
+	ENDTEST
+END
+
+State=ST_PLACEUP
+	TEST TimePlaceUp = 1
+	OR ShuttleUp = 1
+		TEST side = 1
+			SET downstep1 1
+			SET clearNext1 1
+			TEST nextpalb = 1
+				SET nextpalb 0
+				SET placefinito 1
+			ENDTEST
+		ELSETEST side = 2
+			SET clearNext2 1
+		ENDTEST
+		SETSTATE ST_BEGINHOME
+	ENDTEST
+END

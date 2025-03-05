@@ -1,0 +1,191 @@
+STATEMACHINEVERSION 3
+Name=Vender
+Output=Klap1 "VendeStation Klap1"
+Output=Klap2 "VendeStation Klap2"
+Output=VendF "VendeStation Motor Forward"
+Output=VendR "VendeStation Motor Reverse"
+Output=Brakerelease "VendeStation Brake Release"
+Link=VendeStation VendeStation
+Link=VendePattern
+Link=Foto1 Vende1Foto1
+linkValue=Foto1test test Foto1
+linkValue=curturn VendePattern
+linkValue=venderenable VendePattern
+linkValue=gettimeturn1 VendePattern
+linkValue=gettimeturn2 VendePattern
+Value=errorCode 0
+Value=simulate 0
+Timeout=TimeHome 1500000
+Timeout=TimeGet 180000
+Timeout=TimeClose 150000
+Timeout=TimeTune1 330000
+Timeout=TimeTune2 500000
+Timeout=TimeTune3 330000
+Timeout=TimeTune4 500000
+
+; Note: TimeGet must <= TimeOff+TimeOn in Vende1Foto1
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET Klap1 0
+	SET Klap2 0
+	SET VendF 0
+	SET VendR 0
+	SET Brakerelease 0
+	TEST venderenable = 1
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET Klap1 0
+	SET Klap2 0
+	SET VendF 0
+	SET VendR 0
+	SET errorCode 0
+	; Test here if program is nonturning
+	TEST venderenable = 1
+		SET Brakerelease 1
+		SETSTATE ST_HOME
+	ELSE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_EMPTY1
+	SET VendF 0
+	SET VendR 0
+	SET Klap1 0
+	SET Klap2 0
+	SET Brakerelease 0
+	TEST Foto1test = 0
+		SET Brakerelease 1
+		SET TimeGet gettimeturn1
+		TIMEOUT TimeGet ST_GET1
+		SETSTATE ST_GET1
+	ENDTEST
+	TEST VendeStation = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_GET1
+	TEST TimeGet = 1
+		TEST curturn > 0
+		OR simulate = 1
+			SET Klap1 1
+			SET Klap2 1
+			TIMEOUT TimeClose ST_TURN1
+			SETSTATE ST_TURN1
+		ELSE
+			SETSTATE ST_EMPTY1
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_TURN1
+	TEST TimeClose = 1
+		SET VendF 1
+		SET VendR 0
+		TIMEOUT TimeTune1 ST_WAITTURN1
+		SETSTATE ST_WAITTURN1
+	ENDTEST
+END
+
+State=ST_WAITTURN1
+	TEST TimeTune1 = 1
+		SETSTATE ST_ENDTURN1
+	ENDTEST
+END
+
+State=ST_ENDTURN1
+	TEST curturn = 1
+		SET Klap1 0
+		SET Klap2 0
+	ENDTEST
+	;	TEST Foto1test = 0
+	;		SET VendF 0
+	;		SET VendR 0
+	;		SET errorCode 1013
+	;		SETSTATE ST_IDLE
+	;	ELSE
+	TIMEOUT TimeTune2 ST_EMPTY2
+	SETSTATE ST_TIMER
+	;	ENDTEST
+END
+
+State=ST_EMPTY2
+	SET VendF 0
+	SET VendR 0
+	SET Klap1 0
+	SET Klap2 0
+	SET Brakerelease 0
+	TEST Foto1test = 0
+		SET Brakerelease 1
+		SET TimeGet gettimeturn2
+		TIMEOUT TimeGet ST_GET2
+		SETSTATE ST_GET2
+	ENDTEST
+	TEST VendeStation = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_GET2
+	TEST TimeGet = 1
+		TEST curturn > 0
+		OR simulate = 1
+			SET Klap1 1
+			SET Klap2 1
+			TIMEOUT TimeClose ST_TURN2
+			SETSTATE ST_TURN2
+		ELSE
+			SETSTATE ST_EMPTY2
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_TURN2
+	TEST TimeClose = 1
+		SET VendF 0
+		SET VendR 1
+		TIMEOUT TimeTune3 ST_WAITTURN2
+		SETSTATE ST_WAITTURN2
+	ENDTEST
+END
+
+State=ST_WAITTURN2
+	TEST TimeTune3 = 1
+		SETSTATE ST_ENDTURN2
+	ENDTEST
+END
+
+State=ST_ENDTURN2
+	TEST curturn = 1
+		SET Klap1 0
+		SET Klap2 0
+	ENDTEST
+	;	TEST Foto1test = 0
+	;		SET VendF 0
+	;		SET VendR 0
+	;		SET errorCode 1013
+	;		SETSTATE ST_IDLE
+	;	ELSE
+	TIMEOUT TimeTune4 ST_EMPTY1
+	SETSTATE ST_TIMER
+	;	ENDTEST
+END
+
+State=ST_HOME
+	SET Klap1 0
+	SET Klap2 0
+	SET VendF 0
+	SET VendR 1
+	TIMEOUT TimeHome ST_EMPTY1
+	SETSTATE ST_TIMER
+END

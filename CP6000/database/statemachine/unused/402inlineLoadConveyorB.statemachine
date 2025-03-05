@@ -1,0 +1,25 @@
+; INLINE 402inlineLoadConveyorB.statemachine
+SETFRAME fromFrame conveyorB
+LOAD conveyorB_home fromFrame home
+;*******************************************
+CALC temp = cBItem % 2
+TEST temp = 0
+	SETFRAME toFrame crateA
+	SET conveyorB_palletB.mode CrateAmode
+ELSE
+	SETFRAME toFrame crateB
+	SET conveyorB_palletB.mode CrateBmode
+ENDTEST
+SET randmin xvarimin
+SET randmax xvarimax
+INLINE inlineComputeRandom.statemachine
+CALC toFrame.x = toFrame.x + randres
+CALC temp = cBItem % 3
+CALC ftemp = temp * 150.0
+CALC ftemp = ftemp - 150.0
+CALC toFrame.x = toFrame.x + ftemp
+SET randmin zvarimin
+SET randmax zvarimax
+INLINE inlineComputeRandom.statemachine
+CALC toFrame.z = toFrame.z + randres 
+LOAD conveyorB_palletB fromFrame toFrame

@@ -1,0 +1,17 @@
+STATEMACHINEVERSION 3
+Include=pallebane.statemachine
+Name=Pallebane8B
+Delaystop=10000000
+Input=palletInPlace "Pallebane8B Foto"
+Output=Motor "Pallebane8B Motor"
+Link=next Pallebane9
+Link=prev Pallebane8A
+Link=parent Parent 
+Timeout=TimeoutDelay 10000000
+Timeout=StartupTimeout 5000000
+Timeout=StopDelay 0
+Timeout=PickupDelay 0
+Timeout=ReadyDelay 0
+Const=autoDetectPallet 1
+Const=ON 1
+

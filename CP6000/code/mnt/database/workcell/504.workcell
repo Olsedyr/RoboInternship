@@ -1,0 +1,53 @@
+VERSION 1
+504
+Robots 0
+Tools 0
+Items 0
+Patterns 0
+Accessories 0
+PPScripts 0
+Dio 1
+504.io
+Comsks 0
+LoadCells 1
+504.loadcell
+Macs 0
+Statemachines 30
+504WorkCellS1.statemachine
+504ParentS1.statemachine
+504ProgramS1.statemachine
+504EmergencyS1.statemachine
+504ContinueKnapS1.statemachine
+504productOutS1.statemachine
+504fotoInS1.statemachine
+504fotoOutS1.statemachine
+504fotoOutLongS1.statemachine
+504checkWeigherCalcS1.statemachine
+504checkWeigherS1.statemachine
+504checkWeigherZeroCalibS1.statemachine
+504checkWeigherPrevS1.statemachine
+504checkWeigherMotorS1.statemachine
+504checkWeigherNextS1.statemachine
+504WorkCellS2.statemachine
+504ParentS2.statemachine
+504ProgramS2.statemachine
+504EmergencyS2.statemachine
+504ContinueKnapS2.statemachine
+504productOutS2.statemachine
+504fotoInS2.statemachine
+504fotoOutS2.statemachine
+504fotoOutLongS2.statemachine
+504checkWeigherCalcS2.statemachine
+504checkWeigherS2.statemachine
+504checkWeigherZeroCalibS2.statemachine
+504checkWeigherPrevS2.statemachine
+504checkWeigherMotorS2.statemachine
+504checkWeigherNextS2.statemachine
+LANGUAGE danish.language
+LANGUAGE english.language
+LANGUAGE spanish.language
+LANGUAGE russian.language
+STATETEKST danish.statetekst
+STATETEKST english.statetekst
+STATETEKST spanish.statetekst
+STATETEKST russian.statetekst

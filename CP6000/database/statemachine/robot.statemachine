@@ -1,0 +1,130 @@
+STATEMACHINEVERSION 3
+Name=Robot
+Value=VERSION 1
+Value=REVISION 1
+Link=Emergency Emergency
+Value=errorCode 0
+Value=message 0
+;SUMMARY updated by trio.c
+Value=wdog 0
+;Value=emergency 0 is declared in emergency.statemachine
+Value=mpnstate 0
+Value=mtype_t 0
+Value=mtype_f 0
+Value=axis_t 0
+Value=axis_a 0.0
+Value=axis_b 0.0
+Value=axis_c 0.0
+Value=axis_d 0.0
+Value=axis_e 0.0
+Value=axis_f 0.0
+Value=fe_a 0.0
+Value=fe_b 0.0
+Value=fe_c 0.0
+Value=fe_d 0.0
+Value=fe_e 0.0
+Value=fe_f 0.0
+Value=pathtype 0
+Value=startupstate 0
+Value=supervisorlevel 0
+Value=delaystop 0
+Value=moving 0
+Frame=mpos x=0.0000 y=0.0000 z=0.0000 v=0.0000 w=0.0000 u=0.0000
+Value=mposreq 0
+Value=mpostcpidx 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST mpnstate != 3
+  OR Emergency != ST_POWERON
+  OR wdog != 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_SIMULATE_MC
+  TEST mpnstate != 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_MC_COMERROR
+  TEST mpnstate != -1
+  OR Emergency != ST_POWERON
+  OR wdog != 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RUNNING
+  TEST mpnstate = 3
+  OR mpnstate = 0
+  OR mpnstate = -1
+  OR Emergency != ST_POWERON
+  OR wdog != 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_FOLLOWERROR
+  SET errorCode 100
+  SET message startupstate
+  TEST startupstate > 8
+    TEST startupstate = 10
+      SET message 0
+      SETSTATE ST_RESET
+    ELSE
+      SETSTATE ST_SUPERVISOR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMERGENCY
+  SET message startupstate
+  TEST startupstate > 8
+    TEST startupstate = 10
+      SET message 0
+      SETSTATE ST_RESET
+    ELSE
+      SETSTATE ST_SUPERVISOR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_SUPERVISOR
+  TEST supervisorlevel = 1
+    SET supervisorlevel 0
+    SET startupstate 10
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  SET errorCode 0
+  TEST mpnstate = 3
+    SETSTATE ST_IDLE
+  ELSE
+    TEST mpnstate = -1
+      SETSTATE ST_MC_COMERROR
+    ELSE
+      SETSTATE ST_RUNNING
+    ENDTEST
+  ENDTEST
+  TEST wdog != 1
+    SET startupstate 0
+    SETSTATE ST_FOLLOWERROR
+  ENDTEST
+  TEST Emergency = ST_POWEROFF
+    SET startupstate 0
+    SETSTATE ST_EMERGENCY
+  ENDTEST
+  TEST mpnstate = 0
+    SETSTATE ST_SIMULATE_MC
+  ENDTEST
+END
+

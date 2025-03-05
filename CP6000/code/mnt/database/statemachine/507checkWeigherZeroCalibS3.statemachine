@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=checkweigherzerocalib.statemachine
+Name=checkWeigherZeroCalibS3
+Link=checkWeigher checkWeigherS3
+Link=parent ParentS3
+Timeout=timeBetweenCalib 600000000
+Const=minutsBetweenCalib 20

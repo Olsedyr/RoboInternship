@@ -1,0 +1,168 @@
+STATEMACHINEVERSION 3
+Name=ProductConveyors
+Input=powerok1 "dummyOff"
+Input=powerok2 "dummyOff"
+Output=Motor1Enable "dummyOut"
+Output=Motor1Setpoint "dummyOut"
+Output=Motor2Enable "dummyOut"
+Output=Motor2Setpoint "dummyOut"
+Link=Counter ProductCount
+Link=CamGenSkub
+Link=parent LangBufferSkub
+linkValue=prenumofproducts Counter
+linkValue=oldppp Counter
+linkValue=productsfromleft Program
+linkValue=productsfromright Program
+Value=ppp 0
+linkValue=secondProdConvOn Program
+Const=motor1FreqForward 50.0
+Const=motor1FreqReverse -50.0
+Const=motor2FreqForward 50.0
+Const=motor2FreqReverse -50.0
+Timeout=TimeStop 0
+Timeout=TimeRunAgain 600000
+Input=syncInManuelStop "dummyOff"
+Const=useSyncInManuelStop 0
+Const=syncInManuelStopPol 1
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET Motor1Enable 0
+  SET Motor1Setpoint 0.0
+	SET Motor2Enable 0
+  SET Motor2Setpoint 0.0
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET Motor1Enable 1
+	SET Motor2Enable 1
+	SETSTATE ST_STARTUP
+END
+
+State=ST_STARTUP
+	TEST Counter = ST_RUN
+	OR Counter = ST_RUN_MANUELT
+	  CALC ppp = oldppp + 1
+	  TEST prenumofproducts >= ppp
+		  SETSTATE ST_STOP
+    ELSE
+      TEST useSyncInManuelStop = 1
+      AND syncInManuelStop = syncInManuelStopPol
+	    AND Counter = ST_RUN_MANUELT
+        SETSTATE ST_STOP
+      ELSE 
+        TEST CamGenSkub != ST_NOCHOOSETRACK
+	  	    SETSTATE ST_RUN
+        ENDTEST
+      ENDTEST
+    ENDTEST 
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_RUN
+  TEST useSyncInManuelStop = 1
+  AND syncInManuelStop = syncInManuelStopPol
+  AND Counter = ST_RUN_MANUELT
+    SETSTATE ST_STOP
+  ELSE
+	  CALC ppp = oldppp + 1
+	  TEST prenumofproducts >= ppp
+		  TIMEOUT TimeStop ST_GOSTOP
+		  SETSTATE ST_GOSTOP
+	  ELSE
+		  TEST productsfromleft = 1
+      AND productsfromright = 1
+	      SET Motor1Enable 1
+        SET Motor1Setpoint motor1FreqForward
+	      SET Motor2Enable 1
+        SET Motor2Setpoint motor2FreqForward
+		  ELSE
+        TEST productsfromleft = 1
+          TEST secondProdConvOn = 1
+	          SET Motor1Enable 1
+            SET Motor1Setpoint motor1FreqForward
+	          SET Motor2Enable 1
+            SET Motor2Setpoint motor2FreqReverse
+          ELSE
+	          SET Motor1Enable 1
+            SET Motor1Setpoint motor1FreqForward
+	          SET Motor2Enable 0
+            SET Motor2Setpoint 0.0
+          ENDTEST
+        ELSE
+          TEST productsfromright = 1
+            TEST secondProdConvOn = 1
+	            SET Motor1Enable 1
+              SET Motor1Setpoint motor1FreqReverse
+	            SET Motor2Enable 1
+              SET Motor2Setpoint motor2FreqForward
+            ELSE
+	            SET Motor1Enable 0
+              SET Motor1Setpoint 0.0
+	            SET Motor2Enable 1
+              SET Motor2Setpoint motor2FreqForward
+            ENDTEST
+          ENDTEST
+        ENDTEST
+		  ENDTEST
+		ENDTEST
+	ENDTEST
+  TEST powerok1 = 0
+  OR powerok2 = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_GOSTOP
+	CALC ppp = oldppp + 1
+	TEST TimeStop = 1
+		SETSTATE ST_STOP
+	ENDTEST
+	TEST prenumofproducts < ppp
+		SETSTATE ST_RUN
+	ENDTEST
+END
+
+State=ST_STOP
+  CALC ppp = oldppp + 1
+  TEST useSyncInManuelStop = 1
+  AND syncInManuelStop = syncInManuelStopPol
+  AND Counter = ST_RUN_MANUELT
+    SET Motor1Enable 0
+    SET Motor1Setpoint 0.0
+    SET Motor2Enable 0
+    SET Motor2Setpoint 0.0
+  ELSE
+    TEST prenumofproducts >= ppp
+      SET Motor1Enable 0
+      SET Motor1Setpoint 0.0
+      SET Motor2Enable 0
+      SET Motor2Setpoint 0.0
+    ELSE
+   	  TIMEOUT TimeRunAgain ST_RUN
+ 	    SETSTATE ST_TIMER
+	  ENDTEST
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+
+
+
+

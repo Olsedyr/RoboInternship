@@ -1,0 +1,79 @@
+STATEMACHINEVERSION 2
+Name=Sektor43
+Delaystop=10000000
+Input=0,Foto1 "Sektor43 Foto1" 
+Output=0,Motor "Sektor43 Motor"
+Link=0,Sektor44
+Link=1,Sektor42
+Timeout=0,StopDelay 1000000
+Timeout=1,TimeoutDelay 30000000
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+
+State=0,ST_IDLE
+  SET Motor 0
+  END
+
+State=1,ST_READY
+  TEST Foto1 = 0
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST Sektor44 = ST_EMPTY
+      SET Motor 1
+      SETSTATE ST_SEND
+    ELSE
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST Sektor42 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+  END
+
+State=2,ST_SEND
+  TEST Foto1 = 0
+    TIMEOUT StopDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ENDTEST
+  END
+
+
+State=3,ST_EMPTY
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ELSE
+    TEST Sektor42 = ST_SEND
+      TIMEOUT TimeoutDelay ST_RESET
+      SET Motor 1
+      SETSTATE ST_RECIEVE
+    ELSE
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST Sektor42 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+  END
+
+State=4,ST_RECIEVE
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ELSE
+    TEST TimeoutDelay = 1
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+  END
+
+State=5,ST_RESET
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ELSE
+    SETSTATE ST_EMPTY
+  ENDTEST
+  END

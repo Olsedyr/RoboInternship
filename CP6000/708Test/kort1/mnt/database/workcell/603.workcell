@@ -1,0 +1,38 @@
+VERSION 1
+603
+Robots 1
+603.robot
+Tools 1
+603.tool
+Items 2
+FervaA.item
+FervaTest.item
+Patterns 0
+Accessories 0
+PPScripts 0
+Dio 0
+ComSKs 0
+LoadCell 0
+Macs 0
+Statemachines 14
+603ContinueKnap.statemachine
+603MC.statemachine
+603Frames.statemachine
+603Loader.statemachine
+603ErrorCode.statemachine
+603WorkCell.statemachine
+603Parent.statemachine
+603Program.statemachine
+603ProgramB2.statemachine
+603Emergency.statemachine
+603IOError.statemachine
+603Robot.statemachine
+603Tool.statemachine
+603RoboError.statemachine
+BOPTCOEFF 603.boptcoeff
+STATETEKST english.statetekst
+STATETEKST spanish.statetekst
+STATETEKST danish.statetekst
+LANGUAGE english.language
+LANGUAGE spanish.language
+LANGUAGE danish.language

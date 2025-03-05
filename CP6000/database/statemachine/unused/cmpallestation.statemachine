@@ -1,0 +1,513 @@
+STATEMACHINEVERSION 3
+Name=PalleStation
+;** Input **
+;encoder i modulo med scale = 128
+Input=encoder "PalleStation Encoder"
+Input=homeKontakt "PalleStation Pull Home Kontakt"
+;** Output **
+Output=encoderDirect "PalleStation Direct"
+Output=encoderInputValidation "PalleStation Input Validation"
+Output=pusher "PalleStation Pusher Ventil"
+Output=tromle "PalleStation Tromle Motor"
+Output=forward "PalleStation Pull Motor Forward"
+Output=reverse "PalleStation Pull Motor Reverse"
+;** Link **
+Link=parent Parent
+Link=port PalleStationPort
+;stabel 1 er den tættest på ConveyorStation og stabel 2 er tættest på PalleStationPort
+Link=stabel1 PalleStationFotoStabel1
+Link=stabel2 PalleStationFotoStabel2
+Link=mellemrum PalleStationFotoMellemrum
+Link=conveyorStation ConveyorStation
+Link=convstationstabel1 ConveyorStationFotoStabel1
+Link=convstationstabel2 ConveyorStationFotoStabel2
+Link=zone2
+;** linkValue **
+linkValue=portOpen isOpen PalleStationPort
+linkValue=portClosed isClosed PalleStationPort
+linkValue=firstRun WorkCell
+linkValue=tryOpen PalleStationPort
+;** Table **
+;** Item **
+;** Const **
+;pos1=pallestart, pos2=midt på palle, pos3=slutning af palle
+Const=pos1 1600
+Const=pos1MaxHys 1680
+Const=pos2 2350
+Const=pos2MaxHys 2430
+Const=pos3 3100
+Const=pos3MaxHys 3180
+;posPushFree larger than pos3 because of modulo counting.
+Const=posPushFree 3300
+;** Value **
+;security positions, if conveyorstation receive fotos are blocked before halfway positions are reached something is wrong. Calculated in homing.
+Value=pos2halfway 0
+Value=pos3halfway 0
+Value=errorCode 0
+;goHome is set from formCMUser.c
+Value=goHome 0
+Value=homed 0
+Value=pusherOn 0
+Value=sending 0
+Value=message 0
+Value=inPos3 0
+Value=simulate 0
+Value=teststate 0
+Value=testmode 0
+;** Timeout **
+Timeout=maxHomingTime 20000000
+Timeout=maxMoveTime 10000000
+Timeout=tromleTime 3000000
+Timeout=pushTime 5000000
+Timeout=motorStopTime 500000
+Timeout=testTime 3000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET pusher 0
+  SET forward 0
+  SET reverse 0
+  SET tromle 0
+; no input validation on encoder
+  SET encoderInputValidation 0
+  SET pusherOn 0
+  SET sending 0
+  TEST parent = ST_RESET
+  OR simulate = 1
+  OR testmode = 1
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST homed = 0
+  OR simulate = 2
+  OR testmode = 1
+    SETSTATE ST_HOMING
+  ELSE
+    SETSTATE ST_WHERE_AM_I
+  ENDTEST
+END
+
+State=ST_TESTMODE
+  TEST testTime = 1
+    TEST teststate = 0
+      SETSTATE ST_HOMING
+    ELSE
+      TEST teststate = 1
+        TIMEOUT maxMoveTime ST_GOTO_POS1
+        SETSTATE ST_GOTO_POS1
+      ELSE
+        TEST teststate = 2
+          TIMEOUT maxMoveTime ST_GOTO_POS2
+          SETSTATE ST_GOTO_POS2
+        ELSE
+          TEST teststate = 3
+            TIMEOUT maxMoveTime ST_GOTO_POS3
+            SETSTATE ST_GOTO_POS3
+          ENDTEST
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+;Wait for gate and zone 2
+State=ST_WAIT_FOR_GATE
+  SET sending 0
+  SET message 4006
+  TEST portClosed = 1
+  AND zone2 = ST_RUN
+    SET message 0
+    SETSTATE ST_WHERE_AM_I
+  ENDTEST
+  TEST parent != ST_RUN
+  AND simulate = 0
+  AND testmode = 0
+    SET message 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WHERE_AM_I
+  SET sending 0
+  TEST encoder > pos1
+  AND encoder < pos1MaxHys
+    SETSTATE ST_POS1
+  ELSE
+    TEST encoder > pos2
+    AND encoder < pos2MaxHys
+      SETSTATE ST_POS2
+    ELSE
+      TEST encoder > pos3
+      AND encoder < pos3MaxHys
+        SETSTATE ST_POS3
+      ELSE
+        SETSTATE ST_HOMING
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent != ST_RUN
+  AND simulate = 0
+  AND testmode = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_HOME
+  TEST testmode = 1
+    SET teststate 1
+    TIMEOUT testTime ST_TESTMODE
+    SETSTATE ST_TESTMODE
+  ELSE
+    TEST stabel2 = ST_BLOCKED
+    OR stabel1 = ST_BLOCKED
+      TIMEOUT maxMoveTime ST_GOTO_POS1
+      SETSTATE ST_GOTO_POS1
+    ENDTEST
+    TEST portClosed = 0
+    OR zone2 != ST_RUN
+      SETSTATE ST_WAIT_FOR_GATE
+    ENDTEST
+    TEST parent != ST_RUN
+    AND simulate = 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GOTO_POS1
+  TEST encoder >= pos1
+    SETSTATE ST_POS1
+  ENDTEST
+  TEST portClosed = 0
+  OR zone2 != ST_RUN
+    SET forward 0
+    SET reverse 0
+    SETSTATE ST_WAIT_FOR_GATE
+  ELSE
+    SET forward 1
+    SET reverse 0
+  ENDTEST
+  TEST maxMoveTime = 1
+    SET errorCode 1056
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_POS1
+  TEST testmode = 1
+    SET forward 0
+    SET reverse 0
+    SET teststate 2
+    TIMEOUT testTime ST_TESTMODE
+    SETSTATE ST_TESTMODE
+  ELSE
+    TEST stabel1 = ST_BLOCKED
+      TEST stabel2 = ST_FREE
+        SET sending 0
+        TIMEOUT maxMoveTime ST_GOTO_POS2
+        SETSTATE ST_GOTO_POS2
+      ELSE
+        TEST stabel2 = ST_BLOCKED
+        AND conveyorStation = ST_RECEIVE_READY
+          SET sending 1
+          TIMEOUT maxMoveTime ST_GOTO_POS2
+          SETSTATE ST_GOTO_POS2
+        ELSE
+          SET forward 0
+          SET reverse 0
+        ENDTEST
+      ENDTEST
+    ELSE
+      TEST stabel1 = ST_FREE
+      AND stabel2 = ST_BLOCKED
+        SET sending 2
+        TIMEOUT maxMoveTime ST_GOTO_POS2
+        SETSTATE ST_GOTO_POS2
+      ELSE
+        SETSTATE ST_HOMING
+      ENDTEST
+    ENDTEST
+    TEST goHome = 1
+      SETSTATE ST_HOMING
+    ENDTEST
+    TEST portClosed = 0
+    OR zone2 != ST_RUN
+      SET forward 0
+      SET reverse 0
+      SETSTATE ST_WAIT_FOR_GATE
+    ENDTEST
+    TEST parent != ST_RUN
+    AND simulate = 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GOTO_POS2
+  TEST portClosed = 0
+  OR zone2 != ST_RUN
+    SET tromle 0
+    SET forward 0
+    SET reverse 0
+    SETSTATE ST_WAIT_FOR_GATE
+  ELSE
+    TEST sending = 1
+      SET tromle 1
+    ENDTEST
+    SET forward 1
+    SET reverse 0
+  ENDTEST
+  TEST encoder >= pos2
+    TEST sending = 1
+      SET forward 0
+      SET reverse 0
+      TIMEOUT tromleTime ST_TROMLE
+      SETSTATE ST_TROMLE
+    ELSE
+      SETSTATE ST_WHERE_AM_I
+    ENDTEST
+  ENDTEST
+  TEST encoder < pos2halfway
+  AND sending = 1
+    TEST convstationstabel1 = ST_BLOCKED
+    OR convstationstabel2 = ST_BLOCKED
+      SET errorCode 4123
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+  TEST sending = 0
+  AND stabel2 = ST_HIGH
+    SET tromle 0
+    SET forward 0
+    SET reverse 0
+    SETSTATE ST_WHERE_AM_I
+  ENDTEST
+  SET pusher 0
+  TEST maxMoveTime = 1
+    SET errorCode 1056
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_TROMLE
+  TEST tromleTime = 1
+    TEST mellemrum = ST_FREE
+      TIMEOUT pushTime ST_PUSH
+      SETSTATE ST_PUSH
+    ELSE
+      SET errorCode 4120
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_PUSH
+  TEST encoder > pos3
+  AND encoder < pos3MaxHys
+  AND pusherOn = 0
+    SETSTATE ST_WAIT_PUSH_FREE
+  ELSE
+    SET pusher 1
+    SET pusherOn 1
+  ENDTEST
+  TEST pushTime = 1
+    TEST pusherOn = 1
+      SET tromle 0
+      SET pusher 0
+      SET pusherOn 0
+      SET sending 0
+      TIMEOUT pushTime ST_PUSH_BACK
+      SETSTATE ST_PUSH_BACK
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_PUSH_BACK
+  TEST pushTime = 1
+    TEST inPos3 = 1
+      SET inPos3 0
+      SETSTATE ST_POS3
+    ELSE
+      SETSTATE ST_WHERE_AM_I
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_WAIT_PUSH_FREE
+  SET forward 0
+  SET reverse 1
+  TEST encoder > posPushFree
+    SET forward 0
+    SET reverse 0
+    SET pusher 1
+    SET pusherOn 1
+    SET inPos3 1
+    TIMEOUT pushTime ST_PUSH
+    SETSTATE ST_PUSH
+  ENDTEST
+END
+
+State=ST_POS2
+  TEST testmode = 1
+    SET teststate 3
+    TIMEOUT testTime ST_TESTMODE
+    SETSTATE ST_TESTMODE
+  ELSE
+    TEST stabel1 = ST_BLOCKED
+      TEST stabel2 = ST_FREE
+      AND conveyorStation = ST_RECEIVE_READY
+        SET sending 1
+        TIMEOUT maxMoveTime ST_GOTO_POS3
+        SETSTATE ST_GOTO_POS3
+      ELSE
+        TEST stabel2 = ST_BLOCKED
+          SET errorCode 4102
+          SETSTATE ST_IDLE
+        ELSE
+          SET tromle 0
+          SET forward 0
+          SET reverse 0
+        ENDTEST
+      ENDTEST
+    ELSE
+      TEST stabel1 = ST_FREE
+      AND stabel2 = ST_BLOCKED
+        SET errorCode 4102
+        SETSTATE ST_IDLE
+      ELSE
+        SETSTATE ST_HOMING
+      ENDTEST
+    ENDTEST
+    TEST goHome = 1
+      SETSTATE ST_HOMING
+    ENDTEST
+    TEST portClosed = 0
+    OR zone2 != ST_RUN
+      SET tromle 0
+      SET forward 0
+      SET reverse 0
+      SET pusher 0
+      SETSTATE ST_WAIT_FOR_GATE
+    ENDTEST
+    TEST parent != ST_RUN
+    AND simulate = 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GOTO_POS3
+  TEST portClosed = 0
+  OR zone2 != ST_RUN
+    SET tromle 0
+    SET forward 0
+    SET reverse 0
+    SETSTATE ST_WAIT_FOR_GATE
+  ELSE
+    SET tromle 1
+    SET forward 1
+    SET reverse 0
+  ENDTEST
+  TEST encoder >= pos3
+    SET forward 0
+    SET reverse 0
+    TIMEOUT tromleTime ST_TROMLE
+    SETSTATE ST_TROMLE
+  ENDTEST
+  TEST encoder < pos3halfway
+    TEST convstationstabel1 = ST_BLOCKED
+    OR convstationstabel2 = ST_BLOCKED
+      SET errorCode 4123
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+  SET pusher 0
+  TEST maxMoveTime = 1
+    SET errorCode 1056
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_POS3
+  TEST testmode = 1
+    SET teststate 0
+    TIMEOUT testTime ST_TESTMODE
+    SETSTATE ST_TESTMODE
+  ELSE
+    TEST stabel1 = ST_BLOCKED
+    OR stabel2 = ST_BLOCKED
+      SET errorCode 4112
+      SETSTATE ST_IDLE
+    ELSE
+      SETSTATE ST_HOMING
+    ENDTEST
+    TEST parent != ST_RUN
+    AND simulate = 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_HOMING
+  TEST portClosed = 0
+  OR zone2 != ST_RUN
+    SETSTATE ST_WAIT_FOR_GATE
+  ELSE
+    CALC pos2halfway = pos2 - pos1
+    CALC pos2halfway = pos2halfway / 2
+    CALC pos2halfway = pos2halfway + pos1
+    CALC pos3halfway = pos3 - pos2
+    CALC pos3halfway = pos3halfway / 2
+    CALC pos3halfway = pos3halfway + pos2
+    ;enable
+    SET encoderDirect 2
+    TIMEOUT maxHomingTime ST_HOMING1
+    SETSTATE ST_HOMING1
+  ENDTEST
+END
+
+State=ST_HOMING1
+  TEST portClosed = 0
+  OR zone2 != ST_RUN
+    SETSTATE ST_WAIT_FOR_GATE
+  ENDTEST
+  TEST homeKontakt = 0
+    SET forward 0
+    SET reverse 0
+    TIMEOUT motorStopTime ST_HOMING2
+    SETSTATE ST_HOMING2
+  ELSE
+    SET forward 0
+    SET reverse 1
+  ENDTEST
+  TEST maxHomingTime = 1
+    SET errorCode 1050
+    SETSTATE ST_IDLE
+  ENDTEST
+  TEST parent != ST_RUN
+  AND simulate = 0
+  AND testmode = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_HOMING2
+  TEST motorStopTime = 1
+    ;enable and sync (reset counter)
+    SET encoderDirect 3
+    TEST goHome = 1
+      SET goHome 0
+      SET tryOpen 1
+    ENDTEST
+    SET homed 1
+    SETSTATE ST_HOME
+  ENDTEST
+END

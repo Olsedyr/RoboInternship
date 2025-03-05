@@ -1,0 +1,35 @@
+STATEMACHINEVERSION 3
+Name=Simulate
+Link=ConveyorOut
+Link=Pallebane6
+Link=Emergency
+linkValue=simulateConveyorOut2 simulate ConveyorOut2
+linkValue=simulatePallebane6 simulate Pallebane6
+linkValue=simulateEmergency simulate Emergency
+linkValue=simulateTrio simulate ProgramB2
+Value=simulate 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST simulate = 0
+    SET simulateConveyorOut2 0
+    SET simulatePallebane6 0
+    SET simulateEmergency 0
+    SET simulateTrio 0
+  ELSE
+    TEST simulate = 1
+      SET simulateConveyorOut2 1
+      SET simulatePallebane6 1
+      SET simulateEmergency 1
+      SET simulateTrio 1
+    ELSE
+;=2 enable individual settings of simulate
+    ENDTEST
+  ENDTEST
+END
+

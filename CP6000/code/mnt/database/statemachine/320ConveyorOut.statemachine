@@ -1,0 +1,98 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut
+Input=layerReady "Layer Ready"
+Input=tableEmpty "Sync In2 Mattop"
+Input=inmattop3 "Sync In3 Mattop"
+Input=inmattop4 "Sync In4 Mattop"
+Output=layerTaken "Layer Taken"
+Output=robotReady "Robot Ready"
+Output=outmattop3 "Sync Out3 Mattop"
+Output=outmattop4 "Sync Out4 Mattop"
+linkValue=pathtype pathtype Robot
+linkValue=axis_t axis_t Robot
+Link=parent Parent
+Link=Robot Robot
+Value=errorCode 0
+Const=simulate 0
+Const=axis_tLayerTaken 150000
+Timeout=timeLayerTakenReset 1000000
+Value=gosimulatelayer 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET layerTaken 0
+  SET robotReady 0
+  SET outmattop3 0
+  SET outmattop4 0
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_ERROR
+	SET layerTaken 0
+  SET robotReady 0
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_READY_ROBOT
+  TEST pathtype = 24
+	AND axis_t <= axis_tLayerTaken
+		SETSTATE ST_WAIT_ROBOT_GONE
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_ROBOT_GONE
+  TEST pathtype = 24
+	  TEST axis_t > axis_tLayerTaken
+			SET layerTaken 1
+      TIMEOUT timeLayerTakenReset ST_RESET_LAYER_TAKEN
+			SETSTATE ST_RESET_LAYER_TAKEN
+		ENDTEST
+  ENDTEST
+  TEST Robot != ST_RUNNING
+    TEST parent = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET_LAYER_TAKEN
+  TEST timeLayerTakenReset = 1
+    SET layerTaken 0
+    TIMEOUT timeLayerTakenReset ST_WAIT
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+
+State=ST_RESET
+	SET robotReady 1
+	SET layerTaken 0
+	SETSTATE ST_WAIT
+END
+
+State=ST_WAIT
+;	TEST tableEmpty = 0
+;		SET layerTaken 0
+;	ENDTEST
+	TEST layerReady = 1
+	OR gosimulatelayer = 1
+		SET gosimulatelayer 0
+		SET layerTaken 0
+		SETSTATE ST_READY_ROBOT
+	ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

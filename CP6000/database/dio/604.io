@@ -1,0 +1,20 @@
+IOVERSION 1
+ipaddr=192.168.0.171
+simulate=0
+NumOfModules=2
+Type=STB3610DDI
+Name=3D1
+InConnect1="Remote Control Button 1"
+InConnect2="Remote Control Button 2"
+InConnect3="Remote Control Button 3"
+InConnect4=""
+InConnect5=""
+InConnect6=""
+Type=STB3600DDO
+Name=2D9
+OutConnect1="Test Relay"
+OutConnect2=""
+OutConnect3=""
+OutConnect4=""
+OutConnect5=""
+OutConnect6=""

@@ -1,0 +1,6 @@
+*.i
+*.ii
+*.s
+robostacker
+mntdatabase.txt
+.kdbgrc.robostacker

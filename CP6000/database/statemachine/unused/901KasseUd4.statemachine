@@ -1,0 +1,17 @@
+STATEMACHINEVERSION 3
+Include=conveyor.statemachine
+Name=KasseUd4
+Output=motor "Kasse Ud 4 Motor"
+Output=softStarter "Kasse Ud 4 Motor"
+Link=prev KasseLift2
+Link=prev2 KasseUd3
+Link=next KasseUd5
+Link=foto KasseUd4Foto
+Timeout=freeWaitTime 0
+Const=softSend 0
+Const=doubleReceive 1
+linkValue=canSend recv2 KasseUd5
+Timeout=softwaitTime 500000
+Link=parent ConveyorParent
+Value=m1121 1128
+Const=resetOnError 0

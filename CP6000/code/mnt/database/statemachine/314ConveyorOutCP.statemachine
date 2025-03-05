@@ -1,0 +1,207 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOutCP
+Input=boxInPlace "ConveyorOutCP Foto2"
+linkValue=boxReceived test ConveyorOutCPFoto1
+Output=Motor "ConveyorOutCP Motor"
+Output=sync "extern syncOut"
+Link=next ConveyorOut 
+Link=parent Parent 
+Timeout=TimeoutDelay 600000000
+Timeout=StartupTimeout 5000000
+Timeout=emptyDelay 0
+Timeout=StopDelay 0
+Const=ON 0
+Value=simulate 0
+Value=errorCode 0
+
+;en pallebane går automatisk fra ready til empty hvis fotocelle slukker
+;en pallebane går automatisk fra empty til ready hvis fotocelle tænder
+
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET Motor 0
+	SET sync 0
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_READY
+	SET sync 0
+  TEST next = ST_GET1
+    TIMEOUT TimeoutDelay ST_SEND1
+    SETSTATE ST_SEND1
+  ELSE 
+    TEST next = ST_GET2
+      TIMEOUT TimeoutDelay ST_SEND2
+      SETSTATE ST_SEND2
+    ELSE 
+      TEST next = ST_GET3
+        TIMEOUT TimeoutDelay ST_SEND3
+        SETSTATE ST_SEND3
+      ELSE 
+        TEST next = ST_GET4
+          TIMEOUT TimeoutDelay ST_SEND4
+          SETSTATE ST_SEND4
+        ELSE 
+          SET Motor 0
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND1
+	SET sync 0
+  TEST next = ST_GET2
+  OR next = ST_GET3
+  OR next = ST_GET4
+  OR next = ST_READY_ROBOT
+  OR boxInPlace != ON
+    TIMEOUT emptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST TimeoutDelay = 1
+      SET errorCode 1015 
+      SETSTATE ST_IDLE
+    ELSE
+      TEST next = ST_RECEIVE1
+        SET Motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_SEND2
+	SET sync 0
+  TEST next = ST_GET3
+  OR next = ST_GET4
+  OR next = ST_READY_ROBOT
+  OR boxInPlace != ON
+    TIMEOUT emptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST TimeoutDelay = 1
+      SET errorCode 1015 
+      SETSTATE ST_IDLE
+    ELSE
+      TEST next = ST_RECEIVE2
+        SET Motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_SEND3
+	SET sync 0
+  TEST next = ST_GET4
+  OR next = ST_READY_ROBOT
+  OR boxInPlace != ON
+    TIMEOUT emptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST TimeoutDelay = 1
+      SET errorCode 1015 
+      SETSTATE ST_IDLE
+    ELSE
+      TEST next = ST_RECEIVE3
+        SET Motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_SEND4
+	SET sync 0
+  TEST next = ST_READY_ROBOT
+  OR boxInPlace != ON
+    TIMEOUT emptyDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST TimeoutDelay = 1
+      SET errorCode 1015 
+      SETSTATE ST_IDLE
+    ELSE
+      TEST next = ST_RECEIVE4
+        SET Motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMPTY
+	SET Motor 0
+	SET sync 1
+  TEST boxReceived = 1 
+  OR simulate = 1 
+		TIMEOUT TimeoutDelay ST_RECEIVE
+    SETSTATE ST_RECEIVE 
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST boxReceived = 0 
+  OR simulate = 1 
+		TIMEOUT TimeoutDelay ST_RECEIVE2
+    SETSTATE ST_RECEIVE2
+  ELSE
+    TEST TimeoutDelay = 1
+      SET errorCode 1015 
+      SETSTATE ST_IDLE
+    ELSE    
+			SET sync 1
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RECEIVE2
+	SET sync 0
+  TEST boxInPlace = ON 
+  OR simulate = 1 
+    TIMEOUT StopDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST TimeoutDelay = 1
+      SET errorCode 1015 
+      SETSTATE ST_IDLE
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST boxInPlace = ON
+  OR simulate = 1 
+    SETSTATE ST_READY
+  ELSE
+    TIMEOUT StartupTimeout ST_STOP
+    SETSTATE ST_STOP
+  ENDTEST
+END
+
+State=ST_STOP
+	SET sync 0
+  TEST boxInPlace = ON
+  OR simulate = 1 
+    SETSTATE ST_READY
+  ELSE
+    TEST StartupTimeout = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+END
+

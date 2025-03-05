@@ -1,0 +1,87 @@
+STATEMACHINEVERSION 3
+Name=Vibrator
+Output=valve "Pounder"
+Link=KasseLift
+Link=parent Parent
+linkValue=vibrateTime Program
+Value=maxPounds 0
+Const=tTimePoundOn 40000
+Const=tTimePoundOff 40000
+Value=pounds 0
+Value=temp 0
+Value=pounding 0
+Value=simulate 0
+Timeout=TimeVibrate 20000000
+Timeout=TimePoundOn 500000
+Timeout=TimePoundOff 500000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET valve 0
+	TEST parent = ST_RESET
+  OR simulate = 1
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+;	SET TimeVibrate vibrateTime
+  SET TimePoundOn tTimePoundOn
+  SET TimePoundOff tTimePoundOff
+  CALC temp = tTimePoundOn + tTimePoundOff
+  CALC maxPounds = vibrateTime / temp
+	SET valve 0
+	SETSTATE ST_STOP
+END
+
+State=ST_STOP
+	SET valve 0
+	TEST KasseLift = ST_SHAKE1
+  OR simulate = 2
+    SET pounding 1
+    SET valve 1
+    SET pounds 0
+    TEST simulate = 2
+      SET simulate 1
+    ENDTEST
+    TIMEOUT TimePoundOn ST_GO
+		SETSTATE ST_GO
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_GO
+  TEST pounding = 1
+  AND TimePoundOn = 1
+    SET pounding 0
+    SET valve 0
+    TIMEOUT TimePoundOff ST_GO
+		SETSTATE ST_GO
+  ELSETEST pounding = 0
+  AND TimePoundOff = 1
+    CALC pounds = pounds + 1
+    TEST pounds >= maxPounds
+      SETSTATE ST_STOP
+    ELSE
+      SET pounding 1
+      SET valve 1
+      TIMEOUT TimePoundOn ST_GO
+		  SETSTATE ST_GO
+    ENDTEST
+  ENDTEST
+	TEST KasseLift = ST_SEND
+		SETSTATE ST_STOP
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+		SETSTATE ST_IDLE
+	ENDTEST
+END

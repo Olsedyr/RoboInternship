@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=cpservolift.statemachine
+Name=ServoLift
+;** User section **
+Const=posTop 375.0000
+Const=cruise_speed 3000.0000
+Const=posHome 5.0000
+Const=home_torque -70.0000

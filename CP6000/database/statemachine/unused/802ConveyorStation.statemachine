@@ -1,0 +1,4 @@
+STATEMACHINEVERSION 3
+Include=cmconveyorstation.statemachine
+Name=ConveyorStation
+;** User section **

@@ -1,0 +1,130 @@
+STATEMACHINEVERSION 3
+Name=CaseCount
+Const=stackcasecountNetto 32
+Const=stackcasecountC18 8
+;casesPerStack set accordingly after casekind from Program
+Value=stackcasecount 0
+Value=stackcasecountdouble 0
+Link=parent Parent
+Link=ks KasseStativ
+Link=psfoto1 PalleStationFotoStabel1
+Link=psfoto2 PalleStationFotoStabel2
+Link=csfoto1 ConveyorStationFotoStabel1
+Link=csfoto2 ConveyorStationFotoStabel2
+Link=csfoto3 ConveyorStationFotoFremme
+Link=ksfotomodtaget KasseStativFotoModtaget
+Link=ksfototom KasseStativFotoTom
+Link=ksfotoafleveret KasseStativFotoAfleveret
+;below is same as above only input instead of fotoinput
+Link=fotoinputafleveret PindeTjekker600FotoIn
+linkValue=casekind Program803
+linkValue=firstRun WorkCell
+;Pallestation Casecount:
+Value=pscc 0
+;Conveyorstation Casecount:
+Value=cscc 0
+;Kassestativ Casecount:
+Value=kscc 0
+;casecount used by formCM:
+Value=casecount 0
+Timeout=startUpTime 2000000
+
+; casekind = 0  -> none
+; casekind = 1  -> C11
+; casekind = 2  -> C14
+; casekind = 3  -> C18
+; casekind = 4  -> hybschA
+; casekind = 5  -> hybschB
+; casekind = 6  -> Netto
+; casekind = 7  -> EPS610
+; casekind = 8  -> IFCO16
+; casekind = 9  -> IFCO18
+; casekind = 10 -> IFCO20
+
+State=ST_HALT
+  TIMEOUT startUpTime ST_RESET
+	SETSTATE ST_TIMER
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TIMEOUT startUpTime ST_RESET
+	SETSTATE ST_TIMER
+END
+
+State=ST_RESET
+	TEST casekind = 3
+		SET stackcasecount stackcasecountC18
+	ELSE
+		TEST casekind = 6
+	    SET stackcasecount stackcasecountNetto
+		ELSE
+		  SET stackcasecount 0
+		ENDTEST
+	ENDTEST
+  SET kscc 0
+  TEST ksfototom = ST_BLOCKED
+    SET kscc stackcasecount
+  ENDTEST
+  SETSTATE ST_COUNT
+END
+
+State=ST_COUNT
+  SET pscc 0
+  TEST psfoto1 = ST_BLOCKED
+    SET pscc stackcasecount
+    CALC pscc = pscc + stackcasecount
+  ENDTEST
+  TEST psfoto2 = ST_BLOCKED
+    CALC pscc = pscc + stackcasecount
+    CALC pscc = pscc + stackcasecount
+  ENDTEST
+  SET cscc 0
+  TEST csfoto1 = ST_BLOCKED
+    SET cscc stackcasecount
+  ENDTEST
+  TEST csfoto2 = ST_BLOCKED
+    CALC cscc = cscc + stackcasecount
+  ENDTEST
+  TEST csfoto3 = ST_BLOCKED
+    CALC cscc = cscc + stackcasecount
+  ENDTEST
+  TEST ks = ST_RECEIVE_STOP_CONVEYOR
+    SET kscc stackcasecount
+  ENDTEST
+	TEST fotoinputafleveret = ST_HIGH
+    CALC kscc = kscc - 1
+  ENDTEST
+  TEST kscc <= 2
+    TEST ksfototom = ST_BLOCKED
+      TEST ksfotomodtaget = ST_BLOCKED
+        SET kscc 2
+      ELSE
+        SET kscc 1
+      ENDTEST
+    ELSE
+      TEST ksfotomodtaget = ST_BLOCKED
+        SET kscc 1
+      ELSE
+        SET kscc 0
+      ENDTEST      
+    ENDTEST
+  ELSE
+    TEST ksfototom = ST_FREE
+      SET kscc 1
+      TEST ksfotomodtaget = ST_FREE
+        SET kscc 0
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  SET casecount pscc
+  CALC casecount = casecount + cscc
+  CALC casecount = casecount + kscc
+  TEST firstRun = 1
+	AND parent = ST_RESET
+		TIMEOUT startUpTime ST_RESET
+		SETSTATE ST_TIMER
+	ENDTEST
+END

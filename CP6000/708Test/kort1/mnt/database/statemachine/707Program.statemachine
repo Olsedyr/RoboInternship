@@ -1,0 +1,228 @@
+STATEMACHINEVERSION 3
+Name=Program
+Link=workcell WorkCell
+Value=usersection 0
+Value=programidx 1
+Value=loadfromleft 0
+Value=loadfromright 0
+Value=productsfromleft 0
+Value=productsfromright 0
+Value=casekind 0
+Value=newprogram 1
+Value=timeMotorInGoDown 0
+Value=timeKlapDown 0
+Value=noShakeOnLast 0
+Value=waitInR3 0
+Value=liftMilliTime 2000
+Value=vibrateTime 8000000
+Value=manuelt 0
+;programmer
+Value=program 0
+Const=NULL 0
+Const=C18 1
+Const=IFCO 2
+;patterns
+Value=pattern 0
+Const=NULL 0
+Const=10x500GRAM 1
+
+; casekind = 0  -> none
+; casekind = 1  -> C11
+; casekind = 2  -> C14
+; casekind = 3  -> C18
+; casekind = 4  -> hybschA
+; casekind = 5  -> hybschB
+; casekind = 6  -> Netto/Palm
+; casekind = 7  -> EPS610
+; casekind = 8  -> IFCO16
+; casekind = 9  -> IFCO18
+; casekind = 10 -> IFCO20
+; casekind = 11 -> FervaA
+; casekind = 12 -> FervaTest
+
+; Put programstates in top
+
+; also edit 'subPrograms' for example VendePattern and PushPattern for particular program
+
+State=PROGRAM_STD1
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET casekind 3
+	SET program 0
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+	SET pattern NULL
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 500000
+	SET noShakeOnLast 0
+	SET liftMilliTime 2400
+	SET waitInR3 1
+	SET vibrateTime 8000000
+	SETSTATE ST_RUNNING_STD1
+END
+
+State=PROGRAM_FERVAA_10
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET casekind 11
+	SET program 1
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+	SET pattern 10x500GRAM
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET liftMilliTime 2400
+	SET waitInR3 0
+	SET vibrateTime 1000000
+	SETSTATE ST_RUNNING_FERVAA_10
+END
+
+State=PROGRAM_FERVATEST_10
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET casekind 12
+	SET program 2
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+	SET pattern 10x500GRAM
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET liftMilliTime 2400
+	SET waitInR3 0
+	SET vibrateTime 1500000
+	SETSTATE ST_RUNNING_FERVATEST_10
+END
+
+State=PROGRAM_MANUAL
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET casekind 0
+	SET program 3
+  SET manuelt 1
+	SET usersection 1 ; user editable below
+	SET pattern NULL
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET liftMilliTime 2400
+	SET waitInR3 0
+	SET vibrateTime 0
+	SETSTATE ST_RUNNING_MANUAL
+END
+
+State=PROGRAM_FERVAB_10
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET casekind 22
+	SET program 4
+  SET manuelt 0
+	SET usersection 1 ; user editable below
+	SET pattern 10x500GRAM
+	SET timeMotorInGoDown 0
+	SET timeKlapDown 300000
+	SET noShakeOnLast 0
+	SET liftMilliTime 2400
+	SET waitInR3 0
+	SET vibrateTime 3000000
+	SETSTATE ST_RUNNING_FERVAB_10
+END
+
+State=ST_RUNNING_STD1
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_FERVAA_10
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_FERVATEST_10
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_MANUAL
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_FERVAB_10
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_STD1
+  ENDTEST
+  TEST programidx = 1
+    SETSTATE PROGRAM_FERVAA_10
+  ENDTEST
+  TEST programidx = 2
+    SETSTATE PROGRAM_FERVATEST_10
+  ENDTEST
+  TEST programidx = 3
+    SETSTATE PROGRAM_MANUAL
+  ENDTEST
+  TEST programidx = 4
+    SETSTATE PROGRAM_FERVAB_10
+  ENDTEST
+END

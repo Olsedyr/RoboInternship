@@ -1,0 +1,9 @@
+STATEMACHINEVERSION 3
+Include=fotoinput.statemachine
+Name=PindeTjekker600Foto1Pind1
+Input=input "PindeTjekker600 Foto 1 Pind 1"
+Timeout=blockTime 5000
+Timeout=freeTime 2000000
+Value=test 0
+Const=free 1
+Const=blocked 0

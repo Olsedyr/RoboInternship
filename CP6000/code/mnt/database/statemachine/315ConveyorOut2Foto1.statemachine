@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=ConveyorOut2Foto1
+Input=input "ConveyorOut2 Foto1"
+Timeout=TimeOn 50000
+Timeout=TimeOff 50000
+Value=test 0
+

@@ -1,0 +1,5 @@
+STATEMACHINEVERSION 3
+Include=emergency.statemachine
+Name=Emergency
+Input=EmergencyOK "Hz OK"
+Const=errorCode101 103

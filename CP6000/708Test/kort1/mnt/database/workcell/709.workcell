@@ -1,0 +1,122 @@
+VERSION 2
+709
+;*********************************
+;*       COMMON                  *
+;*********************************
+ITEM C11.item
+ITEM C18.item
+ITEM HybschA.item
+CPPATTERN C11Small8.cppattern
+CPPATTERN C11Large6.cppattern
+CPPATTERN PapSmall8.cppattern
+STATETEKST english.statetekst
+STATETEKST danish.statetekst
+STATETEKST spanish.statetekst
+LANGUAGE english.language
+LANGUAGE danish.language
+LANGUAGE spanish.language
+;*********************************
+;*            CP6000 V5          *
+;*********************************
+DIO 709.io
+COMSK 709.comsk
+MAC cplift.mac
+MAC cpstop.mac
+MAC cpbuffer.mac
+MAC cpskub.mac
+STM 709WorkCell.statemachine
+STM 709Parent.statemachine
+STM 709Program.statemachine
+STM 709ErrorCode.statemachine
+STM 709ContinueKnap.statemachine
+STM 709TrafficLight.statemachine
+STM 709Emergency.statemachine
+STM 709IOError.statemachine
+STM 709TripWatch.statemachine
+STM 709KasseLiftFoto.statemachine
+STM 709KasseFreeFoto.statemachine
+STM 709KasseInLinerFoto.statemachine
+STM 709Product1Foto1.statemachine
+STM 709Product1Foto2.statemachine
+STM 709Product2Foto1.statemachine
+STM 709Product2Foto2.statemachine
+STM 709CPCounter.statemachine
+STM 709ProductCount.statemachine
+STM 709PushPattern.statemachine
+STM 709ProductConveyors.statemachine
+STM 709KasseInLiner.statemachine
+STM 709ServoSkub.statemachine
+STM 709LangBufferSkub.statemachine
+STM 709ServoBuffer.statemachine
+STM 709BufferPlads.statemachine
+STM 709ServoLift.statemachine
+STM 701ServoStop.statemachine
+STM 709KasseLift.statemachine
+STM 709KasseLiftNext.statemachine
+STM 709KasseLoaderFoto.statemachine
+STM 709KasseLoader.statemachine
+STM 709Vibrator.statemachine
+;*********************************
+;*    LINIE STYRING 905          *
+;*********************************
+DIO 905.io
+STM 905RemoteControl.statemachine
+STM 905Vende2Foto1.statemachine
+STM 905KeepAlive2Foto.statemachine
+STM 905VendeCount.statemachine
+STM 905VendePattern.statemachine
+STM 905VendeStation2.statemachine
+STM 905Vender2.statemachine
+STM 905TippeFoto.statemachine
+STM 905TippeCount.statemachine
+STM 905TippePattern.statemachine
+STM 905TippeStation.statemachine
+STM 905Tipper.statemachine
+STM 905BigPap.statemachine
+STM 905WeightFoto.statemachine
+STM 905Weight.statemachine
+;*********************************
+;*      CM5000 V2 Master S1      *
+;*********************************
+DIO 502.io
+LOADCELL 502.loadcell
+STM 502checkWeigherZeroCalibS1.statemachine
+STM 502WorkCellS1.statemachine
+STM 502ParentS1.statemachine
+STM 502ProgramS1.statemachine
+STM 502EmergencyS1.statemachine
+STM 502ContinueKnapS1.statemachine
+STM 502productOutS1.statemachine
+STM 502fotoInS1.statemachine
+STM 502fotoOutS1.statemachine
+STM 502fotoOutLongS1.statemachine
+STM 502checkWeigherCalcS1.statemachine
+STM 502checkWeigherS1.statemachine
+STM 502checkWeigherNextS1.statemachine
+STM 502checkWeigherMotorS1.statemachine
+STM 502checkWeigherPrevS1.statemachine
+;*********************************
+;*      CM5000 V2 Slave S2       *
+;*********************************
+STM 502checkWeigherZeroCalibS2.statemachine
+STM 502WorkCellS2.statemachine
+STM 502ParentS2.statemachine
+STM 502ProgramS2.statemachine
+STM 502EmergencyS2.statemachine
+STM 502fotoInS2.statemachine
+STM 502fotoOutS2.statemachine
+STM 502fotoOutLongS2.statemachine
+STM 502ContinueKnapS2.statemachine
+STM 502productOutS2.statemachine
+STM 502checkWeigherCalcS2.statemachine
+STM 502checkWeigherS2.statemachine
+STM 502checkWeigherNextS2.statemachine
+STM 502checkWeigherMotorS2.statemachine	
+STM 502checkWeigherPrevS2.statemachine
+STM 502CallChild1Foto.statemachine
+STM 502CallChild2Foto.statemachine
+STM 502CallChild3Foto.statemachine
+STM 502CallChild2.statemachine
+STM 502CallChild3.statemachine
+REMOTEHOST 192.168.0.150
+STM 502BagCaller.statemachine

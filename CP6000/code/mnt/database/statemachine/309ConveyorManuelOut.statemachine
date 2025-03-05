@@ -1,0 +1,58 @@
+STATEMACHINEVERSION 2
+Name=ConveyorManuelOut
+Input=0,Button "ConveyorManuelOut button"
+Input=1,Endestop "ConveyorIn endestop"
+Output=0,Motor "ConveyorManuelOut Motor"
+Link=0,Plads5
+Link=1,ConveyorFeed
+Timeout=0,stopDelay 1650000
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_IDLE
+  SET Motor 0
+END
+
+State=5,ST_RESET
+  TEST Button = 0
+    SETSTATE ST_STOP
+  ELSE
+    SETSTATE ST_START
+  ENDTEST
+  TEST Endestop = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=5,ST_START
+  SET Motor 1
+  TIMEOUT stopDelay ST_RUN
+  SETSTATE ST_RUN
+  TEST Plads5 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=5,ST_RUN
+  SET Motor 1
+  TEST stopDelay = 1
+    SETSTATE ST_STOP
+  ENDTEST
+  TEST Plads5 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=5,ST_STOP
+  SET Motor 0
+  TEST Button = 1
+    SETSTATE ST_START
+  ENDTEST
+  TEST Plads5 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

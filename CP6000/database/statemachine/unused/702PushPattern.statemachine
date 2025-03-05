@@ -1,0 +1,196 @@
+STATEMACHINEVERSION 3
+Include=cppushpattern.statemachine
+Name=PushPattern
+Const=c18pattern 4
+Value=2lag78C18 1
+Value=3lag663C18 2
+Value=3lag861C18 3
+Value=2lag86C18 4
+
+State=ST_RESET
+	SET gettime1 350000
+	SET gettime2 350000
+	SET gettime3 350000
+	SET maxpushlayer1 2
+	SET maxpushlayer2 2
+	SET maxpushlayer3 2
+  SET pushshortleft1 0
+  SET pushshortleft2 0
+  SET pushshortleft3 0
+  SET pushshortright1 0
+  SET pushshortright2 0
+  SET pushshortright3 0
+	TEST Program = ST_RUNNING_C18
+    TEST c18pattern = 3lag663C18
+		  SETSTATE ST_START_C18
+    ELSE
+      TEST c18pattern = 2lag78C18
+        SETSTATE ST_START_C18_2LAG
+      ELSE
+        TEST c18pattern = 3lag861C18
+          SETSTATE ST_START_C18_3LAG861
+        ELSE
+          TEST c18pattern = 2lag86C18
+            SETSTATE ST_START_C18_2LAG86C18
+          ELSE
+            SETSTATE ST_IDLE
+          ENDTEST
+        ENDTEST
+      ENDTEST
+    ENDTEST
+	ELSE
+		TEST Program = ST_RUNNING_NETTO
+      SETSTATE ST_START_NETTO
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_START_C18
+	SET curppp 2
+	SET maxpush 3
+  SET maxlayers 3
+	SET maxpushlayer1 3
+	SET maxpushlayer2 3
+	SET maxpushlayer3 2
+	SET gettime1 0
+	SET gettime2 0
+	SET gettime3 0
+	SET ppp1 2
+	SET ppp2 2
+	SET ppp3 2
+	SET ppp4 2
+	SET ppp5 2
+	SET ppp6 2
+	SET ppp7 2
+	SET ppp8 1
+	;default rest
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SETSTATE ST_GO
+END
+
+State=ST_START_C18_2LAG
+	SET curppp 2
+	SET maxpush 4
+  SET maxlayers 2
+	SET maxpushlayer1 4
+	SET maxpushlayer2 4
+	SET maxpushlayer3 2
+	SET gettime1 0
+	SET gettime2 0
+	SET gettime3 0
+	SET ppp1 2
+	SET ppp2 2
+	SET ppp3 2
+	SET ppp4 2
+	SET ppp5 2
+	SET ppp6 2
+	SET ppp7 2
+	SET ppp8 1
+	;default rest
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SETSTATE ST_GO
+END
+
+State=ST_START_C18_3LAG861
+	SET curppp 2
+	SET maxpush 4
+  SET maxlayers 3
+	SET maxpushlayer1 4
+	SET maxpushlayer2 3
+	SET maxpushlayer3 1
+	SET gettime1 0
+	SET gettime2 0
+	SET gettime3 0
+	SET ppp1 2
+	SET ppp2 2
+	SET ppp3 2
+	SET ppp4 2
+	SET ppp5 2
+	SET ppp6 2
+	SET ppp7 2
+	SET ppp8 1
+	;default rest
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SETSTATE ST_GO
+END
+
+State=ST_START_C18_2LAG86C18
+	SET curppp 2
+	SET maxpush 4
+  SET maxlayers 2
+	SET maxpushlayer1 4
+	SET maxpushlayer2 3
+	SET maxpushlayer3 0
+	SET gettime1 0
+	SET gettime2 0
+	SET gettime3 0
+	SET ppp1 2
+	SET ppp2 2
+	SET ppp3 2
+	SET ppp4 2
+	SET ppp5 2
+	;default rest
+	SET ppp6 2
+	SET ppp7 2
+	SET ppp8 2
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SETSTATE ST_GO
+END
+
+State=ST_START_NETTO
+	SET curppp 2
+	SET maxpush 3
+  SET maxlayers 3
+	SET maxpushlayer1 3
+	SET maxpushlayer2 3
+	SET maxpushlayer3 2
+	SET gettime1 0
+	SET gettime2 0
+	SET gettime3 0
+	SET ppp1 2
+	SET ppp2 2
+	SET ppp3 2
+	SET ppp4 2
+	SET ppp5 2
+	SET ppp6 2
+	SET ppp7 2
+	SET ppp8 2
+	SET ppp9 2
+	;default rest
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SETSTATE ST_GO
+END

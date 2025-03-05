@@ -1,0 +1,480 @@
+STATEMACHINEVERSION 3
+Include=randomvalues.statemachine
+Name=ProgramB2
+;*******************************************
+;* LINK's                 
+;*******************************************
+Link=program Program603
+Link=parent Parent
+Link=robot Robot
+Link=Tool
+;*******************************************
+;* VALUE's                
+;*******************************************
+linkValue=wBLayer Program603
+linkValue=wBItemsPerLayer Program603
+linkValue=timeInPalletB Program603
+linkValue=WorkCellFirstRun firstRun WorkCell
+;when roboError > 0 and restart = 1 the workcell can be restarted 
+linkValue=restart RoboError 
+linkValue=resetpreload Loader 
+;when 2 or more path's must run as one - set delaystop = 1
+;before start off first path and = 0 after last
+;executer will test this value before pausing execution
+linkValue=delaystop Robot
+linkValue=axis_t Robot
+linkValue=pathtype Robot
+linkValue=casekind Program603
+linkValue=cBItem Frames
+linkValue=wBItem Frames
+linkValue=roboMessageCached RoboError
+Value=errorCode 0
+Const=sBItem 0
+Value=curplace 0
+Value=loaded 0
+Value=dirnegz 0 
+Value=temp 0
+Value=ftemp 0.0
+Const=xvarimin -100.0000
+Const=xvarimax 100.0000
+Const=zvarimin -100.0000
+Const=zvarimax 100.0000
+Const=wvarimin -30.0000
+Const=wvarimax 30.0000
+Const=tvarimin 0.0
+Const=tvarimax 7000000.0
+Const=velvarimin 10.0
+Const=velvarimax 20.0
+Value=rbspeed 0.0
+;*******************************************
+;* FRAME LINKVALUE's                
+;*******************************************
+linkValue=base Frames 
+linkValue=home Frames
+linkValue=homeHigh Frames
+linkValue=placeA Frames
+linkValue=placeB Frames
+linkValue=start Frames
+;*******************************************
+;* ALL EXISTING PATH TYPES
+;*******************************************
+
+Path=home_floor                 21 23
+Path=floor_place                21 24
+Path=floor_pick                 21 44
+Path=floor_home                 21 43
+Path=home_home                  21 16
+;*******************************************
+;* Container PATH's                    
+;*******************************************
+
+Const=placeInAMode 0
+Const=placeInBMode 1
+Value=CurrentMode 1
+
+;*******************************************
+;* ITEM's                    
+;*******************************************
+Item=item FervaA
+Item=itemFervaA FervaA
+Item=itemFervaTest FervaTest
+;*******************************************
+;* PATTERN's     
+;*******************************************
+;Pattern=patternB 30410Kg_80
+;*******************************************
+;* FRAME's
+;*******************************************
+Frame=fromFrame x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+Frame=toFrame x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0 
+;*******************************************
+;* TIMEOUT's                    
+;*******************************************
+Timeout=TimeInPlace 300000
+;*******************************************
+;* STATES                    
+;*******************************************
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_ERROR
+	TEST parent != ST_RUN
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_IDLE
+  SET delaystop 0
+  TEST parent = ST_RUN
+		SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+	SET TimeInPlace timeInPalletB
+	SET loaded 0
+	SET errorCode 0
+	;set state = ST_IDLE for alle path's and set maxidx = 0 in pathTable
+	;stafet value
+  TEST resetpreload = 0
+    SET resetpreload 1
+  ENDTEST
+  TEST resetpreload = 3
+    SET resetpreload 0
+    TEST WorkCellFirstRun = 1
+    OR restart = 0
+	    SETSTATE ST_START
+    ELSE
+      SETSTATE ST_RESTART
+    ENDTEST
+  ENDTEST
+END
+;*******************************************
+;* RESTART FROM SOMEWHERE
+;*******************************************
+State=ST_RESTART
+	;  kun een bopt fil for hver robot
+	;  en ppscripttype for hver konfiguration(tool)
+  SET delaystop 0 
+  TEST home_home.state < ST_INACTIVE
+    LOAD home_home homeHigh home 
+    SETSTATE ST_WAIT_HOME_HOME_LOADED
+  ENDTEST
+END
+;*******************************************
+;* START FROM SCRATCH
+;*******************************************
+State=ST_START
+	;  kun een bopt fil for hver robot
+	;  en ppscripttype for hver konfiguration(tool)
+	SET dirnegz 0
+	SET CurrentMode placeInBMode
+	SET randseed 234623
+	INLINE inlineSeedRandom.statemachine
+	SET delaystop 0
+  TEST home_home.state < ST_INACTIVE
+		TEST casekind = 11
+			SETITEM item itemFervaA
+		ELSE
+			TEST casekind = 12
+				SETITEM item itemFervaTest
+			ENDTEST
+		ENDTEST
+		CALC wBItem = wBLayer * wBItemsPerLayer
+    SET restart 1
+		SET curplace 0
+		SET cBItem sBItem
+		SET fromFrame start
+		SET toFrame placeB
+		SET randmin xvarimin
+		SET randmax xvarimax
+		INLINE inlineComputeRandom.statemachine
+		CALC toFrame.x = toFrame.x + randres
+		SET randmin zvarimin
+		SET randmax zvarimax
+		INLINE inlineComputeRandom.statemachine
+		CALC toFrame.z = toFrame.z + randres
+		SET randmin wvarimin
+		SET randmax wvarimax
+		INLINE inlineComputeRandom.statemachine
+		CALC toFrame.w = toFrame.w + randres
+		LOAD home_home homeHigh home
+	  SETSTATE ST_WAIT_HOME_HOME_LOADED
+  ENDTEST
+END
+;*******************************************
+;* ST_WAIT_HOME_HOME_LOADED
+;*******************************************
+State=ST_WAIT_HOME_HOME_LOADED
+  TEST home_home.state = ST_LOADED
+	  TEST home_floor.state < ST_INACTIVE
+			LOAD home_floor home fromFrame
+      SET delaystop 0
+      EXEC home_home
+      SETSTATE ST_HOME_HOME
+    ENDTEST
+  ENDTEST
+END
+;*******************************************
+;*
+;*       F R A M E - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME
+;*******************************************
+State=ST_HOME
+  TEST parent = ST_RUN
+	AND roboMessageCached = 0
+    TEST home_floor.state = ST_LOADED
+			TEST loaded = 0
+      AND floor_place.state < ST_INACTIVE
+      AND floor_home.state < ST_INACTIVE
+				CALC temp = wBItem - cBItem
+				CALC temp = item.sy * temp
+				CALC fromFrame.y = temp + item.gy
+				CALC temp = item.sy * cBItem
+				CALC toFrame.y = temp + item.gy
+				LOAD floor_place fromFrame toFrame
+				LOAD floor_home fromFrame home
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND Tool = ST_GO
+				SET delaystop 1
+				EXEC home_floor
+				SETSTATE ST_HOME_FLOOR
+			ENDTEST
+    ENDTEST
+  ELSE
+		TEST roboMessageCached = 333
+			SET errorCode 333
+			SETSTATE ST_ERROR
+		ELSE
+			SETSTATE ST_IDLE
+		ENDTEST
+  ENDTEST
+END
+;*******************************************
+;* ST_FLOORPICK
+;*******************************************
+State=ST_FLOORPICK
+	TEST parent = ST_RUN
+		TEST floor_place.state = ST_LOADED
+			TEST loaded = 0
+			AND floor_home.state < ST_INACTIVE
+			AND floor_pick.state < ST_INACTIVE
+				CALC temp = wBItem - cBItem
+				CALC temp = item.sy * temp
+				CALC fromFrame.y = temp + item.gy
+				LOAD floor_pick toFrame fromFrame
+				LOAD floor_home toFrame home
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND Tool = ST_GO
+			AND TimeInPlace = 1
+				SET randmin velvarimin
+				SET randmax velvarimax
+				INLINE inlineComputeRandom.statemachine
+				CALC rbspeed = rbspeed + randres
+				INLINE inlineRobotSpeed.statemachine
+				SET randmin tvarimin
+				SET randmax tvarimax
+				INLINE inlineComputeRandom.statemachine
+				SET TimeInPlace randres
+				SET delaystop 1
+				EXEC floor_place
+				SETSTATE ST_FLOOR_FLOOR
+			ENDTEST
+		ENDTEST
+	ELSE
+		TEST TimeInPlace = 1
+		OR parent != ST_RUN
+		OR roboMessageCached != 0
+			TEST floor_home.state = ST_LOADED
+				TEST home_floor.state < ST_INACTIVE 
+					;*******************************************
+					LOAD home_floor home fromFrame
+					SET delaystop 0
+					;*******************************************
+					; tool doesn't have to be ST_GO before exec because
+					; opendelay is hardcoded=1s for path 43 in trio.
+					EXEC floor_home
+					SETSTATE ST_FLOOR_HOME
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+
+;*******************************************
+;* ST_FLOORPLACE
+;*******************************************
+State=ST_FLOORPLACE
+	TEST parent = ST_RUN
+		TEST floor_pick.state = ST_LOADED
+			TEST loaded = 0
+			AND floor_home.state < ST_INACTIVE
+			AND floor_place.state < ST_INACTIVE
+				CALC temp = item.sy * cBItem
+				CALC toFrame.y = temp + item.gy
+				LOAD floor_place fromFrame toFrame
+				LOAD floor_home fromFrame home
+				SET loaded 1
+			ENDTEST
+			TEST loaded = 1
+			AND Tool = ST_GO
+			AND TimeInPlace = 1
+				SET randmin velvarimin
+				SET randmax velvarimax
+				INLINE inlineComputeRandom.statemachine
+				CALC rbspeed = rbspeed + randres
+				INLINE inlineRobotSpeed.statemachine
+				SET randmin tvarimin
+				SET randmax tvarimax
+				INLINE inlineComputeRandom.statemachine
+				SET TimeInPlace randres
+				SET delaystop 1
+				EXEC floor_place
+				SETSTATE ST_FLOOR_FLOOR
+			ENDTEST
+		ENDTEST
+	ELSE
+		TEST TimeInPlace = 1
+		OR parent != ST_RUN
+		OR roboMessageCached != 0
+			TEST floor_home.state = ST_LOADED
+				TEST home_floor.state < ST_INACTIVE 
+					;*******************************************
+					LOAD home_floor home fromFrame
+					SET delaystop 0
+					;*******************************************
+					; tool doesn't have to be ST_GO before exec because
+					; opendelay is hardcoded=1s for path 43 in trio.
+					EXEC floor_home
+					SETSTATE ST_FLOOR_HOME
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+
+;*******************************************
+;*
+;*       P A T H - S T A T E S
+;*
+;*******************************************
+;*******************************************
+;* ST_HOME_HOME
+;*******************************************
+State=ST_HOME_HOME
+  TEST home_home.state = ST_EXECUTING
+		;    TEST axis_t > 500000
+		;     SET griber 1
+		;    ENDTEST
+  ELSE
+    TEST home_home.state = ST_FINISHED
+			SET loaded 0
+      SETSTATE ST_HOME
+    ELSE
+      TEST home_home.state = ST_ERROR
+        TEST parent = ST_IDLE
+          SETSTATE ST_IDLE
+        ENDTEST 
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+;*******************************************
+;* ST_HOME_FLOOR
+;*******************************************
+State=ST_HOME_FLOOR
+  TEST home_floor.state = ST_EXECUTING
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;    ENDTEST
+  ELSE
+    TEST home_floor.state = ST_FINISHED
+			SET loaded 0
+			SETSTATE ST_FLOORPICK
+    ELSE
+      TEST home_floor.state = ST_ERROR
+        TEST parent = ST_IDLE
+          SETSTATE ST_IDLE
+        ENDTEST 
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+;*******************************************
+;* ST_FLOOR_HOME
+;*******************************************
+State=ST_FLOOR_HOME
+  TEST floor_home.state = ST_EXECUTING
+		SET delaystop 0
+		;    TEST axis_t > 900000
+		;      SET griber 1
+		;   ENDTEST
+  ELSE
+		TEST floor_home.state = ST_FINISHED
+			SET loaded 0
+			SETSTATE ST_HOME
+		ELSE
+			TEST floor_home.state = ST_ERROR
+				TEST parent = ST_IDLE
+					SETSTATE ST_IDLE
+				ENDTEST 
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+;*******************************************
+;* ST_FLOOR_FLOOR
+;*******************************************
+State=ST_FLOOR_FLOOR
+		TEST dirnegz = 0
+		TEST CurrentMode = placeInBMode
+			TEST floor_place.state = ST_FINISHED
+				SET loaded 0
+				INLINE 603inlineNewFrames.statemachine
+				TIMEOUT TimeInPlace ST_FLOORPLACE
+				SETSTATE ST_FLOORPLACE
+			ELSE
+				TEST floor_place.state = ST_ERROR
+					TEST parent = ST_IDLE
+						SETSTATE ST_IDLE
+					ENDTEST 
+				ENDTEST
+			ENDTEST
+		ELSE
+			TEST CurrentMode = placeInAMode
+				TEST floor_pick.state = ST_FINISHED
+					SET loaded 0
+					TIMEOUT TimeInPlace ST_FLOORPICK
+					SETSTATE ST_FLOORPICK
+				ELSE
+					TEST floor_pick.state = ST_ERROR
+						TEST parent = ST_IDLE
+							SETSTATE ST_IDLE
+						ENDTEST 
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ELSE
+		TEST CurrentMode = placeInAMode
+			TEST floor_place.state = ST_FINISHED
+				SET loaded 0
+				INLINE 603inlineNewFrames.statemachine
+				TIMEOUT TimeInPlace ST_FLOORPLACE
+				SETSTATE ST_FLOORPLACE
+			ELSE
+				TEST floor_place.state = ST_ERROR
+					TEST parent = ST_IDLE
+						SETSTATE ST_IDLE
+					ENDTEST 
+				ENDTEST
+			ENDTEST
+		ELSE
+			TEST CurrentMode = placeInBMode
+				TEST floor_pick.state = ST_FINISHED
+					SET loaded 0
+					TIMEOUT TimeInPlace ST_FLOORPICK
+					SETSTATE ST_FLOORPICK
+				ELSE
+					TEST floor_pick.state = ST_ERROR
+						TEST parent = ST_IDLE
+							SETSTATE ST_IDLE
+						ENDTEST 
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END

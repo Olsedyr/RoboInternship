@@ -1,0 +1,31 @@
+STATEMACHINEVERSION 3
+Name=Frames
+Frame=base x=0.0000 y=0.0000 z=0.0000 v=0.0000 w=0.0000 u=0.0000
+;afdrypningshome: Frame=home x=1780.0000 y=2400.0000 z=3265.0000 v=78.0000 w=90.0000 u=0.0000
+;real home, før afdrypning: 
+Frame=home x=1020.0000 y=2250.0000 z=3315.0000 v=90.0000 w=90.0000 u=0.0000
+;Frame=home1 x=1000.0000 y=2300.0000 z=1515.0000 v=90.0000 w=90.0000 u=0.0000
+;Frame=home2 x=1000.0000 y=2600.0000 z=1015.0000 v=90.0000 w=0.0000 u=0.0000
+;Frame=home3 x=934.0000 y=1650.0000 z=3315.0000 v=90.0000 w=90.0000 u=0.0000
+;før afdryp trix:
+Frame=homeHigh x=1000.0000 y=3200.0000 z=3315.0000 v=90.0000 w=90.0000 u=0.0000
+;afdryp homeHigh:
+;Frame=homeHigh x=1000.0000 y=3200.0000 z=3265.0000 v=90.0000 w=90.0000 u=0.0000
+Frame=conveyorB x=865.0000 y=1185.0000 z=3317.5115 v=90.0000 w=89.6161 u=0.0000
+Frame=palletB0 x=954.1440 y=2280.0000 z=1684.0000 v=90.0000 w=0.0000 u=0.0000
+Frame=palletB x=415.0000 y=2270.0000 z=1262.0000 v=90.0000 w=0.0000 u=0.0000
+Frame=inter x=1100.0000 y=2480.0000 z=3070.0000 v=90.0000 w=60.0000 u=0.0000
+Value=nextpalb 0
+Value=userPalletOut 0
+Value=cBItem 0
+Value=wBItem 0
+Value=itemCounter 0
+
+State=ST_HALT
+END
+State=ST_IDLE
+END
+State=ST_TIMER
+END
+State=ST_RESET
+END

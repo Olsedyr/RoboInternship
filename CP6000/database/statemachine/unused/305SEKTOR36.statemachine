@@ -1,0 +1,146 @@
+STATEMACHINEVERSION 2
+Name=Sektor36
+Delaystop=10000000
+Input=0,Foto1 "Sektor36 Foto1"
+Input=1,Foto2 "Sektor36 Foto2"
+Output=0,Motor "Sektor36 Motor"
+Link=0,Sektor35b
+Link=1,Robot
+Timeout=0,TimeoutDelay 10000000
+Timeout=1,StopDelay 100000
+Value=0,Counter 0
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_OK
+  END
+
+State=0,ST_ERROR
+  END
+
+State=0,ST_READY_ROBOT
+  TEST Robot = ST_THIRTYPCT_CONVBPLACE
+  AND Foto1 = 0
+  AND Foto2 = 0
+    SETSTATE ST_EMPTY
+  ENDTEST
+  TEST Sektor35b = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=0,ST_IDLE
+  SET Motor 0
+ END
+
+State=1,ST_READY
+  TEST Foto1 = 1
+  AND Foto2 = 1
+    SETSTATE ST_READY_ROBOT
+    SET Motor 0
+    SET Counter 3
+  ELSE
+    SETSTATE ST_EMPTY
+  ENDTEST
+  TEST Sektor35b = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=2,ST_EMPTY
+  TEST Foto1 = 1
+  AND Foto2 = 1
+    SETSTATE ST_READY
+  ELSE  
+    TEST Sektor35b = ST_READY
+    OR Sektor35b = ST_SEND
+      TEST Foto1 = 0
+        TIMEOUT TimeoutDelay ST_RECIEVE1
+        SETSTATE ST_RECIEVE1
+      ELSE
+        TEST Foto2 = 0
+          TIMEOUT TimeoutDelay ST_RECIEVE2
+          SETSTATE ST_RECIEVE2
+        ENDTEST
+      ENDTEST
+    ELSE
+      TEST TimeoutDelay = 1
+        SET Motor 0
+      ELSE
+        SET Motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST Sektor35b = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+  END
+
+State=3,ST_RECIEVE1
+  SET Motor 1
+  TEST Sektor35b = ST_EMPTY
+    SETSTATE ST_GET1
+  ENDTEST
+END
+
+State=3,ST_GET1
+  TEST Foto1 = 1
+    TIMEOUT StopDelay ST_STOP 
+    SETSTATE ST_STOP
+  ELSE
+    TEST TimeoutDelay = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+ END
+
+State=3,ST_RECIEVE2
+  SET Motor 1
+  TEST Sektor35b = ST_EMPTY
+    SETSTATE ST_GET2
+  ENDTEST
+END
+
+State=3,ST_GET2
+  TEST Foto2 = 1
+    TIMEOUT StopDelay ST_STOP 
+    SETSTATE ST_STOP
+  ELSE
+    TEST TimeoutDelay = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+ END
+
+State=3,ST_STOP
+  TEST Foto1 = 1
+  AND Foto2 = 1
+    SETSTATE ST_READY
+  ELSE 
+    TEST StopDelay = 1
+      SETSTATE ST_EMPTY
+    ENDTEST
+  ENDTEST
+ END
+
+State=5,ST_RESET
+  SET Counter 0
+  TEST Foto1 = 1
+    SET Counter 1
+  ENDTEST
+  TEST Foto2 = 1
+    SET Counter 4
+    SETSTATE ST_READY_ROBOT
+  ELSE
+    TIMEOUT TimeoutDelay ST_EMPTY
+    SETSTATE ST_EMPTY
+  ENDTEST
+  END

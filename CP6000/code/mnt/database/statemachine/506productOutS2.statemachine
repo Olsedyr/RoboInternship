@@ -1,0 +1,9 @@
+STATEMACHINEVERSION 3
+Include=checkweigherproductout.statemachine
+Name=productOutS2
+Output=productOut "S2 Product reject"
+Link=checkWeigher checkWeigherS2
+Link=checkWeigherMotor checkWeigherMotorS2
+Link=parent ParentS2
+Timeout=valveOpenDelay 0
+Timeout=valveOpenTime 250000

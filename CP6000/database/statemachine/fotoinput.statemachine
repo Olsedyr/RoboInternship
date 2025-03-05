@@ -1,0 +1,69 @@
+STATEMACHINEVERSION 3
+Name=FotoInput
+Input=input "dummyOff"
+Timeout=blockTime 100000
+Timeout=freeTime 100000
+Value=test 0
+Const=free 0
+Const=blocked 1
+
+State=ST_HALT
+  SETSTATE ST_IDLE
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST input = blocked
+    SET test blocked
+    SETSTATE ST_BLOCKED
+  ELSE
+    TEST input = free
+      SET test free
+      SETSTATE ST_FREE
+    ENDTEST
+  ENDTEST    
+END
+
+State=ST_FREE
+  TEST input = blocked
+  AND test = free
+    SET test blocked
+    TIMEOUT blockTime ST_FREE
+    SETSTATE ST_FREE
+  ENDTEST
+  TEST input = blocked
+  AND test = blocked
+  AND blockTime = 1
+    SETSTATE ST_HIGH
+  ENDTEST
+  TEST input = free
+    SET test free
+  ENDTEST
+END
+
+State=ST_HIGH
+  SETSTATE ST_BLOCKED
+END
+
+State=ST_BLOCKED
+  TEST input = free
+  AND test = blocked
+    SET test free
+    TIMEOUT freeTime ST_BLOCKED
+    SETSTATE ST_BLOCKED
+  ENDTEST
+  TEST input = free
+  AND test = free
+  AND freeTime = 1
+    SETSTATE ST_LOW
+  ENDTEST
+  TEST input = blocked
+    SET test blocked
+  ENDTEST
+END
+
+State=ST_LOW
+  SETSTATE ST_FREE
+END

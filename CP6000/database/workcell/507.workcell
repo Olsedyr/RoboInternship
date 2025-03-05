@@ -1,0 +1,62 @@
+VERSION 1
+507
+Robots 0
+Tools 0
+Items 0
+Patterns 0
+Accessories 0
+PPScripts 0
+Dio 1
+507.io
+Comsks 0
+LoadCells 1
+507.loadcell
+Macs 0
+Statemachines 45
+507checkWeigherZeroCalibS1.statemachine
+507checkWeigherZeroCalibS2.statemachine
+507checkWeigherZeroCalibS3.statemachine
+507checkWeigherPrevS1.statemachine
+507checkWeigherPrevS2.statemachine
+507checkWeigherPrevS3.statemachine
+507checkWeigherNextS1.statemachine
+507checkWeigherNextS2.statemachine
+507checkWeigherNextS3.statemachine
+507WorkCellS1.statemachine
+507ParentS1.statemachine
+507ProgramS1.statemachine
+507EmergencyS1.statemachine
+507ContinueKnapS1.statemachine
+507productOutS1.statemachine
+507fotoInS1.statemachine
+507fotoOutS1.statemachine
+507fotoOutLongS1.statemachine
+507checkWeigherCalcS1.statemachine
+507checkWeigherS1.statemachine
+507checkWeigherMotorS1.statemachine
+507WorkCellS2.statemachine
+507ParentS2.statemachine
+507ProgramS2.statemachine
+507EmergencyS2.statemachine
+507ContinueKnapS2.statemachine
+507productOutS2.statemachine
+507fotoInS2.statemachine
+507fotoOutS2.statemachine
+507fotoOutLongS2.statemachine
+507checkWeigherCalcS2.statemachine
+507checkWeigherS2.statemachine
+507checkWeigherMotorS2.statemachine
+507WorkCellS3.statemachine
+507ParentS3.statemachine
+507ProgramS3.statemachine
+507EmergencyS3.statemachine
+507ContinueKnapS3.statemachine
+507productOutS3.statemachine
+507fotoInS3.statemachine
+507fotoOutS3.statemachine
+507fotoOutLongS3.statemachine
+507checkWeigherCalcS3.statemachine
+507checkWeigherS3.statemachine
+507checkWeigherMotorS3.statemachine
+LANGUAGE danish.language
+STATETEKST danish.statetekst

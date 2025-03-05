@@ -1,0 +1,27 @@
+STATEMACHINEVERSION 2
+Name=ContinueKnap
+Input=0,Knap "ContinueKnap"
+Timeout=0,TimeoutDelay 2000000
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_IDLE
+  TEST Knap = 1
+    TIMEOUT TimeoutDelay ST_PRESSED
+    SETSTATE ST_PRESSED
+  ENDTEST
+  END
+
+State=0,ST_PRESSED
+  TEST TimeoutDelay = 1
+    SETSTATE ST_IDLE
+  ENDTEST
+	END
+
+State=0,ST_RESET
+	SETSTATE ST_IDLE
+END

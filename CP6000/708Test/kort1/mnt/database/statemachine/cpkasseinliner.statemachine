@@ -1,0 +1,179 @@
+STATEMACHINEVERSION 3
+Name=KasseInLiner
+;** Input **
+;** Output **
+Output=Motor "KasseInLiner Motor"
+;** Link **
+Link=prevback KasseInLinerPrevBack
+Link=prevleft KasseInLinerPrevLeft
+Link=prevright KasseInLinerPrevRight
+Link=CamGen CamGenLift
+Link=parent Parent
+Link=KasseLift
+Link=Foto KasseInLinerFoto
+;** linkValue **
+linkValue=Fototest test Foto
+linkValue=loadfromleft Program
+linkValue=loadfromright Program
+linkValue=noShakeOnLast Program
+;** Table **
+;** Item **
+;** Const **
+Const=speedSend 0
+Const=useMaxReceive 1
+;** Value **
+Value=errorCode 0
+Value=simulate 0
+linkValue=manuelt Program
+;** Timeout **
+Timeout=TimeStartUp 1000000
+Timeout=TimeMaxSend 8000000
+Timeout=TimeMaxReceive 8000000
+Timeout=noShakeOnLastWaitSendTime 300000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET Motor 0
+	TEST parent = ST_RESET
+  AND manuelt = 0
+	  SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+  TEST simulate = 1
+    SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	TIMEOUT TimeStartUp ST_STARTUP
+	SETSTATE ST_STARTUP
+END
+
+State=ST_STARTUP
+	TEST TimeStartUp = 1
+		TEST Fototest = 0
+			SETSTATE ST_READY
+		ELSE
+			SETSTATE ST_EMPTY
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_EMPTY
+	SET Motor 0
+  TEST loadfromleft = 1
+  AND prevleft = ST_SEND
+		TIMEOUT TimeMaxReceive ST_RECEIVE1
+		SETSTATE ST_RECEIVE1
+	ELSE
+    TEST loadfromright = 1
+    AND prevright = ST_SEND
+			TIMEOUT TimeMaxReceive ST_RECEIVE2
+			SETSTATE ST_RECEIVE2
+    ELSE
+      TEST prevback = ST_SEND
+			  TIMEOUT TimeMaxReceive ST_RECEIVE3
+			  SETSTATE ST_RECEIVE3
+      ENDTEST
+    ENDTEST
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE1
+	TEST TimeMaxReceive = 1
+		SET errorCode 1006
+		SETSTATE ST_IDLE
+	ENDTEST
+	TEST Fototest = 0
+		SETSTATE ST_READY
+	ENDTEST
+END
+
+State=ST_RECEIVE2
+	TEST TimeMaxReceive = 1
+		SET errorCode 1006
+		SETSTATE ST_IDLE
+	ENDTEST
+	TEST Fototest = 0
+		SETSTATE ST_READY
+	ENDTEST
+END
+
+State=ST_RECEIVE3
+  SET Motor 1
+	TEST TimeMaxReceive = 1
+	AND useMaxReceive = 1
+		SET errorCode 1006
+		SETSTATE ST_IDLE
+	ENDTEST
+	TEST Fototest = 0
+		SETSTATE ST_READY
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+	AND useMaxReceive = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_READY
+	SET Motor 0
+	TEST Fototest = 1
+		SETSTATE ST_EMPTY
+	ELSE
+		TEST KasseLift = ST_EMPTY
+			TIMEOUT TimeMaxSend ST_SEND
+			SETSTATE ST_SEND
+		ELSE
+			TEST noShakeOnLast = 1
+      AND speedSend = 1
+				TEST KasseLift = ST_SEND
+					TIMEOUT noShakeOnLastWaitSendTime ST_WAIT_SEND
+					SETSTATE ST_WAIT_SEND
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_SEND
+  TEST noShakeOnLastWaitSendTime = 1
+		TIMEOUT TimeMaxSend ST_SEND
+		SETSTATE ST_SEND
+  ENDTEST
+END
+
+State=ST_SEND
+	TEST KasseLift = ST_SEND
+		TEST noShakeOnLast = 1
+			SET Motor 1
+		ENDTEST
+	ELSE
+		TEST KasseLift = ST_RECEIVE
+			SET Motor 1
+		ELSE 
+			SET Motor 0
+		ENDTEST
+	ENDTEST
+	TEST KasseLift != ST_RECEIVE
+  AND Fototest = 1
+		SETSTATE ST_EMPTY
+	ENDTEST
+	TEST TimeMaxSend = 1
+		SET errorCode 1012
+		SETSTATE ST_IDLE
+	ENDTEST
+END

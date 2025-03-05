@@ -1,0 +1,294 @@
+STATEMACHINEVERSION 3
+Name=ServoLift
+Link=Master KasseLift
+Link=parent Parent
+linkValue=firstRun WorkCell
+linkValue=inShake Master
+Output=home_vel "KasseLift Homevel"
+Output=home_tq "KasseLift Hometorque"
+Output=Mode "KasseLift Mode"
+Output=setpoint "KasseLift MacSetpoint"
+Output=vsoll "KasseLift Maxvel"
+Output=asoll "KasseLift Maxacc"
+Output=set_curpos "KasseLift Curpos"
+Output=kvout "KasseLift Load Factor"
+Output=tsoll "KasseLift Maxtorque"
+Output=set_status "KasseLift Status"
+Output=reset_homedone "KasseLift Reset Home_Done"
+Input=temperature "KasseLift Temperature"
+Input=Inpos "KasseLift IN_POS"
+Input=curpos "KasseLift Curpos"
+Input=curtorque "KasseLift Curtorque"
+Input=homedone "KasseLift HOME_DONE"
+Input=curtsoll "KasseLift Maxtorque"
+Input=status "KasseLift Status"
+Input=flwerr "KasseLift Follow Error"
+Input=fncerr "KasseLift Function Error"
+Value=errorCode 0
+Value=curpm 0.0
+Const=loadfactor 3.0000
+Value=homed 0
+Value=temp 0
+Const=home_speed -250.0000
+Const=home_torque -50.0000
+Const=acceleration 15000.0000
+Const=cruise_speed 3000.0000
+Const=testmode 0
+Value=teststate 0
+Value=distance 0.0
+Value=startpos 0.0
+Value=posf 0.0
+Value=goIdle 0
+Value=liftFree 1
+Value=staticmode 0
+;jogmode is controlled from formJogLiftUser.c
+Value=jogmode 0
+; tickspermotorround*gearudveksling/(eff_rad*2*pi)
+; eks: 8000*13.3/(27.5*2*pi)
+Const=tickspermm 615.7849434537
+; All posXX in mm.
+Const=posHome 10.0
+;posShake > posFree
+Const=posShake 70.0000
+Const=posFree 60.0000
+Const=posTop 378.0000
+Const=posTestBegin 100.0000
+Const=posTestEnd 157.0000
+linkValue=item Program
+Timeout=TimeTest 0
+Timeout=TimeCmdDelay 500000
+Timeout=TimeStartMax 1000000
+Timeout=TimeHome 20000000
+Timeout=TimeStatic 5000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+    TEST status != 16
+	  AND status != 32
+	  AND status != 48
+	  AND status != 64
+	  AND status != 80
+	  AND status != 0
+;	    SET homed 0
+      SET set_status 0
+    ENDTEST
+		SET Mode 0
+		SET errorCode 0
+		TIMEOUT TimeCmdDelay ST_RESET
+		SETSTATE ST_TIMER
+	ENDTEST
+END
+
+State=ST_RESET
+	CALC posf = posTop - item.dy
+	CALC posf = posf - posFree
+	CALC posf = posf * tickspermm
+	SET kvout loadfactor
+	SET asoll acceleration
+	TEST homed = 0
+		SET home_vel home_speed
+		SET home_tq home_torque
+		SET temp 0
+		TIMEOUT TimeCmdDelay ST_HOME
+		SETSTATE ST_HOME
+	ELSE
+		SET vsoll cruise_speed
+		SET setpoint curpos
+		TIMEOUT TimeCmdDelay ST_INIT
+		SETSTATE ST_INIT
+	ENDTEST
+END
+
+State=ST_HOME
+	TEST temp = 0
+	AND TimeCmdDelay = 1
+		SET Mode 12
+		SET temp 1
+		TIMEOUT TimeCmdDelay ST_HOME
+		SETSTATE ST_HOME
+	ELSETEST temp = 1
+	AND TimeCmdDelay = 1
+	  SET temp 2
+		TIMEOUT TimeHome ST_HOME
+		SETSTATE ST_HOME
+  ELSETEST temp = 2
+		TEST homedone = 1
+			SET homed 1
+			SET Mode 0
+			SET vsoll cruise_speed
+			TIMEOUT TimeCmdDelay ST_HOME2
+			SETSTATE ST_HOME2
+		ELSETEST TimeHome = 1
+			SET errorCode 1052
+			SET Mode 0
+			SETSTATE ST_IDLE
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_HOME2
+	TEST TimeCmdDelay = 1
+		SET setpoint curpos
+		TIMEOUT TimeCmdDelay ST_HOME3
+		SETSTATE ST_HOME3
+	ENDTEST
+END
+
+State=ST_HOME3
+	TEST TimeCmdDelay = 1
+		SET Mode 2
+		TIMEOUT TimeCmdDelay ST_HOME4
+		SETSTATE ST_HOME4
+	ENDTEST
+END
+
+State=ST_HOME4
+	TEST TimeCmdDelay = 1
+		CALC setpoint = tickspermm * posHome
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+	ENDTEST
+END
+
+State=ST_INIT
+	TEST TimeCmdDelay = 1
+		SET Mode 2
+		TIMEOUT TimeStatic ST_CHOOSETRACK
+		SETSTATE ST_CHOOSETRACK
+	ENDTEST
+END
+
+State=ST_NOCHOOSETRACK
+END
+
+State=ST_CHOOSETRACK
+  TEST Master = ST_BEGINHOME
+		CALC setpoint = tickspermm * posHome
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+  ELSETEST Master = ST_BEGINHIGH
+		CALC temp = posTop - item.dy
+		TEST inShake = 1
+			CALC temp = temp - posShake
+		ENDTEST
+		CALC setpoint = tickspermm * temp
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+  ELSETEST testmode = 1
+		TIMEOUT TimeTest ST_TEST
+		SETSTATE ST_TEST
+	ELSETEST staticmode = 0
+	AND TimeStatic = 1
+		SET Mode 0
+		SET staticmode 1
+	ENDTEST
+	TEST Master = ST_IDLE
+  AND testmode = 0
+  AND jogmode = 0
+    SET goIdle 1
+		CALC setpoint = tickspermm * posHome
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+  ENDTEST
+	TEST curpos < posf
+		SET liftFree 1
+	ELSE
+		SET liftFree 0
+	ENDTEST
+END
+
+State=ST_TEST
+	TEST TimeTest = 1
+ 		TEST teststate = 0
+			SET teststate 1
+			CALC setpoint = tickspermm * posTestBegin
+			SET startpos curpos
+			CALC distance = setpoint - curpos
+			TIMEOUT TimeStartMax ST_START
+			SETSTATE ST_START
+		ELSETEST teststate = 1
+			SET teststate 0
+			CALC temp = posTop - item.dy				
+			CALC setpoint = tickspermm * temp
+			;CALC setpoint = tickspermm * posTestEnd
+			SET startpos curpos
+			CALC distance = setpoint - curpos
+			TIMEOUT TimeStartMax ST_START
+			SETSTATE ST_START
+		ENDTEST
+	ENDTEST
+	TEST curpos < posf
+		SET liftFree 1
+	ELSE
+		SET liftFree 0
+	ENDTEST
+END
+
+State=ST_STOP
+	SET curpm 1000.0
+	TEST Master = ST_IDLE
+	AND goIdle = 1
+    SET goIdle 0
+		SET Mode 0
+		SETSTATE ST_IDLE
+  ELSE
+		TIMEOUT TimeStatic ST_CHOOSETRACK
+		SETSTATE ST_CHOOSETRACK
+	ENDTEST
+END
+
+State=ST_START
+	SET curpm 0.0
+	TEST staticmode = 1
+		SET Mode 2
+		SET staticmode 0
+	ENDTEST
+	TEST Inpos = 0
+	OR TimeStartMax = 1
+	  SETSTATE ST_RUN
+  ENDTEST
+	TEST curpos < posf
+		SET liftFree 1
+	ELSE
+		SET liftFree 0
+	ENDTEST
+END
+
+State=ST_RUN
+	CALC curpm = curpos - startpos
+	CALC curpm = curpm / distance
+	CALC curpm = curpm * 1000.0
+	TEST Inpos = 1
+    SETSTATE ST_STOP
+  ENDTEST
+	TEST curpos < posf
+		SET liftFree 1
+	ELSE
+		SET liftFree 0
+	ENDTEST  
+  TEST status != 16
+	AND status != 32
+	AND status != 48
+	AND status != 64
+	AND status != 80
+	AND status != 0
+    SET Mode 0
+;    SET homed 0
+    TIMEOUT TimeCmdDelay ST_IDLE
+    SETSTATE ST_TIMER
+  ENDTEST
+END

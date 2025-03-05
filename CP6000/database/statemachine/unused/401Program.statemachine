@@ -1,0 +1,378 @@
+STATEMACHINEVERSION 3
+Include=rclpattern.statemachine
+Name=Program401
+;signal to WorkCell that a new program has been selected
+Value=usersection 0
+Value=newprogram 1
+Value=programidx 0
+Link=workcell WorkCell
+Value=pattern 0
+Value=usersection 0
+Value=wBItems 0
+Value=timeInCrate 0
+Value=program 0
+Value=robotspeedpct 1.0
+Value=autorobotspeed 0
+Value=manuelt 0
+Value=twoContainers 0
+Value=caseProg 0
+
+; Put programstates in top
+
+State=PROGRAM_CONTAINER_5KG_36
+	SET usersection 0
+	SET newprogram 1
+  SET program 0
+  SET pattern rclpattern_5Kg_36
+  SET wBItems 36
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 1
+	SET caseProg 0
+	SETSTATE ST_RUNNING_CONTAINER_5KG_36
+END
+
+State=PROGRAM_CONTAINER_3KG_60
+	SET usersection 0
+	SET newprogram 1
+  SET program 1
+  SET pattern rclpattern_3Kg_60
+  SET wBItems 60
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 1
+	SET caseProg 0
+	SETSTATE ST_RUNNING_CONTAINER_3KG_60
+END
+
+State=PROGRAM_CONTAINER_2KG_80
+	SET usersection 0
+	SET newprogram 1
+  SET program 2
+  SET pattern rclpattern_2Kg_80
+  SET wBItems 80
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 1
+	SET caseProg 0
+	SETSTATE ST_RUNNING_CONTAINER_2KG_80
+END
+
+State=PROGRAM_CONTAINER_2KG5_70
+	SET usersection 0
+	SET newprogram 1
+  SET program 3
+  SET pattern rclpattern_2Kg5_70
+  SET wBItems 70
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 1
+	SET caseProg 0
+	SETSTATE ST_RUNNING_CONTAINER_2KG5_70
+END
+
+State=PROGRAM_CONTAINER_2KG5_80
+	SET usersection 0
+	SET newprogram 1
+  SET program 4
+  SET pattern rclpattern_2Kg5_80
+  SET wBItems 80
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 1
+	SET caseProg 0
+	SETSTATE ST_RUNNING_CONTAINER_2KG5_80
+END
+
+State=PROGRAM_TESTNETTO
+	SET usersection 0
+	SET newprogram 1
+  SET program 5
+  SET pattern rclpattern_TestNetto
+  SET wBItems 4
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 0
+	SET caseProg 1
+	SETSTATE ST_RUNNING_TESTNETTO
+END
+
+State=PROGRAM_NETTO_3KG_6
+	SET usersection 0
+	SET newprogram 1
+  SET program 6
+  SET pattern rclpattern_Netto_3Kg_6
+  SET wBItems 6
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 2500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 0
+	SET caseProg 1
+	SETSTATE ST_RUNNING_NETTO_3KG_6
+END
+
+State=PROGRAM_NETTO_2KG5_6
+	SET usersection 0
+	SET newprogram 1
+  SET program 7
+  SET pattern rclpattern_Netto_2Kg5_6
+  SET wBItems 6
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 0
+	SET caseProg 1
+	SETSTATE ST_RUNNING_NETTO_2KG5_6
+END
+
+State=PROGRAM_NETTO_5KG_3
+	SET usersection 0
+	SET newprogram 1
+  SET program 8
+  SET pattern rclpattern_Netto_5Kg_3
+  SET wBItems 3
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 0
+	SET caseProg 1
+	SETSTATE ST_RUNNING_NETTO_5KG_3
+END
+
+State=PROGRAM_NETTO_2KG_8
+	SET usersection 0
+	SET newprogram 1
+  SET program 9
+  SET pattern rclpattern_Netto_2Kg_8
+  SET wBItems 8
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 0
+	SET caseProg 1
+	SETSTATE ST_RUNNING_NETTO_2KG_8
+END
+
+State=PROGRAM_NETTO_1KG5_10
+	SET usersection 0
+	SET newprogram 1
+  SET program 19
+  SET pattern rclpattern_Netto_1Kg5_10
+  SET wBItems 10
+	SET manuelt 0
+	SET usersection 1 ; user editable below
+  SET timeInCrate 1500000
+	SET robotspeedpct 10.0000
+	SET autorobotspeed 0
+	SET twoContainers 0
+	SET caseProg 1
+	SETSTATE ST_RUNNING_NETTO_1KG5_10
+END
+
+State=PROGRAM_MANUELT
+	SET usersection 0
+	SET newprogram 1
+  SET program 11
+	SET manuelt 1
+	SET twoContainers 0
+	SET caseProg 0
+	SET usersection 1 ; user editable below
+	SETSTATE ST_RUNNING_MANUELT
+END
+
+; RUNNING STATES
+
+State=ST_RUNNING_CONTAINER_5KG_36
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_CONTAINER_3KG_60
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_CONTAINER_2KG_80
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_CONTAINER_2KG5_70
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_CONTAINER_2KG5_80
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_TESTNETTO
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_NETTO_3KG_6
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_NETTO_2KG5_6
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_NETTO_5KG_3
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_NETTO_2KG_8
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_NETTO_1KG5_10
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_MANUELT
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_CONTAINER_5KG_36
+  ENDTEST
+  TEST programidx = 1
+    SETSTATE PROGRAM_CONTAINER_3KG_60
+  ENDTEST
+  TEST programidx = 2
+    SETSTATE PROGRAM_CONTAINER_2KG_80
+  ENDTEST
+  TEST programidx = 3
+    SETSTATE PROGRAM_CONTAINER_2KG5_70
+  ENDTEST
+  TEST programidx = 4
+    SETSTATE PROGRAM_CONTAINER_2KG5_80
+  ENDTEST
+  TEST programidx = 5
+    SETSTATE PROGRAM_TESTNETTO
+  ENDTEST
+  TEST programidx = 6
+    SETSTATE PROGRAM_NETTO_3KG_6
+  ENDTEST
+	TEST programidx = 7
+		SETSTATE PROGRAM_NETTO_2KG5_6
+  ENDTEST
+	TEST programidx = 8
+    SETSTATE PROGRAM_NETTO_5KG_3
+  ENDTEST
+	TEST programidx = 9
+    SETSTATE PROGRAM_NETTO_2KG_8
+  ENDTEST
+	TEST programidx = 10
+    SETSTATE PROGRAM_NETTO_1KG5_10
+  ENDTEST
+  TEST programidx = 11
+    SETSTATE PROGRAM_MANUELT
+  ENDTEST
+END

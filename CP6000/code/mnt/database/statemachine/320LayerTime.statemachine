@@ -1,0 +1,4 @@
+STATEMACHINEVERSION 3
+Include=eventtimer.statemachine
+Name=LayerTime
+linkValue=watchValue cBItem Frames

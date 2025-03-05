@@ -1,0 +1,35 @@
+STATEMACHINEVERSION 3
+Name=PScounter
+;**********************
+Input=PScounter "PS Encoder"
+Output=PSIV "PS Input Validation"
+;**********************
+Const=counterBottom 16000
+Const=ticksToMM 0.14181
+Const=offset 650.0000
+Value=toffset 0.0
+;**********************
+Value=counterMM 670.0
+Value=tempPScounter 0.0
+
+State=ST_TIMER
+ END
+
+State=ST_HALT
+ END
+
+State=ST_IDLE
+  SET PSIV 7
+  SETSTATE ST_RUN
+END
+
+State=ST_RUN
+  CALC tempPScounter = PScounter - counterBottom
+  CALC tempPScounter = tempPScounter * ticksToMM
+  TEST tempPScounter < 0.0
+    SET tempPScounter 0.0
+  ENDTEST
+  CALC tempPScounter = tempPScounter + offset
+  CALC counterMM = tempPScounter + toffset
+END
+

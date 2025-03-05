@@ -1,0 +1,68 @@
+STATEMACHINEVERSION 3
+Name=CMCounter
+;** Input **
+;** Output **
+;** Link **
+Link=foto KasseStativFotoAfleveret
+Link=parent Parent
+;** linkValue **
+linkValue=firstRun WorkCell
+;** Table **
+Table=avgtime 5.0 AVG
+;** Item **
+;** Const **
+;** Value **
+Value=curt 0
+Value=now 0.0
+Value=avg 0.0
+Value=avgtimetol 0.0
+Value=prodpermin 0.0
+;** Timeout **
+Timeout=MinTime 30000000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET avgtime 600.0
+	SET avgtime 600.0
+	SET avgtime 600.0
+	SET avgtime 600.0
+	SET avgtime 600.0
+	SET avg 600.0
+	SET prodpermin 0.0
+  TIMEOUT MinTime ST_COUNT
+  SETSTATE ST_COUNT
+END
+
+State=ST_COUNT
+	SET curt MinTime
+	CALC curt = MinTime - curt
+	CALC now = curt / 1000000.0
+	TEST foto = ST_LOW
+		TIMEOUT MinTime ST_COUNT
+		SETSTATE ST_COUNT
+		SET avgtime now
+		SET avg avgtime
+	ELSE
+		TEST MinTime = 1
+			SET avg 600.0
+			SETSTATE ST_RESET
+		ELSE
+			SET avg avgtime
+		ENDTEST
+  ENDTEST
+	CALC prodpermin = 60.0 / avg
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

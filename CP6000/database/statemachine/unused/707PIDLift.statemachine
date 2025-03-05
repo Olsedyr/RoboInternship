@@ -1,0 +1,280 @@
+STATEMACHINEVERSION 3
+Name=PIDLift
+Delaystop=10000000
+Input=raw "KasseLift Encoder"
+Input=powerok "KasseLift HZOK"
+Output=Motor "KasseLift Setpoint"
+Output=encoderenable "KasseLift Input Validation"
+Output=encoderreset "KasseLift Direct"
+Output=motorenable "KasseLift Motor Enable"
+Output=brakerelease "KasseLift Brake Release"
+Link=CamGen CamGenLift
+Link=parent Parent
+linkValue=firstRun WorkCell
+linkValue=setpoint CamGen
+linkValue=setspeed CamGen
+linkValue=testmode CamGen
+linkValue=camgenbeginning beginning CamGen
+Table=pehistory 600
+Value=errorCode 0
+Const=maxhomeclicks 30
+Value=homeclicks 0
+Const=minheight 0
+Const=maxheight 14000
+Const=home 2000
+Const=Kp 4.0000
+Const=Kd 15.0000
+Const=Ki 0.1000
+Const=Ks 0.0000
+Const=Kbias 400.0000
+Const=intdecay 0.9200
+Const=minintegral -80000.0
+Const=maxintegral 80000.0
+Const=minoutval -55.0000
+Const=maxoutval 55.0
+Const=factor 342.0000
+Const=encoderdir 1
+Const=motordir 1
+Const=motorstartval 0.0
+Value=oldsetpoint -10
+Value=staticmode 0
+Value=encoder 0
+Value=outval 0.0
+Value=poserr 0.0
+Value=oldposerr 0.0
+Value=integral 0.0
+Value=diff 0.0
+Value=Kpart 0.0
+Value=Dpart 0.0
+Value=Ipart 0.0
+Value=Spart 0.0
+Value=curpos 0.0
+Value=homed 0
+Const=staticmodeEnable 1
+Timeout=TimeHomeGo 75000
+Timeout=TimeHomeStop 300000
+Timeout=TimeHomeEnd 500000
+Timeout=TimeSlowStop 1000000
+Timeout=TimeStatic 1000000
+Timeout=TimeDisable 100000
+Timeout=TimeBrakeRelease 80000
+Timeout=TimeMotorEnable 1000000
+Const=SlowStopSpeed 1.5000
+Const=holdSpeed 2.0000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Motor 0.0
+  SET encoderreset 2
+  SET motorenable 0
+	SET brakerelease 0
+  ; don't SET encoderenable to 0
+	TEST CamGen = ST_RESET
+  OR CamGen = ST_NOCHOOSETRACK
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_SLOWSTOP
+	SET Motor SlowStopSpeed
+	TEST TimeSlowStop = 1
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_RESET
+  SET poserr 0.0
+  SET integral 0.0
+	SET oldsetpoint -10
+	SET staticmode 0
+	TEST firstRun = 1
+		SET homed 0
+	ENDTEST
+  TEST homed = 1
+		SET motorenable 1
+		TIMEOUT TimeMotorEnable ST_ENABLE_WAIT
+    SETSTATE ST_ENABLE_WAIT
+  ELSE
+    SET encoderenable 1
+    SETSTATE ST_STARTHOME
+  ENDTEST
+END
+
+State=ST_ENABLE_WAIT
+	CALC encoder = raw - home
+  CALC encoder = encoderdir * encoder
+  TEST TimeMotorEnable = 1
+	  SET brakerelease 1
+	  TIMEOUT TimeBrakeRelease ST_BRAKERELEASE_WAIT
+    SETSTATE ST_BRAKERELEASE_WAIT
+  ENDTEST
+END
+
+State=ST_RUN
+	SET encoderreset 2
+	CALC encoder = raw - home
+  CALC encoder = encoderdir * encoder
+  SET curpos encoder
+  SET oldposerr poserr
+  CALC poserr = setpoint - curpos
+	SET pehistory poserr
+  CALC diff = poserr - oldposerr
+  CALC integral = poserr + integral
+  CALC integral = integral * intdecay
+  TEST integral < minintegral
+    SET integral minintegral
+  ELSE
+    TEST integral > maxintegral
+      SET integral maxintegral
+    ENDTEST
+  ENDTEST
+  CALC Kpart = Kp * poserr
+  CALC Dpart = Kd * diff
+  CALC Ipart = Ki * integral
+  CALC Spart = Ks * setspeed
+  CALC outval = Dpart + Kpart
+  CALC outval = Ipart + outval
+  CALC outval = Spart + outval
+	CALC outval = outval + Kbias
+	CALC outval = outval / factor
+  TEST outval < minoutval
+    SET outval minoutval
+  ELSE
+    TEST outval > maxoutval
+      SET outval maxoutval
+    ENDTEST
+  ENDTEST
+  CALC outval = motordir * outval
+	TEST powerok = 1
+		SET brakerelease 1
+	ELSE
+		SET brakerelease 0
+		SET homed 0
+    SET Motor 0.0
+;    PRINT 100
+;    SETSTATE ST_IDLE
+	ENDTEST
+	TEST staticmode = 1
+		TEST setpoint = oldsetpoint
+    AND camgenbeginning = 0
+			SET brakerelease 0
+      TEST TimeDisable = 1
+				SET Motor SlowStopSpeed
+        SET motorenable 0
+			ELSE
+				SET Motor outval
+      ENDTEST
+		ELSE
+      TEST camgenbeginning = 1
+			  SET brakerelease 1
+        SET motorenable 1
+        SET Motor holdSpeed
+			  SET staticmode 0
+			  TIMEOUT TimeBrakeRelease ST_BRAKERELEASE_WAIT
+        SETSTATE ST_BRAKERELEASE_WAIT
+      ENDTEST
+		ENDTEST
+		SET oldsetpoint setpoint
+	ELSE
+		SET Motor outval
+;    PRINT outval
+		TEST TimeStatic = 1
+    AND staticmodeEnable = 1
+			TEST setpoint = oldsetpoint
+      AND poserr < 200
+				SET staticmode 1
+				SET brakerelease 0
+			  TIMEOUT TimeDisable ST_RUN
+			  SETSTATE ST_RUN
+			ELSE
+				TEST powerok = 1
+					SET brakerelease 1
+          SET motorenable 1
+				ENDTEST
+        TIMEOUT TimeStatic ST_RUN
+        SETSTATE ST_RUN
+			ENDTEST
+			SET oldsetpoint setpoint
+		ENDTEST
+	ENDTEST
+  TEST CamGen = ST_IDLE
+		SET brakerelease 0
+		TIMEOUT TimeSlowStop ST_SLOWSTOP
+		SETSTATE ST_SLOWSTOP
+  ENDTEST
+END
+
+State=ST_BRAKERELEASE_WAIT
+	CALC encoder = raw - home
+  CALC encoder = encoderdir * encoder
+  TEST TimeBrakeRelease = 1
+    ;reset
+    SET poserr 0.0
+    SET integral 0.0
+    TIMEOUT TimeStatic ST_RUN
+    SETSTATE ST_RUN    
+  ENDTEST
+	TEST powerok = 0
+		SET brakerelease 0
+    SET motorenable 0
+	ENDTEST
+END
+
+State=ST_STARTHOME
+	SET homed 0
+;  SET encoderreset 6
+  SET motorenable 0
+	SET brakerelease 0
+	SET homeclicks 0
+	TIMEOUT TimeHomeStop ST_HOME
+	SETSTATE ST_HOME
+END
+
+State=ST_HOME 
+	SET encoderreset 2
+	SET Motor 0.0
+	TEST homeclicks >= maxhomeclicks
+		SET motorenable 1
+		SETSTATE ST_ENDHOME
+	ENDTEST
+  TEST TimeHomeStop = 1
+		SET brakerelease 1
+		TIMEOUT TimeHomeGo ST_HOME2
+		SETSTATE ST_HOME2
+  ENDTEST
+END
+
+State=ST_HOME2
+  TEST TimeHomeGo = 1
+		SET brakerelease 0
+		CALC homeclicks = homeclicks + 1
+		TIMEOUT TimeHomeStop ST_HOME
+		SETSTATE ST_HOME
+  ENDTEST
+END
+
+State=ST_ENDHOME
+	SET encoderreset 2
+	SET brakerelease 1
+	SET Motor motorstartval
+	TIMEOUT TimeHomeEnd ST_ENDHOME2
+  SETSTATE ST_ENDHOME2
+END
+
+State=ST_ENDHOME2
+	SET encoderreset 6
+	SET Motor 0.0
+  SET brakerelease 1
+	TEST TimeHomeEnd = 1
+		SET homed 1
+	  CALC encoder = raw - home
+    CALC encoder = encoderdir * encoder
+		TIMEOUT TimeStatic ST_RUN
+		SETSTATE ST_RUN
+	ENDTEST
+END

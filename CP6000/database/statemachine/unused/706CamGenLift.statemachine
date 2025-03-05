@@ -1,0 +1,45 @@
+STATEMACHINEVERSION 3
+Include=cpcamgenlift.statemachine
+Name=CamGenLift
+Link=Master KasseLift3
+Item=item Netto
+Item=itemC18 C18
+Item=itemNetto Netto
+Const=homeIsPosShake 1
+Const=posTop 368.0000
+
+; casekind = 0  -> none
+; casekind = 1  -> C11
+; casekind = 2  -> C14
+; casekind = 3  -> C18
+; casekind = 4  -> hybschA
+; casekind = 5  -> hybschB
+; casekind = 6  -> Netto
+; casekind = 7  -> EPS610
+; casekind = 8  -> IFCO16
+; casekind = 9  -> IFCO18
+; casekind = 10 -> IFCO20
+
+State=ST_RESET
+	TEST firstRun = 1
+		TEST casekind = 3
+			SETITEM item itemC18
+		ELSE
+			TEST casekind = 6
+				SETITEM item itemNetto
+      ELSE
+        SETSTATE ST_IDLE
+			ENDTEST
+		ENDTEST
+	ENDTEST
+  SET goIdle 0
+	SET setpoint encoder
+	CALC posf = posTop - item.dy
+	CALC posf = posf - posFree
+	CALC posf = posf * tickspermm
+	TEST testmode != 1
+		SET tMilli liftMilliTime
+	ENDTEST
+  SETSTATE ST_NOCHOOSETRACK
+END
+Const=posTestBegin 0.0000

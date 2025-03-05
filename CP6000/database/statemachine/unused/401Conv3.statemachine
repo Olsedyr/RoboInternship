@@ -1,0 +1,26 @@
+STATEMACHINEVERSION 3
+Include=conveyorfindnext2.statemachine
+Name=Conv3
+Output=motor "Conv3 Motor Enable"
+Output=setpoint "Conv3 Setpoint"
+Link=foto RotatePhoto1
+Link=next Rotator
+Value=simulate 0
+Timeout=StartDelay 0
+Timeout=timeActive 1000000
+Timeout=timePause 1500000
+Value=motorRunning 0
+Const=freq -30.0000
+
+State=ST_IDLE
+  SET motor 0
+  SET motorRunning 0
+	SET setpoint freq
+  TEST next = ST_RUN
+  OR next = ST_FIND_ITEM
+  OR simulate = 1
+		TIMEOUT StartDelay ST_RESET
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+Const=autoDetect 1

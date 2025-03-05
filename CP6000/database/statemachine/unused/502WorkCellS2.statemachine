@@ -1,0 +1,24 @@
+STATEMACHINEVERSION 3
+Include=502WorkCellS1.statemachine
+Name=WorkCellS2
+Link=Emergency EmergencyS2
+Link=ContinueKnap ContinueKnapS2
+Link=ParentCP CPLonglong
+linkValue=newprogram ProgramS2
+Value=errorCode 0
+Value=firstRun 0
+Value=simulate 0
+Timeout=timeBeforeRunning 3000000
+
+State=ST_ERROR
+;  SET errorCode 104
+	TEST Emergency = ST_POWERON
+    SETSTATE ST_IDLE
+;    TEST ContinueKnap = ST_HIGH
+;  		SET errorCode 0
+;      TIMEOUT timeBeforeRunning ST_STARTING
+;      SETSTATE ST_STARTING
+;    ENDTEST
+  ENDTEST
+END
+

@@ -1,0 +1,192 @@
+STATEMACHINEVERSION 3
+Include=casekind.statemachine
+Include=nspattern.statemachine
+Name=Program304
+;signal to WorkCell that a new program has been selected
+Value=usersection 0
+Value=newprogram 1
+Value=programidx 1
+Value=casekind 0
+Value=nspattern 0
+Value=activeProgram 0
+Link=workcell WorkCell
+Value=usersection 0
+Value=wBItemsPerLayer 0
+Value=wBItems 0
+Value=timeInPalletB 0
+; Put programstates in top
+
+; also edit 'subPrograms' for example VendePattern and PushPattern for particular program
+
+State=PROGRAM_10Kg_60
+  SET usersection 0
+  SET newprogram 1
+  SET activeProgram 0
+  SET casekind casekind_10KgNet
+  SET nspattern nspattern_10KgNet_60
+  SET wBItemsPerLayer 7
+  SET wBItems 60
+  SET usersection 1 ; user editable below
+  SET timeInPalletB 300000
+  SETSTATE ST_RUNNING_10Kg_60
+END
+
+State=PROGRAM_10Kg_80
+  SET usersection 0
+  SET newprogram 1
+  SET activeProgram 0
+  SET casekind casekind_10KgNet 
+  SET nspattern nspattern_10KgNet_80
+  SET wBItemsPerLayer 7
+  SET wBItems 80
+  SET usersection 1 ; user editable below
+  SET timeInPalletB 300000
+  SETSTATE ST_RUNNING_10Kg_80
+END
+
+State=PROGRAM_5Kg_100
+  SET usersection 0
+  SET newprogram 1
+  SET activeProgram 0
+  SET casekind casekind_5KgNet
+  SET nspattern nspattern_5KgNet_100
+  SET wBItemsPerLayer 10
+  SET wBItems 100
+  SET usersection 1 ; user editable below
+  SET timeInPalletB 300000
+  SETSTATE ST_RUNNING_5Kg_100
+END
+
+State=PROGRAM_5Kg_120
+  SET usersection 0
+  SET newprogram 1
+  SET activeProgram 0
+  SET casekind casekind_5KgNet
+  SET nspattern nspattern_5KgNet_120
+  SET wBItemsPerLayer 10
+  SET wBItems 120
+  SET usersection 1 ; user editable below
+  SET timeInPalletB 300000
+  SETSTATE ST_RUNNING_5Kg_120
+END
+
+State=PROGRAM_5KgPlast_40
+  SET usersection 0
+  SET newprogram 1
+  SET activeProgram 1
+  SET casekind casekind_5KgPlast
+  SET nspattern nspattern_5KgPlast_40
+  SET wBItemsPerLayer 6
+  SET wBItems 40
+  SET usersection 1 ; user editable below
+  SET timeInPalletB 300000
+  SETSTATE ST_RUNNING_5KgPlast_40
+END
+
+State=PROGRAM_10Kg_80B
+  SET usersection 0
+  SET newprogram 1
+  SET activeProgram 0
+  SET casekind casekind_10KgNet 
+  SET nspattern nspattern_10KgNet_80B
+  SET wBItemsPerLayer 7
+  SET wBItems 80
+  SET usersection 1 ; user editable below
+  SET timeInPalletB 300000
+  SETSTATE ST_RUNNING_10Kg_80B
+END
+; RUNNING STATES
+
+State=ST_RUNNING_10Kg_60
+  SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 0
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_10Kg_80
+  SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 1
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_5Kg_100
+  SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 2
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_5Kg_120
+  SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 3
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_5KgPlast_40
+  SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 4
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_10Kg_80B
+  SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 5
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_10Kg_60
+  ENDTEST
+  TEST programidx = 1
+    SETSTATE PROGRAM_10Kg_80
+  ENDTEST
+  TEST programidx = 2
+    SETSTATE PROGRAM_5Kg_100
+  ENDTEST
+  TEST programidx = 3
+    SETSTATE PROGRAM_5Kg_120
+  ENDTEST
+  TEST programidx = 4
+    SETSTATE PROGRAM_5KgPlast_40
+  ENDTEST
+  TEST programidx = 5
+    SETSTATE PROGRAM_10Kg_80B
+  ENDTEST
+END
+
+
+

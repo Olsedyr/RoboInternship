@@ -1,0 +1,11 @@
+STATEMACHINEVERSION 3
+Include=pallebanelink.statemachine
+Name=Pos5_9
+Const=Id 59
+Input=palletInPlace "PC9 POS.5.9 Photo"
+Output=Motor "PC9 POS.5.9 Motor"
+Link=prev Shuttle
+Link=parent Parent 
+linkValue=prevId signalId prev
+Value=simulate 0
+Timeout=StopDelay 600000

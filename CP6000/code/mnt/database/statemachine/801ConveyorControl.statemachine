@@ -1,0 +1,38 @@
+STATEMACHINEVERSION 3
+Name=ConveyorControl
+;This statemachine controls conveyors (ConveyorParent)
+Link=converr ConveyorsErrorCode
+Link=ConveyorParent
+Link=parent Parent
+;run is set from formCMUser.c
+Value=run 1
+
+State=ST_HALT
+  SETSTATE ST_IDLE
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST run = 1
+  OR parent = ST_RESET
+    SET run 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_RUN
+END
+
+State=ST_RUN
+  TEST run = 0
+  OR converr = ST_ERROR
+    SET run 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_ALWAYS_RUN
+END

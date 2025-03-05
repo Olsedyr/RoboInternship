@@ -1,0 +1,40 @@
+STATEMACHINEVERSION 3
+Name=FotoInputTest
+Link=refleks FotoInput1Refleks
+Link=almfoto FotoInput2
+Link=parent Parent
+Value=refleksBlocked 0
+Value=almfotoBlocked 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_RESET
+END
+
+State=ST_IDLE
+  TEST parent = ST_RUN
+    SETSTATE ST_RUN
+  ENDTEST
+END
+
+State=ST_RUN
+	TEST refleks = ST_BLOCKED
+		SET refleksBlocked 1
+	ENDTEST
+	TEST almfoto = ST_BLOCKED
+		SET almfotoBlocked 1
+	ENDTEST
+	TEST refleks = ST_FREE
+		SET refleksBlocked 0
+	ENDTEST
+	TEST almfoto = ST_FREE
+		SET almfotoBlocked 0
+	ENDTEST
+  TEST parent != ST_RUN
+    SETSTATE ST_IDLE
+  ENDTEST
+END

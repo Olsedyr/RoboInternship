@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=PB8Foto
+Input=input "Pallebane8 Foto"
+Timeout=TimeOn 50000
+Timeout=TimeOff 50000
+Value=test 0

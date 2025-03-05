@@ -1,0 +1,67 @@
+STATEMACHINEVERSION 3
+Name=LongConveyor1
+;** Input **
+;** Output **
+;** Link **
+Link=master CollectConveyor 
+Link=foto LongConveyorFoto1
+Link=motor LongConveyorMotor
+Link=syncConv SyncConveyor1
+Link=syncConvFoto SyncConveyor1Foto
+;** linkValue **
+linkValue=fototest test foto
+;** Const **
+;** Value **
+Value=errorCode 0
+Value=ETA 999999999
+Const=ETAfromFotoHigh 1000000
+Value=send 0
+Value=seenReceive 0
+;** Timeout **
+Timeout=ETATimeout 999999999
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  SET ETA 999999999
+  TEST foto = ST_ON
+    SET send 1
+    SET ETATimeout 0
+    TIMEOUT ETATimeout ST_RUN
+    SETSTATE ST_RUN
+    SET ETA ETATimeout
+  ENDTEST
+  SETSTATE ST_RUN
+END
+
+State=ST_RUN
+  TEST send = 0
+    SET ETA 999999999
+    TEST foto = ST_HIGH
+      SET send 1
+      SET ETATimeout ETAfromFotoHigh
+      TIMEOUT ETATimeout ST_RUN
+      SETSTATE ST_RUN
+    ENDTEST
+  ELSE
+    TEST syncConv = ST_RECEIVE
+    AND seenReceive = 0
+      SET seenReceive 1
+      SET send 0
+      SET ETA 999999999
+    ELSE
+      SET ETA ETATimeout
+    ENDTEST
+  ENDTEST
+  TEST syncConv != ST_RECEIVE
+    SET seenReceive 0
+  ENDTEST
+END

@@ -1,0 +1,59 @@
+VERSION 2
+SUB 306C14TomatReStart
+* parametre til seekCornerX placering af klasser
+COUNTER ry = 15
+COUNTER rzminus0 = 5
+COUNTER rzminus1 = 30
+COUNTER rzplus0 = 5
+COUNTER rzplus1 = 20
+COUNTER rxminus0 = 5
+COUNTER rxminus1 = 15
+COUNTER rxplus0 = 5
+COUNTER rxplus1 = 15
+COUNTER diagxy = 40
+* wait for air cylinder in ms 
+TUNING msAirDelayClose 280 800.00
+TUNING msAirDelayOpen 281 500.00
+* adjust in ticks
+TUNING ticksSensorTest0 250 50000.00
+TUNING ticksSensorTest1 251 100000.00
+TUNING ticksSensorTest2 252 300000.00
+TUNING toolUsePressostat 298 3.00
+TUNING toolSensorSelect 299 2.00
+OUT 11 0
+OUT 10 0
+SLEEP 500 
+PATH toHomeHigh id=0,type=26,time=100,loadgroup=2,runbopt=0
+POINT home 0,700,0,90,90,0,10 case
+POINT home 0,700,0,90,90,0,10 case
+POINT home 0,700,0,90,90,0,10 case
+POINT home 0,700,0,90,90,0,10 case
+POINT home 0,700,0,90,90,0,10 case
+END
+PATH toHome id=1,type=26,time=100,loadgroup=2,runbopt=0
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+POINT home 0,0,0,90,90,0,10 case
+END
+SIGNALEVENT 1 Pallebane1 ST_RESET
+SLEEP 100
+SIGNALEVENT 1 Pallebane2 ST_RESET
+SIGNALEVENT 1 Pallebane3 ST_RESET
+SIGNALEVENT 1 Pallebane4 ST_RESET
+SIGNALEVENT 1 Pallebane5 ST_RESET
+SIGNALEVENT 1 Pallebane6 ST_RESET
+SIGNALEVENT 1 Pallebane7 ST_RESET
+SIGNALEVENT 1 Pallebane9 ST_RESET
+SIGNALEVENT 1 Pallemagasin ST_RESET
+SIGNALEVENT 1 Tipper ST_RESET
+SIGNALEVENT 1 BakkeDispenser ST_RESET
+SIGNALEVENT 1 Station ST_RESET
+SIGNALEVENT 1 Buffer ST_RESET
+SIGNALEVENT 1 Dispenser ST_RESET
+SIGNALEVENT 1 VacuumMotor ST_RESET
+SIGNALEVENT 1 FlowStop ST_RESET
+SIGNALEVENT 1 ContinueKnap ST_RESET
+CALL 306C14Tomat -1
+END

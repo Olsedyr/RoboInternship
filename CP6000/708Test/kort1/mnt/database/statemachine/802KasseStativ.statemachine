@@ -1,0 +1,6 @@
+STATEMACHINEVERSION 3
+Include=cmkassestativ.statemachine
+Name=KasseStativ
+linkValue=casekind Program802
+;** User section **
+Timeout=ventilTime 1000000

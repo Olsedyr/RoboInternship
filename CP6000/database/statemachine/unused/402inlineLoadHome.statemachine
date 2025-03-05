@@ -1,0 +1,3 @@
+; INLINE 402inlineLoadHome.statemachine
+SETFRAME toFrame conveyorB
+LOAD home_conveyorB home toFrame

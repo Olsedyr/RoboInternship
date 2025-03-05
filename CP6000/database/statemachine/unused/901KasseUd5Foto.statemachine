@@ -1,0 +1,9 @@
+STATEMACHINEVERSION 3
+Include=fotoinput.statemachine
+Name=KasseUd5Foto
+Input=input "Kasse Ud 5 Foto"
+Timeout=blockTime 100000
+Timeout=freeTime 30000
+Value=test 0
+Const=free 1
+Const=blocked 0

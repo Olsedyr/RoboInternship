@@ -1,0 +1,7 @@
+VERSION 2
+SUB 701T
+COUNTER restart += 1
+LABEL test
+SLEEP 100
+GOTO test
+END

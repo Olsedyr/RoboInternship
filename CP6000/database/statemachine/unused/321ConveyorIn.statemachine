@@ -1,0 +1,120 @@
+STATEMACHINEVERSION 3
+Name=ConveyorIn
+Input=layerEmpty "Mattop2 (ConveyorIn) Empty"
+Input=inmattop2 "Sync In2 Mattop1"
+Input=inmattop3 "Sync In3 Mattop1"
+Input=inmattop4 "Sync In4 Mattop1"
+Output=layerPlaced "Mattop2 (CoveyorIn) Layer Placed"
+Output=robotReady "Mattop2 (CoveyorIn) Robot Ready"
+Output=outmattop3 "Sync Out3 Mattop1"
+Output=outmattop4 "Sync Out4 Mattop1"
+linkValue=pathtype pathtype Robot
+linkValue=axis_t axis_t Robot
+Link=parent Parent
+Link=Robot Robot
+Link=robotprg ProgramB2
+Value=errorCode 0
+Const=layerEmptyPol 1
+Const=axis_tRobotReady 900000
+Const=axis_tLayerPlaced 200000
+Timeout=timeLayerPlacedReset 500000
+Value=correctstate 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET layerPlaced 0
+  SET robotReady 0
+  SET outmattop3 0
+  SET outmattop4 0
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_ERROR
+	SET layerPlaced 0
+  SET robotReady 0
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_READY_ROBOT
+	;	TEST layerEmpty != layerEmptyPol
+	;		SET errorCode 1007
+	;    SETSTATE ST_ERROR
+	;  ELSE
+  TEST robotprg = ST_PALLETA_CONVEYORA
+		SET correctstate 1
+	ENDTEST
+	TEST correctstate = 1
+    TEST pathtype = 24
+    AND axis_t > axis_tRobotReady
+    AND axis_t < 999000
+      SET robotReady 1
+    ENDTEST
+		TEST pathtype = 25
+		OR pathtype = 44
+			TEST axis_t <= axis_tLayerPlaced
+				SETSTATE ST_WAIT_ROBOT_GONE
+			ENDTEST
+		ENDTEST
+	ENDTEST
+  TEST Robot != ST_RUNNING 
+	AND parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_WAIT_ROBOT_GONE
+  TEST pathtype = 25
+  OR pathtype = 44
+	  TEST axis_t > axis_tLayerPlaced
+      SET robotReady 0
+			SET layerPlaced 1
+      TIMEOUT timeLayerPlacedReset ST_RESET_LAYER_PLACED
+			SETSTATE ST_RESET_LAYER_PLACED
+    ENDTEST
+  ENDTEST
+  TEST Robot != ST_RUNNING
+  AND parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RESET_LAYER_PLACED
+  TEST timeLayerPlacedReset = 1
+    SET layerPlaced 0
+    TIMEOUT timeLayerPlacedReset ST_WAIT
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_WAIT
+END
+
+State=ST_PREWAIT
+	TEST layerEmpty != layerEmptyPol
+		SETSTATE ST_WAIT
+	ELSETEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT
+	TEST layerEmpty = layerEmptyPol
+		SET layerPlaced 0
+		SET correctstate 0
+		SETSTATE ST_READY_ROBOT
+	ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

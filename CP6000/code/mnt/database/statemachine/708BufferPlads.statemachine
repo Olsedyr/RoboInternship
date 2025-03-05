@@ -1,0 +1,11 @@
+STATEMACHINEVERSION 3
+Include=cpbufferplads.statemachine
+Name=BufferPlads
+Link=CamGen ServoBuffer
+Link=CemGenSkub ServoSkub
+Link=CamGenLift ServoLift
+linkValue=curpmskub curpm ServoSkub
+linkValue=liftFree ServoLift
+;** User section **
+Timeout=WaitLeftRightKortSkub 300000
+Timeout=WaitKortSkub 100000

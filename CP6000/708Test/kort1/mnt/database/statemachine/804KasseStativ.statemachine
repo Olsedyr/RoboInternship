@@ -1,0 +1,266 @@
+STATEMACHINEVERSION 3
+Name=KasseStativ
+Output=slip "KasseStativ Stabel Hold Ventil Ind"
+Output=hold "KasseStativ Stabel Hold Ventil Ud"
+Output=freeNetto "KasseStativ Pull Free Netto"
+Output=freeOthers "KasseStativ Pull Free Others"
+Output=conveyor "KasseStativConveyor Setpoint"
+Output=conveyorenable "KasseLiftConveyor Motor Enable"
+Output=udrullerenable "KasseMagasin UdRuller Motor Enable"
+Input=conveyorpowerok "KasseLiftConveyor HZOK"
+Value=errorCode 0
+Value=message 0
+Value=goIdle 0
+Const=receiveSpeed 20.0
+Const=sendSpeed 20.0000
+Value=conveyorOn 0
+Timeout=maxReceiveTime 10000000
+Timeout=maxSendTime 10000000
+Timeout=ventilTime 500000
+Timeout=waitStopConveyorTime 300000
+Link=next Conveyor1600
+Link=modtaget KasseStativFotoModtaget
+Link=tom KasseStativFotoTom
+Link=afleveret KasseStativFotoAfleveret
+Link=conveyorstation ConveyorStation
+Link=CamGen CamGenLift
+Link=parent Parent
+linkValue=casekind Program804
+linkValue=stopFree CamGenLift
+Const=testmode 0
+
+; casekind = 0  -> none
+; casekind = 1  -> C11
+; casekind = 2  -> C14
+; casekind = 3  -> C18
+; casekind = 4  -> hybschA
+; casekind = 5  -> hybschB
+; casekind = 6  -> Netto
+; casekind = 7  -> EPS610
+; casekind = 8  -> IFCO16
+; casekind = 9  -> IFCO18
+; casekind = 10 -> IFCO20
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET conveyor 0.0
+  SET conveyorOn 0
+  SET conveyorenable 0
+	SET udrullerenable 0
+  TEST parent = ST_RESET
+    SET errorCode 0
+    SET message 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  SET goIdle 0
+  SETSTATE ST_STARTUP
+END
+
+State=ST_STARTUP
+  TEST CamGen = ST_CHOOSETRACK
+    TEST tom = ST_FREE
+      SET hold 0
+			SET slip 1
+      TEST modtaget = ST_FREE
+        ;notifies CamGen to go to receive position
+        SETSTATE ST_WAIT_RECEIVE_POS
+      ELSE
+        TEST modtaget = ST_BLOCKED
+          SETSTATE ST_WAIT_HOLD_POS
+        ENDTEST
+      ENDTEST
+    ELSE
+      TEST tom = ST_BLOCKED
+        TEST modtaget = ST_FREE
+          SETSTATE ST_WAIT_RELEASE_POS
+        ELSE
+          TEST modtaget = ST_BLOCKED
+            SETSTATE ST_WAIT_HOLD_POS
+          ENDTEST
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST afleveret = ST_BLOCKED
+    SET errorCode 4122
+    SETSTATE ST_IDLE
+  ENDTEST
+  TEST parent != ST_RUN
+  AND testmode = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_RECEIVE_POS
+  ;wait for CamGen
+  TEST CamGen = ST_STOP
+    SETSTATE ST_RECEIVE_READY
+  ENDTEST
+END
+
+State=ST_RECEIVE_READY
+  TEST tom = ST_FREE
+    SET hold 0
+		SET slip 1
+  ENDTEST
+  TEST conveyorstation = ST_SEND
+    SET conveyorenable 1
+		SET udrullerenable 0
+    SET conveyor receiveSpeed
+    TIMEOUT maxReceiveTime ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ENDTEST
+  TEST tom = ST_BLOCKED
+    ;todo: fejl. gør hvad?
+  ENDTEST
+  TEST parent != ST_RUN
+  AND testmode = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST modtaget = ST_BLOCKED
+    TIMEOUT waitStopConveyorTime ST_RECEIVE_STOP_CONVEYOR
+    SETSTATE ST_RECEIVE_STOP_CONVEYOR
+  ENDTEST
+  TEST maxReceiveTime = 1
+    SET errorCode 4111
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE_STOP_CONVEYOR
+  TEST waitStopConveyorTime = 1
+    SET conveyorenable 0
+		SET udrullerenable 0
+    SET conveyor 0.0
+    SETSTATE ST_WAIT_HOLD_POS
+  ENDTEST
+END
+
+State=ST_WAIT_HOLD_POS
+  TEST CamGen = ST_STOP
+    TEST goIdle = 1
+      SETSTATE ST_IDLE
+    ELSE
+      SETSTATE ST_HOLD
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_HOLD
+  TEST tom = ST_BLOCKED
+    SET hold 1
+		SET slip 0
+    TEST casekind = 6
+      SET freeNetto 1
+    ELSE
+      SET freeOthers 1
+    ENDTEST
+  ELSE
+    SET hold 0
+		SET slip 1
+  ENDTEST
+  TIMEOUT ventilTime ST_HOLD_VENTIL_WAIT_SEND
+  SETSTATE ST_HOLD_VENTIL_WAIT_SEND
+END
+
+State=ST_HOLD_VENTIL_WAIT_SEND
+  TEST ventilTime = 1
+    SETSTATE ST_WAIT_SEND_POS
+  ENDTEST
+END
+
+State=ST_WAIT_SEND_POS
+  TEST stopFree = 1
+    SET freeNetto 0
+    SET freeOthers 0
+  ENDTEST
+  TEST CamGen = ST_STOP
+    TEST testmode = 0
+      SETSTATE ST_WAIT_SEND
+    ELSE
+      TEST tom = ST_BLOCKED
+        SETSTATE ST_WAIT_RELEASE_POS
+      ELSE
+        SETSTATE ST_WAIT_RECEIVE_POS
+      ENDTEST      
+    ENDTEST
+    SET freeNetto 0
+    SET freeOthers 0
+  ENDTEST
+END
+
+State=ST_WAIT_SEND
+  TEST next = ST_EMPTY
+    TIMEOUT maxSendTime ST_SEND
+    SETSTATE ST_SEND    
+  ENDTEST
+  TEST parent != ST_RUN
+  AND testmode = 0
+    SET goIdle 1
+    SETSTATE ST_WAIT_HOLD_POS
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST conveyorOn = 1
+    TEST modtaget = ST_FREE
+    AND afleveret = ST_FREE
+      SET conveyorenable 0
+			SET udrullerenable 0
+      SET conveyor 0.0
+      SET conveyorOn 0
+      TEST tom = ST_BLOCKED
+        SETSTATE ST_WAIT_RELEASE_POS
+      ELSE
+        SETSTATE ST_WAIT_RECEIVE_POS
+      ENDTEST
+    ENDTEST
+  ELSE
+    TEST modtaget = ST_FREE
+      ;Oops, no case. Might be stuck.
+      SET errorCode 4115
+      SETSTATE ST_IDLE
+    ELSE
+      SET conveyorenable 1
+			SET udrullerenable 1
+      SET conveyor sendSpeed
+      SET conveyorOn 1
+    ENDTEST
+  ENDTEST
+  TEST maxSendTime = 1
+    SET conveyor 0.0
+    SET conveyorOn 0
+    SET errorCode 4114
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_RELEASE_POS
+  TEST CamGen = ST_STOP
+    SETSTATE ST_RELEASE
+  ENDTEST
+END
+
+State=ST_RELEASE
+  SET hold 0
+	SET slip 1
+  TIMEOUT ventilTime ST_HOLD_VENTIL_WAIT_HOLD
+  SETSTATE ST_HOLD_VENTIL_WAIT_HOLD
+END
+
+State=ST_HOLD_VENTIL_WAIT_HOLD
+  TEST ventilTime = 1
+    SETSTATE ST_WAIT_HOLD_POS
+  ENDTEST
+END
+
+State=ST_TIMER
+END

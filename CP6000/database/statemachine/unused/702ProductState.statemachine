@@ -1,0 +1,4 @@
+STATEMACHINEVERSION 3
+Include=cpproductstate.statemachine
+Name=ProductState
+;** User section **

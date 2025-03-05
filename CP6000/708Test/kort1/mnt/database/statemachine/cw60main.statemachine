@@ -1,0 +1,311 @@
+STATEMACHINEVERSION 3
+Name=checkWeigher
+;Include
+;************************
+Input=fotoInRaw "Foto Product In"
+Link=motor checkWeigherMotor
+Link=parent Parent
+Link=checkWeigherCalc checkWeigherCalc
+Link=Program Program
+Link=fotoInS fotoIn
+;************************
+linkValue=raw raw checkWeigherCalc
+linkValue=fotoIn test fotoInS
+linkValue=ffweight ffweight checkWeigherCalc
+linkValue=samplingmaxidx samplingmaxidx checkWeigherCalc
+linkValue=sampling sampling checkWeigherCalc
+linkValue=lowerWeight Program
+linkValue=upperWeight Program
+linkValue=startOffset Program
+linkValue=tMaxProductLength Program
+;************************
+Timeout=timeSampling 500000
+Timeout=timeZeroHold 500000
+Timeout=timeZeroCalib 1000000
+Timeout=timeWaitMotor 2000000
+Timeout=startDelay 1500000
+Timeout=timefftab 3300000
+Const=floatingZero 0
+Const=initNumAfterFoto 0
+Const=topSearchWidth 40
+Const=m2100 2100
+Const=m2102 2102
+Const=m2103 2103
+Const=m2104 2104
+Const=m2105 2105
+Const=m2108 2108
+Const=maxZeroDiff 50.0 
+Const=minZeroDiff -50.0 
+Const=maxCalibZeroInitDiff 500.0 
+Const=minCalibZeroInitDiff -500.0 
+Const=maxOutPct 1.0
+Const=maxOutInARow 5
+Const=detectStyle 0
+;************************
+Value=lastCalculate 0
+Value=lastTopIdx 0
+Value=avgWeight 0.0
+Value=calibOffsetInit 0.0
+Value=calibZero 0.0
+Value=calibrateDone 0
+Value=numAfterFoto 0 
+Value=message 0
+Value=zeroDiff 0.0
+Value=staticWeighing 0
+Value=doZero 1
+Value=calcWeight 0.0
+Value=temp 0.0
+Value=cntProduct 0
+Value=cntProductOut 0
+Value=cntProductOutInARow 0
+Value=errorCode 0
+Value=staticmode 0
+Table=weightHistory 100.0 AVG
+Table=rawtab 50.0 AVG
+Table=fftab 381.0 AVG
+Table=productOut10 10.0 AVG
+
+State=ST_HALT
+END
+
+State=ST_ZEROMIN
+ TEST parent = ST_RESET
+   SET calibrateDone 0 
+   SETSTATE ST_RESET
+ ENDTEST
+ CALC avgWeight = ffweight - calibZero
+ TEST doZero = 1
+   SET doZero 0
+   SET message 0
+   TIMEOUT timeWaitMotor ST_DO_ZERO
+   SETSTATE ST_DO_ZERO
+ ENDTEST
+END
+
+State=ST_ZEROMAX
+ TEST parent = ST_RESET
+   SET calibrateDone 0 
+   SETSTATE ST_RESET
+ ENDTEST
+ CALC avgWeight = ffweight - calibZero
+ TEST doZero = 1
+   SET doZero 0
+   SET message 0
+   TIMEOUT timeWaitMotor ST_DO_ZERO
+   SETSTATE ST_DO_ZERO
+ ENDTEST
+END
+
+State=ST_PAUSED
+ TEST fotoIn = 1
+   SET message 0
+   SETSTATE ST_WAIT_FOR_PRODUCT
+ ENDTEST
+ CALC avgWeight = ffweight - calibZero
+END
+
+State=ST_STATIC
+	SET staticmode 1
+	CALC zeroDiff = ffweight - calibZero
+	TEST zeroDiff > 0.005
+	AND zeroDiff <= maxZeroDiff
+		SET zeroDiff 0.005
+	ELSE
+   TEST zeroDiff < -0.005
+   AND zeroDiff >= minZeroDiff
+     SET zeroDiff -0.005
+   ELSE
+     SET zeroDiff 0.0
+   ENDTEST
+ ENDTEST
+ TEST floatingZero = 1
+   CALC calibZero = calibZero + zeroDiff
+ ENDTEST
+ TEST calibZero > maxCalibZeroInitDiff 
+   SET message m2108
+	 SET staticmode 0
+   SETSTATE ST_ZEROMAX
+ ELSE
+   TEST calibZero < minCalibZeroInitDiff
+     SET message m2108
+		 SET staticmode 0
+     SETSTATE ST_ZEROMIN
+   ENDTEST
+ ENDTEST
+ CALC avgWeight = ffweight - calibZero
+ TEST staticWeighing = 1
+   SET staticWeighing 0
+	 SET staticmode 0
+   SETSTATE ST_IDLE
+ ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	SET staticmode 0
+	TEST parent = ST_RESET
+		SET errorCode 0
+		SET productOut10 0
+		SET productOut10 0
+		SET productOut10 0
+		SET productOut10 0
+		SET productOut10 0
+		SET productOut10 0
+		SET productOut10 0
+		SET productOut10 0
+		SET productOut10 0
+		SET productOut10 0
+		SET cntProductOutInARow 0
+		SETSTATE ST_RESET
+	ENDTEST
+	CALC avgWeight = ffweight - calibZero
+	TEST staticWeighing = 1
+		SET staticWeighing 0
+		SETSTATE ST_STATIC
+	ENDTEST
+	TEST doZero = 1
+		SET doZero 0
+		TIMEOUT timeWaitMotor ST_DO_ZERO
+		SETSTATE ST_DO_ZERO
+	ENDTEST
+END
+
+State=ST_RESET
+  SET message 0
+  SET sampling.topsearchwidth topSearchWidth
+  TEST calibrateDone = 1
+		TIMEOUT startDelay ST_WAIT_FOR_PRODUCT
+    SETSTATE ST_TIMER
+  ELSE
+  	TIMEOUT timeWaitMotor ST_DO_ZERO
+    SETSTATE ST_DO_ZERO
+  ENDTEST
+END
+
+State=ST_DO_ZERO
+  SET message m2100
+  TEST timeWaitMotor = 1
+    TIMEOUT timeZeroCalib ST_CALIB_ZERO
+    SETSTATE ST_CALIB_ZERO
+  ENDTEST
+END
+
+State=ST_CALIB_ZERO
+  SET message m2100
+  SET rawtab raw
+  TEST timeZeroCalib = 1
+    SET calibOffsetInit rawtab 
+    SET calibZero 0.0
+    SET calibrateDone 1 
+    SET message 0
+    SETSTATE ST_WAIT_FOR_PRODUCT
+  ENDTEST
+END
+
+State=ST_CALIBRATE
+  SET message m2100
+  SET fftab ffweight
+  TEST timefftab = 1
+    SET calibZero fftab
+    SETSTATE ST_CALIBRATE_DONE
+  ENDTEST 
+END
+
+State=ST_CALIBRATE_DONE
+   SET message 0
+  SETSTATE ST_WAIT_FOR_PRODUCT
+END
+
+State=ST_WAIT_FOR_PRODUCT
+  TEST fotoIn = 0 
+    TIMEOUT timeSampling ST_AFTER_SAMPLING
+    SETSTATE ST_AFTER_SAMPLING 
+  ELSE
+		TEST motor = ST_CALIBRATE
+      TIMEOUT timefftab ST_CALIBRATE
+      SETSTATE ST_CALIBRATE
+    ENDTEST
+		TEST fotoInRaw = 1
+		AND fotoIn = 1
+      CALC zeroDiff = ffweight - calibZero
+      TEST zeroDiff > 0.005
+      AND zeroDiff <= maxZeroDiff
+        SET zeroDiff 0.005
+      ELSE
+        TEST zeroDiff < -0.005
+        AND zeroDiff >= minZeroDiff
+          SET zeroDiff -0.005
+        ELSE
+          SET zeroDiff 0.0
+        ENDTEST
+      ENDTEST
+      TEST floatingZero = 1
+        CALC calibZero = calibZero + zeroDiff
+      ENDTEST
+      TEST calibZero > maxCalibZeroInitDiff
+        SET message m2108
+        SETSTATE ST_ZEROMAX
+      ELSE
+        TEST calibZero < minCalibZeroInitDiff 
+          SET message m2108
+          SETSTATE ST_ZEROMIN
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_AFTER_SAMPLING
+ TEST timeSampling = 1
+   SETSTATE ST_CALCULATE
+ ENDTEST
+END
+
+State=ST_CALCULATE
+ SET lastTopIdx sampling.topidx
+ CALC calcWeight = sampling.topval - calibZero
+ SET lastCalculate samplingmaxidx
+ SET weightHistory calcWeight 
+ CALC cntProduct = cntProduct + 1
+ TEST calcWeight > upperWeight
+ OR calcWeight < lowerWeight
+   CALC cntProductOut = cntProductOut + 1
+   CALC cntProductOutInARow = cntProductOutInARow + 1
+   SET productOut10 1
+ ELSE
+   SET cntProductOutInARow 0
+   SET productOut10 0
+ ENDTEST
+ TEST calcWeight > upperWeight
+ OR calcWeight < lowerWeight
+   SETSTATE ST_PRODUCT_OUTSIDE
+ ELSE
+   SETSTATE ST_PRODUCT_INSIDE
+ ENDTEST
+END
+ 
+State=ST_PRODUCT_INSIDE
+  TEST productOut10 > maxOutPct
+  OR cntProductOutInARow > maxOutInARow
+    SET errorCode m2102  
+    SETSTATE ST_IDLE 
+  ELSE
+    SETSTATE ST_WAIT_FOR_PRODUCT
+  ENDTEST
+END
+
+State=ST_PRODUCT_OUTSIDE
+  TEST productOut10 > maxOutPct
+  OR cntProductOutInARow > maxOutInARow
+    SET errorCode m2102  
+    SETSTATE ST_IDLE 
+  ELSE
+    SETSTATE ST_WAIT_FOR_PRODUCT
+  ENDTEST
+END
+

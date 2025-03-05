@@ -1,0 +1,5 @@
+/.cvsignore////
+/Makefile////
+/elo.c////
+/hmi.h////
+/kbd.c////

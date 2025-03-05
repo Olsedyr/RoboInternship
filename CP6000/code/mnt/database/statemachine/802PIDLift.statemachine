@@ -1,0 +1,6 @@
+STATEMACHINEVERSION 3
+Include=cmpidlift.statemachine
+Name=PIDLift
+Const=maxhomeclicks 70
+;** User section **
+Timeout=TimeHomeGo 110000

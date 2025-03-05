@@ -1,0 +1,53 @@
+STATEMACHINEVERSION 3
+Name=ErrorCode
+Link=parent Parent
+linkValue=emergency errorCode Emergency
+linkValue=robot errorCode Robot
+linkValue=workcell errorCode WorkCell
+linkValue=roboerror errorCode RoboError
+linkValue=programb2 errorCode ProgramB2
+linkValue=io errorCode IOError
+linkValue=trip errorCode TripWatch
+linkValue=convout errorCode ConveyorOut
+linkValue=pc6 errorCode PalletConveyor6
+linkValue=pm errorCode PalletMagazine
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+  TEST emergency != 0
+  OR robot != 0
+  OR workcell != 0
+  OR roboerror != 0
+  OR programb2 != 0
+  OR io != 0
+  OR trip != 0
+  OR convout != 0
+  OR pc6 != 0
+  OR pm != 0
+		SETSTATE ST_ERROR
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_ERROR
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END

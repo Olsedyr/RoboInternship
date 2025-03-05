@@ -1,0 +1,62 @@
+VERSION 1
+508
+Robots 0
+Tools 0
+Items 0
+Patterns 0
+Accessories 0
+PPScripts 0
+Dio 1
+903.io
+Comsks 1
+903.comsk
+LoadCells 1
+508.loadcell
+Macs 0
+Statemachines 39
+508WorkCellS1.statemachine
+508ParentS1.statemachine
+508ProgramS1.statemachine
+508EmergencyS1.statemachine
+508ContinueKnapS1.statemachine
+508productOutS1.statemachine
+508fotoInS1.statemachine
+508fotoOutS1.statemachine
+508fotoOutLongS1.statemachine
+508checkWeigherCalcS1.statemachine
+508checkWeigherS1.statemachine
+508checkWeigherZeroCalibS1.statemachine
+508checkWeigherPrevS1.statemachine
+508checkWeigherMotorS1.statemachine
+508checkWeigherNextS1.statemachine
+903Emergency.statemachine
+903ErrorCode.statemachine
+903IOError.statemachine
+903TripWatch.statemachine
+903TrafficLight.statemachine
+903LongConveyorFoto1.statemachine
+903LongConveyor1.statemachine
+903LongConveyorFoto2.statemachine
+903LongConveyor2.statemachine
+903LongConveyorFoto3.statemachine
+903LongConveyor3.statemachine
+903LongConveyorMotor.statemachine
+903SyncConveyor1Foto.statemachine
+903SyncConveyor1.statemachine
+903SyncConveyor2Foto.statemachine
+903SyncConveyor2.statemachine
+903SyncConveyor3Foto.statemachine
+903SyncConveyor3.statemachine
+903CollectConveyor.statemachine
+903CollectConveyorFoto1.statemachine
+903CollectProductChecker.statemachine
+903BendConveyor.statemachine
+903AccumulatingConveyor.statemachine
+903AccumulatingConveyorQueFullFoto.statemachine
+REMOTEHOST 192.168.0.152
+LANGUAGE spanish.language
+LANGUAGE english.language
+LANGUAGE danish.language
+STATETEKST spanish.statetekst
+STATETEKST english.statetekst
+STATETEKST danish.statetekst

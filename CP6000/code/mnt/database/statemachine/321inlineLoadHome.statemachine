@@ -1,0 +1,17 @@
+;INLINE 321inlineLoadHome.statemachine
+SETFRAME toFrame1 palletA0
+SETFRAME toFrame2 conveyorB
+CALC toFrame1.y = toFrame1.y + itemIn.gy
+CALC toFrame2.y = toFrame2.y + itemOut.gy
+SET randmin xvarimin
+SET randmax xvarimax
+INLINE inlineComputeRandom.statemachine
+CALC toFrame1.x = toFrame1.x + randres
+CALC toFrame2.x = toFrame2.x + randres
+SET randmin zvarimin
+SET randmax zvarimax
+INLINE inlineComputeRandom.statemachine
+CALC toFrame1.z = toFrame1.z + randres 
+CALC toFrame2.z = toFrame2.z + randres 
+LOAD home_palletA homeFrame toFrame1
+LOAD home_conveyorB homeFrame toFrame2

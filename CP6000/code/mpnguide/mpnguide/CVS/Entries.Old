@@ -1,0 +1,31 @@
+/.cvsignore/1.2/Fri Jun 30 13:07:11 2006//
+/.kdbgrc.mpnwire/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/Doxyfile/1.1/Fri Jun 30 13:07:03 2006//
+/Makefile/1.25/Mon Apr 23 06:34:42 2007//
+/bxwire.bmp/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/filenew.xpm/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/fileopen.xpm/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/filesave.xpm/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/hemite.cpp/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/hemite.h/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/main.cpp/1.2/Fri May  6 11:13:51 2005//
+/mpncommand.cpp/1.2/Thu Jun  3 18:28:19 2004//
+/mpncommand.h/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/mpnguide.cpp/1.39/Fri Apr 13 06:57:44 2007//
+/mpnguide.h/1.10/Thu Jan  4 20:15:26 2007//
+/mpnscript.cpp/1.134/Wed May 30 13:38:54 2007//
+/mpnscript.h/1.17/Fri Feb 16 09:45:16 2007//
+/mpntrackball.cpp/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/mpntrackball.h/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/mpnview3d.cpp/1.28/Fri Jul  6 08:55:35 2007//
+/mpnview3d.h/1.6/Thu Feb 22 08:53:33 2007//
+/mpnviewdata.cpp/1.12/Thu Feb 22 16:39:36 2007//
+/mpnviewdata.h/1.1.1.1/Tue Jan 27 09:30:49 2004//
+/mpnwire/1.1.1.1/Tue Jan 27 09:30:50 2004//
+/roboWire.bmp/1.1.1.1/Tue Jan 27 09:30:50 2004//
+/roboWireLogo.bmp/1.1.1.1/Tue Jan 27 09:30:50 2004//
+/thn.bmp/1.1.1.1/Tue Jan 27 09:30:50 2004//
+/trackball.c/1.1.1.1/Tue Jan 27 09:30:50 2004//
+D/.deps////
+D/docs////
+D/visual////

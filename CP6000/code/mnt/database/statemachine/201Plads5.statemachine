@@ -1,0 +1,73 @@
+STATEMACHINEVERSION 3
+Name=Plads5
+Delaystop=5000000
+;Input=Foto "ConveyorIn Foto5"
+Input=Skubberout "ConveyorIn kasseSkubber+"
+Input=Skubberin "ConveyorIn kasseSkubber-"
+Output=Skubout "ConveyorIn kasseSkubberUd"
+Link=KassePakkerBottom
+Timeout=PushDelay 2100000
+;Value=DoSend 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Skubout 0 
+END
+
+State=ST_READY
+  TEST KassePakkerBottom = ST_EMPTY
+    SET Skubout 1
+    TIMEOUT PushDelay ST_SEND_FW
+    SETSTATE ST_SEND_FW
+  ELSE
+    TEST KassePakkerBottom = ST_IDLE
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+;State=ST_EMPTY
+;  TEST DoSend = 1
+;	SET DoSend 0
+;    SETSTATE ST_READY
+;  ELSE
+;    TEST KassePakkerBottom = ST_IDLE
+;      SETSTATE ST_IDLE
+;    ENDTEST
+;  ENDTEST
+;END
+
+State=ST_SEND_FW
+  TEST PushDelay = 1
+  OR Skubberout = 1
+    SET Skubout 0
+;    SETSTATE ST_SEND_BACK
+    SETSTATE ST_READY
+  ENDTEST
+END
+
+State=ST_SEND_BACK
+  TEST Skubberin = 1
+    SET Skubout 0
+;    SETSTATE ST_EMPTY
+    SETSTATE ST_READY
+  ENDTEST
+END
+
+State=ST_RESET
+;    TEST Foto = 1
+;      SETSTATE ST_READY
+;    ELSE
+      TEST Skubberin = 0
+        SET Skubout 0
+        SETSTATE ST_SEND_BACK
+      ELSE
+        SETSTATE ST_EMPTY
+      ENDTEST
+;    ENDTEST
+END

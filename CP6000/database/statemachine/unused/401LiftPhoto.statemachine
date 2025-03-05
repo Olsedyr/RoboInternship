@@ -1,0 +1,11 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=Conv12Foto1
+Name=LiftPhoto
+Input=input "KasseLift Photo"
+;how long must input be active before it is recognised as on
+Timeout=TimeOn 300000
+;how long must input be active before it is recognised as off
+Timeout=TimeOff 200000
+Value=test 0
+Const=active 0

@@ -1,0 +1,380 @@
+STATEMACHINEVERSION 3
+Name=PushPattern
+Link=Program
+Link=ProductCount
+Link=Skubber LangBufferSkub
+Link=parent Parent
+linkValue=firstRun WorkCell
+linkValue=numpush Skubber
+linkValue=layers bufferlayers KasseLift
+Const=gettimePunnets650 0
+Const=testtime1 400000
+Const=testtime2 0
+Value=curppp 0
+Value=numincycle 0
+Value=ppp1 0
+Value=ppp2 0
+Value=ppp3 0
+Value=ppp4 0
+Value=ppp5 0
+Value=ppp6 0
+Value=ppp7 0
+Value=ppp8 0
+Value=ppp9 0
+Value=ppp10 0
+Value=ppp11 0
+Value=ppp12 0
+Value=ppp13 0
+Value=ppp14 0
+Value=ppp15 0
+Value=ppp16 0
+Value=maxpushlayer1 2
+Value=maxpushlayer2 2
+Value=maxpushlayer3 2
+Value=gettime1 350000
+Value=gettime2 350000
+Value=gettime3 350000
+Value=gettime 350000
+Value=maxpush 2
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST ProductCount = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET gettime1 350000
+	SET gettime2 350000
+	SET gettime3 350000
+	SET maxpushlayer1 2
+	SET maxpushlayer2 2
+	SET maxpushlayer3 2
+	TEST Program = ST_RUNNING_PAPSMALL8
+	OR Program = ST_RUNNING_PAPSMALL8_TURN
+		SETSTATE ST_ALWAYSPUSH2_PPP2
+	ELSE
+		TEST Program = ST_RUNNING_C11LARGE6
+			SETSTATE ST_ALWAYSPUSH3_PPP2
+		ELSE
+			TEST Program = ST_RUNNING_C18BAGS6
+				SETSTATE ST_START_C18BAGS6
+			ELSE
+				TEST Program = ST_RUNNING_C11SMALL8					
+					SETSTATE ST_ALWAYSPUSH4_PPP2
+				ELSE
+					TEST Program = ST_RUNNING_C18BAGS8
+						SETSTATE ST_START_C18BAGS8
+					ELSE
+						TEST Program = ST_RUNNING_EPS610SMALL7
+							SETSTATE ST_START_EPS610SMALL7
+						ELSE
+							TEST Program = ST_RUNNING_C18BAGS6_ALT
+								SETSTATE ST_START_C18BAGS6_ALT
+              ELSE
+							  TEST Program = ST_RUNNING_C14BAGS6
+								  SETSTATE ST_START_C14BAGS6
+	  						ENDTEST
+							ENDTEST
+						ENDTEST
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+END
+
+State=ST_GO
+  TEST layers = 0
+		SET numincycle 0
+		SET maxpush maxpushlayer1
+		SET gettime gettime1
+	ELSE
+		TEST layers = 1
+			SET numincycle maxpushlayer1
+			SET maxpush maxpushlayer2
+			SET gettime gettime2
+		ELSE
+			TEST layers = 2
+				CALC numincycle = maxpushlayer1 + maxpushlayer2
+				SET maxpush maxpushlayer3
+				SET gettime gettime3
+			ENDTEST
+		ENDTEST
+	ENDTEST
+	CALC numincycle = numincycle + numpush
+	TEST numincycle = 0
+		SET curppp ppp1
+	ELSE
+		TEST numincycle = 1
+			SET curppp ppp2
+		ELSE
+			TEST numincycle = 2
+				SET curppp ppp3
+			ELSE
+				TEST numincycle = 3
+					SET curppp ppp4
+				ELSE
+					TEST numincycle = 4
+						SET curppp ppp5
+					ELSE
+						TEST numincycle = 5
+							SET curppp ppp6
+						ELSE
+							TEST numincycle = 6
+								SET curppp ppp7
+							ELSE
+								TEST numincycle = 7
+									SET curppp ppp8
+								ELSE
+									TEST numincycle = 8
+										SET curppp ppp9
+									ELSE
+										TEST numincycle = 9
+											SET curppp ppp10
+										ELSE
+											TEST numincycle = 10
+												SET curppp ppp11
+											ELSE
+												TEST numincycle = 11
+													SET curppp ppp12
+												ELSE
+													TEST numincycle = 12
+														SET curppp ppp13
+													ELSE
+														TEST numincycle = 13
+															SET curppp ppp14
+														ELSE
+															TEST numincycle = 14
+																SET curppp ppp15
+															ELSE
+																TEST numincycle = 15
+																	SET curppp ppp16
+																ENDTEST
+															ENDTEST
+														ENDTEST
+													ENDTEST
+												ENDTEST
+											ENDTEST
+										ENDTEST
+									ENDTEST
+								ENDTEST
+							ENDTEST
+						ENDTEST
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+  TEST firstRun = 1
+	AND parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_START_C18BAGS8
+	SET curppp 2
+	SET maxpush 3
+	SET maxpushlayer1 3
+	SET maxpushlayer2 1
+	SET gettime1 50000
+	SET gettime2 50000
+	SET ppp1 2
+	SET ppp2 2
+	SET ppp3 2
+	SET ppp4 2
+	;default rest
+	SET ppp5 10
+	SET ppp6 10
+	SET ppp7 10
+	SET ppp8 10
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SET gettime3 350000
+	SET maxpushlayer3 0
+	SETSTATE ST_GO
+END
+
+State=ST_START_C18BAGS6
+	SET curppp 1
+	SET maxpush 2
+	SET maxpushlayer1 2
+	SET maxpushlayer2 3
+	SET gettime1 testtime1
+	SET gettime2 testtime2
+	SET ppp1 1
+	SET ppp2 2
+	SET ppp3 1
+	SET ppp4 1
+	SET ppp5 1
+	;default rest
+	SET ppp6 10
+	SET ppp7 10
+	SET ppp8 10
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SET maxpushlayer3 0
+	SET gettime3 350000
+	SETSTATE ST_GO
+END
+
+State=ST_START_C18BAGS6_ALT
+	SET curppp 1
+	SET maxpush 3
+	SET maxpushlayer1 3
+	SET maxpushlayer2 3
+	SET gettime1 0
+	SET gettime2 0
+	SET ppp1 1
+	SET ppp2 1
+	SET ppp3 1
+	SET ppp4 1
+	SET ppp5 1
+	SET ppp6 1
+	;default rest
+	SET ppp7 10
+	SET ppp8 10
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SET maxpushlayer3 0
+	SET gettime3 350000
+	SETSTATE ST_GO
+END
+
+State=ST_START_C14BAGS6
+	SET curppp 2
+	SET maxpush 3
+	SET maxpushlayer1 3
+	SET gettime1 50000
+	SET gettime2 50000
+	SET ppp1 2
+	SET ppp2 2
+	SET ppp3 2
+	;default rest
+	SET ppp4 10
+	SET ppp5 10
+	SET ppp6 10
+	SET ppp7 10
+	SET ppp8 10
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SET gettime3 350000
+	SET maxpushlayer2 0
+	SET maxpushlayer3 0
+	SETSTATE ST_GO
+END
+
+State=ST_START_EPS610SMALL7
+	SET curppp 2
+	SET maxpush 4
+	SET maxpushlayer1 4
+	SET gettime1 450000
+	SET ppp1 2
+	SET ppp2 1
+	SET ppp3 2
+	SET ppp4 2
+	;default rest
+	SET ppp5 10
+	SET ppp6 10
+	SET ppp7 10
+	SET ppp8 10
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SET maxpushlayer2 0
+	SET maxpushlayer3 0
+	SET gettime2 350000
+	SET gettime3 350000
+	SETSTATE ST_GO
+END
+
+State=ST_START_C18BAGS3
+	SET curppp 1
+	SET maxpush 3
+	SET maxpushlayer1 3
+	SET gettime1 600000
+	SET ppp1 1
+	SET ppp2 1
+	SET ppp3 1
+	;default rest
+	SET ppp4 10
+	SET ppp5 10
+	SET ppp6 10
+	SET ppp7 10
+	SET ppp8 10
+	SET ppp9 10
+	SET ppp10 10
+	SET ppp11 10
+	SET ppp12 10
+	SET ppp13 10
+	SET ppp14 10
+	SET ppp15 10
+	SET ppp16 10
+	SET maxpushlayer2 0
+	SET maxpushlayer3 0
+	SET gettime2 600000
+	SET gettime3 600000
+	SETSTATE ST_GO
+END
+
+State=ST_ALWAYSPUSH3_PPP2
+	SET curppp 2
+	SET maxpush 3
+	SET gettime 350000
+	TEST ProductCount = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_ALWAYSPUSH4_PPP2
+	SET curppp 2
+	SET maxpush 4
+	SET gettime gettimePunnets650
+	TEST ProductCount = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_ALWAYSPUSH2_PPP2
+	SET curppp 2
+	SET maxpush 2
+	SET gettime gettimePunnets650
+	TEST ProductCount = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

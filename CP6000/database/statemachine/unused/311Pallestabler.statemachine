@@ -1,0 +1,487 @@
+STATEMACHINEVERSION 3
+Name=Pallestabler
+Output=motor "Pallestabler Ruller Motor"
+Output=op "Pallestabler Lift Op"
+Output=ned "Pallestabler Lift Ned"
+Output=grib "Pallestabler Grib"
+Output=slip "Pallestabler Slip"
+Link=next Pallebane9
+Link=prev Pallebane8
+Link=parent Parent 
+Link=foto PallestablerFoto
+Link=fotobottom PallestablerFotoBottom
+Link=fototop PallestablerFotoTop
+Link=fotomidt PallestablerFotoMidt
+Link=fototjek1 PallestablerFotoKassetjek1
+Link=fototjek2 PallestablerFotoKassetjek2
+Link=fototjek3 PallestablerFotoKassetjek3
+Link=fototjek4 PallestablerFotoKassetjek4
+linkValue=reedgrib test PallestablerReedGrib
+linkValue=reedslip test PallestablerReedSlip
+linkValue=palletStackable8 Pallebane8
+;linkValue=userPalletOut stackerPalletOut ProgramB1
+;userPalletOut og restart sættes fra formStdUser.c
+Value=userPalletOut 0
+Value=restart 0
+Value=simulate 0
+Value=errorCode 0
+Value=message 0
+Value=palletStackable 0
+Value=palletStacked 0
+;goGrib: 0 = en palle oppe og en palle på ruller - kør til stack pos, 1 = kør palle op til grib pos
+Value=goGrib 0
+Value=gotOneTjek 0
+Value=errorDuringDown 0
+Const=errorOnUnstackable 1
+Const=stackEnable 1
+Timeout=maxHomingTime 30000000
+Timeout=maxSendTime 10000000
+Timeout=maxReceiveTime 10000000
+Timeout=maxVentilTime 4000000
+Timeout=maxDownFromGribTime 30000000
+Timeout=maxDownFromStackTime 8000000
+Timeout=allTjekOnTime 500000
+Timeout=opAfterDownErrorTime 10000
+Timeout=maxTjekFreeTime 4000000
+Timeout=tjekToStackTime 1700000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motor 0
+  SET op 0
+  SET ned 0
+  SET grib 0
+  SET slip 0
+  SET restart 0
+  TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST fotobottom = ST_BLOCKED
+    TEST foto = ST_BLOCKED
+      SETSTATE ST_READY
+    ELSE
+      TEST foto = ST_FREE
+        SETSTATE ST_EMPTY
+      ENDTEST
+    ENDTEST
+  ELSE
+    ;TODO: what do i do
+    TIMEOUT maxHomingTime ST_HOMING
+    SETSTATE ST_HOMING
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST prev = ST_SEND
+    TIMEOUT maxReceiveTime ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSE 
+    SET motor 0
+    TEST userPalletOut = 1
+      TEST reedgrib = 1
+      AND reedslip = 0
+        SETSTATE ST_GO_UP_GET
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_GO_UP_GET
+  SET op 1
+  SET ned 0
+  TEST fototop = ST_BLOCKED
+    SET op 0
+    SET ned 0
+    SET grib 0
+    SET slip 1
+    TIMEOUT maxVentilTime ST_SLIP
+    SETSTATE ST_SLIP
+  ENDTEST
+END
+
+State=ST_SLIP
+  TEST reedslip = 1
+  AND reedgrib = 0
+    TIMEOUT maxDownFromGribTime ST_DOWN_FROM_GRIB
+    SETSTATE ST_DOWN_FROM_GRIB
+  ELSE
+    TEST maxVentilTime = 1
+      ;03019 Fejl: Følerfejl på pallestabler.
+      SET errorCode 3019
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST foto = ST_BLOCKED
+    SET palletStackable palletStackable8
+    SET palletStackable8 0
+    SETSTATE ST_READY
+  ELSE
+    TEST maxReceiveTime = 1
+      ;03018 Fejl: Modtagetid for pallestabler overskredet.
+      SET errorCode 3018
+      SETSTATE ST_ERROR
+    ELSE
+      TEST prev = ST_SEND
+      AND fotobottom = ST_BLOCKED
+        SET motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_READY
+  TEST palletStackable = 1
+  AND stackEnable = 1
+  AND userPalletOut = 0
+    SET motor 0
+    TEST reedslip = 1
+    AND reedgrib = 0
+     TEST palletStacked = 0
+       ;all empty
+       SETSTATE ST_WAIT_GO_UP
+     ELSE
+       SETSTATE ST_WAIT_SEND
+     ENDTEST
+    ELSE
+      TEST reedgrib = 1
+      AND reedslip = 0
+        ;got pallet in grib pos
+        SET goGrib 0
+        SETSTATE ST_GO_UP
+;      ELSE
+;        TEST reedslip = 1
+;        AND fotopalleoppe = ST_BLOCKED
+          ;AND fototjek1 = ST_BLOCKED
+          ;AND fototjek2 = ST_BLOCKED
+          ;AND fototjek3 = ST_BLOCKED
+          ;AND fototjek4 = ST_BLOCKED
+          ;got stacked pallet
+;          SETSTATE ST_WAIT_SEND
+        ELSE
+          ;03019 Fejl: Følerfejl på pallestabler.
+          SET errorCode 3019
+          SETSTATE ST_ERROR
+;        ENDTEST
+      ENDTEST
+    ENDTEST
+  ELSE
+    SETSTATE ST_WAIT_SEND
+  ENDTEST
+END
+
+State=ST_WAIT_SEND
+  TEST next = ST_EMPTY
+  AND fotobottom = ST_BLOCKED
+    TIMEOUT maxSendTime ST_SEND
+    SETSTATE ST_SEND
+  ELSE 
+    SET motor 0
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST next = ST_READY
+  AND foto = ST_FREE
+    SET palletStacked 0
+    SET userPalletOut 0
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST maxSendTime = 1
+      ;03017 Fejl: Sendetid for pallestabler overskredet.
+      SET errorCode 3017
+      SETSTATE ST_ERROR
+    ELSE
+      TEST next = ST_RECEIVE
+      AND fotobottom = ST_BLOCKED
+        SET motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_WAIT_GO_UP
+  TEST prev = ST_READY
+  AND stackEnable = 1
+    TEST palletStackable8 = 1
+      SET goGrib 1
+      SETSTATE ST_GO_UP
+    ELSE
+      SETSTATE ST_WAIT_SEND
+    ENDTEST
+  ENDTEST
+  TEST userPalletOut = 1
+  OR stackEnable = 0
+    SETSTATE ST_WAIT_SEND
+  ENDTEST
+  TEST reedslip != 1
+  OR foto = ST_FREE
+;  AND fotopalleoppe != ST_FREE
+    ;03019 Fejl: Følerfejl på pallestabler.
+    SET errorCode 3019
+    SETSTATE ST_ERROR
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_GO_UP
+  SET op 1
+  SET ned 0
+  TEST gotOneTjek = 0
+    TEST fototjek1 = ST_BLOCKED
+    OR fototjek2 = ST_BLOCKED
+    OR fototjek3 = ST_BLOCKED
+    OR fototjek4 = ST_BLOCKED
+      SET gotOneTjek 1
+      TIMEOUT allTjekOnTime ST_GO_UP
+      SETSTATE ST_GO_UP
+    ENDTEST
+  ELSE
+    TEST allTjekOnTime = 1
+      SET gotOneTjek 0
+      TEST fototjek1 != ST_BLOCKED
+      OR fototjek2 != ST_BLOCKED
+      OR fototjek3 != ST_BLOCKED
+      OR fototjek4 != ST_BLOCKED
+        ;ikke go nok til stabling
+        TIMEOUT maxDownFromStackTime ST_UNSTACKABLE
+        SETSTATE ST_UNSTACKABLE
+      ELSE
+        TEST goGrib = 1
+          SETSTATE ST_GO_GRIB
+        ELSE
+          TIMEOUT tjekToStackTime ST_GO_STACK
+          SETSTATE ST_GO_STACK
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST goGrib = 1
+    TEST fototop = ST_BLOCKED
+      ;03020 Fejl: Pallestabler er kørt for langt op i forhold til kassekontrol position
+      SET errorCode 3020
+      SETSTATE ST_ERROR
+    ENDTEST
+  ELSE
+    TEST fotomidt = ST_BLOCKED
+      ;03020 Fejl: Pallestabler er kørt for langt op i forhold til kassekontrol position
+      SET errorCode 3020
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_UNSTACKABLE
+  SET op 0
+  SET ned 1
+  TEST fotobottom = ST_BLOCKED
+    SET op 0
+    SET ned 0
+    TEST errorOnUnstackable = 1
+      ;03016 Fejl: Kasser på palle ved pallestabler står forkert. Stil rigtigt.
+      SET errorCode 3016
+      SETSTATE ST_ERROR
+    ELSE
+      SETSTATE ST_WAIT_SEND
+    ENDTEST
+  ELSE
+    TEST maxDownFromStackTime = 1
+      ;01052 Fejl: Homing-rutinen kunne ikke finde en sensor. (Lift)
+      SET errorCode 1052
+      SET errorDuringDown 1
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GO_GRIB
+  TEST fototop = ST_BLOCKED
+    SET op 0
+    SET ned 0
+    SET grib 1
+    SET slip 0
+    TIMEOUT maxVentilTime ST_GRIB
+    SETSTATE ST_GRIB
+  ENDTEST
+END
+
+State=ST_GRIB
+  TEST reedgrib = 1
+  AND reedslip = 0
+    TIMEOUT maxTjekFreeTime ST_DOWN_FROM_GRIB_TJEK_FREE
+    SETSTATE ST_DOWN_FROM_GRIB_TJEK_FREE
+  ELSE
+    TEST maxVentilTime = 1
+      ;03019 Fejl: Følerfejl på pallestabler.
+      SET errorCode 3019
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_DOWN_FROM_GRIB_TJEK_FREE
+  SET op 0
+  SET ned 1
+  TEST maxTjekFreeTime = 1
+    TEST fototjek1 = ST_FREE
+    AND fototjek2 = ST_FREE
+    AND fototjek3 = ST_FREE
+    AND fototjek4 = ST_FREE
+      TIMEOUT maxDownFromGribTime ST_DOWN_FROM_GRIB
+      SETSTATE ST_DOWN_FROM_GRIB
+    ELSE
+      ;03021 Fejl: Pallestableren er ikke fri på vej ned.
+      SET errorCode 3021
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_DOWN_FROM_GRIB
+  SET op 0
+  SET ned 1
+  TEST fotobottom = ST_BLOCKED
+    SET op 0
+    SET ned 0
+    TEST foto = ST_BLOCKED
+      SETSTATE ST_WAIT_SEND
+    ELSE
+      SETSTATE ST_EMPTY
+    ENDTEST
+  ELSE
+    TEST maxDownFromGribTime = 1
+      ;01052 Fejl: Homing-rutinen kunne ikke finde en sensor. (Lift)
+      SET errorCode 1052
+      SET errorDuringDown 1
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_GO_STACK
+;  TEST fotomidt = ST_BLOCKED
+  TEST tjekToStackTime = 1
+    SET op 0
+    SET ned 0
+    SET grib 0
+    SET slip 1
+    TIMEOUT maxVentilTime ST_STACK
+    SETSTATE ST_STACK
+  ELSE
+    TEST fototop = ST_BLOCKED
+      ;03019 Fejl: Følerfejl på pallestabler.
+      SET errorCode 3019
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_STACK
+  TEST reedslip = 1
+  AND reedgrib = 0
+    SET palletStacked 1
+    TIMEOUT maxDownFromStackTime ST_DOWN_FROM_STACK
+    SETSTATE ST_DOWN_FROM_STACK
+  ELSE
+    TEST maxVentilTime = 1
+      TEST reedgrib = 1
+      AND reedslip = 0
+        SET palletStacked 0
+      ENDTEST
+      ;03019 Fejl: Følerfejl på pallestabler.
+      SET errorCode 3019
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_DOWN_FROM_STACK
+  SET op 0
+  SET ned 1
+  TEST fotobottom = ST_BLOCKED
+    SET op 0
+    SET ned 0
+    SETSTATE ST_WAIT_SEND
+  ELSE
+    TEST maxDownFromStackTime = 1
+      ;01052 Fejl: Homing-rutinen kunne ikke finde en sensor. (Lift)
+      SET errorCode 1052
+      SET errorDuringDown 1
+      SETSTATE ST_ERROR
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_FIX_ERROR_DURING_DOWN
+  TEST fototop = ST_BLOCKED
+  OR opAfterDownErrorTime = 1
+    TIMEOUT maxHomingTime ST_HOMING
+    SETSTATE ST_HOMING
+  ENDTEST
+END
+
+State=ST_HOMING
+  TEST errorDuringDown = 1
+    SET errorDuringDown 0
+    SET op 1
+    SET ned 0
+    TIMEOUT opAfterDownErrorTime ST_FIX_ERROR_DURING_DOWN
+    SETSTATE ST_FIX_ERROR_DURING_DOWN
+  ELSE  
+    SET op 0
+    SET ned 1
+    TEST fotobottom = ST_BLOCKED
+      SET op 0
+      SET ned 0
+      SETSTATE ST_RESET
+    ELSE
+      TEST maxHomingTime = 1
+        ;01052 Fejl: Homing-rutinen kunne ikke finde en sensor. (Lift)
+        SET errorCode 1052
+        SET errorDuringDown 1
+        SETSTATE ST_ERROR
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_ERROR
+  SET motor 0
+  SET op 0
+  SET ned 0
+  SET grib 0
+  SET slip 0
+  TEST restart = 1
+  OR parent = ST_RESET
+    SET restart 0
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END

@@ -1,0 +1,8 @@
+VERSION 1
+305ConveyorA
+dimention x=2000.0,y=-100.0,z=548.0
+transformation x=-250.0,y=1000.0,z=1411.0
+material diffuse r=0.2,g=0.8,b=0.2,a=1.0
+material ambient r=0.2,g=0.8,b=0.2,a=1.0
+material specular r=0.2,g=0.8,b=0.2,a=1.0
+shininess=1.0

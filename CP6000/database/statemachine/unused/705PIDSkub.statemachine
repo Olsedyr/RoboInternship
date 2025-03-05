@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=cppidskub.statemachine
+Name=PIDSkub
+Const=homeSensorPol 1
+Const=Kp 6.0000
+Const=Kd 9.0000
+Const=Ki 0.1500

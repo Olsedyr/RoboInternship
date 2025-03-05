@@ -1,0 +1,25 @@
+/.cvsignore/1.1/Thu Jun 29 07:44:20 2006//
+/Makefile/1.4/Thu Dec  7 08:13:42 2006//
+/Makefile.am/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/Makefile.in/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/bxbuilder.cpp/1.9/Wed Jan  3 17:33:25 2007//
+/bxbuilder.h/1.2/Fri May 14 07:38:28 2004//
+/bxbuilderdoc.cpp/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/bxbuilderdoc.h/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/bxbuilderview.cpp/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/bxbuilderview.h/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/bxdialoglistview.cpp/1.2/Mon May 17 16:44:53 2004//
+/bxdialoglistview.h/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/filenew.xpm/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/fileopen.xpm/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/filesave.xpm/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/generadlg.cpp/1.2/Wed Jan 25 05:46:48 2006//
+/generadlg.h/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/generate.cpp/1.1/Wed Jan 25 05:47:32 2006//
+/generate.h/1.1/Wed Jan 25 05:47:44 2006//
+/generate.ui/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/lms.bxp/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/lo16-app-bxbuilder.png/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/lo32-app-bxbuilder.png/1.1.1.1/Fri Feb 20 12:51:58 2004//
+/main.cpp/1.1.1.1/Fri Feb 20 12:51:58 2004//
+D

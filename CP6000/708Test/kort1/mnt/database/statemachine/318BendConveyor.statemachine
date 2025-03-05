@@ -1,0 +1,81 @@
+STATEMACHINEVERSION 3
+Name=BendConveyor
+Output=motor1 "Conveyor POS.1.12 Motor"
+Output=motor2 "Conveyor POS.1.13 Motor"
+Output=motor3 "Conveyor POS.1.14 Motor"
+Output=motor4 "Conveyor POS.1.15 Motor"
+Output=goPMN "Go PMN"
+Link=next ConveyorOut3B
+Link=parent Parent
+Value=queOn 0
+Value=simulate 0
+linkValue=que test ConveyorOut3BQueFullFoto
+Timeout=queFullStopTime 1000000
+Timeout=runAgainTime 1000000
+Timeout=waitPMNHeatTunnelTime 20000000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motor1 0
+  SET motor2 0
+  SET motor3 0
+  SET motor4 0
+  SET goPMN 0
+  TEST parent = ST_RESET
+  OR simulate = 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_RUN
+END
+
+State=ST_RUN
+  TEST que = 1
+    TEST queOn = 0
+      SET queOn 1
+      TIMEOUT queFullStopTime ST_RUN
+      SETSTATE ST_RUN
+    ELSETEST queFullStopTime = 1
+      SET queOn 0
+      SETSTATE ST_STOP
+    ENDTEST
+  ELSE
+    SET motor1 1
+    SET motor2 1
+    SET motor3 1
+    SET motor4 1
+    SET queOn 0
+    SET goPMN 1
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SET queOn 0
+    SET goPMN 0
+    TIMEOUT waitPMNHeatTunnelTime ST_STOP
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+
+State=ST_STOP
+  TEST que = 0
+    TIMEOUT runAgainTime ST_RUN
+    SETSTATE ST_TIMER
+  ELSE
+    SET motor1 0
+    SET motor2 0
+    SET motor3 0
+    SET motor4 0
+    SET goPMN 0
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END

@@ -1,0 +1,40 @@
+STATEMACHINEVERSION 3
+Include=pallemagasin3.statemachine
+Name=PalletMagazine
+linkValue=Photo test PalletMagazinePhoto
+Input=PhotoFull "PalletMagazine PhotoFull" 
+Input=ReadBottom "PalletMagazine ReadBottom"
+Input=ReadRelease "PalletMagazine ReadRelease"
+Input=ReadGrip "PalletMagazine ReadGrip"
+Input=ReadMidLeft "PalletMagazine ReadMidLeft"
+Input=ReadMidRight "PalletMagazine ReadMidRight"
+Input=ReadTop "PalletMagazine ReadTop"
+Output=MotorFwd "PalletMagazine MotorFwd"
+Output=MotorRev "PalletMagazine MotorRev"
+Output=GripCyl "PalletMagazine GripCyl"
+Output=ReleaseCyl "PalletMagazine ReleaseCyl"
+Output=CylUpLeft "PalletMagazine CylUpLeft"
+Output=CylUpRight "PalletMagazine CylUpRight"
+Output=CylDownLeft "PalletMagazine CylDownLeft"
+Output=CylDownRight "PalletMagazine CylDownRight"
+Timeout=TimeLoadTime 10000000
+Timeout=TimeOutDelay 20000000
+Const=simulate 0
+Link=next Shuttle
+Link=parent Parent
+Value=command 0
+Value=read1ok 0
+Value=read2ok 0
+Value=errorCode 0
+
+State=ST_SEND
+	SET MotorFwd 1
+	TEST Photo = 0
+	AND next = ST_DECIDE
+		SET MotorFwd 0
+		SETSTATE ST_EMPTY
+  ELSETEST TimeOutDelay = 1
+    SET errorCode 5011
+    SETSTATE ST_IDLE
+	ENDTEST
+END

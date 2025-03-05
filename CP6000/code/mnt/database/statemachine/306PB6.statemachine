@@ -1,0 +1,221 @@
+STATEMACHINEVERSION 2
+Name=Pallebane6
+Delaystop=10000000
+Input=0,Foto1 "Pallebane6 Foto1"
+Input=1,Foto2 "Pallebane6 Foto2"
+Input=2,Foto3 "Pallebane6 Foto3"
+Input=3,Foto4 "Pallebane6 Foto4"
+Output=0,MotorFwd "Pallebane6 MotorFwd"
+Output=1,MotorRev "Pallebane6 MotorRev"
+Output=2,ChainFwd "Pallebane6 ChainFwd"
+Output=3,ChainRev "Pallebane6 ChainRev"
+Output=4,Cyl "Pallebane6 Cyl"
+Link=0,Pallebane7
+Link=1,Pallebane5
+Link=2,Pallemagasin
+Timeout=0,StopDelay 1000000
+Timeout=1,TimeoutDelay 5000000
+Timeout=2,TimeoutForPalletRev 1000000
+Timeout=3,TimeoutForPalletSideAlign 1000000
+Timeout=4,TimeoutForPalletLift 2000000
+Timeout=5,TimeoutRev 150000
+Timeout=6,EmptyDelay 2000000
+Value=0,errorCode 0
+
+State=0,ST_HALT
+  END
+
+State=0,ST_OK
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_READY_ROBOT
+  TEST Pallebane5 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+  END
+
+State=0,ST_IDLE
+  SET MotorFwd 0
+  SET MotorRev 0
+  SET ChainFwd 0
+  SET ChainRev 0
+  SET Cyl 0
+  END
+
+State=1,ST_READY
+  TEST Pallebane7 = ST_EMPTY
+    SET MotorFwd 1
+    SET MotorRev 0
+    SET ChainFwd 0
+    SET ChainRev 0
+    SET Cyl 0
+    SETSTATE ST_SEND
+  ELSE 9
+    SET MotorRev 0
+  ENDTEST
+  TEST Pallebane5 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+  END
+
+State=2,ST_SEND
+  TEST Pallebane7 = ST_READY
+    SETSTATE ST_EMPTY
+    SET MotorFwd 0
+    SET MotorRev 0
+  ENDTEST
+  END
+
+State=3,ST_EMPTY
+  TEST Pallebane5 = ST_READY
+  OR Pallebane5 = ST_SEND
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET ChainFwd 0
+    SET Cyl 1
+    TIMEOUT TimeoutForPalletLift ST_EMPTY_SHIFT
+    SETSTATE ST_TIMER
+  ELSE
+    TEST Pallemagasin = ST_READY
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET ChainRev 0
+      SET Cyl 1
+      TIMEOUT TimeoutForPalletLift ST_EMPTY_SHIFT_PM
+      SETSTATE ST_TIMER
+    ELSE
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET ChainFwd 0
+      SET ChainRev 0
+      SET Cyl 0
+    ENDTEST
+  ENDTEST
+  TEST Pallebane5 = ST_EMPTY
+  AND Pallemagasin = PM_LOAD_NEW_PALLETS
+    TIMEOUT EmptyDelay ST_TESTEMPTY
+    SETSTATE ST_TESTEMPTY 
+  ENDTEST
+  TEST Pallebane5 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=7,ST_TESTEMPTY
+  TEST Pallebane5 != ST_EMPTY
+  OR Pallemagasin != PM_LOAD_NEW_PALLETS
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST EmptyDelay = 1
+      SET errorCode 1001
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=4,ST_RECIEVE
+  TEST Foto2 = 1
+    TIMEOUT TimeoutForPalletSideAlign ST_PALLET_SIDE_ALIGN_TIMEOUT
+    SETSTATE ST_TIMER
+  ENDTEST
+	END
+
+State=0,ST_RECIEVE_PM
+  TEST Foto3 = 1
+    TIMEOUT TimeoutForPalletSideAlign ST_PALLET_SIDE_ALIGN_TIMEOUT_PM
+    SETSTATE ST_TIMER
+  ENDTEST
+  END
+
+State=5,ST_PALLET_SIDE_ALIGN_TIMEOUT
+  SET ChainFwd 1
+  SET ChainRev 0
+  SET Cyl 1
+  SET MotorRev 0
+  SET MotorFwd 0
+  TIMEOUT TimeoutRev ST_PALLET_SIDE_ALIGN_REV
+  SETSTATE ST_TIMER
+  END
+
+State=0,ST_PALLET_SIDE_ALIGN_REV
+  SET ChainFwd 0
+  SET ChainRev 0
+  SET Cyl 0
+  SET MotorRev 1
+  SET MotorFwd 0
+  SETSTATE ST_PALLET_REV
+  END
+
+State=0,ST_PALLET_SIDE_ALIGN_TIMEOUT_PM
+  SET ChainFwd 0
+  SET ChainRev 1
+  SET Cyl 1
+  SET MotorFwd 0
+  SET MotorRev 0
+  SETSTATE ST_RECIEVE
+  END
+
+State=6,ST_PALLET_REV
+  TEST Foto1 = 1
+    TIMEOUT TimeoutForPalletRev ST_PALLET_REV_TIMEOUT
+    SETSTATE ST_TIMER
+ ENDTEST
+ END
+
+State=7,ST_PALLET_REV_TIMEOUT
+  SET MotorRev 0
+  SET MotorFwd 0
+  SET ChainFwd 0
+  SET ChainRev 0
+  SET Cyl 0
+  TEST Foto4 = 0
+    SETSTATE ST_READY_ROBOT
+  ELSE
+    SETSTATE ST_OK
+  ENDTEST
+  END
+
+State=8,ST_RESET
+  TEST Foto2 = 1
+  AND Foto4 = 1
+    SETSTATE ST_OK
+  ELSE 
+    SET ChainFwd 0
+    SET ChainRev 0
+    SET Cyl 0
+    SET MotorRev 1
+    SET MotorFwd 0
+    TIMEOUT TimeoutDelay ST_STOP
+    SETSTATE ST_STOP
+  ENDTEST
+  END
+
+State=9,ST_STOP
+  TEST Foto2 = 1
+    TIMEOUT TimeoutForPalletRev ST_PALLET_REV_TIMEOUT
+    SETSTATE ST_TIMER
+  ELSE 
+    TEST TimeoutDelay = 1
+      SET ChainFwd 0
+      SET ChainRev 0
+      SET Cyl 0
+      SET MotorFwd 0
+      SET MotorRev 0
+      SETSTATE ST_EMPTY
+   ENDTEST	
+ ENDTEST
+ END
+
+State=10,ST_EMPTY_SHIFT
+  SET ChainRev 1
+  SETSTATE ST_RECIEVE
+ END
+
+State=0,ST_EMPTY_SHIFT_PM
+  SET ChainFwd 1
+  SETSTATE ST_RECIEVE_PM
+  END
+

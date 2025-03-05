@@ -1,0 +1,105 @@
+\hypertarget{class_geometry}{
+\section{Geometry Class Reference}
+\label{class_geometry}\index{Geometry@{Geometry}}
+}
+\hyperlink{class_geometry}{Geometry} represents one single 3D object.  
+
+
+{\tt \#include $<$Geometry.h$>$}
+
+Inherits Node.
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{class_geometry_ddb32f0091124e3b461bec6677b2e17b}{Geometry} ()
+\begin{CompactList}\small\item\em Constructor. \item\end{CompactList}\item 
+void \hyperlink{class_geometry_b4ead4f0144f2780838c99ea231ae312}{addTriangle} (Point3D a, Point3D b, Point3D c, Point3D n)
+\begin{CompactList}\small\item\em Adds Triangle to \hyperlink{class_geometry}{Geometry}. \item\end{CompactList}\item 
+void \hyperlink{class_geometry_ecfe13058d31edaa7fa94efc6b5503f7}{setColor} (float r, float g, float b)
+\begin{CompactList}\small\item\em Sets color the color of the \hyperlink{class_geometry}{Geometry} using RGB. \item\end{CompactList}\item 
+\hypertarget{class_geometry_893279378714c57cbc1f26efdeda6c8c}{
+vector$<$ Triangle $>$ $\ast$ \textbf{getTriangles} ()}
+\label{class_geometry_893279378714c57cbc1f26efdeda6c8c}
+
+\item 
+\hypertarget{class_geometry_56c5cf8a568cff737ff95520cbe6b405}{
+void \textbf{draw} ()}
+\label{class_geometry_56c5cf8a568cff737ff95520cbe6b405}
+
+\end{CompactItemize}
+\subsection*{Data Fields}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_geometry_b42d47b788b9f4df2ec094a2f75dc297}{
+bool \textbf{inCollision}}
+\label{class_geometry_b42d47b788b9f4df2ec094a2f75dc297}
+
+\end{CompactItemize}
+\subsection*{Protected Attributes}
+\begin{CompactItemize}
+\item 
+\hypertarget{class_geometry_f5856d7f036811ac0ff4aa6e62131427}{
+vector$<$ Triangle $>$ \hyperlink{class_geometry_f5856d7f036811ac0ff4aa6e62131427}{triangles}}
+\label{class_geometry_f5856d7f036811ac0ff4aa6e62131427}
+
+\begin{CompactList}\small\item\em Collections of triangles. \item\end{CompactList}\item 
+\hypertarget{class_geometry_f74d0a39b3fc1939e0826a560006b748}{
+GLfloat \hyperlink{class_geometry_f74d0a39b3fc1939e0826a560006b748}{color} \mbox{[}3\mbox{]}}
+\label{class_geometry_f74d0a39b3fc1939e0826a560006b748}
+
+\begin{CompactList}\small\item\em RGB color of \hyperlink{class_geometry}{Geometry}. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{class_geometry}{Geometry} represents one single 3D object. 
+
+Længere beskrivelse 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_geometry_ddb32f0091124e3b461bec6677b2e17b}{
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\subsubsection[{Geometry}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Geometry} ()}}
+\label{class_geometry_ddb32f0091124e3b461bec6677b2e17b}
+
+
+Constructor. 
+
+Constructs a \hyperlink{class_geometry}{Geometry} with initially no triangles 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_geometry_b4ead4f0144f2780838c99ea231ae312}{
+\index{Geometry@{Geometry}!addTriangle@{addTriangle}}
+\index{addTriangle@{addTriangle}!Geometry@{Geometry}}
+\subsubsection[{addTriangle}]{\setlength{\rightskip}{0pt plus 5cm}void addTriangle (Point3D {\em a}, \/  Point3D {\em b}, \/  Point3D {\em c}, \/  Point3D {\em n})}}
+\label{class_geometry_b4ead4f0144f2780838c99ea231ae312}
+
+
+Adds Triangle to \hyperlink{class_geometry}{Geometry}. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em a}]Corner a of Triangle \item[{\em b}]Corner b of Triangle \item[{\em c}]Corner c of Triangle \item[{\em n}]Normal of Triangle \end{description}
+\end{Desc}
+\hypertarget{class_geometry_ecfe13058d31edaa7fa94efc6b5503f7}{
+\index{Geometry@{Geometry}!setColor@{setColor}}
+\index{setColor@{setColor}!Geometry@{Geometry}}
+\subsubsection[{setColor}]{\setlength{\rightskip}{0pt plus 5cm}void setColor (float {\em r}, \/  float {\em g}, \/  float {\em b})}}
+\label{class_geometry_ecfe13058d31edaa7fa94efc6b5503f7}
+
+
+Sets color the color of the \hyperlink{class_geometry}{Geometry} using RGB. 
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[{\em r}]red color \item[{\em g}]green color \item[{\em b}]blue color \end{description}
+\end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+C:/sandbox/sandbox/mpnguide/mpnguide/visual/Geometry.h\item 
+C:/sandbox/sandbox/mpnguide/mpnguide/visual/Geometry.cpp\end{CompactItemize}

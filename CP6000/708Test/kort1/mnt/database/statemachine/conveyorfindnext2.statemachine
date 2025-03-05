@@ -1,0 +1,93 @@
+STATEMACHINEVERSION 3
+Name=Conv5
+Output=motor "dummyOut"
+Link=next Conv9  
+Link=foto Conv5Foto1  
+Value=simulate 0
+Timeout=StartDelay 1000000
+Timeout=timeActive 800000
+Timeout=timePause 1500000
+Value=motorRunning 0
+Const=autoDetect 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_PAUSE
+  SET motorRunning 0
+  SET motor 0
+	TEST next = ST_FIND_ITEM
+		TIMEOUT timeActive ST_RUN
+		SETSTATE ST_RUN
+	ENDTEST
+  TEST foto != ST_BLOCKED
+  AND autoDetect = 1
+    SETSTATE ST_RESET
+  ENDTEST
+  TEST next != ST_RUN
+  AND next != ST_FIND_ITEM
+  AND next != ST_PAUSE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_IDLE
+  SET motor 0
+  SET motorRunning 0
+  TEST next = ST_RUN
+  OR next = ST_FIND_ITEM
+  OR next = ST_PAUSE
+  OR simulate = 1
+		TIMEOUT StartDelay ST_RESET
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+
+State=ST_FIND_ITEM
+  TEST foto = ST_BLOCKED
+    TEST timePause = 1
+      TEST next = ST_PAUSE
+        SETSTATE ST_PAUSE
+      ELSE
+        TIMEOUT timeActive ST_RUN
+        SETSTATE ST_RUN
+      ENDTEST
+    ELSE
+      SET motorRunning 0
+      SET motor 0
+    ENDTEST
+  ELSE
+    SET motorRunning 1
+    SET motor 1
+  ENDTEST
+  TEST next != ST_RUN
+  AND next != ST_FIND_ITEM
+  AND next != ST_PAUSE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RUN
+  SET motorRunning 1
+  SET motor 1
+  TEST timeActive = 1
+    TIMEOUT timePause ST_FIND_ITEM
+    SETSTATE ST_FIND_ITEM
+    TEST next != ST_RUN
+    AND next != ST_FIND_ITEM
+    AND next != ST_PAUSE
+    AND simulate = 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+  TIMEOUT timePause ST_FIND_ITEM
+  SETSTATE ST_FIND_ITEM
+END

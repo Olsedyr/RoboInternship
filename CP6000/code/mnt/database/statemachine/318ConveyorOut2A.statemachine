@@ -1,0 +1,187 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut2A
+linkValue=photo test ConveyorOut2APhoto
+Output=motor "Conveyor POS.1.7 Motor"
+Link=parent Parent
+Link=prev ConveyorOut2B
+Link=next ConveyorOutA
+Value=errorCode 0
+Value=simulate 0
+Value=sendAndWait 0
+Value=timelength 0.0
+Value=timeleftget 1800000
+Value=maxSendTimeOn 0
+Const=minTime 1800000
+Const=autoDetectItem 1
+Const=motorOffWhilePush 1
+Timeout=startupTime 5000000
+Timeout=maxSendTime 2000000
+Timeout=freeWaitTime 300000
+Timeout=timeleftgetTimeout 1800000
+Timeout=searchAndStopTime 3000000
+Timeout=sendFreeTime 500000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET motor 0
+	TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  TEST photo = 1
+    SETSTATE ST_WAIT_SEND
+  ELSE
+    SET timeleftgetTimeout timeleftget
+    TIMEOUT timeleftgetTimeout ST_SEARCH
+    SETSTATE ST_SEARCH
+  ENDTEST
+END
+
+State=ST_SEARCH
+  TEST prev = ST_PUSH
+    TEST motorOffWhilePush = 0
+      SET motor 1
+    ENDTEST
+    SETSTATE ST_WAIT_PUSH_DONE
+  ELSETEST photo = 1
+    TEST next = ST_GET
+      SET timeleftgetTimeout timeleftget
+      SET motor 1
+      TIMEOUT timeleftgetTimeout ST_SEND
+      SETSTATE ST_SEND
+    ELSE
+      SET timeleftget timeleftgetTimeout
+      SET motor 0
+      SETSTATE ST_WAIT_SEND
+    ENDTEST
+  ELSE
+    SET timeleftget timeleftgetTimeout
+    ;TODO: stop motor ved push?
+    SET motor 1
+    TEST timeleftget = 1
+      TIMEOUT searchAndStopTime ST_SEARCH2
+      SETSTATE ST_SEARCH2
+    ENDTEST
+  ENDTEST 
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEARCH2
+  TEST prev = ST_PUSH
+    SET motor 1
+    SETSTATE ST_WAIT_PUSH_DONE
+  ELSETEST photo = 1
+    TEST next = ST_GET
+      SET timeleftgetTimeout timeleftget
+      SET motor 1
+      TIMEOUT timeleftgetTimeout ST_SEND
+      SETSTATE ST_SEND
+    ELSE
+      SET motor 0
+      SETSTATE ST_WAIT_SEND
+    ENDTEST
+  ELSE
+    TEST searchAndStopTime = 1
+      SET motor 0
+    ELSE
+      SET motor 1
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_PUSH_DONE
+  TEST motorOffWhilePush = 1
+    SET motor 0
+  ENDTEST
+  TEST photo = 1
+  AND next != ST_GET
+    SET motor 0
+  ENDTEST
+  SET timeleftget 50
+  TEST prev != ST_PUSH
+    SET timeleftgetTimeout minTime
+    SET timeleftget minTime
+    TEST photo = 1
+    AND next != ST_GET
+      SET motor 0
+      SETSTATE ST_WAIT_SEND
+    ELSE
+      SET motor 1
+      TIMEOUT timeleftgetTimeout ST_SEARCH
+      SETSTATE ST_SEARCH
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_WAIT_SEND
+  TEST prev = ST_PUSH
+    SET motor 0
+    SETSTATE ST_WAIT_PUSH_DONE
+  ELSETEST next = ST_GET
+    SET timeleftgetTimeout timeleftget
+    SET motor 1
+    TIMEOUT timeleftgetTimeout ST_SEND
+    SETSTATE ST_SEND
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST maxSendTimeOn = 0
+    SET timeleftget timeleftgetTimeout
+  ENDTEST
+  TEST timeleftgetTimeout = 1
+  AND maxSendTimeOn = 0
+    SET maxSendTimeOn 1
+    TIMEOUT maxSendTime ST_SEND
+    SETSTATE ST_SEND
+  ENDTEST
+  TEST prev = ST_PUSH
+    SET maxSendTimeOn 0
+    SET timeleftgetTimeout timeleftget
+    TIMEOUT timeleftgetTimeout ST_WAIT_PUSH_DONE
+    SETSTATE ST_WAIT_PUSH_DONE
+  ELSETEST photo = 0
+    SET maxSendTimeOn 0
+    TIMEOUT sendFreeTime ST_SEND_FREE
+    SETSTATE ST_SEND_FREE
+;    SET timeleftgetTimeout timeleftget
+;    TIMEOUT timeleftgetTimeout ST_SEARCH
+;    SETSTATE ST_SEARCH
+  ELSETEST next = ST_IDLE
+    SET maxSendTimeOn 0
+    SETSTATE ST_IDLE
+  ELSETEST maxSendTime = 1
+  AND maxSendTimeOn = 1
+    SET errorCode 1007
+    SET maxSendTimeOn 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND_FREE
+  TEST sendFreeTime = 1
+    SET timeleftgetTimeout timeleftget
+    TIMEOUT timeleftgetTimeout ST_SEARCH
+    SETSTATE ST_SEARCH
+  ENDTEST
+END

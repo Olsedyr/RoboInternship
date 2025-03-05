@@ -1,0 +1,239 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>formMsgBox</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>formMsgBox</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>799</width>
+            <height>599</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="baseSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="paletteBackgroundColor">
+        <color>
+            <red>0</red>
+            <green>85</green>
+            <blue>255</blue>
+        </color>
+    </property>
+    <property name="caption">
+        <string>Message box</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdCancel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>650</x>
+                <y>490</y>
+                <width>130</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdOk</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>510</x>
+                <y>490</y>
+                <width>130</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Ok</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textCaption</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>21</x>
+                <y>40</y>
+                <width>750</width>
+                <height>31</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>14</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Caption</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>380</x>
+                <y>140</y>
+                <width>32</width>
+                <height>40</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="pixmap">
+            <pixmap>image0</pixmap>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textMsgText</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>240</y>
+                <width>750</width>
+                <height>31</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>14</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>MessageText</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textMsgText_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>290</y>
+                <width>750</width>
+                <height>31</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>14</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>MessageText</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textMsgText_3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>340</y>
+                <width>750</width>
+                <height>31</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>14</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>MessageText</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="2278">89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af4000008ad494441545885e597cb6f1bd715c67f7766c82129520f4a91acd8ae9c58b215398e11c78f22861ba3690a7b51340dba0852a006bc4917fd0f0a78d34d16d9b845e20029eaa21b234de000adfb4a5335889ddacea3526cc7b21cd99228ca222992437148ce0c67eedc2e24b19625b741d15d0f70c08bb933f7fbce77ce87e1c0ff7b888d2e6edd14378a96672ac55619868f9b86feac21c43604dbc2501941a81ed234119a11bd89824086ba1784a626940ca1a9421ca02251450df1c7be9ed82fe7728ef59508440cb12b6a88ef032713a6611d1d796ceac9bdfb36b577762623a888ae697ac2d0e31a4a0b654018041086b84d9fa60cdc4086727e3e6b7ff4f9f5e68c5523e7d4530ada1271232aa57ab12d617c3c9773a6372290d2042f2462dae91dbd7de563bb877b871eee8ba4e331bc5a15dbb25028402064002a4413025d0884008140d7049a583eb2d10cb05c8fb96a9daae7f3feccbcb5d46c86a1a023543c6bd7830f5b04526d467fd4307f1086fe4f4f1cdacfc147066246d0a46455b0aa559452c44c13bdbd93e4e601da922912bd7d08238258a94195f374a652d432b7a9e7e6f16b36005e1050f703e6aa0d6e15abcdb1c5626ed175fbda9391c7e672ceb448b519038661bcd869c67ef2caf78e268453d7178b451a4223d1d3cbd7f67e1d63d356b6ee7a82743a4d32992412892c832a8552aab55e0da514f5c51cd6e417e43eb9883d3f4b6d314fcdf3b93cbfc89fef64ed42c3bded073c29cc8878f65bdb37bff7d4d060f07847227afb6e8e44ff16baf61ee2e07347e9dff60886612056a40dc3700dd0fdc0f7efc9a6472d3bcbdc87ef91b9f401b38b65ee546cce4e4cd56a8e4a1986a11d3e3cf4a8184818d1a9bb39d28f0cb1f93b2ff2cde7bedd3a6c1554d33462b158eb5a18864829f17dff8184841121b56d90c706b61349b5533b7796994a8db66844d69c265a20c3434280e34b925183cec161763db107a5540b64756d1806a55289d3a74ff3f4d34f333434c4c8c8087bf7ee65747414c7715acf6c941d8323440d0da914ba2e22009a2ed8ab092d542874a1b1696818d334d73dac691a4208de7efb6dde78e30d822060dfbe7d0c0f0f934c263979f22457ae5c59965d4aa4942d8556d79a6160681a8626688b47248066189a67e81a20700389aa5aad8aef57c1f77dce9f3f8f65599c38718237df7c933367ce70ecd831cae532afbdf65a0becfe04708b399a522e5b195c0043295c3f90441331ea7e40f5ce2d3cd7259148ace9ab10022925baae63180641102cdb331663cb962dcb96f3bc16d9758329034ad7c7707d49a842a2ba7e7365ae44d1d435d19688133334aaf9bb540bb97515f8be8f9492975e7a899d3b77924ea7310c836c36cbf8f838420806070737544e4a8953ccd358ccd3f0039a32c409826900231ad1fea03c677fc56fcfb5c5629b6a853cd96b63f43f3a8810629dcf0f1e3cc8c0c0003b76ecc0f33c464747f9f4d34fe9e8e8e0c891234829d755afeb3ab5ec2cb5ec0c0b3587dbb56ace937206109adb0c476f5596985c2c7fd9934a62d9368de9492ccb5a574d1886c4623186878709c390ab57af72f6ec590a8502c78f1fe799679ed9b0ff42088a9f7f8c1704d89e4fce75743f5067015db3ebc187bfbd3dfdebdf5c1d7b3488c64a7143a732799ddb5f5ca35eafaf19aa7b273a9fcf73fefc7932990cfbf6ede3f9e79f5f73cf6a2aa5a8cf4d5318bbc26ca54eaee158a152d97cc9cb01860690cdbbc7835076e43d79376546b0aa36cd9be32c2c2c3cd0d3e57299f1f171a2d1287bf6ec41d7f50dfb8f94143ffb3bb6db64ba623355afea6e206f022920aaadf6cbf5e489d72f5e4877b4b7133374ca37ae92bd3686ebbaeb54a8d56af4f7f7b37fff7e344dc3308c35eaacde07e0cdcf90ffc725b2d53a7e18fa35dfcf556cff1dc004347d9540c395b71271ed95877afaee6e4f98edf38b65ba3b52f8e93e3a3b3b5b765ccdcece4e464646d8be7d3b070e1c201e8fafd907304d93ccefdea278e74b268b4b4cd9d5c242cd19abd8c128d000ea2d0580c0f5e453e7c63fd7c344d24ec723643ffe086bea26d56a754d75a669e2fb3ea3a3a35cb87081898989357d0fc31043d358bcfc01f9b12bcc585566abb63b5db713763db8ccf2df801008f57b08d070653e95340fd4a56adfd3954a2fb91e86db40763d44bab7af559d699a6432194e9d3ac5a54b97c8e7f31c3d7ab4b51f8944f00b77c99c7f8bf94281eb798b9bb5a54ace72df6d78e1174001a800f6bd0a0060d579f9a33b539bf2226a0d74b5939b9a24f3a777c96632f8be4f1886d46a354cd3646464844422414f4fcfbf2a370c70ea4cbf7386d2fc1c37162b6ac175aa0bb673cb972ab722bd0b7880d4ef27e0799eab141f4c960adfddb3750b3d112d562e1569369b18dd7db425932db0a1a1210e1f3ecc912347304d93582c862e0316467f4f6efc13a6ac2a5f5ab67fb35a2997aafefb4d3fbc06e48005a00eb8eb080034fd30aba49a99282d7ee3d0c0d6b66ed3d0adcc0cf6c21c74f6602653adf740777737894482443c4eb39863eedcaf287c76991b8b1653655b7e66151bb379e77519aa0c905d91df029c0d15580dc797770229e7a7aa4b070e6c7eb82da9a3fb5689dac21cbee711dfb499542a45241241578ac2a5bf51bcf8172ab76f326bd94c9496e4f58a559acad55f0532c0ccca6f09b0011f0837fc2eb83736a563afa613b1177eb47b676f6f22d6d694124d08ccae1eda77ec42039c995b785619b7e971a3603155b6bdb14a69a954f7fe6a55fd73c0dc0a7079a5ff4d565cf01f0900d174327a2c9d8a9efae1cec1e8f6aef6fe88be6e7629351c264b5526cb4bb509bbe296ede6cfabf5607405b804d4581e3c56c0153ce0cb68a3e84d475f3034edc73db1d8e6dddd5df1dddde9ce58444b559ca6b2dc66f37aa9ece43ca766359b6ec3913fabd8fe45a0c8b2dcb57b40d5bde77e650280487744fa35c4a184a9bf1cd1f45e215407a002a5a2a15279d70f7fe107e18455f56fb06c370708ee07fd6f0900682b690046577ba44f814029ad62074540aea4bf02dc92fa7f4560351ee41ec50632ffbbf827687dcdf9930de2600000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

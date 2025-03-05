@@ -1,0 +1,17 @@
+STATEMACHINEVERSION 3
+Include=palletreverse.statemachine
+Name=PalletReverse4_7
+Input=palletInPlace1 "PC1 POS.4.5 Photo"
+Input=palletInPlace2 "PC2 POS.4.6 Photo"
+Input=palletInPlace3 "PC3 POS.4.7 Photo"
+Output=MotorRev1 "PC1 POS.4.5 MotorRev"
+Output=MotorRev2 "PC2 POS.4.6 MotorRev"
+Output=MotorRev3 "PC3 POS.4.7 MotorRev"
+Link=parent Parent
+Link=scissor ScissorDepalletizer4_7
+Link=pc1 Pos4_5
+Link=pc2 Pos4_6
+linkValue=reverseCommand reverseCommand scissor
+Value=reverseButton 0
+Timeout=timeReverse21 6100000
+Timeout=timeReverse32 7000000

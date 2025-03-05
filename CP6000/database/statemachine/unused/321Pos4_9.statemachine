@@ -1,0 +1,11 @@
+STATEMACHINEVERSION 3
+Include=pallebanelink.statemachine
+Name=Pos4_9
+Const=Id 49
+Input=palletInPlace "PC7 POS.4.9 Photo"
+Output=Motor "PC7 POS.4.9 Motor"
+Link=next ScissorPalletizer4_10
+Link=prev Shuttle
+Link=parent Parent 
+linkValue=prevId signalId prev
+Value=nextId 49

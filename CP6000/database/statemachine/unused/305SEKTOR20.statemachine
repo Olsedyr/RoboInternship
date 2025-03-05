@@ -1,0 +1,90 @@
+STATEMACHINEVERSION 2
+Name=Sektor20
+Delaystop=10000000
+Input=0,Foto1 "Sektor20 Foto1"
+Input=1,Foto2 "Sektor20 Foto2"
+Input=2,Foto3 "Sektor20 Foto3"
+Output=0,Motor "Sektor20 Motor"
+Link=0,Sektor21
+Link=1,WorkCell
+;Type=STM_CONV_OUT
+
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_OK
+END
+
+State=0,ST_ERROR
+END
+
+State=0,ST_IDLE
+SET Motor 0
+END
+
+State=1,ST_READY
+  TEST Foto1 = 0 
+  AND Foto2 = 0 
+  AND Foto3 = 0 
+    SETSTATE ST_EMPTY
+  ELSE 
+    TEST Sektor21 = ST_EMPTY
+      SETSTATE ST_SEND
+    ENDTEST
+  ENDTEST
+  TEST WorkCell = ST_IDLE
+  OR WorkCell = ST_PAUSED
+  OR WorkCell = ST_PAUSING
+  OR WorkCell = ST_STOPPING
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=2,ST_SEND
+  TEST Sektor21 = ST_READY
+    SET Motor 0
+    TEST Foto1 = 0
+    AND Foto2 = 0
+    AND Foto3 = 0
+      SETSTATE ST_EMPTY
+    ELSE
+      SETSTATE ST_READY
+    ENDTEST
+  ELSE
+    SET Motor 1
+  ENDTEST
+  END
+
+State=3,ST_EMPTY
+  SET Motor 0
+  TEST WorkCell = ST_IDLE
+  OR WorkCell = ST_PAUSED
+  OR WorkCell = ST_PAUSING
+  OR WorkCell = ST_STOPPING
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=4,ST_TEST
+  TEST Foto2 = 1
+  AND Foto3 = 1
+    SETSTATE ST_OK
+  ELSE
+    SETSTATE ST_ERROR
+  ENDTEST 
+  SET Motor 0
+  END
+
+State=5,ST_RESET
+  TEST Foto1 = 0
+  AND Foto2 = 0
+  AND Foto3 = 0
+    SETSTATE ST_EMPTY
+  ELSE
+    SETSTATE ST_READY
+  ENDTEST
+  END

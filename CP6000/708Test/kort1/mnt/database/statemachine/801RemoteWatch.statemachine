@@ -1,0 +1,73 @@
+STATEMACHINEVERSION 3
+Name=RemoteWatch
+Link=parent Parent
+Link=RobotProgram Program311
+;CW, CP1 og CP2 kun for at tjekke efter netforbindelse
+Link=CW ProgramS1
+Link=CP1 KasseLift
+Link=CP2 KasseLift2
+Link=myProgram Program801
+Value=errorCode 0
+Value=message 0
+Value=tester 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SET message 0
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST RobotProgram = UNKNOWN
+  OR CW = UNKNOWN
+  OR CP1 = UNKNOWN
+  OR CP2 = UNKNOWN
+    SET message 2050
+    TEST CP1 = UNKNOWN
+      SET message 2055
+    ENDTEST
+    TEST CP2 = UNKNOWN
+      SET message 2056
+    ENDTEST
+	  TEST RobotProgram = UNKNOWN
+		  SET message 2051
+    ENDTEST
+    TEST CW = UNKNOWN
+      SET message 2053
+    ENDTEST
+  ELSE
+    SET message 0
+  ENDTEST
+	TEST myProgram != ST_IDLE
+	AND myProgram != ST_HALT
+	AND myProgram != ST_RESET
+    TEST RobotProgram = ST_RUNNING_C18
+      TEST myProgram != ST_RUNNING_C18
+				SET errorCode 1070
+				SETSTATE ST_IDLE
+      ENDTEST 
+    ELSE
+      TEST RobotProgram = ST_RUNNING_NETTO
+        TEST myProgram != ST_RUNNING_NETTO
+					SET errorCode 1070
+					SETSTATE ST_IDLE
+        ENDTEST 
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

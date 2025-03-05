@@ -1,0 +1,9 @@
+STATEMACHINEVERSION 3
+Include=fotoinput.statemachine
+Name=FotoInput1Refleks
+Input=input "Remote Control Button 1"
+Timeout=TimeSeeSomething 100000
+Timeout=TimeSeeNothing 5000000
+Value=test 0
+Const=free 1
+Const=blocked 0

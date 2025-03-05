@@ -1,0 +1,43 @@
+STATEMACHINEVERSION 3
+Name=Emergency
+Input=EmergencyOK "Emergency OK"
+Output=StyreSpaendingOK "Styrespaending OK"
+Value=errorCode 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+  TEST EmergencyOK = 0
+		SETSTATE ST_POWEROFF
+  ELSE
+    SETSTATE ST_POWERON
+  ENDTEST
+END
+
+State=ST_IDLE
+  TEST EmergencyOK = 0
+		SETSTATE ST_POWEROFF
+  ELSE
+    SETSTATE ST_POWERON
+  ENDTEST
+END
+
+State=ST_POWEROFF
+	SET errorCode 101
+  SET StyreSpaendingOK 0
+  TEST EmergencyOK = 1
+		SETSTATE ST_POWERON
+	ENDTEST
+END
+
+State=ST_POWERON
+	SET errorCode 0
+  SET StyreSpaendingOK 1
+	TEST EmergencyOK = 0
+		SETSTATE ST_POWEROFF
+	ENDTEST
+END
+
+State=ST_RESET
+END

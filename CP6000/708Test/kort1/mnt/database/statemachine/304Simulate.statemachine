@@ -1,0 +1,52 @@
+STATEMACHINEVERSION 3
+Name=Simulate
+Link=PS
+Link=Conv1
+Link=Conv2
+Link=PallebanePS
+Link=Pallemagasin
+Link=Pallebane7
+Link=Pallebane9
+Link=Emergency
+linkValue=simulatePS simulate PS
+linkValue=simulateConv1 simulate Conv1
+linkValue=simulateConv2 simulate Conv2
+linkValue=simulatePallebanePS simulate PallebanePS
+linkValue=simulatePallemagasin simulate Pallemagasin
+linkValue=simulatePallebane7 simulate Pallebane7
+linkValue=simulatePallebane9 simulate Pallebane9
+linkValue=simulateEmergency simulate Emergency
+Value=simulate 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST simulate = 0
+    SET simulatePS 0
+    SET simulateConv1 0
+    SET simulateConv2 0
+    SET simulatePallebanePS 0
+    SET simulatePallemagasin 0
+    SET simulatePallebane7 0
+    SET simulatePallebane9 0
+    SET simulateEmergency 0
+  ELSE
+    TEST simulate = 1
+      SET simulatePS 1
+      SET simulateConv1 1
+      SET simulateConv2 1
+      SET simulatePallebanePS 1
+      SET simulatePallemagasin 1
+      SET simulatePallebane7 1
+      SET simulatePallebane9 1
+      SET simulateEmergency 1
+    ELSE
+;=2 enable individual settings of simulate
+    ENDTEST
+  ENDTEST
+END
+

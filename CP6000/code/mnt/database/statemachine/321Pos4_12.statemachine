@@ -1,0 +1,11 @@
+STATEMACHINEVERSION 3
+Include=pallebane.statemachine
+Name=Pos4_12
+Input=palletInPlace "PC9 POS.4.12 Photo"
+Output=Motor "PC9 POS.4.12 Motor"
+Link=next Pos4_12
+Link=prev Pos4_11
+Link=parent Parent
+Timeout=PickupDelay 3000000
+Const=ON 0
+Timeout=StopDelay 100000

@@ -1,0 +1,16 @@
+; INLINE 312inlineLoadPalletB1.statemachine
+SETFRAME fromFrame palletB1
+CALC ftemp = item.sy * cBStackleft
+CALC fromFrame.y = fromFrame.y + ftemp
+CALC fromFrame.y = fromFrame.y + item.my
+;*******************************************
+SETFRAME toFrame conveyorB
+CALC toFrame.y = toFrame.y + item.gy
+CALC toFrame.x = toFrame.x - item.gx
+LOAD palletB1_conveyorB fromFrame toFrame
+SETFRAME toFrame conveyorA
+CALC toFrame.y = toFrame.y + item.gy
+CALC toFrame.x = toFrame.x - item.gx
+LOAD palletB1_conveyorA fromFrame toFrame
+;*******************************************
+LOAD palletB1_home fromFrame home 

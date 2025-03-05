@@ -1,0 +1,209 @@
+STATEMACHINEVERSION 3
+Name=PIDBuffer
+Delaystop=10000000
+Input=raw "BufferPlads Encoder"
+Input=homesensor "BufferPlads HomeSensor"
+Input=powerok "BufferPlads HZOK"
+Output=encoderenable "BufferPlads Input Validation"
+Output=encoderreset "BufferPlads Direct"
+Output=motorenable "BufferPlads Motor Enable"
+Output=Motor "BufferPlads Setpoint"
+Link=CamGen CamGenBuffer
+Link=parent Parent
+Table=pehistory 600
+linkValue=firstRun WorkCell
+linkValue=setpoint CamGen
+linkValue=setspeed CamGen
+Value=errorCode 0
+Value=ticksround 20000
+Value=ticksroundh 8000
+Const=home 15000
+Const=speedinhoming 4.0000
+Value=homevalone 0
+Value=homevaltwo 0
+Value=homevalthree 0
+Const=Kp 7.0000
+Const=Kd 12.0000
+Const=Ki 0.1200
+Const=Ks 0.4500
+Const=intdecay 0.8900
+Const=minintegral -100000.0000
+Const=maxintegral 100000.0000
+Const=minoutval -100.0
+Const=maxoutval 100.0
+Const=factor 325.0
+Value=dir 1
+Value=encoder 0
+Value=outval 0.0
+Value=poserr 0
+Value=oldposerr 0
+Value=integral 0.0
+Value=diff 0
+Value=temp 0
+Value=Kpart 0.0
+Value=Dpart 0.0
+Value=Ipart 0.0
+Value=Spart 0.0
+Value=curpos 0.0
+Value=homed 0
+Timeout=TimeHome 15000000
+Timeout=TimeStartup 800000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+  SET Motor 0.0
+  SET encoderreset 2
+  SET motorenable 0
+  ; don't SET encoderenable to 0
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	TEST firstRun = 1
+		SET homed 0
+	ENDTEST
+  TEST homed = 1
+		TIMEOUT TimeStartup ST_STARTUP
+		SETSTATE ST_STARTUP
+  ELSE
+		SET motorenable 1
+    SET encoderenable 1
+    SETSTATE ST_STARTHOME
+  ENDTEST
+END
+
+State=ST_STARTUP
+	SET motorenable 1
+  SET Motor 0.0
+	TEST TimeStartup = 1
+		SETSTATE ST_RUN
+	ENDTEST
+END
+
+State=ST_RUN
+	; should we reset counter?
+  TEST homesensor = 0
+		SET encoderreset 6
+	ELSE
+		SET encoderreset 2
+	ENDTEST
+	; make absolute encoder
+	TEST raw < home
+    CALC encoder = ticksround - home 
+    CALC encoder = encoder + raw
+  ELSE
+    CALC encoder = raw - home
+    CALC encoder = encoder % ticksround
+  ENDTEST
+  SET curpos encoder
+  SET oldposerr poserr
+  CALC poserr = setpoint - curpos
+  TEST poserr > ticksroundh
+    CALC poserr = poserr - ticksround
+  ELSE
+    CALC temp = poserr * -1
+    TEST temp > ticksroundh
+      CALC poserr = poserr + ticksround
+    ENDTEST
+  ENDTEST
+	SET pehistory poserr
+  CALC diff = poserr - oldposerr
+  CALC integral = poserr + integral
+  CALC integral = integral * intdecay
+  TEST integral < minintegral
+    SET integral minintegral
+  ELSE
+    TEST integral > maxintegral
+      SET integral maxintegral
+    ENDTEST
+  ENDTEST
+  CALC Kpart = Kp * poserr
+  CALC Dpart = Kd * diff
+  CALC Ipart = Ki * integral
+  CALC Spart = Ks * setspeed
+  CALC outval = Dpart + Kpart
+  CALC outval = Ipart + outval
+  CALC outval = Spart + outval
+  CALC outval = dir * outval
+	CALC outval = outval / factor
+  TEST outval < minoutval
+    SET outval minoutval
+  ELSE
+    TEST outval > maxoutval
+      SET outval maxoutval
+    ENDTEST
+  ENDTEST
+  TEST powerok = 0
+    SET Motor 0.0
+    SET homed 0
+    SETSTATE ST_IDLE
+  ELSE
+    SET Motor outval
+  ENDTEST
+  TEST CamGen = ST_IDLE
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STARTHOME
+  SET encoderreset 2
+  TIMEOUT TimeHome ST_HOME
+  SETSTATE ST_HOME
+END
+
+State=ST_HOME
+  TEST homesensor = 0
+    SET encoderreset 6
+    SET homevalone home
+    SET Motor speedinhoming
+		TIMEOUT TimeHome ST_HOME2
+    SETSTATE ST_HOME2
+  ELSE
+    SET Motor speedinhoming
+  ENDTEST
+  TEST TimeHome = 1
+    SET errorCode 1051
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_HOME2
+  TEST homesensor = 1
+    SET encoderreset 2
+    SET homevaltwo raw
+    SET Motor speedinhoming
+    SETSTATE ST_HOME3
+  ELSE
+    SET Motor speedinhoming
+  ENDTEST
+  TEST TimeHome = 1
+    SET errorCode 1051
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_HOME3
+  TEST homesensor = 0
+    SET encoderreset 6
+    SET homevalthree raw
+    SET homed 1
+    SET Motor 0.0
+    SET dir 1
+    CALC ticksround = homevalthree - homevalone
+    TEST ticksround < 0
+      CALC ticksround = ticksround * -1
+      SET dir -1
+    ENDTEST
+    CALC ticksroundh = ticksround / 3
+    SETSTATE ST_RUN
+  ELSE
+    SET Motor speedinhoming
+  ENDTEST
+END

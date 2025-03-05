@@ -1,0 +1,64 @@
+STATEMACHINEVERSION 3
+Name=TripWatch
+Input=pc1 "PC1 POS.2.1 Tripped"
+Input=pc2 "PC2 POS.2.2 Tripped"
+Input=pc3 "PC3 POS.2.3 Tripped"
+Input=pc7 "PC7 POS.2.4 Tripped"
+Input=pm "PM POS.2.5 Tripped"
+Input=sc1 "ScissorTable POS.2.3 Tripped"
+Input=cbc "CardBoardConveyor POS.2.7 Tripped"
+Input=mattop "Mattop POS.2.6 Tripped"
+Input=cardboardstatus "CardBoardShuttle Status"
+Input=vac "Thermorelay Vacuum"
+linkValue=manometer test Manometer
+Link=parent Parent
+Value=errorCode 0
+Const=vacTrip 1
+Const=manoTrip 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST sc1 = 1
+		SET errorCode 1130
+	ELSETEST vac = vacTrip
+		SET errorCode 1131
+	ELSETEST pc1 = 1
+	OR pc2 = 1
+	OR pc3 = 1
+	OR pc7 = 1
+	OR pm = 1
+		SET errorCode 1116
+	ELSETEST cardboardstatus != 524304
+	AND cardboardstatus != 524320
+	AND cardboardstatus != 524336
+	AND cardboardstatus != 524352
+	AND cardboardstatus != 524368
+	AND cardboardstatus != 524288
+		SET errorCode 1098
+	ELSETEST cbc = 1
+	OR mattop = 1
+		SET errorCode 1114
+  ELSETEST manometer = manoTrip
+    SET errorCode 1117
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

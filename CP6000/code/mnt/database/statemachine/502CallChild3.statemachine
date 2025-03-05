@@ -1,0 +1,16 @@
+STATEMACHINEVERSION 3
+Include=502CallChild1.statemachine
+Name=CallChild3
+Output=getbag "S2 Extern Sync Out3"
+Link=parent ParentS2
+Link=Foto CallChild3Foto
+Link=BagCaller BagCaller 
+linkValue=idx BagCaller
+Value=readytime 0
+Value=curt 0
+Value=thisidx 3
+Const=enable 1
+Timeout=TimeWait 6000000
+Timeout=TimeReady 30000000
+Timeout=TimeDeliver 300000
+Timeout=TimeOutDelay 15000000

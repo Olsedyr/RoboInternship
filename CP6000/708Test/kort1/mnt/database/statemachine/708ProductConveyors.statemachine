@@ -1,0 +1,17 @@
+STATEMACHINEVERSION 3
+Include=cpproductconveyors.statemachine
+Name=ProductConveyors
+Input=powerok1 "ProduktConveyor_1 HZOK"
+Input=powerok2 "ProduktConveyor_2 HZOK"
+Output=Motor1Enable "ProductConveyor1 Motor Enable"
+Output=Motor1Setpoint "ProductConveyor1 Setpoint"
+Output=Motor2Enable "ProductConveyor2 Motor Enable"
+Output=Motor2Setpoint "ProductConveyor2 Setpoint"
+Link=CamGenSkub ServoSkub
+Const=motor1FreqForward -35.0000
+Const=motor1FreqReverse 40.0000
+Const=motor2FreqForward -35.0000
+Const=motor2FreqReverse 45.0000
+Timeout=TimeRunAgain 100000
+;** User section **
+Timeout=TimeStop 200000

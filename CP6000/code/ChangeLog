@@ -1,0 +1,202 @@
+2007-12-06
+
+	* Updated formCWUser.c to support cw60 (general checkweigher)
+	* formICPconUser.c updates output bits in UserUpdate method
+	* 708 products from left (708Program.statemachine)
+
+2007-06-15  Mads Lundstrom  <mil@mpnrobotics.com>
+
+	* Added support for udpagents. Small server/clients that communicate statemachine values across platforms (to upman for instance).
+
+2007-06-13  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Changed 701 to use Servo.
+	* TODO:
+	* dio update and KasseLoader2 needs Motor instead of Skub
+	* Check up on 502
+	* Servo CaseStop and the photocell not being adjustable.
+
+2007-06-12  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Changes made during first visit to Saransk:
+	* 904ServoShuttle: homed = 0 when photos not found in ST_RUN_SEARCH_PHOTO
+	* Switch language to english during login
+	* Added Halt/Idle button to formSTMCtrl
+	* Added B and C home sensor indicators to formJogAxis
+	* Added plus/minus to select axis number
+	* Added Manometer to all robot  workcells
+	* Added Scissor Secure to all scissors
+	* Added ST_X_ABORT to all ProgramB2.statemachine and Tool.statemachine
+	* All Tool.statemachine start in ST_PAUSE
+	* ScissorDepalletizer will lower if photo's are on after center/centerpos. Glaspallets can be one layer higher than palletcenterer and must be lowered to match frame.
+	* Etc.
+	
+2007-05-30  Mads Lundstrom  <mil@mpnrobotics.com>
+
+	* Added fourier analysis support to the scope function. Also added differential support. 
+	The shared library libfftw3.so is now required for robostacker to compile properly. 
+	Get it from samba/devel on the server (use option --enable-shared for ./configure, then make, make install).
+	Add /usr/local/lib/ to /etc/ld.so.conf and run ldconfig
+	* The flash-image has been updated with libfftw3.so.
+
+2007-05-11  Mads Lundstrom  <mil@mpnrobotics.com>
+
+	* Split up tmpnStatemachineLoad() into two stages (tmpnStatemachineLoad() and tmpnStateLoad())
+	, where the first one loads all declarations (in the stm-file itself and include-files), and the second one
+	loads all states, and performs getFunctionBody() on each state. This resolves bug where an output set
+	to "dummyOut" in the include-file results in wrong output-type in the ARG-struct. 
+
+2007-05-22  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Added user keyword to cppattern and item. When 0 the item or cppattern can not be saved.
+	* ITEMVERSION bumped up to support user keyword.
+	* Added tmpnItemSave and added filename to struct tmpnItem
+	* Implemented formItem_cmdCreate_Click
+	* Added entries to danish.language. TODO: add to the others. Update 2007-06-13: Added to the others. TODO: translate to spanish and russian.
+	* Added check to see if name and filename exists when creating a CP Pattern, error on save failure and clean up on add-to-workcell-file error
+
+2007-05-21  Thomas Nørby  <thn@mpn.nu>
+
+	* 901PindeTjekker400 updated to work like Palm
+
+2007-05-16  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Added support for creating new cppattern from formCPPattern.c, got a few TODO's
+
+2007-05-15  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* 708 now uses general cp statemachines and cppattern
+	* Added cpservolift.statemachine, cpservoskub.statemachine, cpservobuffer.statemachine
+	* Added cptripwatch2.statemachine to support servo
+	* Added KasseLift = ST_IDLE before pause in cpworkcell.statemachine
+	* Updated formJogLift to support servo - not tested
+	* Added getMacConnectPtr to cmd.c/h
+	* Updated loader.c to simulate trio on connection error instead of exiting
+
+2007-05-11  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Added formEditCPPattern and formCPPattern
+	* Added support for SETCPPATTERN in Program states
+
+2007-05-09  Mads Lundstrom  <mil@mpnrobotics.com>
+
+	* Added icpcon driver, including relevant bx-controls for stm and dist. i/o
+
+2007-05-08  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Added CP Pattern support to statemachines:
+	* Load command: CPPattern=<local name> <name in .cppattern file>
+	* Set command: SETCPPATTERN <dest name> <src name>
+	* Sub commands (<name>.<subcommand>):
+		* Set subcommands:
+			* layeridx (sets selected layer)
+			* pppidx (sets selected ppp in selected layer)
+		* Get subcommands:
+			* maxlayers (number of layers in pattern)
+			* maxpush (number of pushes in selected layer)
+			* gettime (gettime in selected layer)
+			* ppp (ppp in selected layer and selected ppp)
+	* Added cppushpattern2.statemachine (Testet, afprøvet og fundet i orden)
+	* Automatic unload and cleanup on CP Pattern load error (in tmpnCPPatternLoad)
+
+2007-05-07  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Workcell version 2. Uses keywords instead of reading maxidx.
+	* Keywords are:
+	  ROBOT,TOOL,ITEM,PATTERN,CPPATTERN,ACCESSORY,PPSCRIPT,DIO,COMSK,
+	  LOADCELL,MAC,STM,SCRIPT,STATETEKST,REMOTEHOST,BOPTCOEFF,LANGUAGE
+	* Updated 706.workcell to version 2
+	* Added CP Pattern. At this point only Loading of CP patterns is possible (cmd.c :: tmpnCPPatternLoad)
+	* Added CP Pattern example: cppattern/test.cppattern
+
+2007-04-30  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Added support for SETITEM in ST_PROGRAM_XX states
+	* Updated SaveProgramVal in cmd.c/h to support SETITEM
+	* Added SaveItemVal function to cmd.c/h
+	* Added formItem to select a item from loaded items. TODO: Has un-implemented buttons for adding, removing loaded items (*.workcell file) and buttons for creating, deleting and editing items (item dir)
+
+2007-04-25  Thomas Nørby  <thn@mpn.nu>
+
+	* Updated rs/version to 3.02 
+	* Updated 803 to use more general statemachine's 
+  	* Updated 803 sendTime  
+  	* Updated 803 to "caseMagazine 3.02"
+	* Updated 314 boptcoeff
+  	* Updated 314 to "roboStacker 3.02"
+  	* BUGFIX: cmpallestation.statemachine: pos1MinHys replaced by pos1, pos2MinHys replaced by pos2, pos3MinHys replaced by pos3
+  	* Updated 504 to use latest general statemachines
+  	* Updated 504 to "checkWeigher 3.02"
+  	* Updated 803PindeTjekker unSqueezeTime added
+	* Updated checkweigherzerocalib.statemachine to count minuts between auto calibration
+  	* BUGFIX: pallemagasin2.statemachine extra ST_STOP removed
+	* BUGFIX: libmpnrobot/cmd.c Added  init to all Table->item's In tmpnStateamchineLoad
+	* Added cmzone2.statemachine
+
+2007-04-24  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Updated 703 and 706 Links regarding oldppp/curppp problem fixed 2007-03-30
+	* Now using linkValue pointer in formSTMCtrlUser.c, added formSTMCtrl_BuildValueString method
+	* Added indication if the linkValue is remote: "linkValue(remote) <name> <val>"
+
+2007-04-23  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* 319Mattop:
+	-- Added ST_WAIT_B04_FREE.
+	-- Use ST_WAIT_B04_FREE instead of TimePause after ST_REV.
+	-- Do one more ST_FORWARD in ST_STOP if B01 or B02 is activated (reactivated after ST_REV).
+
+2007-04-19  Thomas Nørby  <thn@mpn.nu>
+
+	* BUG: The tool does not blow before moving to home.
+	* 319 ST_PALLETB_ABORT added to ProgramB2 and Tool.
+	* TODO: the Program could instead control the tool via linkValue
+
+2007-04-19  Thomas Nørby  <thn@mpn.nu>
+
+	* TimePause added to sequence in 319Mattop.statemachine
+
+2007-04-19  Thomas Nørby  <thn@mpn.nu>
+
+	* 318 read1 activated
+
+2007-04-19  Thomas Nørby  <thn@mpn.nu>
+
+	* length and width added to tmpnPattern in order 
+	* to draw scaled in formEditBoxPatternUser.c
+
+2007-04-08  Thomas Nørby  <thn@mpn.nu>
+
+	* Added mc_version to assure match between host and mc
+	* Robostacker309-ZCTLCOMMAND will return VERSION 2 (used to return 1.6242)
+	* From VERSION 2 it is possible to set PID from host
+	* Workcells with mc_version >= 2 must have PID values in *.robot
+
+2007-03-30  Thomas Nørby  <thn@mpn.nu>
+
+	* oldppp/curppp problem solved in general statemachine for casePacker 
+
+2007-03-07  Thomas Nørby  <thn@mpn.nu>
+
+	* pallemagasin added maxCylDownTime
+	* pallemagasin2 added maxCylDownTime
+	* timestamp before PRINT in cmd.c        
+	* 316 robot now moves directly from PALLETB CONVEYORB autorobotspeed is increased if ConveyorOut = ST_READY_ROBOT decreased if not 
+
+2007-03-07  Michael Jessen  <mvj@mpnrobotics.com>
+
+	* Tilføjet staticmode følgefejlstest i cppidlift og cpcamgenlift (+ opdateret værdier i 702 og 703)
+	* Samme tilføjet i 705.
+
+2005-07-11  Mads Lundstrom  <mil@mpnrobotics.com>
+
+	* tester
+
+ Lundstrom  <mil@mpnrobotics.com>
+
+	* tester
+
+mil@mpnrobotics.com>
+
+	* tester
+

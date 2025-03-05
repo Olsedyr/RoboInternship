@@ -1,0 +1,210 @@
+STATEMACHINEVERSION 3
+Name=KasseLoader
+;override motor and skubber in includer statemachine
+Output=motor "Red Light"
+Output=skubber "Red Light"
+;minihack: if Kasseloader doesn't have a stopper set it to any or empty output and set hasStopper = 0, the output will then not be set
+Output=stopper "Red Light"
+Value=errorCode 0
+Value=gotCase 0
+Value=m1121 1121
+linkValue=firstRun WorkCell
+Link=prev KasseInd2
+Link=skubberReceiver KasseInLiner
+Link=parent Parent
+;conveyorReceiver only used if hasStopper = 1
+Link=conveyorReceiver KasseIndConveyor4
+Link=foto KasseLoader1Foto
+;linkValue=loadfromleft Program
+Const=hasStopper 0
+;whether or not prev sends from side or back of KasseLoader
+Const=sideReceive 0
+Const=resetOnError 1
+Timeout=skubberTime 3000000
+Timeout=startupTime 5000000
+Timeout=maxReceiveTime 10000000
+Timeout=motorStopTime 1000000
+Value=simulate 0
+Value=inPush 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET skubber 0
+  SET motor 0
+  TEST hasStopper = 1
+    SET stopper 0
+  ENDTEST
+	TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  TEST hasStopper = 1
+    SET stopper 0
+  ENDTEST
+	TEST foto = ST_BLOCKED
+    TIMEOUT motorStopTime ST_READY
+		SETSTATE ST_READY
+	ELSE
+    TEST foto = ST_FREE
+      TIMEOUT startupTime ST_STARTUP
+	    SETSTATE ST_STARTUP
+    ENDTEST
+	ENDTEST
+END
+
+State=ST_STARTUP
+  TEST firstRun = 1
+  OR gotCase = 1
+    TEST startupTime = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      TEST foto = ST_BLOCKED
+        TIMEOUT motorStopTime ST_READY
+        SETSTATE ST_READY
+      ELSE
+        SET motor 1
+      ENDTEST
+	  ENDTEST
+  ELSE
+    SETSTATE ST_EMPTY
+  ENDTEST
+END
+
+State=ST_EMPTY
+  SET gotCase 0
+	SET skubber 0
+  TEST hasStopper = 1
+    SET stopper 0
+  ENDTEST
+	TEST foto = ST_BLOCKED
+    TIMEOUT motorStopTime ST_READY
+		SETSTATE ST_READY
+	ENDTEST
+	TEST prev = ST_SEND
+    TIMEOUT maxReceiveTime ST_RECEIVE
+		SETSTATE ST_RECEIVE
+  ELSE
+    SET motor 0
+	ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST sideReceive = 1
+    TEST prev != ST_SEND
+      SET motor 1
+    ENDTEST
+  ELSE
+    SET motor 1
+  ENDTEST
+  TEST prev != ST_SEND
+    SET gotCase 1
+  ENDTEST
+  TEST foto = ST_BLOCKED
+    SET gotCase 1
+    TIMEOUT motorStopTime ST_READY
+    SETSTATE ST_READY
+  ENDTEST
+  TEST maxReceiveTime = 1
+    TEST resetOnError = 1
+      SETSTATE ST_RESET
+    ELSE
+      SET errorCode m1121
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_SKUBBER
+  TEST motorStopTime = 1
+    SET motor 0
+    TEST inPush = 0
+      TEST skubberReceiver = ST_RECEIVE1
+      OR skubberReceiver = ST_RECEIVE2
+      OR skubberReceiver = ST_RECEIVE3
+        SET skubber 1
+        SET inPush 1
+      ELSE
+        SET skubber 0
+      ENDTEST
+    ELSE
+      TEST skubberReceiver != ST_RECEIVE1
+      AND skubberReceiver != ST_RECEIVE2
+      AND skubberReceiver != ST_RECEIVE3    
+        SET inPush 0
+        TIMEOUT skubberTime ST_GOBACK
+        SETSTATE ST_GOBACK  
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST skubberReceiver = ST_IDLE
+    SETSTATE ST_RESET
+    SET inPush 0
+  ENDTEST
+END
+
+State=ST_READY
+	SET skubber 0
+  TEST skubberReceiver = ST_EMPTY
+    SETSTATE ST_SKUBBER
+  ELSE
+    TEST hasStopper = 1
+      TEST conveyorReceiver = ST_EMPTY
+        SETSTATE ST_SEND
+      ELSE
+        TEST motorStopTime = 1
+          SET motor 0
+        ENDTEST
+      ENDTEST
+    ELSE
+      TEST motorStopTime = 1
+        SET motor 0
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST foto = ST_FREE
+    SETSTATE ST_EMPTY
+  ENDTEST
+	TEST parent = ST_IDLE
+  AND simulate = 0
+  AND motorStopTime = 1
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+	TEST conveyorReceiver = ST_RECEIVE
+    SET motor 1
+    SET stopper 1
+	ENDTEST
+  TEST conveyorReceiver != ST_RECEIVE
+  AND conveyorReceiver != ST_EMPTY
+    SETSTATE ST_EMPTY
+  ENDTEST
+	TEST foto = ST_FREE
+		SETSTATE ST_EMPTY
+	ENDTEST
+END
+
+State=ST_GOBACK
+	SET skubber 0
+	TEST skubberTime = 1
+    TEST foto = ST_FREE
+		  SETSTATE ST_EMPTY
+    ELSE
+      SETSTATE ST_RESET
+	  ENDTEST
+	ENDTEST
+END

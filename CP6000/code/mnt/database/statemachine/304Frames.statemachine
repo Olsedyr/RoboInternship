@@ -1,0 +1,23 @@
+STATEMACHINEVERSION 3
+Name=Frames
+Frame=base x=0.0 y=0.0 z=0.0 v=0.0 w=0.0 u=0.0
+Frame=home x=900.0 y=2320.0 z=1350.0 v=90.0 w=0.0 u=0.0
+Frame=homeHigh x=900.0 y=2410.0 z=1350.0 v=90.0 w=0.0 u=0.0
+Frame=palletB x=450.0000 y=320.0000 z=35.0000 v=90.0000 w=0.0000 u=0.0000
+Frame=conveyorB x=575.0000 y=410.0000 z=1350.0000 v=100.0000 w=0.0000 u=0.0000
+Frame=conveyorBplast x=460.0000 y=350.0000 z=1390.0000 v=100.0000 w=0.0000 u=0.0000
+Value=nextpalb 0
+Value=userPalletOut 0
+Value=cBItem 0
+Value=itemCounter 0
+Value=wBItem 0
+
+State=ST_HALT
+END
+State=ST_IDLE
+END
+State=ST_TIMER
+END
+State=ST_RESET
+END
+

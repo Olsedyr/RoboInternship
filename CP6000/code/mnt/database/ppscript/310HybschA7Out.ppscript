@@ -1,0 +1,19 @@
+PPSCRIPTVERSION 2
+310HybschA7Out
+type=19
+itemsPrLayer=2
+layers=7
+move HybschA from conveyorBP to palletB0PH(idx=0,0)
+move HybschA from conveyorBP to palletB0P(idx=1,1)
+move HybschA from conveyorBP to palletB1P(idx=0,2)
+move HybschA from conveyorBP to palletB0P(idx=2,3)
+move HybschA from conveyorBP to palletB1P(idx=1,4)
+move HybschA from conveyorBP to palletB0P(idx=3,5)
+move HybschA from conveyorBP to palletB1P(idx=2,6)
+move HybschA from conveyorBP to palletB0P(idx=4,7)
+move HybschA from conveyorBP to palletB1P(idx=3,8)
+move HybschA from conveyorBP to palletB0P(idx=5,9)
+move HybschA from conveyorBP to palletB1P(idx=4,10)
+move HybschA from conveyorBP to palletB0P(idx=6,11)
+move HybschA from conveyorBP to palletB1P(idx=5,12)
+move HybschA from conveyorBP to palletB1P(idx=6,13)

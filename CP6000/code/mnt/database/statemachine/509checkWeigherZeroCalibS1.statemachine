@@ -1,0 +1,4 @@
+STATEMACHINEVERSION 3
+Include=checkweigherzerocalib.statemachine
+Name=checkWeigherZeroCalibS1
+;** User section **

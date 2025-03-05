@@ -1,0 +1,92 @@
+STATEMACHINEVERSION 3
+Name=LongConveyorMotor
+;** Input **
+;** Output **
+Output=motor "Long Conveyor Motor"
+Output=startnt1 "Start Newtec1"
+Output=startnt2 "Start Newtec2"
+Output=startnt3 "Start Newtec3"
+;** Link **
+Link=master CollectConveyor
+Link=sync1 SyncConveyor1
+Link=sync2 SyncConveyor2
+Link=sync3 SyncConveyor3
+;** linkValue **
+linkValue=ETA1 ETA LongConveyor1
+linkValue=ETA2 ETA LongConveyor2
+linkValue=ETA3 ETA LongConveyor3
+;** Const **
+;** Value **
+Value=errorCode 0
+;** Timeout **
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motor 0
+	SET startnt1 0
+	SET startnt2 0
+	SET startnt3 0
+  TEST master = ST_RESET
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  SETSTATE ST_STOP
+END
+
+State=ST_RUN
+	SET startnt1 1
+	SET startnt2 1
+	SET startnt3 1
+  TEST ETA1 = 1
+  OR ETA2 = 1
+  OR ETA3 = 1
+	OR master = ST_STOP
+		; TODO remove dependency on master = ST_STOP 
+    SETSTATE ST_STOP
+  ELSE
+    SET motor 1
+  ENDTEST
+  TEST master = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_STOP
+	SET startnt1 0
+	SET startnt2 0
+	SET startnt3 0
+	TEST sync1 != ST_EMPTY
+	AND ETA1 = 1
+		SET motor 0
+	ELSE
+		TEST sync2 != ST_EMPTY
+		AND ETA2 = 1
+			SET motor 0
+		ELSE
+			TEST sync3 != ST_EMPTY
+			AND ETA3 = 1
+				SET motor 0
+			ELSE
+				TEST master = ST_STOP
+					SET motor 0
+				ELSE
+					TEST master = ST_RUN
+						; TODO remove dependency on master = ST_RUN
+						SETSTATE ST_RUN
+					ENDTEST
+				ENDTEST
+			ENDTEST
+		ENDTEST
+	ENDTEST
+	TEST master = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

@@ -1,0 +1,68 @@
+STATEMACHINEVERSION 3
+Name=PalletAWatch
+Input=Foto1 "Pallebane4 FotoRev"
+Link=Pallebane4
+Link=parent Parent
+Timeout=TimeMinBlink 300000
+Value=dirtyflag 0
+Value=zero 0
+Value=one 1
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST Foto1 = 0
+    SET dirtyflag 1
+  ENDTEST
+  TEST parent = ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_CLEAN
+  SET dirtyflag 0
+  TEST Foto1 = 0
+    TIMEOUT TimeMinBlink ST_TESTCLEAN
+    SETSTATE ST_TESTCLEAN
+  ENDTEST
+  TEST Pallebane4 = ST_SEND
+  OR Pallebane4 = ST_RECEIVE
+    SETSTATE ST_DIRTY    
+  ENDTEST  	
+  TEST Pallebane4 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_TESTCLEAN
+  TEST TimeMinBlink = 1
+    TEST Foto1 = 0
+      SETSTATE ST_DIRTY
+    ELSE
+      SETSTATE ST_CLEAN
+    ENDTEST
+  ENDTEST
+  TEST Pallebane4 = ST_SEND
+  OR Pallebane4 = ST_RECEIVE
+    SETSTATE ST_DIRTY
+  ENDTEST
+END
+
+State=ST_DIRTY
+  SET dirtyflag 1
+  TEST Pallebane4 = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_RESET
+  TEST dirtyflag = zero
+    SETSTATE ST_CLEAN
+  ELSE
+    SETSTATE ST_DIRTY
+  ENDTEST
+END

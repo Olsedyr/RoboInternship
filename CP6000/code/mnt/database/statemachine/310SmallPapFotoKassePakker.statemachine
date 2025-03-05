@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=SmallPapFotoKassePakker
+Input=input "SmallPap FotoKassePakker"
+Timeout=TimeOn 500000
+Timeout=TimeOff 500000
+Value=test 0

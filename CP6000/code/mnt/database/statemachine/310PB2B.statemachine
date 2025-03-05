@@ -1,0 +1,124 @@
+STATEMACHINEVERSION 3
+Include=pallebane.statemachine
+Name=Pallebane2B
+Input=palletInPlace "Pallebane2B Foto"
+Output=Motor "Pallebane2B Motor"
+Link=next Pallebane3
+Link=nextafter Pallebane4
+Link=prev Pallebane2A
+Link=parent Parent 
+Timeout=TimeoutDelay 10000000
+Timeout=StartupTimeout 5000000
+Timeout=StopDelay 0
+Timeout=PickupDelay 0
+Timeout=ReadyDelay 0
+Const=autoDetectPallet 1
+Const=ON 1
+
+;en pallebane går automatisk fra ready til empty hvis fotocelle slukker
+;en pallebane går automatisk fra empty til ready hvis fotocelle tænder
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET Motor 0
+  TEST parent = ST_RESET
+  OR parent = ST_RUN
+  OR simulate = 1
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_READY
+  TEST palletInPlace != ON 
+  AND autoDetectPallet = 1
+    TIMEOUT PickupDelay ST_EMPTY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST next = ST_EMPTY
+		AND nextafter = ST_EMPTY
+      TIMEOUT maxDelayStop ST_SEND
+      SETSTATE ST_SEND
+    ELSE 
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_SEND
+  TEST next = ST_READY
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST maxDelayStop = 1
+      SETSTATE ST_RESET
+    ELSE
+      TEST next = ST_RECEIVE
+        SET Motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_EMPTY
+  TEST palletInPlace = ON 
+  AND autoDetectPallet = 1
+    TIMEOUT ReadyDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST prev = ST_SEND
+      TIMEOUT maxDelayStop ST_RECEIVE
+      SETSTATE ST_RECEIVE
+    ELSE 
+      SET Motor 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST palletInPlace = ON
+    TIMEOUT StopDelay ST_READY
+    SETSTATE ST_TIMER
+  ELSE
+    TEST maxDelayStop = 1
+      SETSTATE ST_RESET
+    ELSE
+      TEST prev = ST_SEND
+        SET Motor 1
+      ENDTEST
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST palletInPlace = ON
+    SETSTATE ST_READY
+  ELSE
+    TIMEOUT StartupTimeout ST_STOP
+    SETSTATE ST_STOP
+  ENDTEST
+END
+
+State=ST_STOP
+  TEST palletInPlace = ON
+    SETSTATE ST_READY
+  ELSE
+    TEST StartupTimeout = 1
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+END
+

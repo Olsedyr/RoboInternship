@@ -1,0 +1,89 @@
+STATEMACHINEVERSION 3
+Name=RemoteWatch
+Link=parent Parent
+Link=RobotProgram Program311
+Link=CWProgram ProgramS1
+Link=CP1Program Program
+Link=CP2Program Program703
+Link=CMProgram Program801
+Value=errorCode 0
+Value=message 0
+Value=tester 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET errorCode 0
+	SET message 0
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST RobotProgram != UNKNOWN
+  AND CMProgram != UNKNOWN
+    SET message 0
+  ENDTEST
+	TEST RobotProgram = UNKNOWN
+		SET message 2051
+  ELSE
+		TEST CP1Program != ST_IDLE
+		AND CP1Program != ST_HALT
+		AND CP1Program != ST_RESET
+      TEST RobotProgram = ST_RUNNING_C18
+        TEST CP1Program != ST_RUNNING_C18
+        AND CP1Program != ST_RUNNING_C18_LEFT
+        AND CP1Program != ST_RUNNING_C18_RIGHT
+					SET errorCode 1070
+					SETSTATE ST_IDLE
+        ENDTEST 
+      ELSE
+        TEST RobotProgram = ST_RUNNING_NETTO
+          TEST CP1Program != ST_RUNNING_NETTO
+          AND CP1Program != ST_RUNNING_NETTO_LEFT
+          AND CP1Program != ST_RUNNING_NETTO_RIGHT
+					  SET errorCode 1070
+					  SETSTATE ST_IDLE
+          ENDTEST 
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+	TEST CMProgram = UNKNOWN
+		SET message 2052
+  ELSE
+		TEST CP1Program != ST_IDLE
+		AND CP1Program != ST_HALT
+		AND CP1Program != ST_RESET
+      TEST CMProgram = ST_RUNNING_C18
+        TEST CP1Program != ST_RUNNING_C18
+        AND CP1Program != ST_RUNNING_C18_LEFT
+        AND CP1Program != ST_RUNNING_C18_RIGHT
+					SET errorCode 1071
+					SETSTATE ST_IDLE
+        ENDTEST 
+      ELSE
+        TEST CMProgram = ST_RUNNING_NETTO
+          TEST CP1Program != ST_RUNNING_NETTO
+          AND CP1Program != ST_RUNNING_NETTO_LEFT
+          AND CP1Program != ST_RUNNING_NETTO_RIGHT
+					  SET errorCode 1071
+					  SETSTATE ST_IDLE
+          ENDTEST 
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

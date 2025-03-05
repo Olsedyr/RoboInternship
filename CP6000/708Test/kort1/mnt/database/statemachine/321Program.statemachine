@@ -1,0 +1,178 @@
+STATEMACHINEVERSION 3
+Include=casekind.statemachine
+Name=Program321
+;signal to WorkCell that a new program has been selected
+Value=usersection 0
+Value=newprogram 1
+Const=programidx 0
+Value=usePhotoUp_Count_From_Bottom_1_2_3_4 0
+Value=usePhotoUp_Can1_is_3__Jar1_is_4 0
+Link=workcell WorkCell
+Value=usersection 0
+Value=wBLayer 0
+Value=wBItemsPerLayer 0
+Value=timeInPlaceFrame 0
+Value=usePhotoUp 0
+Value=palletizingEnable 0
+Item=itemIn CanLayer1
+Item=itemOut CanLayer2
+Item=itemCan1 CanLayer1
+Item=itemCan2 CanLayer2
+Item=itemJar1 JarLayer1
+Item=itemJar2 JarLayer2
+
+; Put programstates in top
+
+; also edit 'subPrograms' for example VendePattern and PushPattern for particular program
+
+State=PROGRAM_CANS1_IN
+	SET usersection 0
+	SET newprogram 1
+  SETITEM itemIn itemCan1
+  SETITEM itemOut itemCan1
+  SET palletizingEnable 0
+	SET wBItemsPerLayer 1
+  SET usePhotoUp 3
+	SET usersection 1 ; user editable below
+	SET wBLayer 12
+	SET timeInPlaceFrame 0
+	SETSTATE ST_RUNNING_CANS1_IN
+END
+
+State=PROGRAM_JARS1_IN
+	SET usersection 0
+	SET newprogram 1
+  SETITEM itemIn itemJar1
+  SETITEM itemOut itemCan1
+  SET palletizingEnable 0
+	SET wBItemsPerLayer 1
+  SET usePhotoUp 4
+	SET usersection 1 ; user editable below
+	SET wBLayer 12
+	SET timeInPlaceFrame 1000000
+	SETSTATE ST_RUNNING_JARS1_IN
+END
+
+State=PROGRAM_CANS1_IN__CANS1_OUT
+	SET usersection 0
+	SET newprogram 1
+  SETITEM itemIn itemCan1
+  SETITEM itemOut itemCan1
+  SET palletizingEnable 1
+	SET wBItemsPerLayer 1
+  SET usePhotoUp 3
+	SET usersection 1 ; user editable below
+	SET wBLayer 12
+	SET timeInPlaceFrame 1000000
+	SETSTATE ST_RUNNING_CANS1_IN__CANS1_OUT
+END
+
+State=PROGRAM_JARS1_IN__CANS1_OUT
+	SET usersection 0
+	SET newprogram 1
+  SETITEM itemIn itemJar1
+  SETITEM itemOut itemCan1
+  SET palletizingEnable 1
+	SET wBItemsPerLayer 1
+  SET usePhotoUp 4
+	SET usersection 1 ; user editable below
+	SET wBLayer 12
+	SET timeInPlaceFrame 1000000
+	SETSTATE ST_RUNNING_JARS1_IN__CANS1_OUT
+END
+
+State=PROGRAM_USER1
+	SET usersection 0
+	SET newprogram 1
+	SET wBItemsPerLayer 1
+	SET usersection 1 ; user editable below
+  SETITEM itemIn itemCan1
+  SETITEM itemOut itemCan1
+  SET palletizingEnable 1
+  SET usePhotoUp 3
+  SET usePhotoUp_Count_From_Bottom_1_2_3_4 0
+  SET usePhotoUp_Can1_is_3__Jar1_is_4 0
+	SET wBLayer 12
+	SET timeInPlaceFrame 1000000
+	SETSTATE ST_RUNNING_USER1
+END
+
+; RUNNING STATES
+
+State=ST_RUNNING_CANS1_IN
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 0
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_JARS1_IN
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 1
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_CANS1_IN__CANS1_OUT
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 2
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_JARS1_IN__CANS1_OUT
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 3
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_RUNNING_USER1
+	SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != 4
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  TEST programidx = 0
+    SETSTATE PROGRAM_CANS1_IN
+  ENDTEST
+  TEST programidx = 1
+    SETSTATE PROGRAM_JARS1_IN
+  ENDTEST
+  TEST programidx = 2
+    SETSTATE PROGRAM_CANS1_IN__CANS1_OUT
+  ENDTEST
+  TEST programidx = 3
+    SETSTATE PROGRAM_JARS1_IN__CANS1_OUT
+  ENDTEST
+  TEST programidx = 4
+    SETSTATE PROGRAM_USER1
+  ENDTEST
+END

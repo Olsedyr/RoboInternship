@@ -1,0 +1,115 @@
+STATEMACHINEVERSION 3
+;Include=rotator.statemachine
+Name=Rotator
+Input=powerok1 "dummyOff"
+Input=powerok2 "dummyOff"
+Output=Motor1Enable "dummyOut"
+Output=Motor2Enable "dummyOut"
+Output=Setpoint1 "dummyOut"
+Output=Setpoint2 "dummyOut"
+Link=next Next
+Link=prev Prev
+Link=RotatePattern
+Link=parent Parent
+linkValue=Photo1 test RotatePhoto1
+linkValue=Photo2 test RotatePhoto2
+Value=errorCode 0
+Value=simulate 0
+Const=motorLeft -30.0000
+Const=motorRight 30.0000
+Timeout=TimeGet 500000
+Timeout=TimeTurn 1500000
+Timeout=TimeTurnNinety 500000
+Timeout=TimeTurnOneEighty 500000
+Timeout=TimeStartup 3000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET Motor1Enable 0
+	SET Motor2Enable 0
+	SET Setpoint1 motorLeft
+	SET Setpoint2 motorRight
+	TEST parent = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET Motor1Enable 0
+	SET Motor2Enable 0
+	SET Setpoint1 motorLeft
+	SET Setpoint2 motorRight
+	TEST Photo2 = 1
+		SETSTATE ST_READY
+	ELSETEST Photo1 = 1
+		SETSTATE ST_EMPTY
+	ELSE
+		TIMEOUT TimeStartup ST_STARTUP
+		SETSTATE ST_STARTUP
+	ENDTEST
+END
+
+State=ST_STARTUP
+	SET Motor1Enable 1
+	SET Motor2Enable 1
+	TEST Photo2 = 1
+		SETSTATE ST_READY
+	ELSETEST TimeStartup = 1
+		SETSTATE ST_EMPTY
+	ENDTEST
+END
+
+State=ST_EMPTY
+	SET Motor1Enable 1
+	SET Motor2Enable 1
+	TEST prev = ST_SEND
+		SETSTATE ST_RECEIVE
+	ELSETEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_RECEIVE
+	SET Motor1Enable 1
+	SET Motor2Enable 1
+	TEST Photo1 = 0
+		SETSTATE ST_GET
+	ENDTEST
+END
+
+State=ST_GET
+	TEST Photo2 = 1
+		SETSTATE ST_READY
+	ENDTEST
+END
+
+State=ST_READY
+	TEST next = ST_EMPTY
+		SETSTATE ST_SEND
+	ELSE
+		SET Motor1Enable 0
+		SET Motor2Enable 0
+	ELSETEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_SEND
+	SET Motor1Enable 1
+	SET Motor2Enable 1
+	TEST Photo2 = 0
+		SETSTATE ST_EMPTY
+	ENDTEST
+	TEST next != ST_RECEIVE
+		TEST Photo2 = 1
+			SETSTATE ST_READY
+		ELSE
+			SETSTATE ST_EMPTY
+		ENDTEST
+	ENDTEST
+END

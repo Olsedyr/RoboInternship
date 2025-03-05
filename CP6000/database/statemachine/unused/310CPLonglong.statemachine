@@ -1,0 +1,66 @@
+STATEMACHINEVERSION 3
+Name=CPLonglong
+Output=motor "CPLonglong Motor"
+Value=simulate 0
+Const=maxPulsCount 20
+Value=pulsCount 0
+Value=modCount 0
+Timeout=pulsTime 900000
+Timeout=StartDelay 1000000
+Const=pulsTimeOn 900000
+Const=pulsTimeOff 1100000
+
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motor 0
+  TEST simulate = 1
+		TIMEOUT StartDelay ST_RESET
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+
+State=ST_START
+  TEST pulsCount < maxPulsCount
+    TEST pulsTime = 1
+      CALC modCount = pulsCount % 2    
+      TEST modCount = 0
+        SET motor 1
+        SET pulsTime pulsTimeOn
+        TIMEOUT pulsTime ST_START
+        SETSTATE ST_START
+      ELSE
+        SET motor 0
+        SET pulsTime pulsTimeOff
+        TIMEOUT pulsTime ST_START
+        SETSTATE ST_START
+      ENDTEST  
+      CALC pulsCount = pulsCount + 1
+    ENDTEST
+  ELSE
+    SETSTATE ST_RUN
+  ENDTEST
+  TEST simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RUN
+  SET motor 1
+  TEST simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RESET
+  SET pulsCount 1
+  SET motor 1
+  SET pulsTime pulsTimeOn
+  TIMEOUT pulsTime ST_START
+  SETSTATE ST_START
+END

@@ -1,0 +1,9 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=TippeFoto
+;Input=input "TippeStation Foto"
+Input=input "dummyOff"
+Timeout=TimeOn 60000
+Timeout=TimeOff 60000
+Value=test 0
+Link=parent Parent

@@ -1,0 +1,21 @@
+STATEMACHINEVERSION 3
+Name=nspattern
+;*************************************************************
+;* oversigt patterns der kan anvendes i NS700 
+;* er entydigt på tværs af workcells
+;*************************************************************
+Value=nspattern_none 0
+Value=nspattern_10KgNet_60 1
+Value=nspattern_10KgNet_80 2
+Value=nspattern_5KgNet_100 3
+Value=nspattern_5KgNet_120 4
+Value=nspattern_16KgNet_40 5
+Value=nspattern_16KgNet_50 6
+Value=nspattern_5KgPlast_40 7
+Value=nspattern_25KgNet_30 8
+Value=nspattern_10KgNet_40 9
+Value=nspattern_5KgNet_50 10
+Value=nspattern_25KgNet_35 11
+Value=nspattern_10KgNet_80B 12
+Value=nspattern_5KgNet_150 13
+Value=nspattern_2x5KgNet_100 14

@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=cmpallestation.statemachine
+Name=PalleStation
+;** User section **
+Const=pos2 2370
+Const=pos2MaxHys 2440
+Const=pos2MinHys 2300

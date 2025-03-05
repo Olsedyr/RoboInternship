@@ -1,0 +1,58 @@
+STATEMACHINEVERSION 3
+Name=TripWatch
+Input=pallebane1 "Pallebane1 Motor Tripped"
+Input=pallebane4 "Pallebane4 Motor Tripped"
+Input=pallebane4chain "Pallebane4 Chain Tripped"
+Input=pallebane6 "Pallebane6 Motor Tripped"
+Input=pallebane6chain "Pallebane6 Chain Tripped"
+Input=pallebane9 "Pallebane9 Motor Tripped"
+Input=liftconveyor "Lift Conveyor Tripped"
+Input=conv2 "Conv2 Motor Tripped"
+Input=prod1 "ProductConveyor1 HZOK"
+Input=prod2 "ProductConveyor1 HZOK"
+Input=conv3 "Conv3 HZOK"
+Link=parent Parent
+Value=errorCode 0
+Timeout=waitForPressure 10000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+	SETSTATE ST_IDLE
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+		SET errorCode 0
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+  TIMEOUT waitForPressure ST_WATCH
+	SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+	TEST pallebane1 = 1
+  OR pallebane4 = 1
+	OR pallebane4chain = 1
+  OR pallebane6 = 1
+	OR pallebane6chain = 1
+	OR pallebane9 = 1
+		SET errorCode 1116
+	ENDTEST
+	TEST liftconveyor = 1
+		SET errorCode 1119
+	ENDTEST
+	TEST conv2 = 1
+	OR conv3 = 0
+	OR prod1 = 0
+	OR prod2 = 0
+		SET errorCode 1100
+	ENDTEST
+	TEST parent = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END

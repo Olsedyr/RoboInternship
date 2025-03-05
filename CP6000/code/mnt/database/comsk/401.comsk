@@ -1,0 +1,77 @@
+COMSKVERSION 1
+ipaddr=192.168.0.211
+simulate=0
+Type=WONLY
+NumOfModules=3
+Name=RotatorLeft
+Address=1
+Init1.06=70.0 "max setspeed" "Maximum set speed (Hz)" fixdec=1
+Init1.07=0.0 "min setspeed" "Minimum set speed (Hz)" fixdec=1
+Init2.11=0.0 "accel rate" "Acceleration rate (s/Hz)" fixdec=1
+Init2.21=0.0 "decel rate" "Deceleration rate (s/Hz)" fixdec=1
+Init11.27=3 "drive conf" "Drive configuration=Pr" fixdec=0
+Init5.07=0.8 "motor rated amps" "Motor rated Current (A) (2 motors)" fixdec=2
+Init5.08=1400 "motor rated rpms" "Motor rated Speed (RPM)" fixdec=0
+Init5.09=230 "motor rated volts" "Motor rated voltage (V)" fixdec=0
+Init5.10=0.67 "motor power factor" "Motor power factor (cos phi)" fixdec=2
+Init11.44=1 "parameter access" "Parameter access=L2" fixdec=0
+Init5.06=50.0 "motor rated freq" "Motor rated frequency (Hz)" fixdec=1
+Init5.11=2 "no. of poles" "Number of motor poles=4P" fixdec=0
+Init2.04=0 "ramp mode select" "Ramp mode select=Fast ramp" fixdec=0
+Init1.10=1 "Allow neg. ref." "Allow negative references=On" fixdec=0
+Init1.15=1 "Preset speed selector" "Preset speed selector=1" fixdec=0
+Init1.21=0.0 "Preset speed 1" "Preset speed 1" fixdec=1
+Init1.00=1000 "Save config" "Save config menu 1" fixdec=0
+Init2.00=1000 "Save config" "Save config menu 2" fixdec=0
+Init5.00=1000 "Save config" "Save config menu 5" fixdec=0
+Init11.00=1000 "Save config" "Save config menu 11" fixdec=0
+Init10.38=100 "Drive reset" "Drive reset" fixdec=0
+Output1.21="RotatorLeft Setpoint" "RotatorLeft Setpoint" fixdec=1
+Name=RotatorRight
+Address=2
+Init1.06=70.0 "max setspeed" "Maximum set speed (Hz)" fixdec=1
+Init1.07=0.0 "min setspeed" "Minimum set speed (Hz)" fixdec=1
+Init2.11=0.0 "accel rate" "Acceleration rate (s/Hz)" fixdec=1
+Init2.21=0.0 "decel rate" "Deceleration rate (s/Hz)" fixdec=1
+Init11.27=3 "drive conf" "Drive configuration=Pr" fixdec=0
+Init5.07=0.8 "motor rated amps" "Motor rated Current (A) (2 motors)" fixdec=2
+Init5.08=1400 "motor rated rpms" "Motor rated Speed (RPM)" fixdec=0
+Init5.09=230 "motor rated volts" "Motor rated voltage (V)" fixdec=0
+Init5.10=0.67 "motor power factor" "Motor power factor (cos phi)" fixdec=2
+Init11.44=1 "parameter access" "Parameter access=L2" fixdec=0
+Init5.06=50.0 "motor rated freq" "Motor rated frequency (Hz)" fixdec=1
+Init5.11=2 "no. of poles" "Number of motor poles=4P" fixdec=0
+Init2.04=0 "ramp mode select" "Ramp mode select=Fast ramp" fixdec=0
+Init1.10=1 "Allow neg. ref." "Allow negative references=On" fixdec=0
+Init1.15=2 "Preset speed selector" "Preset speed selector=2" fixdec=0
+Init1.22=0.0 "Preset speed 2" "Preset speed 2" fixdec=1
+Init1.00=1000 "Save config" "Save config menu 1" fixdec=0
+Init2.00=1000 "Save config" "Save config menu 2" fixdec=0
+Init5.00=1000 "Save config" "Save config menu 5" fixdec=0
+Init11.00=1000 "Save config" "Save config menu 11" fixdec=0
+Init10.38=100 "Drive reset" "Drive reset" fixdec=0
+Output1.22="RotatorRight Setpoint" "RotatorRight Setpoint" fixdec=1
+Name=Conv3
+Address=3
+Init1.06=70.0 "max setspeed" "Maximum set speed (Hz)" fixdec=1
+Init1.07=0.0 "min setspeed" "Minimum set speed (Hz)" fixdec=1
+Init2.11=0.1 "accel rate" "Acceleration rate (s/Hz)" fixdec=1
+Init2.21=0.1 "decel rate" "Deceleration rate (s/Hz)" fixdec=1
+Init11.27=3 "drive conf" "Drive configuration=Pr" fixdec=0
+Init5.07=0.53 "motor rated amps" "Motor rated Current (A) (2 motors)" fixdec=2
+Init5.08=1400 "motor rated rpms" "Motor rated Speed (RPM)" fixdec=0
+Init5.09=230 "motor rated volts" "Motor rated voltage (V)" fixdec=0
+Init5.10=0.73 "motor power factor" "Motor power factor (cos phi)" fixdec=2
+Init11.44=1 "parameter access" "Parameter access=L2" fixdec=0
+Init5.06=50.0 "motor rated freq" "Motor rated frequency (Hz)" fixdec=1
+Init5.11=2 "no. of poles" "Number of motor poles=4P" fixdec=0
+Init2.04=0 "ramp mode select" "Ramp mode select=Fast ramp" fixdec=0
+Init1.10=1 "Allow neg. ref." "Allow negative references=On" fixdec=0
+Init1.15=3 "Preset speed selector" "Preset speed selector=3" fixdec=0
+Init1.23=0.0 "Preset speed 3" "Preset speed 3" fixdec=1
+Init1.00=1000 "Save config" "Save config menu 1" fixdec=0
+Init2.00=1000 "Save config" "Save config menu 2" fixdec=0
+Init5.00=1000 "Save config" "Save config menu 5" fixdec=0
+Init11.00=1000 "Save config" "Save config menu 11" fixdec=0
+Init10.38=100 "Drive reset" "Drive reset" fixdec=0
+Output1.23="Conv3 Setpoint" "Conv3 Setpoint" fixdec=1

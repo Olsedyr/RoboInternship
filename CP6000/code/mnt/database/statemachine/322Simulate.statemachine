@@ -1,0 +1,27 @@
+STATEMACHINEVERSION 3
+Name=Simulate
+Link=ProgramB2
+Link=ConveyorOut
+Link=Pallebane6
+linkValue=goReadyRobotB goReadyRobot ConveyorOut
+Value=simulatePallets 0
+linkValue=firstRun WorkCell
+Value=temp 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+;  TEST simSoco = 0
+;  AND temp != simSoco
+;    SET temp simSoco
+;    SET simConvA 0
+;  ELSETEST simSoco = 1
+;  AND temp != simSoco
+;    SET temp simSoco
+;    SET simConvA 1
+;  ENDTEST
+END

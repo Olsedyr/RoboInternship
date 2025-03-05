@@ -1,0 +1,51 @@
+STATEMACHINEVERSION 3
+Include=servocardboard.statemachine
+Name=ServoCardBoard
+Link=Master CardBoardShuttle
+Link=parent Parent
+Output=home_vel "CardBoardShuttle Homevel"
+Output=home_tq "CardBoardShuttle Hometorque"
+Output=Mode "CardBoardShuttle Mode"
+Output=setpoint "CardBoardShuttle MacSetpoint"
+Output=vsoll "CardBoardShuttle Maxvel"
+Output=asoll "CardBoardShuttle Maxacc"
+Output=set_curpos "CardBoardShuttle Curpos"
+Output=kvout "CardBoardShuttle Load Factor"
+Output=set_status "CardBoardShuttle Status"
+Input=temperature "CardBoardShuttle Temperature"
+Input=Inpos "CardBoardShuttle IN_POS"
+Input=curpos "CardBoardShuttle Curpos"
+Input=curtorque "CardBoardShuttle Curtorque"
+Input=homedone "CardBoardShuttle HOME_DONE"
+Input=status "CardBoardShuttle Status"
+Input=ShuttleUp "CardBoardShuttle ReadUp"
+Value=errorCode 0
+Value=simulate 0
+Value=curpm 0.0
+Value=homed 0
+Value=temp 0
+Const=loadfactor 4.0000
+Const=home_speed 250.0000
+Const=home_torque 70.0000
+Const=acceleration 7000.0000
+Const=cruise_speed 3000.0000
+Const=testmode 0
+Value=teststate 0
+Value=distance 0.0
+Value=startpos 0.0
+Value=goIdle 0
+Value=moveIsSafe 1
+Const=overrideSafe 1
+; tickspermotorround*gearudveksling/(eff_rad*2*pi)
+; eks: 8000*10.9/(27.5*2*pi)
+Const=tickspermm 504.6658559132
+; All posXX in mm.
+Const=posHome -100.0
+Const=posPick -100.0000
+Const=posPlace -1720.0000
+Const=posTestBegin -100.0000
+Const=posTestEnd -1720.0000
+Timeout=TimeTest 2000000
+Timeout=TimeCmdDelay 500000
+Timeout=TimeStartMax 1000000
+Timeout=TimeHome 30000000

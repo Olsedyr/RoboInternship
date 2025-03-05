@@ -1,0 +1,7 @@
+STATEMACHINEVERSION 3
+Include=cwemergency.statemachine
+Name=EmergencyS1
+Input=PowerOn "S1 Power On"
+Value=errorCode 0
+Const=errorCode103 103
+

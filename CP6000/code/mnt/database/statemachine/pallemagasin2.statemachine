@@ -1,0 +1,352 @@
+STATEMACHINEVERSION 3
+Name=Pallemagasin
+Input=Foto "Pallemagasin Foto" 
+Input=FotoMid "Pallemagasin Foto" 
+Input=ReadBottom "Pallemagasin ReadBottom"
+Input=ReadSlip "Pallemagasin ReadSlip"
+Input=ReadGrib "Pallemagasin ReadGrib"
+Input=ReadMidLeft "Pallemagasin ReadMidLeft"
+Input=ReadMidRight "Pallemagasin ReadMidRight"
+Input=ReadTop "Pallemagasin ReadTop"
+Output=Motor "Pallemagasin Motor"
+Output=GribCyl "Pallemagasin GribCyl"
+Output=SlipCyl "Pallemagasin SlipCyl"
+Output=CylUpLeft "Pallemagasin CylUpLeft"
+Output=CylUpRight "Pallemagasin CylUpRight"
+Output=CylDownLeft "Pallemagasin CylDownLeft"
+Output=CylDownRight "Pallemagasin CylDownRight"
+Timeout=TimeoutDelay 20000000
+Timeout=TimeStartUp 3000000
+Timeout=TimeoutPalletDispense 5000000
+Timeout=maxTimeDown 5000000
+Timeout=maxWaitStop 10000000
+Timeout=maxCylDownTime 10000000
+Timeout=timeSend 5000000
+Timeout=maxTimeReadTop 5000000
+Const=useTimerTop 0
+Const=useEarlySend 0
+Const=simulate 0
+Link=pallebane Pallebane6
+Link=parent Parent
+Value=read1ok 0
+Value=read2ok 0
+Value=errorCode 0
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_RESET
+  SETSTATE ST_RESET
+END
+
+State=ST_IDLE
+  SET Motor 0
+  SET SlipCyl 0
+  SET GribCyl 0
+  SET CylUpLeft 0
+  SET CylUpRight 0
+  SET CylDownLeft 0
+  SET CylDownRight 0
+  TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+    TIMEOUT maxCylDownTime ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_EMPTY
+END
+
+State=ST_RECIEVE
+END
+
+State=ST_RESET
+	TEST ReadSlip = 1
+    TEST ReadBottom = 1
+      TIMEOUT TimeoutDelay PM_LOAD_NEW_PALLETS
+      SETSTATE PM_LOAD_NEW_PALLETS
+    ELSE
+      SET CylUpLeft 0
+      SET CylUpRight 0
+      SET CylDownLeft 1
+      SET CylDownRight 1
+    ENDTEST
+  ELSE
+    SET SlipCyl 1
+		SET GribCyl 0
+    SET CylUpLeft 1
+    SET CylUpRight 1
+    SET CylDownLeft 0
+    SET CylDownRight 0
+	ENDTEST
+  TEST maxCylDownTime = 1
+    SET CylUpLeft 1
+    SET CylUpRight 1
+    SET CylDownLeft 0
+    SET CylDownRight 0
+    SET errorCode 1022
+    TIMEOUT maxWaitStop ST_IDLE
+    SETSTATE ST_TIMER
+  ENDTEST  
+  TEST simulate = 1
+    SETSTATE ST_READY
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_STOP
+	TEST ReadSlip = 1
+    TEST ReadBottom = 1
+      SETSTATE ST_IDLE
+    ELSE
+      SET CylUpLeft 0
+      SET CylUpRight 0
+      SET CylDownLeft 1
+      SET CylDownRight 1
+    ENDTEST
+  ELSE
+    SET SlipCyl 1
+		SET GribCyl 0
+	ENDTEST
+  TEST maxWaitStop = 1
+    SET CylUpLeft 1
+    SET CylUpRight 1
+    SET CylDownLeft 0
+    SET CylDownRight 0
+    TIMEOUT maxWaitStop ST_IDLE
+    SETSTATE ST_TIMER
+  ENDTEST  
+END
+
+State=PM_RELEASE
+  TEST ReadSlip = 1
+    TEST Foto = 1
+	    SET SlipCyl 1
+			SET GribCyl 0
+			SET CylUpLeft 1
+			SET CylUpRight 1
+			SET CylDownLeft 0
+			SET CylDownRight 0
+			SET read1ok 0
+			SET read2ok 0
+			SETSTATE PM_CYL_UP_MID
+		ELSE
+      TIMEOUT TimeoutDelay PM_LOAD_NEW_PALLETS
+		  SETSTATE PM_LOAD_NEW_PALLETS
+		ENDTEST
+	ELSE
+    SET SlipCyl 1
+    SET GribCyl 0
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    TIMEOUT maxWaitStop ST_STOP
+    SETSTATE ST_STOP
+  ENDTEST  
+	END
+
+State=PM_LOAD_NEW_PALLETS
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    TIMEOUT maxWaitStop ST_STOP
+    SETSTATE ST_STOP
+  ELSE
+    TEST Foto = 1
+;      TEST FotoMid = 0
+        SET CylUpLeft 0
+        SET CylUpRight 0
+	      SET CylDownLeft 1
+  	    SET CylDownRight 1
+        TEST TimeoutDelay = 1
+          SETSTATE PM_RELEASE
+        ENDTEST
+;      ENDTEST
+    ELSE
+      TEST ReadBottom = 1
+        SET CylUpLeft 0
+        SET CylUpRight 0
+	      SET CylDownLeft 0
+  	    SET CylDownRight 0
+      ELSE
+        SET CylUpLeft 0
+        SET CylUpRight 0
+	      SET CylDownLeft 1
+  	    SET CylDownRight 1
+      ENDTEST
+      SET GribCyl 0
+  	  SET SlipCyl 1
+;restart timer
+      TIMEOUT TimeoutDelay PM_LOAD_NEW_PALLETS
+	    SETSTATE PM_LOAD_NEW_PALLETS
+	  ENDTEST
+  ENDTEST
+END
+	
+State=PM_CYL_UP_MID
+	TEST ReadMidLeft = 1
+	  SET CylUpLeft 0
+		SET read1ok 1
+	ENDTEST
+	TEST ReadMidRight = 1
+		SET CylUpRight 0
+		SET read2ok 1
+	ENDTEST
+	TEST read1ok = 1
+	AND read2ok = 1
+		SET SlipCyl 0
+		SET GribCyl 1
+		SETSTATE PM_GRIB_LIFT
+	ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    TIMEOUT maxWaitStop ST_STOP
+    SETSTATE ST_STOP
+  ENDTEST  
+	END
+	
+State=ST_STOP_CYL_DOWN_MID
+  TEST read1ok = 0
+	  SET CylUpLeft 0
+	  SET CylDownLeft 1
+  ELSE
+  ENDTEST
+  TEST ReadMidLeft = 1
+	  SET CylDownLeft 0
+	  SET read1ok 1
+	ENDTEST
+  TEST read2ok = 0
+	  SET CylUpRight 0
+    SET CylDownRight 1
+  ENDTEST
+  TEST ReadMidRight = 1
+	  SET CylDownRight 0
+	  SET read2ok 1
+	ENDTEST
+	TEST read1ok = 1
+	AND read2ok = 1
+    TIMEOUT maxWaitStop ST_STOP
+		SETSTATE ST_STOP
+	ENDTEST
+  TEST maxWaitStop = 1
+  AND simulate = 0
+    SET errorCode 1016 
+    SETSTATE ST_IDLE 
+  ENDTEST
+	END
+
+State=PM_GRIB_LIFT
+	TEST ReadGrib = 1
+	  SET GribCyl 1
+		SET SlipCyl 0
+		SET CylUpLeft 1
+		SET CylUpRight 1
+		SET CylDownLeft 0
+		SET CylDownRight 0
+		SETSTATE PM_CYL_TOP
+	ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    TIMEOUT maxWaitStop ST_STOP
+    SETSTATE ST_STOP
+  ENDTEST  
+	END
+	
+State=PM_CYL_TOP
+	TEST ReadTop = 1
+  	SET CylUpLeft 1
+		SET CylUpRight 1
+	  SETSTATE ST_READY
+	ENDTEST
+	TEST maxTimeReadTop = 1
+  AND useTimerTop = 1
+  	SET CylUpLeft 1
+		SET CylUpRight 1
+	  SETSTATE ST_READY
+	ENDTEST
+END
+	
+State=ST_READY
+  TEST Foto = 0
+  AND simulate = 0
+    TIMEOUT TimeoutPalletDispense READY_TIMEOUT
+		SETSTATE READY_TIMEOUT
+	ELSE
+	  TEST pallebane = ST_EMPTY_SHIFT2
+			TIMEOUT timeSend ST_SEND
+			SETSTATE ST_SEND
+    ELSETEST pallebane = ST_SEND
+    AND useEarlySend = 1
+			TIMEOUT timeSend ST_SEND
+			SETSTATE ST_SEND
+    ENDTEST
+	ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+	  SET read1ok 0
+		SET read2ok 0
+    TIMEOUT maxWaitStop ST_STOP_CYL_DOWN_MID
+    SETSTATE ST_STOP_CYL_DOWN_MID
+  ENDTEST  
+END
+
+State=ST_SEND
+  TEST pallebane = ST_PALLET_REV
+    SET Motor 0
+    TIMEOUT TimeoutPalletDispense READY_TIMEOUT
+		SETSTATE READY_TIMEOUT
+  ELSE
+    TEST pallebane = ST_RECEIVE2
+    OR pallebane = ST_PALLET_SIDE_ALIGN_TIMEOUT2
+    OR timeSend > 1
+		  SET Motor 1
+    ELSE
+      SET Motor 0
+      TEST pallebane = ST_IDLE
+        SETSTATE ST_IDLE
+      ENDTEST
+	  ENDTEST
+  ENDTEST
+END
+	
+State=READY_TIMEOUT
+  TEST Foto = 1
+  OR simulate = 1
+    SETSTATE ST_READY
+  ELSE
+    TEST TimeoutPalletDispense = 1
+      SET GribCyl 1
+  	  SET SlipCyl 0
+      SET CylUpLeft 0
+      SET CylUpRight 0
+	    SET CylDownLeft 1
+  	  SET CylDownRight 1
+      TIMEOUT maxTimeDown PM_CYL_DOWN
+	    SETSTATE PM_CYL_DOWN
+    ENDTEST
+  ENDTEST
+  TEST pallebane = ST_IDLE
+  AND simulate = 0
+	  SET read1ok 0
+		SET read2ok 0
+    TIMEOUT maxWaitStop ST_STOP_CYL_DOWN_MID
+    SETSTATE ST_STOP_CYL_DOWN_MID
+  ENDTEST  
+END
+	
+State=PM_CYL_DOWN
+	TEST ReadBottom = 1
+	OR maxTimeDown = 1
+	  SET GribCyl 0
+	  SET SlipCyl 1
+	  SET CylDownLeft 0
+	  SET CylDownRight 0
+	  SETSTATE PM_RELEASE
+	ENDTEST
+END

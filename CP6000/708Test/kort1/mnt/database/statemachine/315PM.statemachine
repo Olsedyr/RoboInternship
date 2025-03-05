@@ -1,0 +1,22 @@
+STATEMACHINEVERSION 3
+Include=pallemagasin2.statemachine
+Name=Pallemagasin
+Delaystop=10000000
+Input=Foto "Pallemagasin Foto" 
+Input=ReadBottom "Pallemagasin ReadBottom"
+Input=ReadSlip "Pallemagasin ReadSlip"
+Input=ReadGrib "Pallemagasin ReadGrib"
+Input=ReadMidLeft "Pallemagasin ReadMidLeft"
+Input=ReadMidRight "Pallemagasin ReadMidRight"
+Input=ReadTop "Pallemagasin ReadTop"
+Output=Motor "Pallemagasin Motor"
+Output=GribCyl "Pallemagasin GribCyl"
+Output=SlipCyl "Pallemagasin SlipCyl"
+Output=CylUpLeft "Pallemagasin CylUpLeft"
+Output=CylUpRight "Pallemagasin CylUpRight"
+Output=CylDownLeft "Pallemagasin CylDownLeft"
+Output=CylDownRight "Pallemagasin CylDownRight"
+Timeout=TimeoutDelay 20000000
+Timeout=TimeoutPalletDispense 20000000
+Const=simulate 0
+Link=pallebane Pallebane6

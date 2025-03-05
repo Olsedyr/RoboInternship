@@ -1,0 +1,155 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOutA
+linkValue=photo2 test ConveyorOutAPhoto1
+linkValue=photo1 test ConveyorOutAPhoto2
+linkValue=pathtype pathtype Robot
+linkValue=axis_t axis_t Robot
+linkValue=goingFromConv ProgramB2
+linkValue=myId A ProgramB2
+Link=parent Parent
+Link=robotprg ProgramB2
+Link=prev ConveyorOut2A
+Link=Robot Robot
+Value=errorCode 0
+Value=simulate 0
+Value=waitingFirst 0
+Value=goReadyRobot 0
+Timeout=TimeOutDelay 5000000
+Timeout=waitTestFull 2000000
+Timeout=maxWaitFirst 8000000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+;  TEST simulate = 1
+;    SETSTATE ST_READY_ROBOT
+;  ELSE
+    TIMEOUT TimeOutDelay ST_STARTUP
+    SETSTATE ST_STARTUP
+;  ENDTEST
+END
+
+State=ST_STARTUP
+  TEST photo1 = 1
+  AND photo2 = 1
+    SETSTATE ST_READY_ROBOT
+  ELSETEST TimeOutDelay = 1
+    SETSTATE ST_GET
+  ENDTEST
+END
+
+State=ST_GET
+  TEST photo1 = 1
+    SET waitingFirst 0
+  ENDTEST
+  TEST photo2 = 1
+    SETSTATE ST_RECEIVE
+  ELSETEST waitingFirst = 1
+  AND maxWaitFirst = 1
+    SET waitingFirst 0
+		SET errorCode 1007
+		SETSTATE ST_IDLE
+  ENDTEST
+  TEST goReadyRobot = 1
+    SETSTATE ST_READY_ROBOT
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_RECEIVE
+  TEST photo1 = 1
+    SET waitingFirst 0
+    TIMEOUT waitTestFull ST_TEST_FULL
+    SETSTATE ST_TEST_FULL
+	ELSE
+    SET waitingFirst 1
+    TIMEOUT maxWaitFirst ST_WAIT_FIRST
+    SETSTATE ST_WAIT_FIRST
+  ENDTEST
+END
+
+State=ST_TEST_FULL
+  TEST photo2 = 0
+    SETSTATE ST_GET
+  ELSETEST waitTestFull = 1
+    SETSTATE ST_READY_ROBOT
+  ENDTEST
+END
+
+State=ST_WAIT_FIRST
+  TEST photo2 = 0
+    SETSTATE ST_GET
+  ELSETEST maxWaitFirst = 1
+    SET waitingFirst 0
+		SET errorCode 1007
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_READY_ROBOT
+  TEST photo1 = 0
+  AND goReadyRobot = 0
+  AND simulate = 0
+  OR photo2 = 0
+  AND goReadyRobot = 0
+  AND simulate = 0
+    TEST pathtype = 23
+    OR pathtype = 44
+	    TEST axis_t <= 900000
+      AND goingFromConv = myId
+		    SET errorCode 1007
+        SETSTATE ST_IDLE
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST pathtype = 24
+	AND axis_t <= 400000
+  AND goingFromConv = myId
+    SETSTATE ST_WAIT_ROBOT_GONE
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_WAIT_ROBOT_GONE
+  TEST pathtype = 24
+	  TEST axis_t > 400000
+      TEST simulate = 0
+        TEST photo1 = 0
+        AND photo2 = 0
+        OR goReadyRobot = 1
+          SET goReadyRobot 0
+          SETSTATE ST_GET
+        ELSE
+          SET errorCode 1007
+          SETSTATE ST_IDLE
+        ENDTEST
+      ELSE
+        SETSTATE ST_READY_ROBOT
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST Robot != ST_RUNNING
+    TEST parent = ST_IDLE
+    AND simulate = 0
+      SETSTATE ST_IDLE
+    ENDTEST
+  ENDTEST
+END

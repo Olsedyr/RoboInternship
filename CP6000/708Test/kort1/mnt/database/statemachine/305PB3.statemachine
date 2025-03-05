@@ -1,0 +1,103 @@
+STATEMACHINEVERSION 2
+Name=Pallebane3
+Delaystop=10000000
+Input=0,Foto1 "Pallebane3 Foto1"
+Output=0,Motor "Pallebane3 Motor" 
+Link=0,Pallebane4
+Link=1,Pallebane2
+Timeout=0,StopDelay 1000000
+Timeout=1,TimeoutDelay 10000000
+Timeout=2,StartupTimeout 5000000
+
+State=0,ST_HALT
+  END
+
+State=0,ST_TIMER
+  END
+
+State=0,ST_IDLE
+  SET Motor 0
+  END
+
+State=1,ST_READY
+  TEST Foto1 = 0
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST Pallebane4 = ST_EMPTY
+      SET Motor 1
+      TIMEOUT TimeoutDelay ST_RESET
+      SETSTATE ST_SEND
+    ELSE
+      SET Motor 0
+    ENDTEST
+ ENDTEST
+ TEST Pallebane2 = ST_IDLE
+   SETSTATE ST_IDLE
+ ENDTEST
+ END
+
+State=2,ST_SEND
+  TEST Pallebane4 = ST_PALLET_REV_TIMEOUT
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST TimeoutDelay = 1
+      SETSTATE ST_RESET
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+END
+
+State=3,ST_EMPTY
+  TEST Foto1 = 1 
+    SETSTATE ST_READY
+  ELSE 
+    TEST Pallebane2 = ST_SEND 
+      SET Motor 1
+      TIMEOUT TimeoutDelay ST_RESET
+      SETSTATE ST_RECIEVE
+    ELSE 
+      SET Motor 0
+    ENDTEST
+ ENDTEST
+ TEST Pallebane2 = ST_IDLE
+   SETSTATE ST_IDLE
+ ENDTEST
+ END
+ 
+State=4,ST_RECIEVE
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ELSE 
+    TEST TimeoutDelay = 1
+      SETSTATE ST_RESET
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+  END
+
+State=5,ST_RESET
+  TEST Foto1 = 1
+    SETSTATE ST_READY
+  ELSE
+    TIMEOUT StartupTimeout ST_STOP
+    SETSTATE ST_STOP
+    SET Motor 1
+  ENDTEST
+  END
+
+State=6,ST_STOP
+  TEST Foto1 = 1
+    SET Motor 0
+    SETSTATE ST_READY
+  ELSE
+    TEST StartupTimeout = 1
+      SET Motor 0
+      SETSTATE ST_EMPTY
+    ELSE
+      SET Motor 1
+    ENDTEST
+  ENDTEST
+  END
+

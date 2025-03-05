@@ -1,0 +1,10 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=Sc2_3PalletInPlace
+Input=input "PC3 POS.2.3 Photo"
+;how long must input be active before it is recognised as on
+Timeout=TimeOn 20000
+;how long must input be not active before it is recognised as off
+Timeout=TimeOff 20000
+Value=test 0
+Const=active 1

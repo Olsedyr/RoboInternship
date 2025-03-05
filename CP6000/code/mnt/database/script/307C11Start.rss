@@ -1,0 +1,25 @@
+VERSION 2
+SUB 307C11Start
+COUNTER delaystop = 0
+COUNTER offline = 0
+COUNTER restart = 0
+* 48 kasser -> COUNTER sAItems = 0 COUNTER sBItems = 0 
+* 24 kasser -> COUNTER sAItems = 12 COUNTER sBItems = 0 
+* 6 kasser -> COUNTER sAItems = 21 COUNTER sBItems = 0 
+COUNTER sAItems = 0
+COUNTER sBItems = 0 
+COUNTER wAItems = 36
+COUNTER wBItems = 30 
+COUNTER cItemsTotal = 0
+COUNTER cItemsTotal = 0
+COUNTER cAItems = 0
+COUNTER cBItems = 0
+COUNTER cAPallet = 0
+COUNTER cBPallet = 0
+COUNTER cALayer = 0
+COUNTER cBLayer = 0
+SIGNALEVENT 1 KassePakkerTop ST_RESET1
+SIGNALEVENT 1 KassePakkerBottom ST_RESET_SHAKE1
+SLEEP 100
+CALL 307C11ReStart -1
+END

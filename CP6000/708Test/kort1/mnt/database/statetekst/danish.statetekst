@@ -1,0 +1,222 @@
+STATETEKSTVERSION 1
+Dansk
+00001 Info: Kontrollerer hardware.
+00002 Info: Tryk nødstop ind.
+00003 Info: Frigiv nødstop og tryk reset.
+00004 Info: Starter akser.
+00005 Info: Sætter startværdier.
+00006 Info: Sætter enheder.
+00007 Info: Reset akser.
+00008 Info: Finder nulpunkter.
+00034 Fejl: 2 Kasser har hængt sammen. Fjern kasser.
+00035 Fejl: Cylinder til kontrol af sammenh. kasser fejler (readkontakt).
+00100 Fejl: Følgefejl.
+00101 Nødstop aktiveret.
+00102 Nødstop aktiveret på robot.
+00103 Nødstop aktiveret på tjekvejer S1.
+00104 Nødstop aktiveret på tjekvejer S2.
+00105 Nødstop aktiveret på tjekvejer S3.
+00106 Nødstop aktiveret på tjekvejer S4.
+00107 Nødstop aktiveret på kassemagasin.
+00108 Nødstop aktiveret på kassepakker.
+00109 Nødstop aktiveret på eksterne bånd.
+00203 Nødstop blev trykket under kørsel.
+00203 Foretag komplet start procedure for maskinen.
+00206 Robotten blev standset - robotten er STOPPET.
+00206 Foretag komplet start procedure for maskinen.
+00207 Der er opstået en fejl i controlleren - robotten er STOPPET.
+00207 Foretag komplet start procedure for maskinen.
+00208 Robottens crash sensor blev aktiveret - robotten er STOPPET.
+00208 Foretag komplet start procedure for maskinen.
+00215 Robotten er sat i pause.
+00231 Der er opstået en fejl - robotten er standset.
+00231 Robotten har tabt/fejlplaceret tomme kasser.
+00232 Der er opstået en fejl - robotten er standset.
+00232 Robotten har tabt de fyldte kasser.
+00234 Der er opstået en fejl - robotten er standset.
+00234 Kasser hænger sammen.
+00333 Der er opstået en fejl - robotten er standset.
+00333 Robotten har fejlplaceret fyldte kasser.
+00500 IO-fejl: Forbindelse til komponent mangler.
+00501 IO-fejl: Forbindelse til advantys mangler.
+00502 IO-fejl: Forbindelse til comsk mangler.
+00503 IO-fejl: Forbindelse til trio mangler.
+00504 IO-fejl: Forbindelse til loadcell mangler.
+00505 IO-fejl: Forbindelse til mac mangler.
+01000 Fejl: Tøm kassepakkeren for produkter. 
+01001 Fejl: Der mangler en palle. Læg en ny ind.
+01002 Fejl: Bakker står skævt ved skubbeplads. Ret de forreste bakker. 
+01003 Fejl: Kasse sidder fast (Ud). Hiv kassen ud og sæt på båndet.
+01004 Fejl: Bakker sad fast i bunden på låget. Tøm for produkter.
+01005 Fejl: Bakker sad fast ved indskubning. Tøm for produkter.
+01006 Fejl: Kasse sidder fast (Ind). Skub kassen ind i kassepakkeren.
+01007 Fejl: Kasser står forkert på transportbånd (ud). Stil rigtigt.
+01008 Fejl: Kasser står forkert på transportbånd (ind). Stil rigtigt.
+01009 Fejl: Paller (ind) står for tæt. Træk tilbage.
+01010 Fejl: Forkert type kasse til det program du har valgt.
+01011 Fejl: Der er for lille afstand mellem produkterne. (cp)
+01012 Fejl: Kasse sidder fast inde i kassepakkeren.
+01013 Fejl: Der er for lille afstand mellem produkterne. (vs)
+01014 Fejl: Kasser står forkert på transportbånd (ud). Stil rigtigt. Test fotoceller.
+01015 Fejl: Kasser står forkert ved kassepakker (ud). Stil rigtigt. Test fotoceller.
+01016 Fejl: Pallemagasin har ikke nået midterste position indenfor maksimum stop tid.
+01017 Fejl: Der er for lille afstand mellem produkterne på samlerbånd.
+01018 Fejl: Der sidder produkt fast eller er ingen afstand mellem produkterne på samlerbånd.
+01019 Fejl: Følgefejl på lift. Kasse/lift i klemme.
+01020 Fejl: Følgefejl på skubber.
+01021 Fejl: Følgefejl på skuffer.
+01022 Fejl: Pallemagasin har ikke nået nederste position indenfor maksimum stop tid.
+01023 Fejl: Saksbord har ikke kunne finde korrekt position. Test føler.
+01048 Fejl: Homing-rutinen kunne ikke finde en sensor. (PapConveyor)
+01049 Fejl: Homing-rutinen kunne ikke finde en sensor. (PalleShuttle)
+01050 Fejl: Homing-rutinen kunne ikke finde en sensor. (Skubber)
+01051 Fejl: Homing-rutinen kunne ikke finde en sensor. (Buffer)
+01052 Fejl: Homing-rutinen kunne ikke finde en sensor. (Lift)
+01053 Fejl: Homing-rutinen kunne ikke finde en sensor. (Vender1)
+01054 Fejl: Homing-rutinen kunne ikke finde en sensor. (Vender2)
+01055 Fejl: Fjern produkter før opstart.
+01056 Fejl: Palle station kan ikke gå til korrekt aftræk position.
+01057 Fejl: Tid for Homing-rutinen er overskredet. (CardBoard Shuttle)
+01070 Fejl: Inkompatible programmer for robot og kassepakker.
+01071 Fejl: Inkompatible programmer for kassepakker og kassemagasin.
+01098 Fejl: Papshuttle er trippet.
+01099 Fejl: Palleshuttle trippet
+01100 Fejl: Produktbånd trippet
+01101 Fejl: BufferSkub trippet
+01102 Fejl: KassePakker Bund trippet
+01103 Fejl: KasseLift trippet
+01104 Fejl: KasseInLiner trippet
+01105 Fejl: KasseLift Bånd trippet
+01106 Fejl: Vibrator trippet
+01107 Fejl: Vendestation bånd trippet
+01108 Fejl: Vendestation rotation trippet
+01109 Fejl: Vendestation2 bånd trippet
+01110 Fejl: Vendestation2 rotation trippet
+01111 Fejl: Båndsving1 trippet
+01112 Fejl: Båndsving2 trippet
+01113 Fejl: Tipper bånd trippet
+01114 Fejl: Termorelæ til motor på Transportbånd(ind) er trippet. 
+01115 Fejl: Termorelæ til motor på pallebane9 er trippet.
+01116 Fejl: Pallebane trippet
+01117 Fejl: Trykket på luftforsyningen er for lavt.
+01118 Fejl: Kassebånd trippet (ind)
+01119 Fejl: Kassebånd trippet (ud)
+01120 Fejl: Affaldsbånd trippet
+01121 Fejl: Modtagetid på transportbånd overskredet. Kontroller bånd for fejlplaceret kasse.
+01122 Fejl: Modtagetid på transportbånd 1 overskredet. Kontroller bånd for fejlplaceret kasse.
+01123 Fejl: Modtagetid på transportbånd 2 overskredet. Kontroller bånd for fejlplaceret kasse.
+01124 Fejl: Modtagetid på transportbånd 3 overskredet. Kontroller bånd for fejlplaceret kasse.
+01125 Fejl: Modtagetid på transportbånd 4 overskredet. Kontroller bånd for fejlplaceret kasse.
+01126 Fejl: Modtagetid på transportbånd 5 overskredet. Kontroller bånd for fejlplaceret kasse.
+01127 Fejl: Modtagetid på transportbånd 6 overskredet. Kontroller bånd for fejlplaceret kasse.
+01128 Fejl: Modtagetid på transportbånd 7 overskredet. Kontroller bånd for fejlplaceret kasse.
+01129 Fejl: Modtagetid på transportbånd 8 overskredet. Kontroller bånd for fejlplaceret kasse.
+01130 Fejl: Termorelæ til hydraulikpumpe er trippet.
+01131 Fejl: Termorelæ til vacuumpumpe er trippet.
+01132 Fejl: Kassestop er trippet.
+01150 Fejl: Tooltype og programtype passer ikke sammen.
+02000 Info: Ingen produkter på båndet.
+02001 Info: Printerstop. Indsæt eventuelt ny rulle mærkater.
+02002 Info: Flowpakker stoppet pga. af ophopning af bakker.
+02003 Info: Flowpakker stoppet. Der mangler kasser. Vent på robot.
+02004 Fejl: Fotoceller blokeret for længe på tjekVejer.
+02050 Info: Mangler netværksforbindelse til andre dele af anlægget.
+02051 Info: Mangler netværksforbindelse til robot.
+02052 Info: Mangler netværksforbindelse til kassemagasin.
+02053 Info: Mangler netværksforbindelse til vægte.
+02054 Info: Mangler netværksforbindelse til anden kassepakker.
+02055 Info: Mangler netværksforbindelse til kassepakker 1.
+02056 Info: Mangler netværksforbindelse til kassepakker 2.
+02057 Info: Mangler netværksforbindelse til kassepakker 3.
+02100 Info: Nulstilling igang. Vent venligst. S1.
+02101 Fejl: Udenfor området. Fjern bakke og tryk kør.
+02102 Info: Tjekvejeren er stoppet. Der er for mange produkter udenfor den tilladte vægt. S1
+02103 Info: Vejetid(ind) overskredet på tjekvejer S1.
+02104 Info: Vejetid(fri) overskredet på tjekvejer S1.
+02105 Info: Vejetid(vejning) overskredet på tjekvejer S1.
+02106 Info: Printerstop. Indsæt eventuelt ny rulle mærkater, S1.
+02107 Info: Externt stop, S1.
+02108 Fejl: Flydende nulpunkt for langt fra oprindeligt nulpunkt. Tryk nulstil på S1.
+02109 Info: Fotocelle på tjekvejer S1 aktiveret for længe.
+02110 Info: Nulstilling igang. Vent venligst. S2.
+02112 Info: Tjekvejeren er stoppet. Der er for mange produkter udenfor den tilladte vægt. S2
+02113 Info: Vejetid(ind) overskredet på tjekvejer S2.
+02114 Info: Vejetid(fri) overskredet på tjekvejer S2.
+02115 Info: Vejetid(vejning) overskredet på tjekvejer S2.
+02116 Info: Printerstop. Indsæt eventuelt ny rulle mærkater, S2.
+02117 Info: Externt stop, S2.
+02118 Fejl: Flydende nulpunkt for langt fra oprindeligt nulpunkt. Tryk nulstil på S2.
+02119 Info: Fotocelle på tjekvejer S2 aktiveret for længe.
+02120 Info: Nulstilling igang. Vent venligst. S3.
+02122 Info: Tjekvejeren er stoppet. Der er for mange produkter udenfor den tilladte vægt. S3
+02123 Info: Vejetid(ind) overskredet på tjekvejer S3.
+02124 Info: Vejetid(fri) overskredet på tjekvejer S3.
+02125 Info: Vejetid(vejning) overskredet på tjekvejer S3.
+02126 Info: Printerstop. Indsæt eventuelt ny rulle mærkater, S3.
+02127 Info: Externt stop, S3.
+02128 Fejl: Flydende nulpunkt for langt fra oprindeligt nulpunkt. Tryk nulstil på S3.
+02129 Info: Fotocelle på tjekvejer S3 aktiveret for længe.
+02200 Fejl: Fotoceller på stablingstårn virker ikke.
+02201 Fejl: Encoder på stablingstårn virker ikke.
+02207 Info: Externt stop fra wrapper.
+03011 Fejl: Fotocelle aktiveret på transportbånd (ind). Test fotoceller.
+03012 Fejl: Robotten har tabt/fejlplaceret tomme kasser. Test fotoceller.
+03013 Fejl: Palleplads ikke tom. Test fotoceller.
+03014 Fejl: Palle sidder fast. Test fotoceller.
+03015 Fejl: Robotten har tabt/fejlplaceret tomme kasser. Test fotoceller.
+03016 Fejl: Kasser på palle ved pallestabler står forkert. Stil rigtigt.
+03017 Fejl: Sendetid for pallestabler overskredet.
+03018 Fejl: Modtagetid for pallestabler overskredet.
+03019 Fejl: Følerfejl på pallestabler.
+03020 Fejl: Pallestabler er kørt for langt op i forhold til kassekontrol position.
+03021 Fejl: Pallestableren er ikke fri på vej ned.
+03500 03500-03699 Palleshuttle
+03501 Info: Palleshuttle søger hjemmeposition.
+03601 Fejl: Palleshuttle har været i position, men er efterfølgende kørt forbi fotocellerne.
+03602 Fejl: Fotoceller på palleshuttle er ikke blevet aktiveret ved ønsket position.
+04000 04000-04199 Kasse magasin
+04001 Info: Porten på palle stationen åbner.
+04002 Info: Porten kan ikke åbnes. Tryk stop eller kør hjem.
+04003 Info: Porten på palle stationen lukker.
+04004 Info: 
+04005 Info: Porten kunne ikke lukkes. Fjern blokerende objekter eller test portkontakter.
+04006 Info: Venter på at porten lukkes.
+04007 Info: Sikkerhedszone aktiveret. Tryk på R-knappen.
+04101 Fejl: Afleveringstid overskredet på bånd kasse station.
+04102 Fejl: Palle station: Test fotoceller.
+04103 Fejl: Modtagetid overskredet på bånd kasse station
+04104 Fejl: Bånd kasse station: Test fotoceller.
+04105 Fejl: Kør frem tid overskredet på bånd kasse station.
+04106 Fejl: Lift i kassestativ trippet.
+04107 Fejl: Bånd i kassestativ trippet.
+04108 Fejl: Aftrækker i pallestation trippet.
+04109 Fejl: Tromle i pallestation trippet.
+04110 Fejl: Bånd på båndstation trippet.
+04111 Fejl: Modtagetid overskredet på kasse stativ.
+04112 Fejl: Aftræk på palle station kan ikke køre tilbage når der står kasser.
+04113 Fejl: Kasse stativ ved ikke hvilken slags kasse der benyttes.
+04114 Fejl: Afleveringstid overskredet på kasse stativ.
+04115 Fejl: Der kom ikke en kasse med ned til aflevering.
+04116 Fejl: Sende eller modtagetid overskredet på CHN400.
+04117 Fejl: Sende eller modtagetid overskredet på CHN600.
+04118 Fejl: Motor på CHN400 trippet
+04119 Fejl: Motor på CHN600 trippet
+04120 Fejl: Der er ikke noget mellemrum efter aftræk.
+04121 Fejl: Efterskubber på palle station kan ikke komme ned.
+04122 Fejl: Afleveringsfotocelle på kasse stativ er blokeret.
+04123 Fejl: Aftræk kan ikke udføres. Fotoceller på blå bånd blokeret for tidligt.
+04124 Fejl: Følgefejl på lift. Kasse/lift i klemme.
+04125 Fejl: Motor på Udruller er trippet.
+04126 Fejl: Motor på Conveyor1600 er trippet.
+04201 Fejl: PapShuttle kan ikke løfte næste lag pap.
+04202 Fejl: PapShuttle er kørt galt.
+05000 Fejl: Net ligger forkert på transportør ved robot.
+05001 Info: Stabel for høj. Palle sendes ud.
+05009 Info: Pos5_9 palle(pap) er fyldt. Fjern venligst palle fra Pos5_9.
+05010 Info: Pallemagasin er fyldt. Fjern venligst nogle paller.
+05011 Fejl: Palle blev ikke modtaget i tide. Fjern venligst pallen manuelt.
+30002 Info: Finder startposition
+30003 Info: Søger emne
+30004 Info: Løfter emne
+30005 Info: Flytter emne
+30006 Info: Tilbage til startposition

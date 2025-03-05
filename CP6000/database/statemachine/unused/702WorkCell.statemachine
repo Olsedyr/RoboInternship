@@ -1,0 +1,4 @@
+STATEMACHINEVERSION 3
+Include=cpworkcell.statemachine
+Name=WorkCell
+;** User section **

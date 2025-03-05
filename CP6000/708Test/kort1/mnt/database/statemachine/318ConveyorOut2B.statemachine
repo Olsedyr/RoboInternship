@@ -1,0 +1,382 @@
+STATEMACHINEVERSION 3
+Name=ConveyorOut2B
+linkValue=photo test ConveyorOut2BPhoto
+Input=reed1 "Pusher POS.1.9 Reed 1"
+Input=reedHome "Pusher POS.1.9 Reed Home"
+Output=motor "Conveyor POS.1.9 Motor"
+Output=pusher "Pusher Cyl POS.1.9"
+linkValue=nextConv ProgramB2
+linkValue=A ProgramB2
+linkValue=B ProgramB2
+linkValue=countB ProgramB2
+linkValue=canProgram Program318
+Link=ProgramB2
+Link=parent Parent
+Link=prev ConveyorOut3B
+Link=nextA ConveyorOut2A
+Link=nextB ConveyorOutB
+linkValue=firstRun WorkCell
+linkValue=doPush timeleftget ConveyorOut2A
+linkValue=photoB1 photo1 ConveyorOutB
+linkValue=photoB2 photo2 ConveyorOutB
+linkValue=conv2aMotorOffWhilePush motorOffWhilePush ConveyorOut2A
+Value=errorCode 0
+Value=simulate 0
+Value=pushing 0
+Value=curCountB 0
+Value=singlesend 0
+Value=watchNextBRR 0
+Const=tCansExtraPushTime 400000
+Const=tJarsExtraPushTime 400000
+Const=motorOffWhilePush 1
+Timeout=startupTime 6000000
+Timeout=maxMovePhotoFreeTime 4000000
+Timeout=moveFreeTime 0
+Timeout=maxSendTime 10000000
+Timeout=maxReceiveTime 5000000
+Timeout=extraPushTime 5000
+Timeout=afterrunTime 500000
+Timeout=minMoveTimeInEmpty 6000000
+Timeout=maxPushTime 3000000
+Timeout=pushBackTime 500000
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SET motor 0
+  SET pusher 0
+  TEST parent = ST_RESET
+  OR simulate = 1
+    SET errorCode 0
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST firstRun = 1
+  AND photoB1 = 1
+  AND photoB2 = 0
+    SET singlesend 1
+  ENDTEST
+  TEST curCountB = 0
+  AND photoB1 = 1
+  AND photoB2 = 0
+    SET singlesend 1
+  ENDTEST  
+  TEST nextB != ST_HALT
+  AND nextB != ST_IDLE
+  AND nextB != ST_RESET
+  AND nextB != ST_STARTUP
+  AND ProgramB2 != ST_RESET
+  AND ProgramB2 != ST_START
+    TEST nextB = ST_READY_ROBOT
+      SET countB 0
+      SET curCountB 0
+      SET watchNextBRR 0
+    ENDTEST
+    TIMEOUT startupTime ST_STARTUP
+    SETSTATE ST_STARTUP
+  ENDTEST
+  TEST pushSim = 1
+    SETSTATE ST_PUSH
+  ENDTEST
+END
+
+State=ST_STARTUP
+  TEST watchNextBRR = 1
+  AND nextB = ST_READY_ROBOT
+    SET watchNextBRR 0
+  ENDTEST
+  TEST photo = 1
+    SETSTATE ST_READY
+  ELSE
+    TEST startupTime = 1
+      TIMEOUT minMoveTimeInEmpty ST_EMPTY
+      SETSTATE ST_EMPTY
+    ELSE
+      SET motor 1
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_ERROR
+  SET motor 0
+  SET pusher 0
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_EMPTY
+  TEST watchNextBRR = 1
+  AND nextB = ST_READY_ROBOT
+    SET watchNextBRR 0
+  ENDTEST
+  TEST prev = ST_SEND
+    TIMEOUT maxReceiveTime ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSETEST photo = 1
+    SETSTATE ST_READY
+  ELSE
+    TEST singlesend = 1
+      SET motor 0
+    ELSETEST minMoveTimeInEmpty = 1
+      SET motor 0
+    ELSE
+      SET motor 1
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+State=ST_RECEIVE
+  TEST watchNextBRR = 1
+  AND nextB = ST_READY_ROBOT
+    SET watchNextBRR 0
+  ENDTEST
+  TEST photo = 1
+    TIMEOUT afterrunTime ST_AFTERRUN
+    SETSTATE ST_AFTERRUN
+	ELSETEST maxReceiveTime = 1
+		SET errorCode 1007
+		SETSTATE ST_ERROR
+  ELSE
+    SET motor 1
+  ENDTEST
+END
+
+State=ST_AFTERRUN
+  TEST watchNextBRR = 1
+  AND nextB = ST_READY_ROBOT
+    SET watchNextBRR 0
+  ENDTEST
+  TEST afterrunTime = 1
+    SETSTATE ST_READY
+  ENDTEST
+END
+
+State=ST_READY
+  TEST watchNextBRR = 1
+  AND nextB = ST_READY_ROBOT
+    SET watchNextBRR 0
+  ENDTEST
+  TEST photo = 0
+    TIMEOUT minMoveTimeInEmpty ST_EMPTY
+    SETSTATE ST_EMPTY
+  ELSE
+    TEST nextConv = A
+      TEST doPush = 1
+        TEST conv2aMotorOffWhilePush = 0
+          SETSTATE ST_PUSH
+        ELSE
+          SET motor 0
+          TEST nextA != ST_SEND
+          AND nextA != ST_SEND_FREE
+            SETSTATE ST_PUSH
+          ENDTEST
+        ENDTEST
+      ELSETEST singlesend = 0
+      AND curCountB < countB
+        TEST nextB = ST_GET
+        OR nextB = ST_RECEIVE
+        OR nextB = ST_TEST_FULL
+        OR nextB = ST_WAIT_FIRST
+          TIMEOUT maxMovePhotoFreeTime ST_MOVE
+          SETSTATE ST_MOVE
+        ENDTEST
+      ELSETEST singlesend = 1
+      AND nextB = ST_GET
+        TIMEOUT maxSendTime ST_SEND
+        SETSTATE ST_SEND
+      ELSE
+        SET motor 0
+      ENDTEST
+    ELSETEST nextConv = B
+      TEST singlesend = 0
+      AND curCountB < countB
+        TEST nextB = ST_GET
+        OR nextB = ST_RECEIVE
+        OR nextB = ST_TEST_FULL
+        OR nextB = ST_WAIT_FIRST
+          TIMEOUT maxMovePhotoFreeTime ST_MOVE
+          SETSTATE ST_MOVE
+        ENDTEST
+      ELSETEST singlesend = 1
+      AND nextB = ST_GET
+        TIMEOUT maxSendTime ST_SEND
+        SETSTATE ST_SEND
+      ELSETEST doPush = 1
+        TEST conv2aMotorOffWhilePush = 0
+          SETSTATE ST_PUSH
+        ELSE
+          SET motor 0
+          TEST nextA != ST_SEND
+          AND nextA != ST_SEND_FREE
+            SETSTATE ST_PUSH
+          ENDTEST
+        ENDTEST
+      ELSE
+        SET motor 0
+      ENDTEST
+    ELSE
+      ;error?
+      SET motor 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+  AND simulate = 0
+    SETSTATE ST_IDLE
+  ENDTEST 
+END
+
+Value=pushSim 0
+Timeout=pushSimTime 3000000
+
+State=ST_PUSH
+  TEST watchNextBRR = 1
+  AND nextB = ST_READY_ROBOT
+    SET watchNextBRR 0
+  ENDTEST
+  TEST pushing = 0
+    TEST motorOffWhilePush = 1
+      SET motor 0
+    ENDTEST
+    SET pusher 1
+    SET pushing 1
+    TIMEOUT maxPushTime ST_PUSH
+    SETSTATE ST_PUSH
+  ELSETEST pushing = 1
+    TEST reed1 = 1
+      TEST canProgram = 1
+        SET extraPushTime tCansExtraPushTime
+      ELSE
+        SET extraPushTime tJarsExtraPushTime
+      ENDTEST
+      SET pushing 2
+      TIMEOUT extraPushTime ST_PUSH
+      SETSTATE ST_PUSH
+    ELSETEST maxPushTime = 1
+      SET pushing 0
+		  SET errorCode 1007
+		  SETSTATE ST_ERROR
+    ENDTEST
+  ELSETEST pushing = 2
+    TEST extraPushTime = 1
+      SET pusher 0
+      TEST pushSim = 1
+        TIMEOUT pushSimTime ST_PUSH
+        SETSTATE ST_TIMER
+      ELSE
+        ;vent med emtpy til pushBackTime
+        SET pushing 3
+        SET motor 1
+        TIMEOUT pushBackTime ST_PUSH
+        SETSTATE ST_PUSH
+        ;SET pushing 0
+        ;SET motor 1
+        ;TIMEOUT maxMovePhotoFreeTime ST_WAIT_PHOTO_FREE
+        ;SETSTATE ST_WAIT_PHOTO_FREE
+      ENDTEST
+    ENDTEST
+  ELSE
+    TEST pushBackTime = 1
+      SET pushing 0
+      TIMEOUT maxMovePhotoFreeTime ST_WAIT_PHOTO_FREE
+      SETSTATE ST_WAIT_PHOTO_FREE
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_WAIT_PHOTO_FREE
+  TEST watchNextBRR = 1
+  AND nextB = ST_READY_ROBOT
+    SET watchNextBRR 0
+  ENDTEST
+  TEST photo = 0
+    TEST watchNextBRR = 1
+      SET watchNextBRR 0
+      TIMEOUT maxSendTime ST_MOVE3
+      SETSTATE ST_MOVE3
+    ELSE
+      TIMEOUT minMoveTimeInEmpty ST_EMPTY
+      SETSTATE ST_EMPTY
+    ENDTEST
+  ELSETEST maxMovePhotoFreeTime = 1
+		SET errorCode 1007
+		SETSTATE ST_ERROR
+  ENDTEST
+END
+
+State=ST_MOVE
+  SET motor 1
+  TEST photo = 0
+    TIMEOUT moveFreeTime ST_MOVE2
+    SETSTATE ST_MOVE2
+  ELSETEST maxMovePhotoFreeTime = 1
+		SET errorCode 1007
+		SETSTATE ST_ERROR
+  ENDTEST
+END
+
+State=ST_MOVE2
+  TEST moveFreeTime = 1
+    CALC curCountB = curCountB + 1
+    TEST curCountB >= countB
+      SET curCountB 0
+      SET countB 0
+      TIMEOUT maxSendTime ST_MOVE3
+      SETSTATE ST_MOVE3
+    ELSE
+      TIMEOUT minMoveTimeInEmpty ST_EMPTY
+      SETSTATE ST_EMPTY
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_MOVE3
+  TEST nextB = ST_READY_ROBOT
+    TIMEOUT minMoveTimeInEmpty ST_EMPTY
+    SETSTATE ST_EMPTY
+  ELSETEST doPush = 1
+    SET watchNextBRR 1
+    TIMEOUT minMoveTimeInEmpty ST_EMPTY
+    SETSTATE ST_EMPTY
+  ELSETEST maxSendTime = 1
+    SET errorCode 1007
+		SETSTATE ST_ERROR
+  ENDTEST
+END
+
+State=ST_SEND
+  SET motor 1
+  TEST nextB = ST_RECEIVE
+    TIMEOUT maxSendTime ST_SEND2
+    SETSTATE ST_SEND2
+  ELSETEST maxSendTime = 1
+    SET errorCode 1007
+		SETSTATE ST_ERROR
+  ENDTEST
+END
+
+State=ST_SEND2
+  TEST nextB = ST_READY_ROBOT
+    SET singlesend 0
+    SET curCountB 0
+    SET countB 0
+    TIMEOUT minMoveTimeInEmpty ST_EMPTY
+    SETSTATE ST_EMPTY
+  ELSETEST nextB = ST_GET
+    TIMEOUT minMoveTimeInEmpty ST_EMPTY
+    SETSTATE ST_EMPTY
+  ELSETEST maxSendTime = 1
+    SET errorCode 1007
+		SETSTATE ST_ERROR
+  ENDTEST
+END

@@ -1,0 +1,9 @@
+STATEMACHINEVERSION 3
+Include=901PreCW1.statemachine
+Name=PreCW2b
+Output=motor "PreCW 2b Motor"
+Link=master checkWeigherPrevS2
+;bånd under newtec. Oplysningsvalue :)
+Value=detteErConvUnderNewtec 1
+Timeout=timeRunAgain 500000
+Timeout=timeStop 0

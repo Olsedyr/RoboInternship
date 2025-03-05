@@ -1,0 +1,88 @@
+STATEMACHINEVERSION 3
+Name=KasseLoader2
+;Output=Skub "KasseSkubber2"
+Output=Skub "dummyOut"
+Link=Inliner KasseInLiner
+Link=Foto KasseSkubberFoto2
+linkValue=loadfromback Program
+Timeout=TimeStartUp 1000000
+Timeout=TimeBack 1500000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET Skub 0
+	TEST Inliner = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	TIMEOUT TimeStartUp ST_STARTUP
+	SETSTATE ST_TIMER
+	TEST loadfromback = 0
+		SETSTATE ST_FREEZE
+	ELSE
+		SET Skub 0
+	ENDTEST
+END
+
+State=ST_FREEZE
+	SET Skub 1
+	TEST loadfromback = 1
+	OR Inliner = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_STARTUP
+	TEST Foto = ST_ON
+		SETSTATE ST_READY
+	ELSE
+		SETSTATE ST_EMPTY
+	ENDTEST
+END
+
+State=ST_EMPTY
+	SET Skub 0
+	TEST Foto = ST_ON
+		SETSTATE ST_READY
+	ENDTEST
+	TEST Inliner = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_READY
+	SET Skub 0
+	TEST Inliner = ST_EMPTY
+		SETSTATE ST_SEND
+	ENDTEST
+	TEST Inliner = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_SEND
+	TEST Inliner = ST_RECEIVE2
+		SET Skub 1
+	ENDTEST
+	TEST Inliner = ST_READY
+		TIMEOUT TimeBack ST_GOBACK
+		SETSTATE ST_GOBACK
+	ENDTEST
+	TEST Inliner = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_GOBACK
+	SET Skub 0
+	TEST TimeBack = 1
+		SETSTATE ST_EMPTY
+	ENDTEST
+END

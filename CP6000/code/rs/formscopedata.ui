@@ -1,0 +1,265 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>formScopeData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>formScopeData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>799</width>
+            <height>599</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="baseSize">
+        <size>
+            <width>799</width>
+            <height>599</height>
+        </size>
+    </property>
+    <property name="paletteBackgroundColor">
+        <color>
+            <red>0</red>
+            <green>85</green>
+            <blue>255</blue>
+        </color>
+    </property>
+    <property name="caption">
+        <string>ScopeData</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdMenu</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>670</x>
+                <y>500</y>
+                <width>120</width>
+                <height>90</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Helvetica [Urw]</family>
+                <pointsize>18</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Menu</string>
+        </property>
+    </widget>
+    <widget class="QScrollBar">
+        <property name="name">
+            <cstring>scrollBar1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>51</width>
+                <height>440</height>
+            </rect>
+        </property>
+        <property name="orientation">
+            <enum>Vertical</enum>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>Text</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>460</y>
+                <width>780</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="frameShape">
+            <enum>Box</enum>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>490</y>
+                <width>90</width>
+                <height>41</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Index</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cmdIndex</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>540</y>
+                <width>80</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>5</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>Capture</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>560</x>
+                <y>540</y>
+                <width>60</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Capture</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>550</x>
+                <y>490</y>
+                <width>90</width>
+                <height>41</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Capture</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>FT</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>450</x>
+                <y>540</y>
+                <width>60</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>FT</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>390</x>
+                <y>490</y>
+                <width>40</width>
+                <height>41</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>DT</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>470</x>
+                <y>490</y>
+                <width>40</width>
+                <height>41</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>FT</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>DT</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>370</x>
+                <y>540</y>
+                <width>60</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>DT</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>Data</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>60</x>
+                <y>10</y>
+                <width>730</width>
+                <height>440</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="frameShape">
+            <enum>Box</enum>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

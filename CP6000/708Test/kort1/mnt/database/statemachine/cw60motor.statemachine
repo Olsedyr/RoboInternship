@@ -1,0 +1,112 @@
+STATEMACHINEVERSION 3
+Name=checkWeigherMotor
+Output=motor "Motor"
+Link=checkWeigher checkWeigher
+Link=zerocalib checkWeigherZeroCalib
+Link=parent Parent
+Link=next null
+Value=temp 0
+Timeout=TimeStartSync 0
+Timeout=stopDelay 10000000
+Value=stopDelayOn 0
+Value=stopPrev 1
+
+State=ST_HALT
+END
+
+State=ST_TIMER
+END
+
+State=ST_RESET
+  SETSTATE ST_IDLE
+END
+
+State=ST_PAUSED
+  SET motor 0
+  SET stopPrev 1
+  TEST parent = ST_RESET
+  OR checkWeigher != ST_PAUSED
+    TEST checkWeigher != ST_ZEROMAX 
+    AND checkWeigher != ST_ZEROMIN 
+    AND next != ST_STOP
+      SET stopDelayOn 0
+      TIMEOUT TimeStartSync ST_RUN
+      SETSTATE ST_RUN
+    ENDTEST
+  ENDTEST
+END
+
+State=ST_CALIBRATE
+  SET motor 1
+  SET stopPrev 1
+  TEST zerocalib != ST_DO_CALIBRATE
+    SET stopDelayOn 0
+    TIMEOUT TimeStartSync ST_RUN
+    SETSTATE ST_RUN
+  ENDTEST
+END
+
+State=ST_IDLE
+  SET motor 0 
+  SET stopPrev 1
+  TEST parent = ST_RUN
+    SET stopDelayOn 0
+    TIMEOUT TimeStartSync ST_RUN
+    SETSTATE ST_RUN
+  ENDTEST
+END
+
+State=ST_RUN
+; ST_PAUSED is set when a product has been on weight for too long
+  TEST checkWeigher = ST_PAUSED
+  OR checkWeigher = ST_ZEROMIN
+  OR checkWeigher = ST_ZEROMAX
+    SETSTATE ST_PAUSED
+  ELSE
+    SET motor 1
+    TEST next = ST_STOP
+; next is full and can't receive, stop calling for product but let motor run for a while 
+      SET stopPrev 1
+      TEST stopDelayOn = 0
+        SET stopDelayOn 1
+        TIMEOUT stopDelay ST_RUN
+  	    SETSTATE ST_RUN
+      ELSE
+;we can not stop while weighing therefore wait until we are in state ST_WAIT_FOR_PRODUCT
+        TEST checkWeigher = ST_WAIT_FOR_PRODUCT
+        AND stopDelay = 1
+  	      SETSTATE ST_PAUSED
+        ENDTEST
+        TEST checkWeigher = ST_PRODUCT_INSIDE
+        OR checkWeigher = ST_PRODUCT_OUTSIDE
+  	      SETSTATE ST_PAUSED
+        ENDTEST
+      ENDTEST
+    ELSE
+      TEST zerocalib = ST_DO_CALIBRATE
+        SET stopPrev 1
+        TEST stopDelayOn = 0
+          SET stopDelayOn 1
+          TIMEOUT stopDelay ST_RUN
+  	      SETSTATE ST_RUN
+        ELSE
+          TEST checkWeigher = ST_WAIT_FOR_PRODUCT
+          AND stopDelay = 1
+  	        SETSTATE ST_CALIBRATE
+          ENDTEST
+        ENDTEST
+      ELSE
+  ; next is empty and can receive
+        SET stopDelayOn 0
+        TEST checkWeigher = ST_WAIT_FOR_PRODUCT
+          TEST TimeStartSync = 1
+            SET stopPrev 0
+          ENDTEST 
+        ENDTEST
+      ENDTEST
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END

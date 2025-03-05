@@ -1,0 +1,232 @@
+STATEMACHINEVERSION 3
+Name=Pallebane45
+;**************************************
+;* Middel pallet sektion between palle4 and pallet6
+; first used in 312.workcell (Palm) model CS1200U
+;**************************************
+Input=palletInPlace "Pallebane5 FotoMid"
+Output=MotorFwd "Pallebane5 MotorFwd" 
+Output=MotorRev "Pallebane5 MotorRev"
+Output=ChainLeft "Pallebane5 ChainFwd"
+Output=ChainRight "Pallebane5 ChainRev"
+Output=Cyl "Pallebane5 Cyl"
+Link=left Pallebane6
+Link=right Pallebane6A
+Link=prev Pallebane3
+Link=parent Parent
+Timeout=TimeoutDelay 5000000
+Timeout=TimeoutForPalletRev 1000000
+Timeout=TimeoutForPalletSideAlign 5000000
+Timeout=TimeoutForPalletLift 2000000
+Timeout=maxDelayStop 10000000
+Timeout=StopDelay 250000
+
+State=ST_HALT
+  END
+
+State=ST_TIMER
+  END
+
+State=ST_IDLE
+  SET MotorFwd 0
+  SET MotorRev 0
+  SET ChainLeft 0
+  SET ChainRight 0
+  SET Cyl 0
+  TEST parent = ST_RESET
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_READY
+  TEST right = ST_EMPTY
+    SET MotorFwd 0
+    SET MotorRev 1
+    SET ChainLeft 0
+    SET ChainRight 0
+    SET Cyl 0
+    TIMEOUT StopDelay ST_READY_RIGHT
+    SETSTATE ST_READY_RIGHT
+  ELSE
+    TEST left = ST_EMPTY
+      SET MotorFwd 0
+      SET MotorRev 1
+      SET ChainLeft 0
+      SET ChainRight 0
+      SET Cyl 0
+      TIMEOUT StopDelay ST_READY_LEFT
+      SETSTATE ST_READY_LEFT
+    ELSE
+      SET MotorFwd 0
+      SET MotorRev 0
+      SET ChainLeft 0
+      SET ChainRight 0
+      SET Cyl 0
+    ENDTEST
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_SEND_LEFT
+ TEST left = ST_PALLET_REV
+   SETSTATE ST_EMPTY
+   SET MotorFwd 0
+   SET MotorRev 0
+   SET ChainLeft 0
+   SET ChainRight 0
+   SET Cyl 0
+ ELSE 
+   SET MotorFwd 0
+   SET MotorRev 0
+   SET ChainLeft 1
+   SET ChainRight 0
+   SET Cyl 1
+ ENDTEST
+ TEST parent = ST_IDLE
+ AND maxDelayStop = 1 
+   SETSTATE ST_IDLE
+ ENDTEST  
+END
+
+State=ST_SEND_RIGHT
+  TEST right = ST_PALLET_REV
+    SETSTATE ST_EMPTY
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET ChainLeft 0
+    SET ChainRight 0
+    SET Cyl 0
+  ELSE 
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET ChainLeft 0
+    SET ChainRight 1
+    SET Cyl 1
+ ENDTEST
+ TEST parent = ST_IDLE
+ AND maxDelayStop = 1 
+   SETSTATE ST_IDLE
+ ENDTEST  
+ END
+
+State=ST_EMPTY
+  TEST prev = ST_SEND
+    SET MotorFwd 1
+    SET MotorRev 0
+    SET ChainLeft 0
+    SET ChainRight 0
+    SET Cyl 0
+    TIMEOUT maxDelayStop ST_RECEIVE
+    SETSTATE ST_RECEIVE
+  ELSE 
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET ChainLeft 0
+    SET ChainRight 0
+    SET Cyl 0
+  ENDTEST
+  TEST parent = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST  
+END
+
+State=ST_RECEIVE
+ TEST palletInPlace = 1
+    TIMEOUT TimeoutForPalletRev ST_PALLET_REV_TIMEOUT
+    SETSTATE ST_TIMER
+ ENDTEST
+ TEST parent = ST_IDLE
+ AND maxDelayStop = 1
+   SETSTATE ST_IDLE
+ ENDTEST  
+ END
+
+State=ST_PALLET_REV_TIMEOUT
+  SET MotorRev 0
+  SET MotorFwd 0
+  SET ChainLeft 0
+  SET ChainRight 0
+  SET Cyl 0
+  TEST palletInPlace = 1
+    SETSTATE ST_READY
+  ELSE 
+    SETSTATE ST_RESET
+  ENDTEST
+END
+
+State=ST_RESET
+  TEST palletInPlace = 1
+    SETSTATE ST_READY
+  ELSE 
+    SET ChainLeft 0
+    SET ChainRight 0
+    SET MotorRev 0
+    SET MotorFwd 1
+    SET Cyl 0
+    TIMEOUT TimeoutDelay ST_STOP
+    SETSTATE ST_STOP
+  ENDTEST
+  END
+
+State=ST_STOP
+  TEST palletInPlace = 1
+    TIMEOUT TimeoutForPalletRev ST_PALLET_REV_TIMEOUT
+    SETSTATE ST_TIMER
+  ELSE 
+    TEST TimeoutDelay = 1
+      SET ChainLeft 0
+      SET ChainRight 0
+      SET Cyl 0
+      SET MotorFwd 0
+      SET MotorRev 0
+      SETSTATE ST_EMPTY
+    ENDTEST	
+ ENDTEST
+END
+
+State=ST_READY_LEFT
+  TEST StopDelay = 1
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET ChainLeft 0
+    SET ChainRight 0
+    SET Cyl 1
+    TIMEOUT TimeoutForPalletLift ST_EMPTY_SHIFT_LEFT
+    SETSTATE ST_TIMER
+  ENDTEST
+ END
+
+State=ST_READY_RIGHT
+  TEST StopDelay = 1
+    SET MotorFwd 0
+    SET MotorRev 0
+    SET ChainLeft 0
+    SET ChainRight 0
+    SET Cyl 1
+    TIMEOUT TimeoutForPalletLift ST_EMPTY_SHIFT_RIGHT
+    SETSTATE ST_TIMER
+  ENDTEST
+END
+
+State=ST_EMPTY_SHIFT_LEFT
+  SET MotorFwd 0
+  SET MotorRev 0
+  SET ChainLeft 1
+  SET ChainRight 0
+  SET Cyl 1
+  TIMEOUT maxDelayStop ST_SEND_LEFT
+  SETSTATE ST_SEND_LEFT
+END
+
+State=ST_EMPTY_SHIFT_RIGHT
+  SET MotorFwd 0
+  SET MotorRev 0
+  SET ChainLeft 0
+  SET ChainRight 1
+  SET Cyl 1
+  TIMEOUT maxDelayStop ST_SEND_RIGHT
+  SETSTATE ST_SEND_RIGHT
+END
+

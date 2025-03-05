@@ -1,0 +1,21 @@
+STATEMACHINEVERSION 3
+Name=Program604
+Link=parent Parent
+
+State=ST_IDLE
+  TEST parent = ST_RUN
+		SETSTATE ST_RUNNING
+	ENDTEST
+END
+
+State=ST_RUNNING
+  TEST parent != ST_RUN
+		SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END

@@ -1,0 +1,55 @@
+STATEMACHINEVERSION 3
+Name=AffaldsWatch
+Link=affald1 Affald1
+Link=affald2 Affald2
+linkValue=delayStop1 delayStop Affald1
+linkValue=delayStop2 delayStop Affald2
+;count reversed: preCW1 -> CheckWeigherS3 -> postCW1 -> ...
+Link=skub3 productOutS1
+Link=skub2 productOutS2
+Link=skub1 productOutS3
+Value=affald1Starting 0
+Value=affald2Starting 0
+
+State=ST_HALT
+  SETSTATE ST_RESET
+END
+
+State=ST_TIMER
+END
+
+State=ST_IDLE
+  SETSTATE ST_RESET
+END
+
+State=ST_RESET
+  SET affald1Starting 0
+  SET affald2Starting 0
+  SETSTATE ST_WATCH
+END
+
+State=ST_WATCH
+  ;Affald 1
+  TEST skub1 = ST_DELAY_OPEN_VALVE
+  OR skub1 = ST_VALVE_IS_OPEN
+    TEST affald1Starting = 0
+      SET delayStop1 1
+      SET delayStop2 1
+      SET affald1Starting 1
+    ENDTEST
+  ELSE
+    SET affald1Starting 0
+  ENDTEST
+  ;Affald 2
+  TEST skub2 = ST_DELAY_OPEN_VALVE
+  OR skub2 = ST_VALVE_IS_OPEN
+  OR skub3 = ST_DELAY_OPEN_VALVE
+  OR skub3 = ST_VALVE_IS_OPEN
+    TEST affald2Starting = 0
+      SET delayStop2 1
+      SET affald2Starting 1
+    ENDTEST
+  ELSE
+    SET affald2Starting 0
+  ENDTEST
+END

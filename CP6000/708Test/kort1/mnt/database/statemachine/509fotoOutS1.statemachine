@@ -1,0 +1,8 @@
+STATEMACHINEVERSION 3
+Include=input.statemachine
+Name=fotoOutS1
+Input=input "S1 Photo1"
+Timeout=TimeOn 0
+Timeout=TimeOff 0
+Value=test 0
+Const=active 0
