@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=PalleStationPortLukketKontakt
-Input=input "PalleStation Port Lukket Kontakt"
-Timeout=TimeOn 1000000
-Timeout=TimeOff 100000
-Value=test 0

@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=fotoinput.statemachine
-Name=KasseStativFotoAfleveret
-Input=input "KasseStativ Foto Afleveret"
-Timeout=blockTime 100000
-Timeout=freeTime 100000
-Value=test 0
-Const=free 1
-Const=blocked 0

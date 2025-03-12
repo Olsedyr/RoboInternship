@@ -60,3 +60,5 @@ STM 708AccumulatingConveyor.statemachine
 STM 708Vibrator.statemachine
 CPPATTERN simple.cppattern
 ;REMOTEHOST 192.168.0.96
+ITEM test.item
+CPPATTERN 10prod.cppattern

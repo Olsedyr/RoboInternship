@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Name=RandomValues
-Value=rand_next 25
-Value=rand_temp 0
-Value=rand_ftemp 0.0
-Value=randseed 1
-Value=randmax 1.0
-Value=randmin 0.0
-Value=randres 0.0

@@ -1,0 +1,93 @@
+STATETEKSTVERSION 1
+328
+00001 Info: Kontrollerer hardware.
+00002 Info: Tryk nødstop ind.
+00003 Info: Frigiv nødstop og tryk reset.
+00004 Info: Starter akser.
+00005 Info: Sætter startværdier.
+00006 Info: Sætter enheder.
+00007 Info: Reset akser.
+00008 Info: Finder nulpunkter.
+00100 Fejl: Følgefejl.
+00101 Nødstop aktiveret på kassepakker.
+00102 Nødstop aktiveret på robot.
+00103 Nødstop aktiveret på tjekvejer S1.
+00104 Nødstop aktiveret på tjekvejer S2.
+00105 Nødstop aktiveret på tjekvejer S3.
+00106 Nødstop aktiveret på tjekvejer S4.
+00202 Der er opstået en fejl - robotten er STOPPET.
+00202 Foretag komplet start procedure for maskinen.
+00203 Nødstop blev trykket under kørsel.
+00203 Foretag komplet start procedure for maskinen.
+00204 Der er opstået en vacuumfejl
+00204 Ret produktet og fjern kassen, tryk Fortsæt eller Stop
+00214 Robotten har tabt en kasse.
+00214 Ret fejlen, tryk Fortsæt eller Stop.
+00215 Robotten er sat i pause.
+00216 Der er opstået en fejl - robotten er standset.
+00231 Robotten har tabt/fejlplaceret tomme kasser.
+00232 Robotten har tabt de fyldte kasser.
+00233 Robotten har fejlplaceret fyldte kasser.
+01000 Fejl: Tøm kassepakkeren for produkter. 
+01001 Fejl: Der mangler en palle. Læg en ny ind.
+01002 Fejl: Bakker står skævt ved skubbeplads. Ret de forreste bakker. 
+01003 Fejl: Kasse sidder fast (Ud). Hiv kassen ud og sæt på båndet.
+01004 Fejl: Bakker sad fast i bunden på låget. Tøm for produkter.
+01005 Fejl: Bakker sad fast ved indskubning. Tøm for produkter.
+01006 Fejl: Kasse sidder fast (Ind). Skub kassen ind i kassepakkeren.
+01007 Fejl: Kasser står forkert på transportbånd (ud). Stil rigtigt.
+01008 Fejl: Kasser står forkert på transportbånd (ind). Stil rigtigt.
+01009 Fejl: Paller (ind) står for tæt. Træk tilbage.
+01010 Fejl: Forkert type kasse til det program du har valgt.
+01011 Fejl: Der er for lille afstand mellem produkterne. (cp)
+01012 Fejl: Kasse sidder fast inde i kassepakkeren.
+01013 Fejl: Der er for lille afstand mellem produkterne. (vs)
+01014 Fejl: Kasser står forkert på transportbånd (ud). Stil rigtigt. Test fotoceller.
+01015 Fejl: Kasser står forkert ved kassepakker (ud). Stil rigtigt. Test fotoceller.
+01050 Fejl: Homing-rutinen kunne ikke finde en sensor. (Skubber)
+01050 Fejl: Homing-rutinen kunne ikke finde en sensor. (Skubber)
+01051 Fejl: Homing-rutinen kunne ikke finde en sensor. (Buffer)
+01052 Fejl: Homing-rutinen kunne ikke finde en sensor. (Lift)
+01053 Fejl: Homing-rutinen kunne ikke finde en sensor. (Vender1)
+01054 Fejl: Homing-rutinen kunne ikke finde en sensor. (Vender2)
+01055 Fejl: Fjern produkter før opstart.
+01070 Fejl: Inkompatible programmer for robot og kassepakker.
+01100 Fejl: Produktbånd trippet
+01101 Fejl: BufferSkub trippet
+01102 Fejl: KassePakker Bund trippet
+01103 Fejl: KasseLift trippet
+01104 Fejl: KasseInLiner trippet
+01105 Fejl: KasseLift Bånd trippet
+01106 Fejl: Vibrator trippet
+01107 Fejl: Vendestation bånd trippet
+01108 Fejl: Vendestation rotation trippet
+01109 Fejl: Vendestation2 bånd trippet
+01110 Fejl: Vendestation2 rotation trippet
+01111 Fejl: Båndsving1 trippet
+01112 Fejl: Båndsving2 trippet
+01113 Fejl: Tipper bånd trippet
+01150 Fejl: Tooltype og programtype passer ikke sammen.
+02000 Info: Ingen produkter på båndet.
+02001 Info: Printerstop. Indsæt eventuelt ny rulle mærkater.
+02002 Info: Flowpakker stoppet pga. af ophopning af bakker.
+02003 Info: Flowpakker stoppet. Der mangler kasser. Vent på robot.
+02004 Fejl: Fotoceller blokeret for længe på tjekVejer.
+02050 Info: Mangler netværksforbindelse til andre dele af anlægget.
+02101 Fejl: Udenfor området. Fjern bakke og tryk kør.
+02103 Info: Vejetid(ind) overskredet. (S1)
+02104 Info: Vejetid(fri) overskredet. (S1)
+02105 Info: Vejetid(vejning) overskredet. (S1)
+02106 Info: Vejetid(ind) overskredet. (S2)
+02107 Info: Vejetid(fri) overskredet. (S2)
+02108 Info: Vejetid(vejning) overskredet. (S2)
+02109 Info: Fotocelle på tjekvejer aktiveret for længe.
+03011 Fejl: Fotocelle aktiveret på transportbånd (ind). Test fotoceller.
+03012 Fejl: Robotten har tabt/fejlplaceret tomme kasser. Test fotoceller.
+03013 Fejl: Palleplads ikke tom. Test fotoceller.
+03014 Fejl: Palle sidder fast. Test fotoceller.
+03015 Fejl: Robotten har tabt/fejlplaceret tomme kasser. Test fotoceller.
+30002 Finder startposition
+30003 Søger kasse
+30004 Løfter kasse
+30005 Flytter kasse
+30006 Tilbage til startposition

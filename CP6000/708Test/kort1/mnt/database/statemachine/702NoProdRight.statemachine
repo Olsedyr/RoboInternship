@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=NoProdRight
-Input=input "Sving 2 Foto"
-Timeout=TimeOn 999999999
-Timeout=TimeOff 100000
-Value=test 0
-Link=parent Parent

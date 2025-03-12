@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=pallebane.statemachine
-Name=Pallebane7
-Input=palletInPlace "Pallebane7 Foto"
-Output=Motor "Pallebane7 Motor"
-Link=next Pallebane9
-Link=prev PallebanePS
-Link=parent Parent
-Const=ON 0

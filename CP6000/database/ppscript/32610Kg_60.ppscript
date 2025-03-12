@@ -1,0 +1,73 @@
+PPSCRIPTVERSION 2
+32610Kg_60
+type=1
+itemsPrLayer=7
+layers=9
+move 32610Kg from conveyorA to palletA(idx=0,0,wcp=1030,0,630,90,0,0)
+move 32610Kg from conveyorA to palletA(idx=0,1,wcp=170,0,630,90,-180,0)
+move 32610Kg from conveyorA to palletA(idx=0,2,wcp=750,0,150,90,-110,0)
+move 32610Kg from conveyorA to palletA(idx=0,3,wcp=450,0,150,90,-70,0)
+move 32610Kg from conveyorA to palletA(idx=0,4,wcp=600,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=0,5,wcp=1020,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=0,6,wcp=180,0,150,90,-90,0)
+#
+move 32610Kg from conveyorA to palletA(idx=1,7,wcp=1020,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=1,8,wcp=180,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=1,9,wcp=1020,0,150,90,0,0)
+move 32610Kg from conveyorA to palletA(idx=1,10,wcp=180,0,150,90,-180,0)
+move 32610Kg from conveyorA to palletA(idx=1,11,wcp=600,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=1,12,wcp=750,0,630,90,110,0)
+move 32610Kg from conveyorA to palletA(idx=1,13,wcp=450,0,630,90,70,0)
+#
+move 32610Kg from conveyorA to palletA(idx=2,14,wcp=1020,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=2,15,wcp=180,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=2,16,wcp=1020,0,630,90,0,0)
+move 32610Kg from conveyorA to palletA(idx=2,17,wcp=180,0,630,90,-180,0)
+move 32610Kg from conveyorA to palletA(idx=2,18,wcp=600,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=2,19,wcp=750,0,150,90,-110,0)
+move 32610Kg from conveyorA to palletA(idx=2,20,wcp=450,0,150,90,-70,0)
+#
+move 32610Kg from conveyorA to palletA(idx=3,21,wcp=1020,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=3,22,wcp=180,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=3,23,wcp=1020,0,150,90,0,0)
+move 32610Kg from conveyorA to palletA(idx=3,24,wcp=180,0,150,90,-180,0)
+move 32610Kg from conveyorA to palletA(idx=3,25,wcp=600,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=3,26,wcp=750,0,630,90,110,0)
+move 32610Kg from conveyorA to palletA(idx=3,27,wcp=450,0,630,90,70,0)
+#
+move 32610Kg from conveyorA to palletA(idx=4,28,wcp=1020,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=4,29,wcp=180,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=4,30,wcp=1020,0,630,90,0,0)
+move 32610Kg from conveyorA to palletA(idx=4,31,wcp=180,0,630,90,-180,0)
+move 32610Kg from conveyorA to palletA(idx=4,32,wcp=600,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=4,33,wcp=750,0,150,90,-110,0)
+move 32610Kg from conveyorA to palletA(idx=4,34,wcp=450,0,150,90,-70,0)
+#
+move 32610Kg from conveyorA to palletA(idx=5,35,wcp=1020,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=5,36,wcp=180,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=5,37,wcp=1020,0,150,90,0,0)
+move 32610Kg from conveyorA to palletA(idx=5,38,wcp=180,0,150,90,-180,0)
+move 32610Kg from conveyorA to palletA(idx=5,39,wcp=600,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=5,40,wcp=750,0,630,90,110,0)
+move 32610Kg from conveyorA to palletA(idx=5,41,wcp=450,0,630,90,70,0)
+#
+move 32610Kg from conveyorA to palletA(idx=6,42,wcp=1020,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=6,43,wcp=180,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=6,44,wcp=1020,0,630,90,0,0)
+move 32610Kg from conveyorA to palletA(idx=6,45,wcp=180,0,630,90,-180,0)
+move 32610Kg from conveyorA to palletA(idx=6,46,wcp=600,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=6,47,wcp=750,0,150,90,-110,0)
+move 32610Kg from conveyorA to palletA(idx=6,48,wcp=450,0,150,90,-70,0)
+#
+move 32610Kg from conveyorA to palletA(idx=7,49,wcp=1020,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=7,50,wcp=180,0,630,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=7,51,wcp=1020,0,150,90,0,0)
+move 32610Kg from conveyorA to palletA(idx=7,52,wcp=180,0,150,90,-180,0)
+move 32610Kg from conveyorA to palletA(idx=7,53,wcp=600,0,150,90,-90,0)
+move 32610Kg from conveyorA to palletA(idx=7,54,wcp=750,0,630,90,110,0)
+move 32610Kg from conveyorA to palletA(idx=7,55,wcp=450,0,630,90,70,0)
+#
+move 32610Kg from conveyorA to palletA(idx=8,56,wcp=300,0,500,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=8,57,wcp=900,0,500,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=8,58,wcp=500,0,500,90,90,0)
+move 32610Kg from conveyorA to palletA(idx=8,59,wcp=700,0,500,90,90,0)

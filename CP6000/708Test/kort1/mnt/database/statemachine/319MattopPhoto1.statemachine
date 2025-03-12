@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=MattopPhoto1
-Input=input "Mattop In1"
-Timeout=TimeOn 100000
-Timeout=TimeOff 500000
-Value=test 0
-Const=active 0

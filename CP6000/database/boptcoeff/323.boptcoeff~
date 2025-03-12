@@ -1,0 +1,31 @@
+BOPTCOEFFVERSION 1
+323
+
+mode 21 pathtype 13 :
+pathName home_rwframe
+def.fromFrame home
+def.toFrame rwframe1
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=9.3000 b=4.2000 c=5.0000 d=7.0000 e=11.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=2.0000 maxlength=2500.0000
+
+mode 21 pathtype 11 :
+pathName home_home
+def.fromFrame homeHigh
+def.toFrame home
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=2.2000 maxlength=2500.0000
+
+mode 23 pathtype 11 :
+pathName conveyorB_home
+def.fromFrame rwframe1
+def.toFrame rwframe2
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=2.0000 maxlength=2500.0000
+
+

@@ -1,5 +1,0 @@
-#!/bin/sh
-#compile:
-emacs -batch -f batch-byte-compile stm-mode.el
-#install (as root):
-cp -f stm-mode.elc /usr/share/emacs/21.3/lisp/

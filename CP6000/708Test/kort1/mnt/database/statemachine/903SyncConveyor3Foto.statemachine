@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=SyncConveyor3Foto
-Input=input "Sync Conveyor 3 Foto 1"
-Timeout=TimeOn 60000
-Timeout=TimeOff 50000
-Value=test 0
-Link=parent Parent

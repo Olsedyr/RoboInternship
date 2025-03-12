@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cmworkcell.statemachine
-Name=WorkCell
-linkValue=newprogram Program801
-;** User section **

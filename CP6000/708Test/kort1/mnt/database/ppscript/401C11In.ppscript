@@ -1,6 +1,0 @@
-PPSCRIPTVERSION 2
-401C11In
-type=16
-itemsPrLayer=1
-layers=1
-move C11 from palletA0(idx=0,0) to conveyorA 

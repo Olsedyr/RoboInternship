@@ -1,7 +1,0 @@
-VERSION 2
-SUB 501CW
-COUNTER restart += 1
-LABEL test
-SLEEP 100
-GOTO test
-END

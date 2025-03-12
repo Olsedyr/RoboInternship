@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=fotoInS3
-Input=input "S3 Foto Product In"
-Timeout=TimeOn 50000
-Timeout=TimeOff 50000
-Value=test 0

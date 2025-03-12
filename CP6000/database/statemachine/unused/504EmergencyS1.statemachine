@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=emergency.statemachine
-Name=EmergencyS1
-Input=EmergencyOK "S1 Power On"
-Output=PowerOK "dummyOut"
-Value=errorCode 0
-Const=errorCode101 103
-

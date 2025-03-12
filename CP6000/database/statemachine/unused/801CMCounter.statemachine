@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cmspeedcount.statemachine
-Name=CMCounter
-;** User section **

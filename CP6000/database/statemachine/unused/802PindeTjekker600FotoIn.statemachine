@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=PindeTjekker600FotoIn
-Input=input "KasseStativ Foto Afleveret"
-Timeout=TimeOn 100000
-Timeout=TimeOff 100000
-Value=test 0

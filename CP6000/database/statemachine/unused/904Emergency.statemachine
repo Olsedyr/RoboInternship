@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=emergency.statemachine
-Name=Emergency
-Input=EmergencyOK "Emergency OK"
-Output=PowerOK "Power OK"

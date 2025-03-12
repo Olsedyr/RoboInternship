@@ -1,0 +1,215 @@
+BOPTCOEFFVERSION 1
+329
+
+mode 17 pathtype 23 :
+pathName home_conveyor
+def.fromFrame home
+def.toFrame conveyorB
+def.toItem FervaA
+viatype END
+via2pos.y c=1000.0000
+via2vel.y c=-50.0000
+macro1 type=NOMACRO
+macro2 type=FASTDOWNLINE length=50.0000 time=0.300
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.3000 b=2.5000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2100.0000 minheight=250.0000 samplerate=15.0000 timefactor=1.0000 maxlength=5500.0000
+
+mode 22 pathtype 24 :
+pathName conveyorA_palletA
+def.fromFrame conveyorA
+def.toFrame palletA0
+def.fromItem FervaA
+def.toItem FervaA
+def.toPattern 2PLASTA
+viatype BOTH
+via1pos.y c=1200.0000 
+via1pos.z c=-35.0000 g=-90 p=-30
+via1vel.y c=50.0000 
+via1vel.z c=-25.0000 
+via2pos.y c=1400.0000 g=-850 gg=-800 
+via2pos.z c=150.0000 ll=1000.0000
+via2vel.y c=-80.0000 pppp=-60.0000 ll=400.0000
+via2vel.z c=-25.0000 lll=-1500.0000
+macro1 type=UPLINE positionhint=1 length=120.0000 time=0.400
+macro2 type=FASTDOWNLINE length=30.0000 time=0.1000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.0000 b=2.0000 c=4.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2000.0000 minheight=220.0000 samplerate=25.0000 timefactor=1.0000 maxlength=5500.0000
+
+mode 22 pathtype 26 :
+pathName conveyorA_closePalletA
+def.fromFrame conveyorA
+def.toFrame palletA0
+def.fromItem FervaA
+def.toItem FervaA
+def.toPattern 2PLASTA
+viatype BOTH
+via1pos.y c=1200.0000 
+via1pos.z c=-35.0000 g=-90 p=-30
+via1vel.y c=50.0000 
+via1vel.z c=-25.0000 
+via2pos.y c=1400.0000 g=-850 gg=-800 
+via2pos.z c=150.0000 ll=1000.0000
+via2vel.y c=-80.0000 pppp=-60.0000 ll=400.0000
+via2vel.z c=-25.0000 lll=-1500.0000
+macro1 type=UPLINE positionhint=1 length=120.0000 time=0.400
+macro2 type=FASTDOWNLINE length=30.0000 time=0.1000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.0000 b=2.0000 c=4.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2000.0000 minheight=220.0000 samplerate=25.0000 timefactor=1.0000 maxlength=5500.0000
+
+mode 21 pathtype 24 :
+pathName conveyorB_palletB
+def.fromFrame conveyorB
+def.toFrame palletB0
+def.fromItem FervaA
+def.toItem FervaA
+def.toPattern 2PLASTB
+viatype BOTH
+via1pos.y c=1200.0000 
+via1pos.z c=35.0000 g=90 p=30
+via1vel.y c=50.0000 
+via1vel.z c=40.0000 
+via2pos.y c=1400.0000 g=-850 gg=-800 
+via2pos.z c=150.0000 ll=-1000.0000
+via2vel.y c=-80.0000 pppp=-60.0000 ll=400.0000
+via2vel.z c=45.0000 lll=2500.0000
+macro1 type=UPLINE positionhint=1 length=120.0000 time=0.400
+macro2 type=FASTDOWNLINE length=30.0000 time=0.1000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.0000 b=2.0000 c=4.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2000.0000 minheight=220.0000 samplerate=25.0000 timefactor=1.0000 maxlength=5500.0000
+
+mode 21 pathtype 26 :
+pathName conveyorB_closePalletB
+def.fromFrame conveyorB
+def.toFrame palletB0
+def.fromItem FervaA
+def.toItem FervaA
+def.toPattern 2PLASTB
+viatype BOTH
+via1pos.y c=1200.0000 
+via1pos.z c=35.0000 g=90 p=30
+via1vel.y c=50.0000 
+via1vel.z c=40.0000 
+via2pos.y c=1400.0000 g=-850 gg=-800 
+via2pos.z c=150.0000 ll=-1000.0000
+via2vel.y c=-80.0000 pppp=-60.0000 ll=400.0000
+via2vel.z c=45.0000 lll=2500.0000
+macro1 type=UPLINE positionhint=1 length=120.0000 time=0.400
+macro2 type=FASTDOWNLINE length=30.0000 time=0.1000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.0000 b=2.0000 c=4.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2000.0000 minheight=220.0000 samplerate=25.0000 timefactor=1.0000 maxlength=5500.0000
+
+mode 21 pathtype 21 :
+pathName closePallet_pallet
+def.fromFrame homeHigh
+def.toFrame home
+viatype END
+via2pos.z c=-35.0000  
+via2vel.z c=10.0000  
+via2pos.y c=-5.0000 
+via2vel.y c=10.0000 
+macro2 type=FASTDOWNLINE length=20.0000 time=0.5000
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 timefactor=1.2000
+
+mode 22 pathtype 22 :
+pathName palletA_home
+def.fromFrame palletA0
+def.fromPattern 2PLASTA
+def.toFrame home
+def.fromItem FervaA
+viatype START
+via1pos.y c=1000.0000 b=-850 bb=-800 
+via1vel.y c=80.0000 pppp=-60.0000 ll=400.0000
+macro1 type=UPLINE length=120.0000 time=0.5600
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2000.0000 minheight=200.0000 samplerate=15.0000 timefactor=1.0000 maxlength=5500.0000
+
+mode 21 pathtype 22 :
+pathName palletB_home
+def.fromFrame palletB0
+def.fromPattern 2PLASTB
+def.toFrame home
+def.fromItem FervaA
+viatype START
+via1pos.y c=1000.0000 b=-850 bb=-800 
+via1vel.y c=80.0000 pppp=-60.0000 ll=400.0000
+macro1 type=UPLINE length=120.0000 time=0.5600
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.2000 b=2.2000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2000.0000 minheight=200.0000 samplerate=15.0000 timefactor=1.0000 maxlength=5500.0000
+
+mode 17 pathtype 16 :
+pathName home_home
+def.fromFrame homeHigh
+def.toFrame home
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 timefactor=1.2000
+
+mode 17 pathtype 43 :
+pathName conveyor_home
+def.fromFrame conveyorB
+def.toFrame home
+def.fromItem FervaA
+viatype START
+via1pos.y c=1000.0000
+via1vel.y c=50.0000
+macro1 type=FASTUPLINE length=50.0000 time=0.300
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.3000 b=2.5000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2100.0000 minheight=250.0000 samplerate=15.0000 timefactor=1.0000 maxlength=5500.0000
+
+mode 22 pathtype 25 :
+pathName palletA_conveyorA
+def.fromFrame palletA0
+def.fromPattern 2PLASTA
+def.toFrame conveyorA
+def.fromItem FervaA
+def.toItem FervA
+viatype BOTH 
+via1pos.y c=1350.0000 b=-850 bb=-800 
+via1pos.z c=50.0000 ll=1000.0000
+via1vel.y c=80.0000 ffff=60.0000 ll=-400.0000
+via1vel.z c=35.0000 lll=1500.0000
+via2pos.y c=1200.0000 
+via2pos.z c=-55.0000 g=-90 p=-30
+via2vel.y c=-40.0000 
+via2vel.z c=55.0000
+macro1 type=UPLINE positionhint=1 length=120.0000 time=0.400
+macro2 type=FASTDOWNLINE length=190.0000 time=0.5500
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.0000 b=2.0000 c=4.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2000.0000 minheight=220.0000 samplerate=25.0000 timefactor=1.0000 maxlength=5500.0000
+
+mode 21 pathtype 25 :
+pathName palletB_conveyorB
+def.fromFrame palletB0
+def.fromPattern 2PLASTB
+def.toFrame conveyorB
+def.fromItem FervaA
+def.toItem FervA
+viatype BOTH
+via1pos.y c=1350.0000 b=-850 bb=-800 
+via1pos.z c=-50.0000 ll=-1000.0000
+via1vel.y c=80.0000 ffff=60.0000 ll=-400.0000
+via1vel.z c=-35.0000 lll=-1500.0000
+via2pos.y c=1200.0000 
+via2pos.z c=55.0000 g=90 p=30
+via2vel.y c=-40.0000 
+via2vel.z c=-55.0000
+macro1 type=UPLINE positionhint=1 length=120.0000 time=0.400
+macro2 type=FASTDOWNLINE length=190.0000 time=0.5500
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.0000 b=2.0000 c=4.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2000.0000 minheight=220.0000 samplerate=25.0000 timefactor=1.0000 maxlength=5500.0000

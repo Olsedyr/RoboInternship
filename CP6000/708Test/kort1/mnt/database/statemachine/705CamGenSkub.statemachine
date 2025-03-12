@@ -1,6 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpcamgenskub.statemachine
-Name=CamGenSkub
-Const=tTimeForward 1600000
-Const=tTimeForwardStay 1000000
-Const=tTimeBack 850000

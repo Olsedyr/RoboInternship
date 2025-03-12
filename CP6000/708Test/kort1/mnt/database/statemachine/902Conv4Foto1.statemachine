@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=fotoinput.statemachine
-Name=Conv4Foto1
-Timeout=blockTime 1000000
-Timeout=freeTime 1000000
-Value=test 0
-Const=free 1
-Const=blocked 0
-Input=input "Conv4 Foto1"

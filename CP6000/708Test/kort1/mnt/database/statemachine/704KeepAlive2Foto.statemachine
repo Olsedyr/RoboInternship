@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=KeepAlive2Foto
-Input=input "TippeStation Foto"
-Timeout=TimeOn 30000000
-Timeout=TimeOff 100000
-Value=test 0
-Link=parent Parent

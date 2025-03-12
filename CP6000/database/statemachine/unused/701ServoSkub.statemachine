@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpservoskub.statemachine
-Name=ServoSkub
-;** User section **

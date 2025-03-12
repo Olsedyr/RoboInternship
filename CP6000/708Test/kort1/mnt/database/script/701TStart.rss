@@ -1,6 +1,0 @@
-VERSION 2
-SUB 701TStart
-COUNTER restart = 0
-CALL 701TReStart -1
-END
-

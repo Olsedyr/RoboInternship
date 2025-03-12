@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=checkweigherworkcell.statemachine
-Name=WorkCellS1
-;** User section **

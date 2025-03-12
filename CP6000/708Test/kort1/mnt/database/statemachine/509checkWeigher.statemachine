@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=checkweigher.statemachine
-Name=checkWeigherS1
-;** User section **
-Input=fotoInRaw "S1 Photo1"
-
-Const=detectStyle 1

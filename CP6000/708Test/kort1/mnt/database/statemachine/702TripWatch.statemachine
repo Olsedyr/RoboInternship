@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cptripwatch.statemachine
-Name=TripWatch
-Input=prodconv1 "ProduktConveyor_1_2 HZOK"
-Input=prodconv2 "ProduktConveyor_1_2 HZOK"

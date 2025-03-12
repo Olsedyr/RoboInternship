@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpservostop.statemachine
-Name=ServoStop
-;** User section **
-Const=testmode 0
-Const=Offset 220.0000
-Const=posDown -460.0000

@@ -1,3 +1,0 @@
-#!/bin/sh
-[ "$1" != "" ] && [ "$2" != "" ] && [ "$3" != "" ] && [ "$4" = "" ] && `scp -r -P1$1 $2 localhost:$3` || echo "Usage: ./transfer <workcellid> <fromlocation> <tolocation>"
-

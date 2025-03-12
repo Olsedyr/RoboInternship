@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpservobuffer.statemachine
-Name=ServoBuffer
-;** User section **
-Const=acceleration 35000.0000
-Const=testmode 0
-Const=posBackOffset 1500
-Timeout=TimeTest 1500000

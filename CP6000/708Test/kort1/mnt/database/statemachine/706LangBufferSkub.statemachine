@@ -1,6 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cplangbufferskub.statemachine
-Name=LangBufferSkub
-Link=Counter ProductCount3
-Link=Conveyors ProductConveyors3
-;** User section **

@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=fotoInS1
-Input=input "S1 Foto Product In"
-Timeout=TimeOn 100000
-Timeout=TimeOff 0
-Value=test 0

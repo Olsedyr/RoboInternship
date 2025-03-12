@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=continueknap.statemachine
-Name=RemoteStart310
-Input=Knap "Remote Control Button 3"
-Timeout=TimeoutDelay 2000000

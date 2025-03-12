@@ -1,6 +1,0 @@
-STATEMACHINEVERSION 3
-Include=checkweighermotor.statemachine
-Name=checkWeigherMotorS1
-Link=next checkWeigherNextS1
-;** User section **
-Output=motor "S1 Motor enable"

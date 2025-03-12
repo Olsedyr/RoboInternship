@@ -1,0 +1,283 @@
+STATEMACHINEVERSION 3
+Name=ServoSkub
+Link=Master LangBufferSkub
+Link=parent Parent
+linkValue=numpush LangBufferSkub
+linkValue=curpacc PushPattern
+linkValue=curpspeed PushPattern
+Input=homesensor "LangBufferSkub HomeSensor"
+Output=Mode "LangBufferSkub Mode"
+Output=setpoint "LangBufferSkub MacSetpoint"
+Output=vsoll "LangBufferSkub Maxvel"
+Output=asoll "LangBufferSkub Maxacc"
+Output=set_curpos "LangBufferSkub Curpos"
+Output=kvout "LangBufferSkub Load Factor"
+Output=set_status "LangBufferSkub Status"
+Output=move_rel "LangBufferSkub Move Relative"
+Output=pos2 "LangBufferSkub Position2"
+Output=pos3 "LangBufferSkub Position3"
+Input=temperature "LangBufferSkub Temperature"
+Input=Inpos "LangBufferSkub IN_POS"
+Input=curpos "LangBufferSkub Curpos"
+Input=curvel "LangBufferSkub Curvel"
+Input=status "LangBufferSkub Status"
+Value=errorCode 0
+Value=curpm 0.0
+Value=posRoundHalf -120000
+Value=homed 0
+Value=infwdpos 0
+Value=temp 0
+Value=ftemp 0.0
+Value=teststate 0
+Value=distance 0.0
+Value=startpos 0.0
+Value=acceleration_perc 0.0
+Value=cruise_speed_perc 0.0
+Value=forward 0
+Const=posBackOffset -2000
+Const=posForwardOffset -12000
+Const=posRound -240000
+Const=loadfactor 1.8000
+Const=homeSensorPol 0
+Const=home_speed 300.0000
+Const=acceleration 4500.0000
+Const=cruise_speed 4000.0000
+Const=testmode 0
+Timeout=TimeTest 1000000
+Timeout=TimeCmdDelay 500000
+Timeout=TimeStartMax 1000000
+Timeout=TimeHome 10000000
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	TEST parent = ST_RESET
+ 	   TEST status != 16
+	 	AND status != 32
+		AND status != 48
+	 	AND status != 64
+	 	AND status != 80
+		AND status != 0
+		AND status != 524304
+		AND status != 524320
+		AND status != 524336
+		AND status != 524352
+		AND status != 524368
+		AND status != 524288
+      		SET set_status 0
+   	    ENDTEST
+;	    SET homed 0
+	    SET errorCode 0
+	    SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	SET kvout loadfactor
+	CALC posRoundHalf = posRound / 2
+	SET asoll acceleration
+	SET pos2 posRoundHalf
+	SET pos3 posRound
+	CALC cruise_speed_perc = cruise_speed * 0.01
+	CALC acceleration_perc = acceleration * 0.01
+	TEST homed = 0
+		TEST homesensor = homeSensorPol
+			TIMEOUT TimeCmdDelay ST_HOME2
+			SETSTATE ST_HOME2
+		ELSE
+			SET vsoll home_speed
+			SET Mode 1
+			TIMEOUT TimeHome ST_HOME
+			SETSTATE ST_HOME
+		ENDTEST
+	ELSE
+		;SET vsoll cruise_speed
+		SET setpoint curpos
+		TIMEOUT TimeCmdDelay ST_INIT
+		SETSTATE ST_INIT
+	ENDTEST
+END
+
+State=ST_HOME
+	TEST homesensor = homeSensorPol
+		SET Mode 0
+		TIMEOUT TimeCmdDelay ST_HOME2
+		SETSTATE ST_HOME2
+	ELSETEST TimeHome = 1
+		SET errorCode 1050
+		SET Mode 0
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_HOME2
+	TEST TimeCmdDelay = 1
+		SET setpoint 0
+		SET set_curpos 0
+		SET homed 1
+		SET Mode 2
+		TIMEOUT TimeCmdDelay ST_HOME3
+		SETSTATE ST_HOME3
+	ENDTEST
+END
+
+State=ST_HOME3
+	TEST TimeCmdDelay = 1
+		;SET vsoll cruise_speed
+		SET setpoint posBackOffset
+		SET startpos curpos
+		SET distance posBackOffset
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+	ENDTEST
+END
+
+State=ST_HOMERESET
+	TEST TimeCmdDelay = 1
+		SET setpoint posRoundHalf
+		SET set_curpos 0
+		SET Mode 2
+		;SET setpoint posRoundHalf
+		SET startpos 0
+		SET distance setpoint
+;move in positive direction?
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+	ENDTEST
+END
+
+State=ST_INIT
+	TEST TimeCmdDelay = 1
+		SET Mode 2
+		SETSTATE ST_CHOOSETRACK
+	ENDTEST
+END
+
+State=ST_NOCHOOSETRACK
+END
+
+State=ST_CHOOSETRACK
+	TEST Master = ST_IDLE
+	AND testmode = 0
+		SET Mode 0
+		SETSTATE ST_IDLE
+	ELSETEST Master = ST_BEGINBACK
+		TEST asoll > 4000
+			SET asoll 4000
+		ENDTESTSET 
+		SET Mode 0
+		SET forward 0
+		TIMEOUT TimeCmdDelay ST_HOMERESET
+		SETSTATE ST_HOMERESET
+	ELSETEST Master = ST_BEGINFORWARDSTAY
+		CALC vsoll = cruise_speed_perc * curpspeed
+		CALC asoll = acceleration_perc * curpacc
+		;CALC setpoint = setpoint + posRoundHalf
+		SET move_rel 2
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		SET forward 1
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START
+	ELSETEST Master = ST_BEGINFORWARD
+		CALC vsoll = cruise_speed_perc * curpspeed
+		CALC asoll = acceleration_perc * curpacc
+		;CALC setpoint = setpoint + posRound
+		SET move_rel 3
+		SET startpos curpos
+		CALC distance = setpoint - curpos
+		TIMEOUT TimeStartMax ST_START
+		SETSTATE ST_START		
+	ELSETEST testmode = 1
+		TIMEOUT TimeTest ST_TEST
+		SETSTATE ST_TEST
+	ENDTEST
+END
+
+State=ST_TEST
+	TEST TimeTest = 1
+		TEST teststate = 0
+			SET teststate 1
+      ;forward
+			TEST infwdpos = 1
+				SET setpoint posBackOffset
+				SET infwdpos 0
+			ELSE
+				CALC setpoint = posRound + posBackOffset
+				SET infwdpos 1
+			ENDTEST
+			SET startpos curpos
+			CALC distance = setpoint - curpos
+			TIMEOUT TimeStartMax ST_START
+			SETSTATE ST_START
+		ELSETEST teststate = 1
+			SET teststate 2
+      ;forwardstay
+			TEST infwdpos = 1
+				CALC temp = posRound + posRoundHalf
+				CALC setpoint = posForwardOffset + temp
+			ELSE
+				CALC setpoint = posForwardOffset + posRoundHalf
+			ENDTEST
+			SET startpos curpos
+			CALC distance = setpoint - curpos
+			TIMEOUT TimeStartMax ST_START
+			SETSTATE ST_START
+    ELSETEST teststate = 2
+			SET teststate 0
+      ;back
+			TEST infwdpos = 1
+				CALC setpoint = posRound + posBackOffset
+			ELSE
+				SET setpoint posBackOffset
+			ENDTEST
+			SET startpos curpos
+			CALC distance = setpoint - curpos
+			TIMEOUT TimeStartMax ST_START
+			SETSTATE ST_START
+    ENDTEST
+	ENDTEST
+END
+
+State=ST_STOP
+	SET curpm 1000.0
+  SETSTATE ST_CHOOSETRACK
+END
+
+State=ST_START
+	SET curpm 0.0
+	TEST Inpos = 0
+	OR TimeStartMax = 1 
+	  SETSTATE ST_RUN
+  ENDTEST
+END
+
+State=ST_RUN
+	CALC curpm = curpos - startpos
+	CALC curpm = curpm / distance
+	CALC curpm = curpm * 1000.0
+	TEST Inpos = 1
+    SETSTATE ST_STOP
+  ENDTEST
+  TEST status != 16
+	AND status != 32
+	AND status != 48
+	AND status != 64
+	AND status != 80
+	AND status != 0
+	AND status != 524304
+	AND status != 524320
+	AND status != 524336
+	AND status != 524352
+	AND status != 524368
+	AND status != 524288
+    SET Mode 0
+    SET homed 0
+    TIMEOUT TimeCmdDelay ST_IDLE
+    SETSTATE ST_TIMER
+  ENDTEST
+END

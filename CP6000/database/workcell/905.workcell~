@@ -1,0 +1,13 @@
+VERSION 2
+905
+STM 905ContinueKnap.statemachine
+STM 905ErrorCode.statemachine
+STM 905WorkCell.statemachine
+STM 905Parent.statemachine
+STM 905Program.statemachine
+STM 905Emergency.statemachine
+REMOTEHOST 192.168.0.151
+STATETEKST danish.statetekst
+STATETEKST english.statetekst
+LANGUAGE danish.language
+LANGUAGE english.language

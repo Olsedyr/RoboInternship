@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpkasseinliner.statemachine
-Name=KasseInLiner
-Link=prevback KasseInLiner
-Link=prevleft KasseLoader
-Link=prevright KasseInLiner
-;** User Section **

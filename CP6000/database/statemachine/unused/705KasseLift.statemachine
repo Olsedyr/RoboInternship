@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpkasselift.statemachine
-Name=KasseLift
-Output=Kassestop "KasseStop"
-Output=Kassestop1 "KasseStop"
-Link=next ConveyorOut2
-Value=canSend 1
-Value=kasseStopType 2
-Timeout=TimeCenter 1200000

@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cplangbufferskub.statemachine
-Name=LangBufferSkub
-Link=CamGen ServoSkub
-linkValue=curpm ServoSkub
-Const=klapindpm 250
-Const=klapudpm 850
-Timeout=TimeWaitBack 200000
-;** User section **

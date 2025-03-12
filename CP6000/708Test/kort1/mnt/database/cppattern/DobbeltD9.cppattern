@@ -1,7 +1,0 @@
-VERSION 1
-DobbeltD9 user=1
-layer=0 maxpush=4 gettime=200000
-ppp=2 pacc=100 pspeed=100
-ppp=2 pacc=80 pspeed=100
-ppp=2 pacc=40 pspeed=40
-ppp=2 pacc=30 pspeed=30

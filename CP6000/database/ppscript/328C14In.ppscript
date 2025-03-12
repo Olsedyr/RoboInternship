@@ -1,0 +1,35 @@
+PPSCRIPTVERSION 2
+328C14In
+type=16
+itemsPrLayer=2
+layers=15
+move C14 from palletA0(idx=14,0) to conveyorA
+move C14 from palletA1(idx=14,1) to conveyorA
+move C14 from palletA0(idx=13,2) to conveyorA
+move C14 from palletA1(idx=13,3) to conveyorA
+move C14 from palletA0(idx=12,4) to conveyorA
+move C14 from palletA1(idx=12,5) to conveyorA
+move C14 from palletA0(idx=11,6) to conveyorA
+move C14 from palletA1(idx=11,7) to conveyorA
+move C14 from palletA0(idx=10,8) to conveyorA
+move C14 from palletA1(idx=10,9) to conveyorA
+move C14 from palletA0(idx=9,10) to conveyorA
+move C14 from palletA1(idx=9,11) to conveyorA
+move C14 from palletA0(idx=8,12) to conveyorA
+move C14 from palletA1(idx=8,13) to conveyorA
+move C14 from palletA0(idx=7,14) to conveyorA
+move C14 from palletA1(idx=7,15) to conveyorA
+move C14 from palletA0(idx=6,16) to conveyorA
+move C14 from palletA1(idx=6,17) to conveyorA
+move C14 from palletA0(idx=5,18) to conveyorA
+move C14 from palletA1(idx=5,19) to conveyorA
+move C14 from palletA0(idx=4,20) to conveyorA
+move C14 from palletA1(idx=4,21) to conveyorA
+move C14 from palletA0(idx=3,22) to conveyorA
+move C14 from palletA1(idx=3,23) to conveyorA
+move C14 from palletA0(idx=2,24) to conveyorA
+move C14 from palletA1(idx=2,25) to conveyorA
+move C14 from palletA0(idx=1,26) to conveyorA
+move C14 from palletA1(idx=1,27) to conveyorA
+move C14 from palletA0(idx=0,28) to conveyorA
+move C14 from palletA1(idx=0,29) to conveyorA

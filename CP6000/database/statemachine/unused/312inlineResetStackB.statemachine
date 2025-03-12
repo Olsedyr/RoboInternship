@@ -1,5 +1,0 @@
-; INLINE 312inlineResetStackB.statemachine
-SET cBItem sBItem
-CALC cBStackleft = sBItem / 2
-CALC cBStackright = sBItem / 2
-SET nextpalb 1

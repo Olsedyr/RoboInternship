@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=ConveyorOut3BQueFullFoto
-Input=input "Conveyor POS.1.11 Que Full Photo"
-Timeout=TimeOn 50000
-Timeout=TimeOff 50000
-Value=test 0
-Link=parent Parent
-Const=active 0

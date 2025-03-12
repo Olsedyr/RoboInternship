@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=505checkWeigherNextS1.statemachine
-Name=checkWeigherNextS3
-Input=syncIn "S3 Extern Sync In"
-Link=next Sving1
-Const=m2107 2127
-Const=extSyncInPol 1
-Value=message 0

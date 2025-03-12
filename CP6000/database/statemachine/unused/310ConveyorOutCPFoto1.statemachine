@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=ConveyorOutCPFoto1
-Input=input "ConveyorOutCP Foto1"
-Timeout=TimeOn 300000
-Timeout=TimeOff 300000
-Value=test 0

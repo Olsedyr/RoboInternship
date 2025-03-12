@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=checkweighercalc.statemachine
-Name=checkWeigherCalcS1
-;** User section **

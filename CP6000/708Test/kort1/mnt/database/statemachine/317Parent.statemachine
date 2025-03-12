@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=parent.statemachine
-Name=Parent
-Link=WorkCell WorkCell

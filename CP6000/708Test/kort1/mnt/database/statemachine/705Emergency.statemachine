@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpemergency.statemachine
-Name=Emergency
-;** User section **

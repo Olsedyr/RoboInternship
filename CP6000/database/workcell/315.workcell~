@@ -1,0 +1,62 @@
+VERSION 1
+315
+Robots 1
+315.robot
+Tools 1
+315.tool
+Items 7
+C18.item
+C11.item
+IFCO16.item
+IFCO18.item
+IFCO20.item
+Netto.item
+Europalle.item
+Patterns 0
+Accessories 2
+315RollerOut.accessory
+315ConveyorB.accessory
+PPScripts 0
+Dio 1
+315.io
+ComSKs 0
+LoadCell 0
+Macs 0
+Statemachines 31
+315ContinueKnap.statemachine
+315MC.statemachine
+315Frames.statemachine
+315Loader.statemachine
+315ErrorCode.statemachine
+315WorkCell.statemachine
+315Parent.statemachine
+315Program.statemachine
+315ProgramB1.statemachine
+315Emergency.statemachine
+315Manometer.statemachine
+315TripWatch.statemachine
+315IOError.statemachine
+315TrafficLight.statemachine
+315Robot.statemachine
+315Tool.statemachine
+315RoboError.statemachine
+315ConveyorOutFoto1.statemachine
+315ConveyorOutFoto2.statemachine
+315ConveyorOutFoto3.statemachine
+315ConveyorOutFoto4.statemachine
+315ConveyorOut.statemachine
+315ConveyorOut2Foto1.statemachine
+315ConveyorOut2.statemachine
+315PM.statemachine
+315PB6.statemachine
+315PB7.statemachine
+315PB8a.statemachine
+315PB8b.statemachine
+315PB9.statemachine
+315ToolTester.statemachine
+STATETEKST danish.statetekst
+STATETEKST english.statetekst
+REMOTEHOST 192.168.0.154
+BOPTCOEFF 315.boptcoeff
+LANGUAGE danish.language
+LANGUAGE english.language

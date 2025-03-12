@@ -1,0 +1,45 @@
+VERSION 1
+403
+Robots 1
+403.robot
+Tools 1
+403.tool
+Items 2
+PalmBagA.item
+Europalle.item
+Patterns 2
+403_1Kg_80.pattern
+403_2Kg_40.pattern
+Accessories 4
+403ConveyorB.accessory
+403Chikane.accessory
+403ChikaneLow.accessory
+403PallesideMidt.accessory
+PPScripts 0
+Dio 1
+403.io
+Comsks 0
+LoadCells 0
+Macs 0
+Statemachines 22
+403ContinueKnap.statemachine
+403Frames.statemachine
+403Loader.statemachine
+403MC.statemachine
+403ErrorCode.statemachine
+403WorkCell.statemachine
+403Parent.statemachine
+403Emergency.statemachine
+403TripWatch.statemachine
+403IOError.statemachine
+403TrafficLight.statemachine
+403Robot.statemachine
+403RoboError.statemachine
+403Tool.statemachine
+403Program.statemachine
+403ProgramB2.statemachine
+BOPTCOEFF 403.boptcoeff
+STATETEKST danish.statetekst
+STATETEKST english.statetekst
+LANGUAGE danish.language
+LANGUAGE english.language

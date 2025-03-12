@@ -1,0 +1,53 @@
+MACVERSION 1
+ipaddr=192.168.0.201
+port=4001
+simulate=1
+NumOfMotors=1
+Name=KasseLiftMotor
+Address=254
+Init37=0 "START_MODE" "Passive startmode" longint
+Init36=0x20 "CNTRL_BITS" "Resync position" longint
+Init2=0 "MODE_REG" "Passive mode" longint
+Init3=0 "P_SOLL" "Commanded position" longint
+Init10=0 "P_IST" "Actual motor position set to zero" longint
+Init38=0 "P_HOME" "Zero search Position" longint
+Init23=0x01 "UV_HANDLE" "Set errorbit when UV" longint
+Init28=-10000000 "MIN_P_IST" "Neg Software Limit" longint
+Init30=10000000 "MAX_P_IST" "Pos Software Limit" longint
+Init42=0x00 "HOME_MODE" "Set Home_Done=0" longint
+Init35=0x00 "ERR_STAT" "Clear errors" longint
+InBits35="KasseLift Status" "ERR_STAT" longint
+Bit0="KasseLift I2T_ERR" "I2t error"
+Bit1="KasseLift FLW_ERR" "Follow error"
+Bit2="KasseLift FNC_ERR" "Function error"
+Bit3="KasseLift UIT_ERR" "Regenerative error"
+Bit4="KasseLift IN_POS"  "In position"
+Bit5="KasseLift ACC_FLAG" "Accelerating"
+Bit6="KasseLift DEC_FLAG" "Decelerating"
+Bit7="KasseLift PLIM_ERR" "Position limits error"
+Bit8="KasseLift DEGC_ERR" "Temperature error"
+Bit9="KasseLift UV_ERR"  "Undervoltage error"
+Bit10="KasseLift UV_DETECT" "Low voltage at high volt bus"
+Bit11="KasseLift OV_ERR" "Overvoltage error"
+Bit12="KasseLift IPEAK_ERR" "Motor over current"
+Bit13="KasseLift SPEED_ERR" "Over speed error"
+Bit14="KasseLift DIS_P_LIM" "SW limits disabled"
+Bit15="KasseLift INDEX_ERR" "internal encoder error"
+Bit16="KasseLift OLD_FILT_ERR" "Filter setting not valid"
+Bit17="KasseLift U24V_ERR" "Control supply has been too low"
+EndBits
+InBits42="KasseLift Home Mode" "HOME_MODE" longint
+Bit16="KasseLift HOME_DONE" "Home Done" 
+EndBits
+In29="KasseLift Temperature" "DEGC" longint factor=0.12207
+In169="KasseLift Curtorque" "VF_OUT" longint factor=0.293255
+InOut10="KasseLift Curpos" "P_IST" longint
+Out2="KasseLift Mode" "MODE_REG" longint
+Out13="KasseLift Load Factor" "KVOUT" fixed16
+Out3="KasseLift MacSetpoint" "P_SOLL" longint
+Out5="KasseLift Maxvel" "V_SOLL" longint factor=0.36093786
+Out6="KasseLift Maxacc" "A_SOLL" longint factor=277.921911
+InOut7="KasseLift Maxtorque" "T_SOLL" longint
+Out35="KasseLift Status" "ERR_STAT" longint
+Out40="KasseLift Homevel" "V_HOME" longint factor=0.36093786
+Out41="KasseLift Hometorque" "T_HOME" longint factor=0.293255

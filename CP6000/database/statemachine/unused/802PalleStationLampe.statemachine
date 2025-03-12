@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cmpallestationlampe.statemachine
-Name=PalleStationLampe
-;** User section **

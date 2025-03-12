@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpvibrator.statemachine
-Name=Vibrator
-Link=KasseLift KasseLift2

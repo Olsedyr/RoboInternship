@@ -1,0 +1,8 @@
+VERSION 1
+Nyhuus2RollerA
+dimention x=4200.0,y=100.0,z=910.0
+transformation x=200.00,y=50.00,z=600.00
+material diffuse r=0.0,g=0.0,b=1.0,a=1.0
+material ambient r=0.0,g=0.0,b=1.0,a=1.0
+material specular r=0.0,g=0.0,b=1.0,a=1.0
+shininess=50.0

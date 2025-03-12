@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=901PostCW1.statemachine
-Name=PostCW3
-Output=motor "PostCW 3 Motor"
-Link=master Sving3

@@ -1,4 +1,0 @@
-; INLINE 318inlineResetStackB.statemachine
-SET cBItem sBItem
-SET itemCounter cBItem
-SET nextpalb 1

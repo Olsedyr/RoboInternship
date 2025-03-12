@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=901Sving1.statemachine
-Name=Sving2
-Output=motor "Sving 2 Motor"
-Link=foto Sving2Foto
-Link=productconveyors ProductConveyors2
-linkValue=dontSend gotLeft ProductCount2
-Timeout=minFreeTime 700000
-Timeout=maxBlockTime 500000

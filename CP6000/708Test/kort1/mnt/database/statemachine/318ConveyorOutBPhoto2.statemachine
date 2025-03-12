@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=ConveyorOutBPhoto2
-Input=input "Conveyor POS.1.8 Photo 2"
-Timeout=TimeOn 50000
-Timeout=TimeOff 50000
-Value=test 0
-Const=active 0

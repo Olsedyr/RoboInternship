@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpworkcell.statemachine
-Link=PIDBuffer ServoBuffer
-Link=PIDLift ServoLift
-Link=PIDSkub ServoSkub
-;Link=extra1 AccumulatingConveyor
-;** User section **

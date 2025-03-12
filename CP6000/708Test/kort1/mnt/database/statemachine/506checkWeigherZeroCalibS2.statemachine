@@ -1,6 +1,0 @@
-STATEMACHINEVERSION 3
-Include=checkweigherzerocalib.statemachine
-Name=checkWeigherZeroCalibS2
-Link=checkWeigher checkWeigherS2
-Link=parent ParentS2
-Timeout=timeBetweenCalib 600000000

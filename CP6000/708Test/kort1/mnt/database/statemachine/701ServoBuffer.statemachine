@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpservobuffer.statemachine
-Name=ServoBuffer
-;** User section **

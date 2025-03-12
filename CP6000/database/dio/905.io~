@@ -1,0 +1,20 @@
+IOVERSION 1
+ipaddr=192.168.0.173
+simulate=1
+NumOfModules=2
+Type=STB3610DDI
+Name=D4004
+InConnect1="Emergency OK"
+InConnect2="Power OK"
+InConnect3=""
+InConnect4=""
+InConnect5=""
+InConnect6=""
+Type=STB3600DDO
+Name=D4008
+OutConnect1=""
+OutConnect2=""
+OutConnect3=""
+OutConnect4=""
+OutConnect5=""
+OutConnect6=""

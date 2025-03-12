@@ -1,9 +1,0 @@
-VERSION 1
-hs-tomat user=1
-layer=0 maxpush=6 gettime=200000
-ppp=3 pacc=50 pspeed=25
-ppp=3 pacc=50 pspeed=25
-ppp=3 pacc=50 pspeed=25
-ppp=3 pacc=50 pspeed=25
-ppp=3 pacc=50 pspeed=25
-ppp=3 pacc=50 pspeed=25

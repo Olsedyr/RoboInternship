@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpcamgenbuffer.statemachine
-Name=CamGenBuffer
-Const=posBack 300
-Const=posForward 200
-Const=tTimeForward 600000
-Const=tTimeBack 700000

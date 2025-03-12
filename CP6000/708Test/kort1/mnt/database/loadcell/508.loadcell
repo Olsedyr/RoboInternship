@@ -1,7 +1,0 @@
-LOADCELLVERSION 1
-ipaddr=192.168.0.200
-port=4001
-fastmoxa=1
-simulate=0
-NumOfModules=1
-LoadCell0="S1 LoadCell data" "S1 LoadCell data" ignoreError

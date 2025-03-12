@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=CallChild3Foto
-Input=input "S2 Extern Sync In3"
-Timeout=TimeOn 100000
-Timeout=TimeOff 20000
-Value=test 0

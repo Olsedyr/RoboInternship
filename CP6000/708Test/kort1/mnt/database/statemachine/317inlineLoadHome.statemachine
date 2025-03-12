@@ -1,5 +1,0 @@
-; INLINE 317inlineLoadHome.statemachine
-SETFRAME toFrame conveyorB
-CALC toFrame.y = toFrame.y + item.gy
-CALC toFrame.x = toFrame.x - item.gx
-LOAD home_conveyorB home toFrame

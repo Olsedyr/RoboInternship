@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cmpidlift.statemachine
-Name=PIDLift
-Timeout=TimeHomeGo 85000

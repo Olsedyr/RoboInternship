@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=fotoinput.statemachine
-Name=PindeTjekker400AFoto
-Input=input "PindeTjekker400A Foto"
-Timeout=blockTime 200000
-Timeout=freeTime 1500000
-Value=test 0
-Const=free 0
-Const=blocked 1

@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=WeightFoto
-Input=input "Weight Foto"
-Timeout=TimeOn 300000
-Timeout=TimeOff 300000
-Value=test 0

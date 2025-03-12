@@ -1,6 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cmworkcell.statemachine
-Name=WorkCell
-Link=ConveyorsErrorCode ErrorCode
-linkValue=newprogram Program802
-;** User section **

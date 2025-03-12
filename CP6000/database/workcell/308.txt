@@ -1,0 +1,50 @@
+VERSION 1
+308
+Robots 1
+308.robot
+Tools 1
+308.tool
+Items 4
+C18.item
+C14.item
+C11.item
+Europalle.item
+Patterns 0
+Accessories 4
+308RollerIn.accessory
+308RollerOut.accessory
+308ConveyorA.accessory
+308ConveyorB.accessory
+PPScripts 6
+308C11In.ppscript
+308C11Out.ppscript
+308C14In.ppscript
+308C14Out.ppscript
+308C18In.ppscript
+308C18Out.ppscript
+Dio 1
+308.io
+Comsks 0
+LoadCells 0
+Macs 0
+Statemachines 16
+308WorkCell.statemachine
+308Robot.statemachine
+308ContinueKnap.statemachine
+308COutFotoOne.statemachine
+308COutFotoTwo.statemachine
+308ConveyorIn.statemachine
+308ConveyorOut.statemachine
+308PladsLoad.statemachine
+308PB1.statemachine
+308PB3.statemachine
+308PB4.statemachine
+308PalletAWatch.statemachine
+308PB5.statemachine
+308PB6.statemachine
+308PB7.statemachine
+308PB9.statemachine
+;m_stateTeksts=308
+SCRIPT 308C18
+SCRIPT 308C14
+SCRIPT 308C11

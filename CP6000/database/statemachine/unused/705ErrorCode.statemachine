@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cperrorcode.statemachine
-Name=ErrorCode
-linkValue=remotewatch errorCode IOError
-;** User section **

@@ -1,0 +1,43 @@
+VERSION 2
+331
+;*********************************
+;*       COMMON                  *
+;*********************************
+ITEM C18.item
+ITEM Cm18In.item
+ITEM Cm18Out.item
+ITEM Europalle.item
+STATETEKST danish.statetekst
+STATETEKST english.statetekst
+LANGUAGE danish.language
+LANGUAGE english.language
+;*********************************
+;* CS1200U 328                   *
+;*********************************
+ROBOT 331.robot
+TOOL 331.tool
+ACCESSORY 331RollerIn.accessory
+ACCESSORY 331RollerOut.accessory
+ACCESSORY 331ConveyorA.accessory
+ACCESSORY 331ConveyorB.accessory
+DIO 331.io
+STM 331Simulate.statemachine
+STM 331ContinueKnap.statemachine
+STM 331Frames.statemachine
+STM 331ErrorCode.statemachine
+STM 331WorkCell.statemachine
+STM 331Parent.statemachine
+STM 331Program.statemachine
+STM 331ProgramB1.statemachine
+STM 331TrafficLight.statemachine
+STM 331Emergency.statemachine
+STM 331TripWatch.statemachine
+STM 331IOError.statemachine
+STM 331Robot.statemachine
+STM 331Tool.statemachine
+STM 331RoboError.statemachine
+;STM 331ConveyorIn.statemachine
+;STM 331ConveyorOut.statemachine
+STM 331PB1.statemachine
+STM 331Loader.statemachine
+BOPTCOEFF 331.boptcoeff

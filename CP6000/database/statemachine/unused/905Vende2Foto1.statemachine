@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=Vende2Foto1
-Input=input "Vender Foto"
-Timeout=TimeOn 100000
-Timeout=TimeOff 100000
-Value=test 0
-Link=parent Parent

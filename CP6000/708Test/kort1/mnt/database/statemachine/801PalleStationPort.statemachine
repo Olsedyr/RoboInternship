@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cmpallestationport.statemachine
-Name=PalleStationPort
-;** User section **

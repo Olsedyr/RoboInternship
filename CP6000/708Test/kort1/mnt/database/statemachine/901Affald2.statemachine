@@ -1,7 +1,0 @@
-STATEMACHINEVERSION 3
-Include=901Affald1.statemachine
-Name=Affald2
-Output=motor "Affald 2 Motor"
-Link=convemergency ConveyorsEmergency
-Value=delayStop 0
-Timeout=delayStopTime 14000000

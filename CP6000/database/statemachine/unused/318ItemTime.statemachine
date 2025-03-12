@@ -1,4 +1,0 @@
-STATEMACHINEVERSION 3
-Include=eventtimer.statemachine
-Name=ItemTime
-linkValue=watchValue cBItem Frames

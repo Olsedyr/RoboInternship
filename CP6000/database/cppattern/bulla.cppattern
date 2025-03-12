@@ -1,0 +1,7 @@
+VERSION 1
+bulla user=1
+layer=0 maxpush=2 gettime=100000
+ppp=3 pacc=75 pspeed=50
+ppp=1 pacc=3 pspeed=3
+layer=1 maxpush=1 gettime=100000
+ppp=1 pacc=35 pspeed=3

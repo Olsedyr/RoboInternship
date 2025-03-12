@@ -1,0 +1,261 @@
+STATEMACHINEVERSION 3
+Name=BufferPlads
+;** Input **
+Input=kortskubleftinde "KortBufferSkub Left Inde"
+Input=kortskubrightinde "KortBufferSkub Right Inde"
+;** Output **
+Output=kortskubleft1 "KortBufferSkubber Left 1"
+Output=kortskubleft2 "KortBufferSkubber Left 2"
+Output=kortskubright1 "KortBufferSkubber Right 1"
+Output=kortskubright2 "KortBufferSkubber Right 2"
+;** Link **
+Link=KasseLift
+Link=CamGen CamGenBuffer
+Link=CamGenSkub
+Link=CamGenLift
+Link=Skubber LangBufferSkub
+;** linkValue **
+linkValue=firstRun WorkCell
+linkValue=curpmskub curpm CamGenSkub
+linkValue=liftFree CamGenLift
+linkValue=pushshortleft PushPattern
+linkValue=pushshortright PushPattern
+linkValue=numpush LangBufferSkub
+linkValue=layers KasseLift
+linkValue=maxlayers PushPattern
+;** Const **
+Const=KortSkubpm 900
+Const=left1 0
+Const=left2 0
+Const=right1 1
+Const=right2 0
+;** Value **
+Value=full 0
+Value=startingup 0
+Value=emptyflag 0
+Value=bufferlayers 0
+;** Timeout **
+Timeout=WaitKortSkub 100000
+Timeout=WaitLeftRightKortSkub 300000
+Timeout=TimeOpen 0
+
+State=ST_TIMER
+END
+
+State=ST_HALT
+END
+
+State=ST_IDLE
+	SET kortskubleft1 0
+	SET kortskubleft2 0
+	SET kortskubright1 0
+	SET kortskubright2 0
+	TEST Skubber = ST_RESET
+		SETSTATE ST_RESET
+	ENDTEST
+END
+
+State=ST_RESET
+	TEST firstRun = 1
+		SET full 0
+    SET emptyflag 0
+		SET bufferlayers 0
+	ENDTEST
+	SET startingup 1
+  TEST CamGen = ST_CHOOSETRACK
+	  SETSTATE ST_BEGINCLOSE
+  ENDTEST
+	TEST Skubber = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_STARTUP
+	SET startingup 0
+	TEST full = 0
+		SETSTATE ST_WAITPUSH
+	ELSE
+	  SET kortskubleft1 1
+	  SET kortskubleft2 1
+	  SET kortskubright1 1
+	  SET kortskubright2 1
+		TIMEOUT WaitKortSkub ST_DUMP
+		SETSTATE ST_DUMP
+	ENDTEST
+END
+
+State=ST_WAITPUSH
+  TEST Skubber = ST_FORWARD
+		SETSTATE ST_GETPUSH
+	ELSE
+		TEST Skubber = ST_FORWARDSTAY
+			SETSTATE ST_GETFULL
+		ENDTEST
+	ENDTEST
+  TEST Skubber = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_GETPUSH
+	TEST curpmskub > 500
+    TEST numpush = pushshortleft
+    AND pushshortleft != 0
+      SET kortskubleft1 1
+	    SET kortskubleft2 1
+      TIMEOUT WaitLeftRightKortSkub ST_PUSHSHORT
+      SETSTATE ST_PUSHSHORT
+    ENDTEST
+    TEST numpush = pushshortright
+    AND pushshortright != 0
+      SET kortskubright1 1
+	    SET kortskubright2 1
+      TIMEOUT WaitLeftRightKortSkub ST_PUSHSHORT
+      SETSTATE ST_PUSHSHORT
+    ENDTEST
+  ENDTEST
+	TEST Skubber != ST_FORWARD
+		SETSTATE ST_WAITPUSH
+	ENDTEST
+END
+
+State=ST_PUSHSHORT
+  TEST WaitLeftRightKortSkub = 1
+    SET kortskubleft1 0
+	  SET kortskubleft2 0
+	  SET kortskubright1 0
+	  SET kortskubright2 0
+  ENDTEST
+  TEST Skubber != ST_FORWARD
+    SET kortskubleft1 0
+	  SET kortskubleft2 0
+	  SET kortskubright1 0
+	  SET kortskubright2 0
+		SETSTATE ST_WAITPUSH
+	ENDTEST
+END
+
+State=ST_GETFULL
+	TEST curpmskub > KortSkubpm
+	  SET kortskubleft1 1
+	  SET kortskubleft2 0
+	  SET kortskubright1 1
+	  SET kortskubright2 0
+	ENDTEST
+	TEST Skubber = ST_STAY_FINISH
+		SET full 1
+		CALC bufferlayers = layers + 1
+		TEST bufferlayers >= maxlayers
+			SET bufferlayers 0
+		ENDTEST
+    SET emptyflag 0
+	  SET kortskubleft1 1
+	  SET kortskubleft2 0
+	  SET kortskubright1 1
+	  SET kortskubright2 0
+		TIMEOUT WaitKortSkub ST_DUMP
+		SETSTATE ST_DUMP
+	ENDTEST
+END
+
+State=ST_DUMP
+  TEST CamGen = ST_CHOOSETRACK
+	  TEST WaitKortSkub = 1
+	    SET kortskubleft1 1
+	    SET kortskubleft2 0
+	    SET kortskubright1 1
+	    SET kortskubright2 0
+		  TEST KasseLift = ST_READY2
+			  SETSTATE ST_BEGINOPEN
+		  ELSE
+			  TEST liftFree = 0
+			  AND KasseLift = ST_GO
+				  SETSTATE ST_BEGINOPEN
+			  ENDTEST
+      ENDTEST
+		ENDTEST
+	ENDTEST
+	TEST Skubber = ST_IDLE
+		SETSTATE ST_IDLE
+	ENDTEST
+END
+
+State=ST_BEGINOPEN
+  TEST CamGen = ST_START
+    SETSTATE ST_GOOPEN
+	ELSE
+		TEST Skubber = ST_IDLE
+			SETSTATE ST_IDLE
+		ENDTEST
+  ENDTEST
+END
+
+State=ST_GOOPEN
+	TEST CamGen = ST_STOP
+		SET full 0
+		SETSTATE ST_PREOPEN
+	ENDTEST
+  TEST CamGen = ST_NOCHOOSETRACK
+  OR CamGen = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_PREOPEN
+	TEST KasseLift = ST_READY2
+  OR KasseLift = ST_IDLE
+    TIMEOUT TimeOpen ST_OPEN
+    SETSTATE ST_OPEN
+  ENDTEST
+END
+
+State=ST_OPEN
+	TEST TimeOpen = 1
+		SETSTATE ST_EMPTIED
+	ENDTEST
+END
+
+State=ST_EMPTIED
+  SET emptyflag 1
+	TEST liftFree = 1
+  OR KasseLift = ST_IDLE
+    TEST CamGen = ST_CHOOSETRACK
+		  SETSTATE ST_BEGINCLOSE
+    ENDTEST
+	ENDTEST
+END
+
+State=ST_BEGINCLOSE
+	SET kortskubleft1 left1
+	SET kortskubleft2 left2
+	SET kortskubright1 right1
+	SET kortskubright2 right2
+	TEST CamGen = ST_START
+    SETSTATE ST_GOCLOSE
+	ELSE
+		TEST Skubber = ST_IDLE
+			SETSTATE ST_IDLE
+		ENDTEST
+  ENDTEST
+END
+
+State=ST_GOCLOSE
+  TEST CamGen = ST_STOP
+		SETSTATE ST_NEXT
+  ENDTEST
+  TEST CamGen = ST_NOCHOOSETRACK
+  OR CamGen = ST_IDLE
+    SETSTATE ST_IDLE
+  ENDTEST
+END
+
+State=ST_NEXT
+	TEST kortskubleftinde = 1
+;  AND kortskubrightinde = 1
+  	TEST startingup = 0
+			SETSTATE ST_WAITPUSH
+		ELSE
+			SETSTATE ST_STARTUP
+		ENDTEST
+	ENDTEST
+END

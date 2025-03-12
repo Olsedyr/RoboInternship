@@ -1,6 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cmerrorcode.statemachine
-Name=ErrorCode
-linkValue=remotewatch errorCode PindeTjekker600
-linkValue=extra errorCode PindeTjekker600
-;** User section **

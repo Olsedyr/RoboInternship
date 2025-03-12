@@ -1,0 +1,65 @@
+VERSION 2
+710
+;*********************************
+;*       COMMON                  *
+;*********************************
+ITEM D9.item
+ITEM C11.item
+ITEM C14.item
+ITEM C18.item
+ITEM HSdoubleD9Cardboard.item
+CPPATTERN Harndrup.cppattern
+CPPATTERN DobbeltD9.cppattern
+CPPATTERN C11Small8.cppattern
+STATETEKST danish.statetekst
+STATETEKST polish.statetekst
+STATETEKST english.statetekst
+STATETEKST spanish.statetekst
+LANGUAGE danish.language
+LANGUAGE polish.language
+LANGUAGE english.language
+LANGUAGE spanish.language
+;*********************************
+;*            CP6000 V4          *
+;*********************************
+DIO 710.io
+COMSK 710.comsk
+MAC 710Skub.mac
+MAC 710Buffer.mac
+MAC 710Lift.mac
+STM 710WorkCell.statemachine
+STM 710Parent.statemachine
+STM 710Program.statemachine
+STM 710ErrorCode.statemachine
+STM 710ContinueKnap.statemachine
+;STM 710TrafficLight.statemachine
+STM 710Emergency.statemachine
+STM 710IOError.statemachine
+;STM 710TripWatch.statemachine
+;STM 710KasseLiftFoto.statemachine
+;STM 710KasseInLinerFoto.statemachine
+;STM 710Product1Foto1.statemachine
+;STM 710Product1Foto2.statemachine
+;STM 710Product2Foto1.statemachine
+;STM 710Product2Foto2.statemachine
+;STM 710CPCounter.statemachine
+;STM 710ProductCount.statemachine
+;STM 710PushPattern.statemachine
+;STM 710ProductConveyors.statemachine
+;STM 710KasseInLiner.statemachine
+;STM 710ServoSkub.statemachine
+;STM 710LangBufferSkub.statemachine
+;STM 710ServoBuffer.statemachine
+;STM 710BufferPlads.statemachine
+;STM 710ServoLift.statemachine
+;STM 710KasseLift.statemachine
+;STM 710KasseLiftNext.statemachine
+;STM 710KasseLoaderFoto.statemachine
+;STM 710KasseLoader.statemachine
+;STM 710AccumulatingConveyorQueFullFoto.statemachine
+;STM 710AccumulatingConveyor.statemachine
+;STM 710Vibrator.statemachine
+STM 710PS1.statemachine
+STM 710PS1counter.statemachine
+;STM 710PS2.statemachine
+STM 710PS2counter.statemachine

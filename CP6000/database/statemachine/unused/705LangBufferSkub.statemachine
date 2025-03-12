@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cplangbufferskub.statemachine
-Name=LangBufferSkub
-Const=klapindpm 420
-Const=klapudpm 800

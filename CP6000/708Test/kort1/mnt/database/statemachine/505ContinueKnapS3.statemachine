@@ -1,6 +1,0 @@
-STATEMACHINEVERSION 3
-Include=continueknap.statemachine
-Name=ContinueKnapS3
-Input=Knap ""
-Timeout=TimeoutDelay 2000000
-Value=knap 0

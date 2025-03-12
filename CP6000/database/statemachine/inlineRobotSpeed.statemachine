@@ -1,8 +1,0 @@
-TEST rbspeed > 100.0
-	SET rbspeed 100.0
-ELSE
-	TEST rbspeed < 1.0
-		SET rbspeed 1.0
-	ENDTEST
-ENDTEST
-ROBOTSPEED rbspeed

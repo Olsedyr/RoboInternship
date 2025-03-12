@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=input.statemachine
-Name=KasseLiftFoto
-Input=input "KasseLift Foto"
-Timeout=TimeOn 250000
-Timeout=TimeOff 350000
-Value=test 0
-Link=parent Parent

@@ -1,3 +1,0 @@
-STATEMACHINEVERSION 3
-Include=trafficlight.statemachine
-Name=TrafficLight

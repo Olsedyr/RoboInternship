@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cpbufferplads.statemachine
-Name=BufferPlads
-Link=KasseLift KasseLift2
-;** User Section **

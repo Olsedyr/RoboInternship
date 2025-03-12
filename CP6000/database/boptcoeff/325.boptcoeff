@@ -1,0 +1,190 @@
+BOPTCOEFFVERSION 1
+325
+
+mode 21 pathtype 12 :
+pathName home_conveyorB
+def.fromFrame home
+def.toFrame conveyorB
+def.toItem 10KgNet
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=9.3000 b=4.2000 c=5.0000 d=7.0000 e=11.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=2.0000 maxlength=2500.0000
+
+mode 21 pathtype 13 :
+pathName conveyorB_palletB
+def.fromFrame conveyorB
+def.toFrame palletB
+def.fromItem 10KgNet
+def.toItem 10KgNet
+def.toPattern 32510Kg_80
+viatype END
+via1pos.y c=30.00 g=80.00
+via1pos.x c=150.00
+via1pos.v c=0.0
+via1vel.y c=50.00 g=100.00
+via1vel.x c=80.00 g=100.00
+via1vel.v c=0.0
+via2pos.y c=140.0000
+via2pos.z c=-200.0000 gg=-100.00 ll=-2400.00 llll=-100.00
+via2pos.w r=-30.0000
+via2vel.y c=0.0000
+via2vel.z c=180.0000 ll=1000.00 llll=800.00
+via2vel.w r=40.0000
+macro1 type=NOMACRO
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.5000 b=2.0000 c=2.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 22 pathtype 14 :
+pathName palletB_conveyorB
+def.fromFrame palletB
+def.toFrame conveyorB
+def.fromItem 10KgNet
+def.toItem 10KgNet
+def.fromPattern 32510Kg_80
+viatype START
+via1pos.y c=130.0000
+via1pos.z c=-50.0000 l=-100 ll=-2400.00 llll=-100.00
+via1pos.w r=80.0000
+via1vel.y c=-15.0000 ff=15.00
+via1vel.z c=-50.0000 b=-80.00 bb=-100.00 ll=-580.00
+via1vel.w r=70.0000
+via2pos.x c=50.0000 bb=30.00
+via2pos.y c=20.0000 bb=10.00
+via2vel.x c=-50.0000 bb=-220.00
+via2vel.y c=-20.0000 bb=-50.00
+macro1 type=FASTUPLINE length=80.000 time=0.30
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.8000 b=3.0000 c=6.0000 d=7.0000 e=7.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 21 pathtype 14 :
+pathName palletB_home
+def.fromFrame palletB
+def.toFrame home
+def.fromItem 10KgNet
+def.fromPattern 32510Kg_80
+viatype START
+via1pos.y c=130.0000
+via1pos.z c=-120.0000
+via1pos.w r=80.0000
+via1vel.y c=25.0000
+via1vel.z c=-150.0000
+via1vel.w r=70.0000
+macro1 type=FASTUPLINE length=20.000 time=0.10
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.5000 b=2.0000 c=4.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 21 pathtype 11 :
+pathName home_home
+def.fromFrame homeHigh
+def.toFrame home
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=2.2000 maxlength=2500.0000
+
+mode 23 pathtype 11 :
+pathName conveyorB_home
+def.fromFrame conveyorB 
+def.toFrame home
+def.fromItem 10KgNet
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=2.0000 maxlength=2500.0000
+
+mode 31 pathtype 12 :
+pathName home_conveyorB
+def.fromFrame home
+def.toFrame conveyorB
+def.fromItem 5KgPlast
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=9.3000 b=4.2000 c=5.0000 d=7.0000 e=11.0000
+params tcpidx=0 blendtype=0 samplerate=25.0000 timefactor=2.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=2.0000 maxlength=2500.0000
+
+mode 31 pathtype 14 :
+pathName palletB_home
+def.fromFrame palletB 
+def.toFrame home
+def.fromItem 5KgPlast
+def.fromPattern 3255KgPlast_40
+viatype NONE
+via1pos.y c=250.0000
+via1pos.z c=-60.0000
+via1pos.w r=30.0000
+via1vel.y c=150.0000
+via1vel.z c=-60.0000
+via1vel.w r=40.0000
+macro1 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.5000 b=3.0000 c=6.0000 d=7.0000 e=7.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 31 pathtype 11 :
+pathName home_home
+def.fromFrame homeHigh
+def.toFrame home
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=2.2000 maxlength=2500.0000
+
+mode 31 pathtype 13 :
+pathName conveyorB_palletB
+def.fromFrame conveyorB
+def.toFrame palletB
+def.fromItem 5KgPlast
+def.toItem 5KgPlast
+def.toPattern 3255KgPlast_40
+viatype BOTH
+via1pos.y c=500.00
+via1pos.x c=400.00
+via1pos.v c=10
+via1vel.y c=450.00
+via1vel.x c=240.00
+via2pos.y c=600.0 g=-600.0
+via2vel.y c=-350.0000 g=300.0
+macro1 type=NOMACRO
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.5000 b=3.5000 c=5.0000 d=6.0000 e=6.0000
+params tcpidx=0 blendtype=0 maxheight=1320.0000 minheight=320.0000 samplerate=10.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 32 pathtype 14 :
+pathName palletB_conveyorB
+def.fromFrame palletB
+def.toFrame conveyorB
+def.fromItem 5KgPlast
+def.toItem 5KgPlast
+def.fromPattern 3255KgPlast_40
+viatype BOTH
+via1pos.y c=600.0000 b=-1200.0
+via1vel.y c=350.0000 b=-300.0
+via2pos.y c=500.00
+via2pos.x c=400.00
+via2pos.v c=-10.0
+via2vel.y c=-400.00
+via2vel.x c=-140
+macro1 type=NOMACRO
+macro2 type=NOMACRO
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=4.8000 b=3.0000 c=6.0000 d=7.0000 e=7.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=1.0000 maxlength=2500.0000
+
+mode 33 pathtype 11 :
+pathName conveyorB_home
+def.fromFrame conveyorB
+def.toFrame home
+def.fromItem 5KgPlast
+viatype NONE
+mv a=1.7000 b=3.1100 c=3.2400 d=2.6200 e=5.2360
+ma a=3.7000 b=1.7000 c=3.0000 d=5.0000 e=5.0000
+params tcpidx=0 blendtype=0 maxheight=2500.0000 minheight=320.0000 samplerate=10.0000 timefactor=2.0000 maxlength=2500.0000
+

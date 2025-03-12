@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=507checkWeigherPrevS1.statemachine
-Name=checkWeigherPrevS3
-;Input=syncOutAck "S3 induknewtec"
-Output=syncOut "S3 Extern Sync Out"
-Const=extSyncOutPol 1
-linkValue=stopPrev stopPrev checkWeigherMotorS3
-Timeout=timeMaxDelayStop 2000000
-Value=temp 0

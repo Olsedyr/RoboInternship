@@ -1,8 +1,0 @@
-VERSION 1
-309RollerIn
-dimention x=2500.0,y=100.0,z=800.0
-transformation x=470.00,y=0.00,z=2180.00
-material diffuse r=0.0,g=0.0,b=1.0,a=1.0
-material ambient r=0.0,g=0.0,b=1.0,a=1.0
-material specular r=0.0,g=0.0,b=1.0,a=1.0
-shininess=50.0

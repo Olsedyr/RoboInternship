@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cmerrorcode.statemachine
-Name=ErrorCode
-linkValue=extra errorCode KasseInd1
-;** User section **

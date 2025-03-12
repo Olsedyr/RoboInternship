@@ -1,9 +1,0 @@
-STATEMACHINEVERSION 3
-Include=504checkWeigherNextS1.statemachine
-Name=checkWeigherNextS2
-Input=syncIn "S2 Extern Sync In"
-Value=motorRunning 1
-Const=m2107 2117
-Const=extSyncInPol 0
-Value=message 0
-Value=simulate 0

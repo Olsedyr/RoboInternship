@@ -1,8 +1,0 @@
-STATEMACHINEVERSION 3
-Include=318ConveyorOutA.statemachine
-Name=ConveyorOutB
-linkValue=photo2 test ConveyorOutBPhoto1
-linkValue=photo1 test ConveyorOutBPhoto2
-linkValue=myId B ProgramB2
-Link=prev ConveyorOut2B
-Timeout=waitTestFull 2000000

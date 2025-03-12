@@ -1,5 +1,0 @@
-STATEMACHINEVERSION 3
-Include=cmcasecount.statemachine
-Name=CaseCount
-linkValue=casekind Program802
-;** User section **
