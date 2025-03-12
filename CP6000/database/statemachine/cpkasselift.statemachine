@@ -34,7 +34,7 @@ Link=ServoStop
 ;** Item **
 ;** Const **
 Const=centerOutInShake 0
-Const=useFotoFree 1
+Const=useFotoFree 0
 ;** Value **
 Value=errorCode 0
 Value=layers 0
@@ -60,6 +60,7 @@ Timeout=TimeCenter 1100000
 Timeout=TimeInCenter 1000000
 Timeout=timeCentrerOut 300000
 Timeout=timeWaitForServoStop 2000000
+
 ; reboot = 0 -> ren rÃ¸v
 ; reboot = 1 -> starter med tom kasse
 ; reboot = 2 -> starter med fyldt kasse
@@ -88,9 +89,19 @@ END
 State=ST_RESET
 	SET errorCode 0
 	TEST firstRun = 1
+	;**************************************************************************************
+	;Changed from 0 to 2 to make box go out of machine on startup to ensure right box size
+		SET reboot 2
+	;**************************************************************************************
+		SET layers 0
+	ENDTEST
+	;**************************************************************************************
+	;Added to ensure correct behavior if its not first run
+	TEST firstRun = 0
 		SET reboot 0
 		SET layers 0
 	ENDTEST
+	;**************************************************************************************
 	SET curshake 0
 	SET inShake 0
 	SET startingup 1
@@ -219,15 +230,15 @@ State=ST_RECEIVE
 			SET centered 2
 		ENDTEST
 	ENDTEST
-	TEST Fototest = 0 AND centered = 2
+	TEST Fototest = 0
 		SET Centrer 1
 		SET Motor 0
 		SET reboot 1
-    		TEST simulate = 1
-      			SETSTATE ST_SEND
-    		ELSE
-		  	SETSTATE ST_READY1
-    		ENDTEST
+    TEST simulate = 1
+      SETSTATE ST_SEND
+    ELSE
+		  SETSTATE ST_READY1
+    ENDTEST
 	ENDTEST
 	TEST KasseInLiner = ST_IDLE
 		SETSTATE ST_IDLE
@@ -323,8 +334,8 @@ State=ST_GODOWN
 	ENDTEST
 	TEST CamGen = ST_CHOOSETRACK
 		SET TimePapMotor timeMotorInGoDown
-		TIMEOUT TimePapMotor ST_BEGINKASSEOUT
-		SETSTATE ST_BEGINKASSEOUT
+		TIMEOUT TimePapMotor ST_BEGINHOME
+		SETSTATE ST_BEGINHOME
   ELSE
     TEST CamGen = ST_NOCHOOSETRACK
     OR CamGen = ST_IDLE
@@ -382,13 +393,13 @@ State=ST_SEND
         AND useFotoFree = 0
           SET sending 0
 		      SET reboot 0
-		      SETSTATE ST_BEGINHOME
+		      SETSTATE ST_EMPTY
 	      ENDTEST
         TEST fotofree = 1
         AND useFotoFree = 1
           SET sending 0
 		      SET reboot 0
-		      SETSTATE ST_BEGINHOME
+		      SETSTATE ST_EMPTY
 	      ENDTEST
 	      TEST TimeSend = 1
           SET sending 0
@@ -468,10 +479,6 @@ State=ST_GO
 							SET Motor 0
 							TIMEOUT TimeW3 ST_READY
 							SETSTATE ST_READY
-						ELSE 
-							TEST reboot = 0
-								SETSTATE ST_EMPTY
-							ENDTEST
 						ENDTEST
 					ENDTEST
 				ENDTEST
@@ -483,22 +490,3 @@ State=ST_GO
 		SETSTATE ST_IDLE
 	ENDTEST
 END
-
-State=ST_BEGINKASSEOUT
-  TEST CamGen = ST_START
-    TEST testmode = 1
-      TIMEOUT testTime ST_TESTMODE
-      SETSTATE ST_TESTMODE
-    ELSE
-      SETSTATE ST_GO
-    ENDTEST
-  ELSE
-    TEST CamGen = ST_NOCHOOSETRACK
-    OR CamGen = ST_IDLE
-      SETSTATE ST_IDLE
-    ENDTEST
-  ENDTEST
-END
-
-
-

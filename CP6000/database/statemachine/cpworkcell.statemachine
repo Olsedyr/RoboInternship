@@ -18,6 +18,10 @@ linkValue=newprogram Program
 Value=errorCode 0
 Value=firstRun 0
 Value=doFakeProducts 0
+;********************************************************
+;Added for new empty casepacker logic
+Value=fakeRunning 0
+;********************************************************
 Timeout=timeBeforeRunning 3000000
 Timeout=timeBeforePausing 2000000
 
@@ -26,10 +30,10 @@ END
 
 State=ST_IDLE
 	SET errorCode 0
-  TEST ContinueKnap = ST_HIGH
-    TIMEOUT timeBeforeRunning ST_STARTING
-    SETSTATE ST_STARTING
-  ENDTEST
+  	TEST ContinueKnap = ST_HIGH
+    	TIMEOUT timeBeforeRunning ST_STARTING
+    	SETSTATE ST_STARTING
+  	ENDTEST
 END
 
 State=ST_STARTING
@@ -55,17 +59,36 @@ State=ST_RESTARTING
 END
 
 State=ST_RUNNING
-  TEST ContinueKnap = ST_HIGH
-    TIMEOUT timeBeforePausing ST_PAUSING
-    SETSTATE ST_PAUSING
-  ENDTEST
-	TEST ErrorCode = ST_ERROR
-		TIMEOUT timeBeforePausing ST_PAUSING
-    SETSTATE ST_PAUSING
-	ENDTEST
-	TEST Emergency = ST_POWEROFF
-		SET errorCode 203
-		SETSTATE ST_ERROR
+;**********************************************************************
+;Added new empty casepacker logic
+	TEST fakeRunning = 1
+		TEST ErrorCode = ST_ERROR	
+			TIMEOUT timeBeforePausing ST_PAUSING
+			SETSTATE ST_PAUSING
+		ENDTEST
+		TEST Emergency = ST_POWEROFF
+			SET errorCode 203
+			SETSTATE ST_ERROR
+		ENDTEST
+		TEST doFakeProducts = 0
+			SET fakeRunning 0
+			TIMEOUT timeBeforePausing ST_PAUSING
+			SETSTATE ST_PAUSING
+		ENDTEST
+;*********************************************************************
+	ELSE
+		TEST ContinueKnap = ST_HIGH
+			TIMEOUT timeBeforePausing ST_PAUSING
+			SETSTATE ST_PAUSING
+		ENDTEST
+		TEST ErrorCode = ST_ERROR
+			TIMEOUT timeBeforePausing ST_PAUSING
+			SETSTATE ST_PAUSING
+		ENDTEST
+		TEST Emergency = ST_POWEROFF
+			SET errorCode 203
+			SETSTATE ST_ERROR
+		ENDTEST
 	ENDTEST
 END
 
@@ -101,8 +124,16 @@ State=ST_PAUSED
 	TEST newprogram = 1
 		SETSTATE ST_IDLE
 	ELSE
+;***********************************************************************
+;Added new empty casepacker logic
+		TEST doFakeProducts = 1
+			SET fakeRunning 1
+			TIMEOUT timeBeforeRunning ST_RESTARTING
+			SETSTATE ST_RESTARTING
+		ENDTEST
+;***********************************************************************
 		TEST ContinueKnap = ST_HIGH
-      SET firstRun 0
+      		SET firstRun 0
 			TIMEOUT timeBeforeRunning ST_RESTARTING
 			SETSTATE ST_RESTARTING
 		ENDTEST
