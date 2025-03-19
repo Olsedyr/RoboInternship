@@ -91,7 +91,7 @@ State=ST_RESET
 	TEST firstRun = 1
 	;**************************************************************************************
 	;Changed from 0 to 2 to make box go out of machine on startup to ensure right box size
-		SET reboot 2
+		;SET reboot 2
 	;**************************************************************************************
 		SET layers 0
 	ENDTEST

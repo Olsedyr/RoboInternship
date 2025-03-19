@@ -2,7 +2,7 @@ STATEMACHINEVERSION 3
 Name=Program
 Link=workcell WorkCell
 Value=usersection 0
-Const=programidx 3
+Const=programidx 2
 Value=loadfromleft 0
 Value=loadfromright 0
 Value=productsfromleft 0
@@ -23,12 +23,11 @@ Item=itemC18 C18
 Item=itemC14 C14
 Item=itemC11 C11
 Item=itemD9 D9
-CPPattern=cppattern simple
+CPPattern=cppattern Grape1Lag
 CPPattern=cppGrape1Lag Grape1Lag
 CPPattern=cppDobbeltD9 DobbeltD9
 CPPattern=cppPeber1Lag Peber1Lag
 CPPattern=cppPeber2Lag Peber2Lag
-
 
 State=PROGRAM_C11_PEBER_1LAG
 	SET usersection 0
@@ -39,14 +38,14 @@ State=PROGRAM_C11_PEBER_1LAG
 	SET productsfromright 1
 	SET secondProdConvOn 0
 	SET program 0
-  SET manuelt 0
-	SET usersection 1 ; user editable below
-  SETITEM item itemC18
-	SETCPPATTERN cppattern cppPeber1Lag
+  	SET manuelt 0
 	SET timeMotorInGoDown 0
 	SET timeKlapDown 0
-	SET noShakeOnLast 0
 	SET waitInR3 0
+	SET usersection 1 ; user editable below
+  	SETITEM item itemC18
+	SETCPPATTERN cppattern cppPeber1Lag
+	SET noShakeOnLast 0
 	SET vibrateTime 800000
   SETSTATE ST_RUNNING_C11_PEBER_1LAG
 END
@@ -60,14 +59,14 @@ State=PROGRAM_C11_GRAPE_1LAG
 	SET productsfromright 1
 	SET secondProdConvOn 0
 	SET program 1
-  SET manuelt 0
-	SET usersection 1 ; user editable below
-  SETITEM item itemC11
-	SETCPPATTERN cppattern cppGrape1Lag
+  	SET manuelt 0
+	SET waitInR3 0
 	SET timeMotorInGoDown 0
 	SET timeKlapDown 0
+	SET usersection 1 ; user editable below
+  	SETITEM item itemC11
+	SETCPPATTERN cppattern cppGrape1Lag
 	SET noShakeOnLast 0
-	SET waitInR3 0
 	SET vibrateTime 800000
 	SETSTATE ST_RUNNING_C11_GRAPE_1LAG
 END
@@ -81,18 +80,38 @@ State=PROGRAM_C18_PEBER_2LAG
 	SET productsfromright 1
 	SET secondProdConvOn 0
 	SET program 2
-  SET manuelt 0
-	SET usersection 1 ; user editable below
-  SETITEM item itemC18
-	SETCPPATTERN cppattern cppPeber2Lag
+  	SET manuelt 0
 	SET timeMotorInGoDown 0
 	SET timeKlapDown 0
-	SET noShakeOnLast 0
 	SET waitInR3 0
+	SET usersection 1 ; user editable below
+  	SETITEM item itemC18
+	SETCPPATTERN cppattern cppPeber2Lag
+	SET noShakeOnLast 0
 	SET vibrateTime 800000
   SETSTATE ST_RUNNING_C18_PEBER_2LAG
 END
 
+State=PROGRAM_DobbeltD9_KIWI_1LAG
+	SET usersection 0
+	SET newprogram 1
+	SET loadfromleft 1
+	SET loadfromright 0
+	SET productsfromleft 0
+	SET productsfromright 1
+	SET secondProdConvOn 0
+	SET program 3
+  	SET manuelt 0
+	SET waitInR3 0
+	SET timeKlapDown 0
+	SET noShakeOnLast 0
+	SET usersection 1 ; user editable below
+  	SETITEM item itemD9
+	SETCPPATTERN cppattern cppDobbeltD9
+	SET timeMotorInGoDown 0
+	SET vibrateTime 800000
+  SETSTATE ST_RUNNING_DobbeltD9_KIWI_1LAG
+END
 
 State=ST_RUNNING_C11_PEBER_1LAG
 	SET newprogram 0
@@ -124,6 +143,15 @@ State=ST_RUNNING_C18_PEBER_2LAG
   ENDTEST
 END
 
+State=ST_RUNNING_DobbeltD9_KIWI_1LAG
+  SET newprogram 0
+  TEST workcell = ST_IDLE
+  OR workcell = ST_PAUSED
+    TEST programidx != program
+      SETSTATE ST_RESET
+    ENDTEST
+  ENDTEST
+END
 
 State=ST_TIMER
 END
@@ -136,8 +164,8 @@ State=ST_IDLE
 END
 
 State=ST_RESET
-  TEST programidx = 3
-    SETSTATE PROGRAM_10prod
+  TEST programidx = 0
+    SETSTATE PROGRAM_C11_PEBER_1LAG
   ENDTEST
   TEST programidx = 1
     SETSTATE PROGRAM_C11_GRAPE_1LAG
@@ -145,6 +173,9 @@ State=ST_RESET
   TEST programidx = 2
     SETSTATE PROGRAM_C18_PEBER_2LAG
   ENDTEST
+  TEST programidx = 3
+    SETSTATE PROGRAM_DobbeltD9_KIWI_1LAG
+  ENDTEST
 END
 
-CPPattern=cpp10prod 10prod
+CPPattern=cppsimple simple

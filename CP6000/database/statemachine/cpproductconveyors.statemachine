@@ -2,10 +2,11 @@ STATEMACHINEVERSION 3
 Name=ProductConveyors
 Input=powerok1 "dummyOff"
 Input=powerok2 "dummyOff"
-Output=Motor1Enable "dummyOut"
-Output=Motor1Setpoint "dummyOut"
-Output=Motor2Enable "dummyOut"
-Output=Motor2Setpoint "dummyOut"
+Output=Motor1Forward "dummyOut"
+Output=Motor1Backwards "dummyOut"
+Output=Motor2Forward "dummyOut"
+Output=Motor2Backwards "dummyOut"
+
 Link=Counter ProductCount
 Link=CamGenSkub
 Link=parent LangBufferSkub
@@ -15,10 +16,6 @@ linkValue=productsfromleft Program
 linkValue=productsfromright Program
 Value=ppp 0
 linkValue=secondProdConvOn Program
-Const=motor1FreqForward 50.0
-Const=motor1FreqReverse -50.0
-Const=motor2FreqForward 50.0
-Const=motor2FreqReverse -50.0
 Timeout=TimeStop 0
 Timeout=TimeRunAgain 600000
 Input=syncInManuelStop "dummyOff"
@@ -32,18 +29,18 @@ State=ST_HALT
 END
 
 State=ST_IDLE
-	SET Motor1Enable 0
-  SET Motor1Setpoint 0.0
-	SET Motor2Enable 0
-  SET Motor2Setpoint 0.0
+  SET Motor1Forward 0
+  SET Motor1Backwards 0
+  SET Motor2Forward 0
+  SET Motor2Backwards 0
 	TEST parent = ST_RESET
 		SETSTATE ST_RESET
 	ENDTEST
 END
 
 State=ST_RESET
-;	SET Motor1Enable 1
-	SET Motor2Enable 1
+;	SET Motor1Forward 1
+	SET Motor2Forward 1
 	SETSTATE ST_STARTUP
 END
 
@@ -83,35 +80,35 @@ State=ST_RUN
 	  ELSE
 		  TEST productsfromleft = 1
       AND productsfromright = 1
-	      SET Motor1Enable 1
-        SET Motor1Setpoint motor1FreqForward
-	      SET Motor2Enable 1
-        SET Motor2Setpoint motor2FreqForward
+        SET Motor1Forward 0
+        SET Motor1Backwards 1
+        SET Motor2Forward 1
+        SET Motor2Backwards 0
 		  ELSE
         TEST productsfromleft = 1
           TEST secondProdConvOn = 1
-	          SET Motor1Enable 1
-            SET Motor1Setpoint motor1FreqForward
-	          SET Motor2Enable 1
-            SET Motor2Setpoint motor2FreqReverse
+            SET Motor1Forward 0
+            SET Motor1Backwards 1
+            SET Motor2Backwards 1
+            SET Motor2Forward 0
           ELSE
-	          SET Motor1Enable 1
-            SET Motor1Setpoint motor1FreqForward
-	          SET Motor2Enable 0
-            SET Motor2Setpoint 0.0
+            SET Motor1Forward 0
+            SET Motor1Backwards 1
+            SET Motor2Backwards 0
+            SET Motor2Forward 0
           ENDTEST
         ELSE
           TEST productsfromright = 1
             TEST secondProdConvOn = 1
-	            SET Motor1Enable 1
-              SET Motor1Setpoint motor1FreqReverse
-	            SET Motor2Enable 1
-              SET Motor2Setpoint motor2FreqForward
+              SET Motor1Forward 1
+              SET Motor1Backwards 0
+              SET Motor2Backwards 0
+              SET Motor2Forward 1
             ELSE
-	            SET Motor1Enable 0
-              SET Motor1Setpoint 0.0
-	            SET Motor2Enable 1
-              SET Motor2Setpoint motor2FreqForward
+              SET Motor1Forward 0
+              SET Motor1Backwards 0
+              SET Motor2Backwards 0
+              SET Motor2Forward 1
             ENDTEST
           ENDTEST
         ENDTEST
@@ -142,16 +139,16 @@ State=ST_STOP
   TEST useSyncInManuelStop = 1
   AND syncInManuelStop = syncInManuelStopPol
   AND Counter = ST_RUN_MANUELT
-    SET Motor1Enable 0
-    SET Motor1Setpoint 0.0
-    SET Motor2Enable 0
-    SET Motor2Setpoint 0.0
+    SET Motor1Forward 0
+    SET Motor1Backwards 0
+    SET Motor2Forward 0
+    SET Motor2Backwards 0
   ELSE
     TEST prenumofproducts >= ppp
-      SET Motor1Enable 0
-      SET Motor1Setpoint 0.0
-      SET Motor2Enable 0
-      SET Motor2Setpoint 0.0
+      SET Motor1Forward 0
+      SET Motor1Backwards 0
+      SET Motor2Forward 0
+      SET Motor2Backwards 0
     ELSE
    	  TIMEOUT TimeRunAgain ST_RUN
  	    SETSTATE ST_TIMER

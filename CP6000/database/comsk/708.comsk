@@ -4,7 +4,7 @@ simulate=0
 Type=WONLY
 NumOfModules=3
 Name=ProductConveyor1
-Address=1
+Address=2
 Init1.06=70.0 "max setspeed" "Maximum set speed (Hz)" fixdec=1
 Init1.07=0.0 "min setspeed" "Minimum set speed (Hz)" fixdec=1
 Init2.11=0.0 "accel rate" "Acceleration rate (s/Hz)" fixdec=1
@@ -28,7 +28,7 @@ Init11.00=1000 "Save config" "Save config menu 11" fixdec=0
 Init10.38=100 "Drive reset" "Drive reset" fixdec=0
 Output1.21="ProductConveyor1 Setpoint" "ProductConveyor1 Setpoint" fixdec=1
 Name=ProductConveyor2
-Address=2
+Address=1
 Init1.06=70.0 "max setspeed" "Maximum set speed (Hz)" fixdec=1
 Init1.07=0.0 "min setspeed" "Minimum set speed (Hz)" fixdec=1
 Init2.11=0.0 "accel rate" "Acceleration rate (s/Hz)" fixdec=1
@@ -53,7 +53,7 @@ Init10.38=100 "Drive reset" "Drive reset" fixdec=0
 Output1.22="ProductConveyor2 Setpoint" "ProductConveyor2 Setpoint" fixdec=1
 Name=AccumulatingConveyor
 Address=3
-Init1.06=50.0 "max setspeed" "Maximum set speed (Hz)" fixdec=1
+Init1.06=0.0 "max setspeed" "Maximum set speed (Hz)" fixdec=1
 Init1.07=0.0 "min setspeed" "Minimum set speed (Hz)" fixdec=1
 Init2.11=0.0 "accel rate" "Acceleration rate (s/Hz)" fixdec=1
 Init2.21=0.0 "decel rate" "Deceleration rate (s/Hz)" fixdec=1
